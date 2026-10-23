@@ -1,0 +1,70 @@
+{
+ "built_at": "2026-10-23T15:09:39+00:00",
+ "code_version": "src:eb524db8c13a",
+ "config_sha256": "e6c04d54d0413978",
+ "python": "3.14.4",
+ "packages": {
+  "numpy": "2.5.4",
+  "pandas": "3.1.0",
+  "geopandas": "1.2.0",
+  "shapely": "2.2.0",
+  "rasterio": "1.5.2",
+  "pyarrow": "26.0.0",
+  "pillow": "13.0.0",
+  "matplotlib": "3.11.2",
+  "pyyaml": "6.0.3"
+ },
+ "datasets": {
+  "s2_rgb": {
+   "status": "failed",
+   "fingerprint": null
+  },
+  "lst_hourly_2023": {
+   "status": "cached",
+   "fingerprint": "b006551f78e211de"
+  },
+  "lst_10m_final": {
+   "status": "failed",
+   "fingerprint": null
+  },
+  "lst_jja2023_mean": {
+   "status": "cached",
+   "fingerprint": "cc1eb289d85a7c12"
+  },
+  "lst_20240731_utc22": {
+   "status": "cached",
+   "fingerprint": "65c492e69430f0e9"
+  },
+  "lst_amp_2023": {
+   "status": "cached",
+   "fingerprint": "42141e30140808bf"
+  },
+  "roads_lst": {
+   "status": "cached",
+   "fingerprint": "ec032c4a81e7a29f"
+  },
+  "surface_parking": {
+   "status": "cached",
+   "fingerprint": "908acded3864c14a"
+  },
+  "hub311_2023": {
+   "status": "cached",
+   "fingerprint": "b9bac44b4ad76103"
+  }
+ },
+ "tables": {
+  "assets": 5130,
+  "dependencies": 0,
+  "couplings": 0,
+  "exposures": 850587,
+  "events": 3367,
+  "sources": 9
+ },
+ "validation": {
+  "errors": 0,
+  "warnings": 0,
+  "issues": []
+ },
+ "chain_check": true,
+ "run_id": "20261023T150939Z-b243002a"
+}

@@ -1,0 +1,259 @@
+# =====================================================================
+# 【中文】数据集登记表：新增数据集只需在这里加一条，然后重跑 pipeline。
+# 每一条会生成 sources 表中的一行（设计方案第 4 节第 1 步）。
+# 依赖上游资产的数据集（zonal / match）必须排在上游之后。
+# Dataset registry: to add a dataset, add an entry here and re-run the pipeline.
+# Datasets that read upstream assets (zonal / match) must come after them.
+#
+#   python -m pipeline.build            # 【中文】增量构建 / incremental build
+#   python -m pipeline.build --force    # 【中文】全部重建 / rebuild everything
+#   python -m pipeline.build --strict   # 【中文】校验有错误时返回 1 / fail on validation errors
+#   python -m pipeline.build --only roads_lst
+# =====================================================================
+
+project:
+  name: Nashville Heat Cascade Digital Twin
+  # 【中文】downtown AOI，与 LST v4.1 pipeline 一致 / same AOI as LST v4.1
+  aoi: [-86.837, 36.118, -86.727, 36.208]   # [west, south, east, north], EPSG:4326
+  timezone: America/Chicago
+  # 【中文】校验用：时间字段超出这个范围会给出警告 / timestamps outside this range are flagged
+  time_range: ["2023-06-01", "2023-09-30"]
+  # 【中文】热浪时间窗沿用 twin_demo 的定义（in_event_window），对照期为之前 10 天。
+  # 代表性热浪的选择仍是待决问题（设计方案第 9 节），确认后改这里即可。
+  # Heat window follows twin_demo's in_event_window; baseline = the 10 days before.
+  heatwave: { name: "July 2023 heat window", start: "2023-07-11", end: "2023-07-21" }
+  baseline: { name: "Early July baseline", start: "2023-07-01", end: "2023-07-10" }
+  # 【中文】G1 全链条检查：LST → 资产 → 事件 / gate G1 check
+  chain_check: { assets: roads_lst, exposures: lst_hourly_2023, events: hub311_2023 }
+  raw_dir: raw            # 【中文】原始数据放这里（不提交到 git）/ raw inputs (git-ignored)
+  standard_dir: data/standard   # 【中文】标准表 GeoParquet / COG
+  site_data_dir: site/data      # 【中文】网站读取的静态文件 / static files for the site
+
+datasets:
+
+  # ---------------------------------------------------------------- 底图 Basemap
+  - id: s2_rgb
+    kind: raster_rgb
+    title: Sentinel-2 true colour
+    group: Basemap
+    file: Nashville_Sentinel2_RGB.tif
+    drive_url: https://drive.google.com/file/d/1WygDn89VJfwvKq67FqzbcwLXVyIS96N7/view
+    bands: [1, 2, 3]
+    stretch: [2, 98]          # 【中文】百分位拉伸 / percentile stretch
+    visible: true
+    opacity: 1.0
+    provider: ESA Copernicus Sentinel-2 (via GEE)
+    license: Copernicus open data
+    temporal_res: composite
+    spatial_res: 10 m
+    quality_rank: 1
+
+  # ---------------------------------------------------------------- 地表温度 LST
+  # 【中文】逐小时序列：时间回放 + 道路 / 停车场逐小时热暴露（阶段 A）
+  # Hourly series: time playback + hourly exposures for roads and parking lots
+  - id: lst_hourly_2023
+    kind: raster_series
+    title: Hourly LST, July 2023
+    group: Land surface temperature
+    dir: lst_hourly_2023      # 【中文】raw/ 下的文件夹 / folder under raw/
+    glob: "LST10m_*.tif"
+    time_regex: 'LST10m_(?P<date>\d{4}-\d{2}-\d{2})_UTC(?P<hour>\d{2})'
+    drive_folder: 01_Nashville_LST/Nashville_LST_Hourly_2023
+    band: 1
+    units: "°C"
+    kelvin: auto
+    colormap: inferno
+    stretch: [1, 99]          # 【中文】所有帧共用的数值范围 / one value range shared by all frames
+    max_px: 1000
+    zonal:                    # 【中文】写入 exposures 的资产 / assets that get hourly exposures
+      - { source: roads_lst, buffer_m: 15 }   # 【中文】与 buf_m 一致 / matches buf_m
+      - { source: surface_parking }
+    lst_source: "LST v4.1 10 m hourly fusion"
+    visible: true
+    opacity: 0.8
+    provider: Gio / LST v4.1 pipeline (hourly)
+    license: research use
+    version: v4.1
+    temporal_res: hourly, 09:00–17:00 CDT
+    spatial_res: 10 m
+    coverage: "2023-07-01 – 2023-07-21 (07-14 missing)"
+    quality_rank: 2
+
+  - id: lst_10m_final
+    kind: raster
+    title: LST 10 m fusion result
+    group: Land surface temperature
+    file: Nashville_LST_10m_Final.tif
+    drive_url: https://drive.google.com/file/d/1nxUkKzFfH6Bs6nGyvhosU6BlfqECcVKu/view
+    band: 1
+    units: "°C"
+    kelvin: auto              # 【中文】中位数 > 200 时自动按 K 转 °C / auto K→°C if median > 200
+    colormap: inferno
+    stretch: [2, 98]
+    provider: Gio / LST v4.1 pipeline
+    license: research use
+    version: v4.1
+    temporal_res: summer composite
+    spatial_res: 10 m
+    quality_rank: 2
+
+  - id: lst_jja2023_mean
+    kind: raster
+    title: LST summer 2023 mean (JJA)
+    group: Land surface temperature
+    file: LST_Nashville_JJA2023_mean.tif
+    drive_url: https://drive.google.com/file/d/1JKzfQq5RhoSjLhQM0bM6aw4dHmrHRXyu/view
+    band: 1
+    units: "°C"
+    kelvin: auto
+    colormap: inferno
+    stretch: [2, 98]
+    provider: Gio / LST v4.1 pipeline
+    license: research use
+    version: v4.1
+    temporal_res: JJA 2023 mean
+    spatial_res: 10 m
+    quality_rank: 2
+
+  - id: lst_20240731_utc22
+    kind: raster
+    title: LST 2024-07-31 17:00 CDT
+    group: Land surface temperature
+    file: LST10m_2024-07-31_UTC22.tif
+    drive_url: https://drive.google.com/file/d/1KsqyLVB3nIsGjQ2x5jXyg7if9DY-UPzE/view
+    band: 1
+    units: "°C"
+    kelvin: auto
+    colormap: inferno
+    stretch: [2, 98]
+    timestamp: "2024-07-31T22:00:00Z"
+    provider: Gio / LST v4.1 pipeline (hourly)
+    license: research use
+    version: v4.1
+    temporal_res: hourly snapshot
+    spatial_res: 10 m
+    quality_rank: 2
+
+  - id: lst_amp_2023
+    kind: raster
+    title: LST amplitude 2023
+    group: Land surface temperature
+    file: Nash_ampMap_2023.tif
+    drive_url: https://drive.google.com/file/d/1Q776PkQiRyzf5p-kW5hdhzinv85Nbqdh/view
+    band: 1
+    units: "°C"               # 【中文】请确认单位 / please confirm units
+    kelvin: false
+    colormap: viridis
+    stretch: [2, 98]
+    provider: Gio / LST spatial pattern analysis
+    license: research use
+    temporal_res: 2023
+    spatial_res: 10 m
+    quality_rank: 2
+
+  # ---------------------------------------------------------------- 交通 Transportation
+  - id: roads_lst
+    kind: vector
+    title: Roads (summer LST mean)
+    group: Transportation
+    file: nashville_roads_lst_full.shp      # 【中文】同名 .dbf/.shx/.prj 需放在一起
+    drive_url: https://drive.google.com/file/d/1p9VyLZ1tIfk45RUQBvRCrrn6cVdBgDsG/view
+    system: transportation
+    asset_type: road_segment
+    id_field: linearid
+    color_field: lst_mean
+    color_label: Summer LST mean
+    colormap: inferno
+    units: "°C"
+    exposure:                 # 【中文】写入 exposures 标准表（合成期）/ composite exposure rows
+      period: ["2023-06-01", "2023-09-30"]
+      fields: { lst_mean: lst_mean, lst_std: lst_std }
+      lst_source: "Landsat 8/9 C2 L2, Jun–Sep 2023 max composite"
+    popup_fields: [fullname, road_class, mtfcc, lst_mean, lst_std, evi_mean]
+    field_labels:
+      fullname: Name
+      road_class: Road class
+      mtfcc: MTFCC
+      lst_mean: Summer LST mean (°C)
+      lst_std: Summer LST std (°C)
+      evi_mean: EVI mean
+    # 【中文】road_class 原值形如 "Interstate / 州际"，中文部分在 shapefile 里已乱码，只保留英文
+    # road_class reads "Interstate / ????" (the second half is garbled); keep the English part
+    split_fields: { road_class: " / " }
+    simplify_m: 2
+    visible: true
+    provider: TIGER/Line roads + Gio LST buffer statistics
+    license: public domain (TIGER) / research use
+    temporal_res: Jun–Sep 2023
+    spatial_res: per segment
+    quality_rank: 2
+
+  # ---------------------------------------------------------------- 建成环境 Built environment
+  - id: surface_parking
+    kind: vector
+    title: Surface parking
+    group: Built environment
+    file: nashville_surface_parking.geojson
+    drive_url: https://drive.google.com/file/d/1GtkPZDIIwc6o46o2-8mPEROfylrnfVel/view
+    system: built_environment
+    asset_type: parking_lot
+    id_field: full_id
+    fill_color: "#7FA7B8"
+    popup_fields: [name, parking, access, fee, capacity, operator, surface]
+    field_labels: { name: Name, parking: Parking type, access: Access, fee: Fee, capacity: Capacity,
+                    operator: Operator, surface: Surface }
+    simplify_m: 1
+    visible: false
+    provider: Gio parking lot segmentation (OSM-based)
+    license: research use / ODbL (OSM)
+    temporal_res: static
+    spatial_res: polygon
+    quality_rank: 2
+
+  # ---------------------------------------------------------------- 事件 Events
+  # 【中文】hubNashville 311（twin_demo 的 L2 表）。网站只发布网格汇总和每日计数。
+  # hubNashville 311 (twin_demo L2 table). The site only gets aggregates.
+  - id: hub311_2023
+    kind: events
+    title: 311 infrastructure requests
+    group: Events
+    file: events_hub311.parquet
+    drive_folder: 06_Digital_Twin/twin_demo/l2
+    fields: { id: event_id, type: system, start: time_utc, end: closed_utc }
+    attribute_fields: [category, status, hours_to_close]
+    # 【中文】只保留与基础设施相关的类型 / infrastructure-related types only
+    event_types: [pavement, road_other, traffic_signal, streetlight, tree_down, electric, water]
+    type_labels: { pavement: Pavement, road_other: Other road, traffic_signal: Traffic signal,
+                   streetlight: Streetlight, tree_down: Tree down, electric: Electric, water: Water }
+    match:                    # 【中文】实体匹配到道路 / spatial match to road assets
+      source: roads_lst
+      max_dist_m: 30
+      event_types: [pavement, road_other, traffic_signal, streetlight, tree_down]
+    grid_m: 500
+    colormap: YlOrRd
+    visible: false
+    opacity: 0.6
+    provider: Metro Nashville hubNashville 311 (via twin_demo)
+    license: "Nashville Open Data terms; publish aggregates only"
+    retrieved_date: "2026-10-16"
+    temporal_res: per request
+    spatial_res: address point
+    coverage: "2023-06-01 – 2023-08-31"
+    quality_rank: 3
+
+  # ---------------------------------------------------------------- 耦合与依赖 Couplings / dependencies
+  # 【中文】文献整理好后取消注释；格式见 templates/。阶段 2 的 cascade 模型读这两张表。
+  # Uncomment once the literature table exists; see templates/ for the format.
+  # - id: couplings_lit
+  #   kind: table
+  #   target_table: couplings
+  #   title: Literature couplings
+  #   file: couplings.csv
+  #   provider: literature review (40+ papers)
+  #   quality_rank: 2
+  # - id: deps_roads
+  #   kind: table
+  #   target_table: dependencies
+  #   title: Road dependencies
+  #   file: dependencies.csv
+  #   quality_rank: 2

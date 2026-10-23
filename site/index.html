@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Nashville Heat Twin</title>
+  <meta name="description" content="Downtown Nashville land surface temperature, infrastructure and events — a historical digital twin prototype.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- 【中文】MapLibre 已打包在 vendor/，不依赖外部 CDN / vendored, no CDN needed -->
+  <link rel="stylesheet" href="vendor/maplibre-gl-4.7.1/maplibre-gl.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="map" aria-label="Map"></div>
+
+  <aside class="panel" id="panel">
+    <header class="panel-head">
+      <h1>Nashville Heat Twin</h1>
+      <p class="lede">Downtown surface temperature, infrastructure and events · historical prototype</p>
+      <button class="panel-toggle" id="panelToggle" aria-expanded="true" aria-controls="layerList">Layers</button>
+    </header>
+    <div class="layer-list" id="layerList">
+      <p class="status" id="status">Loading layers…</p>
+    </div>
+    <footer class="panel-foot">
+      <span class="foot-links">
+        <button class="link-btn" id="openSources">Data sources</button>
+        <button class="link-btn" id="openChain" hidden>Chain check</button>
+      </span>
+      <span class="built" id="builtAt"></span>
+    </footer>
+  </aside>
+
+  <section class="readout" id="readout" aria-live="polite">
+    <div class="readout-layer" id="readoutLayer"></div>
+    <div class="readout-value"><span id="readoutNum">Click the map</span><span class="unit" id="readoutUnit"></span></div>
+    <div class="ramp-wrap" id="rampWrap" hidden>
+      <div class="ramp" id="ramp"><span class="marker" id="marker" hidden></span></div>
+      <div class="ramp-labels"><span id="rampMin"></span><span id="rampMax"></span></div>
+    </div>
+    <p class="readout-hint" id="readoutHint">to read the temperature there</p>
+    <div class="feature" id="feature" hidden></div>
+    <div class="vector-legends" id="vectorLegends"></div>
+  </section>
+
+  <!-- 【中文】时间回放：逐小时 LST + 每日事件数 / time playback -->
+  <section class="timeline" id="timeline" hidden aria-label="Time playback">
+    <div class="tl-row">
+      <button class="tl-play" id="tlPlay" aria-label="Play">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path id="tlPlayIcon" d="M4 2.5v11l9-5.5z"/></svg>
+      </button>
+      <div class="tl-time">
+        <span class="tl-date" id="tlDate"></span>
+        <span class="tl-hour" id="tlHour"></span>
+      </div>
+      <span class="tl-tag" id="tlTag"></span>
+      <span class="tl-warn" id="tlWarn" hidden></span>
+    </div>
+    <input class="tl-slider" id="tlSlider" type="range" min="0" max="0" step="1" value="0" aria-label="Hour">
+    <div class="tl-days" id="tlDays"></div>
+    <div class="tl-key" id="tlKey"></div>
+  </section>
+
+  <dialog class="sources" id="sourcesDialog">
+    <form method="dialog" class="sources-head">
+      <h2>Data sources</h2>
+      <button class="close" aria-label="Close">Close</button>
+    </form>
+    <div class="sources-body" id="sourcesBody"></div>
+  </dialog>
+
+  <dialog class="sources" id="chainDialog">
+    <form method="dialog" class="sources-head">
+      <h2>Chain check · LST → roads → events</h2>
+      <button class="close" aria-label="Close">Close</button>
+    </form>
+    <div class="sources-body" id="chainBody"></div>
+  </dialog>
+
+  <script src="vendor/maplibre-gl-4.7.1/maplibre-gl.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

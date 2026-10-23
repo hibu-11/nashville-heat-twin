@@ -1,0 +1,188 @@
+{
+ "project": "Nashville Heat Cascade Digital Twin",
+ "aoi": [
+  -86.837,
+  36.118,
+  -86.727,
+  36.208
+ ],
+ "built_at": "2026-10-23T15:09+00:00",
+ "run_id": "20261023T150939Z-b243002a",
+ "timezone": "America/Chicago",
+ "heatwave": {
+  "name": "July 2023 heat window",
+  "start": "2023-07-11",
+  "end": "2023-07-21"
+ },
+ "baseline": {
+  "name": "Early July baseline",
+  "start": "2023-07-01",
+  "end": "2023-07-10"
+ },
+ "layers": [
+  {
+   "id": "lst_hourly_2023",
+   "kind": "raster_series",
+   "title": "Hourly LST, July 2023",
+   "group": "Land surface temperature",
+   "visible": true,
+   "opacity": 0.8,
+   "source_id": "lst_hourly_2023",
+   "meta": "series/lst_hourly_2023.json",
+   "frame_count": 165,
+   "time_start": "2023-07-01T14:00Z",
+   "time_end": "2023-07-21T15:00Z"
+  },
+  {
+   "id": "lst_jja2023_mean",
+   "kind": "raster",
+   "title": "LST summer 2023 mean (JJA)",
+   "group": "Land surface temperature",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "lst_jja2023_mean",
+   "image": "raster/lst_jja2023_mean.png",
+   "values": "raster/lst_jja2023_mean.bin",
+   "meta": "raster/lst_jja2023_mean.json"
+  },
+  {
+   "id": "lst_20240731_utc22",
+   "kind": "raster",
+   "title": "LST 2024-07-31 17:00 CDT",
+   "group": "Land surface temperature",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "lst_20240731_utc22",
+   "image": "raster/lst_20240731_utc22.png",
+   "values": "raster/lst_20240731_utc22.bin",
+   "meta": "raster/lst_20240731_utc22.json"
+  },
+  {
+   "id": "lst_amp_2023",
+   "kind": "raster",
+   "title": "LST amplitude 2023",
+   "group": "Land surface temperature",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "lst_amp_2023",
+   "image": "raster/lst_amp_2023.png",
+   "values": "raster/lst_amp_2023.bin",
+   "meta": "raster/lst_amp_2023.json"
+  },
+  {
+   "id": "roads_lst",
+   "kind": "vector",
+   "title": "Roads (summer LST mean)",
+   "group": "Transportation",
+   "visible": true,
+   "opacity": 1.0,
+   "source_id": "roads_lst",
+   "data": "vector/roads_lst.geojson",
+   "geometry": "line",
+   "popup_fields": [
+    "fullname",
+    "road_class",
+    "mtfcc",
+    "lst_mean",
+    "lst_std",
+    "evi_mean"
+   ],
+   "field_labels": {
+    "fullname": "Name",
+    "road_class": "Road class",
+    "mtfcc": "MTFCC",
+    "lst_mean": "Summer LST mean (°C)",
+    "lst_std": "Summer LST std (°C)",
+    "evi_mean": "EVI mean"
+   },
+   "count": 4137,
+   "color": {
+    "field": "lst_mean",
+    "label": "Summer LST mean",
+    "vmin": 39.46,
+    "vmax": 50.2,
+    "stops": [
+     "#000004",
+     "#57106e",
+     "#bc3754",
+     "#f98e09",
+     "#fcffa4"
+    ],
+    "units": "°C"
+   }
+  },
+  {
+   "id": "surface_parking",
+   "kind": "vector",
+   "title": "Surface parking",
+   "group": "Built environment",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "surface_parking",
+   "data": "vector/surface_parking.geojson",
+   "geometry": "fill",
+   "popup_fields": [
+    "name",
+    "parking",
+    "access",
+    "fee",
+    "capacity",
+    "operator",
+    "surface"
+   ],
+   "field_labels": {
+    "name": "Name",
+    "parking": "Parking type",
+    "access": "Access",
+    "fee": "Fee",
+    "capacity": "Capacity",
+    "operator": "Operator",
+    "surface": "Surface"
+   },
+   "count": 993,
+   "fill_color": "#7FA7B8"
+  },
+  {
+   "id": "hub311_2023",
+   "kind": "vector",
+   "title": "311 infrastructure requests",
+   "group": "Events",
+   "visible": false,
+   "opacity": 0.6,
+   "source_id": "hub311_2023",
+   "role": "events",
+   "data": "events/hub311_2023_grid.geojson",
+   "geometry": "fill",
+   "popup_fields": [
+    "events_heatwave",
+    "events_baseline",
+    "per_day_heatwave",
+    "per_day_baseline"
+   ],
+   "field_labels": {
+    "events_heatwave": "Events, heat window",
+    "events_baseline": "Events, baseline",
+    "per_day_heatwave": "Per day, heat window",
+    "per_day_baseline": "Per day, baseline"
+   },
+   "count": 263,
+   "count_label": "500 m cells",
+   "color": {
+    "field": "per_day_heatwave",
+    "label": "Events per day (heat window)",
+    "vmin": 0,
+    "vmax": 0.62,
+    "stops": [
+     "#ffffcc",
+     "#fed976",
+     "#fd8c3c",
+     "#e2191c",
+     "#800026"
+    ],
+    "units": "/day"
+   },
+   "daily": "events/hub311_2023_daily.json",
+   "aggregated": true
+  }
+ ]
+}

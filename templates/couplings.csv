@@ -1,0 +1,3 @@
+# Coupling parameters (design section 3). One row per relationship; param_low/mid/high feed Monte Carlo sampling.
+# functional_form examples: linear, logistic, threshold, exponential. Fill from the literature review; do not invent values.
+coupling_id,driver,response,functional_form,param_low,param_mid,param_high,units,citation,notes

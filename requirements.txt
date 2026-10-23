@@ -1,0 +1,11 @@
+# 【中文】建议用 conda-forge 安装 rasterio / geopandas，最省事
+# Tip: conda install -c conda-forge rasterio geopandas pyarrow pyyaml matplotlib
+rasterio>=1.3
+geopandas>=0.14
+shapely>=2.0
+pyarrow>=14
+pandas>=2.0
+numpy>=1.24
+matplotlib>=3.7
+pillow>=10
+pyyaml>=6

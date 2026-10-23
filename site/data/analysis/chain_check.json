@@ -1,0 +1,95 @@
+{
+ "ok": true,
+ "assets_source": "roads_lst",
+ "exposures_source": "lst_hourly_2023",
+ "events_source": "hub311_2023",
+ "heatwave": {
+  "name": "July 2023 heat window",
+  "start": "2023-07-11",
+  "end": "2023-07-21"
+ },
+ "baseline": {
+  "name": "Early July baseline",
+  "start": "2023-07-01",
+  "end": "2023-07-10"
+ },
+ "days": {
+  "heatwave": 11,
+  "baseline": 10
+ },
+ "days_with_lst": {
+  "baseline": 10,
+  "heatwave": 10
+ },
+ "assets_total": 4137,
+ "assets_with_exposure": 4137,
+ "events_matched": 773,
+ "bins": [
+  {
+   "bin": "Q1",
+   "assets": 828,
+   "km": 210.9,
+   "lst_heat_min": 37.9,
+   "lst_heat_max": 43.9,
+   "lst_heat_mean": 42.73,
+   "lst_base_mean": 39.04,
+   "events_heatwave": 28,
+   "events_baseline": 55,
+   "per_100km_day_heatwave": 1.207,
+   "per_100km_day_baseline": 2.608
+  },
+  {
+   "bin": "Q2",
+   "assets": 827,
+   "km": 243.6,
+   "lst_heat_min": 43.9,
+   "lst_heat_max": 45.4,
+   "lst_heat_mean": 44.67,
+   "lst_base_mean": 41.0,
+   "events_heatwave": 54,
+   "events_baseline": 57,
+   "per_100km_day_heatwave": 2.015,
+   "per_100km_day_baseline": 2.34
+  },
+  {
+   "bin": "Q3",
+   "assets": 827,
+   "km": 328.5,
+   "lst_heat_min": 45.4,
+   "lst_heat_max": 46.7,
+   "lst_heat_mean": 46.07,
+   "lst_base_mean": 42.4,
+   "events_heatwave": 87,
+   "events_baseline": 70,
+   "per_100km_day_heatwave": 2.408,
+   "per_100km_day_baseline": 2.131
+  },
+  {
+   "bin": "Q4",
+   "assets": 827,
+   "km": 370.2,
+   "lst_heat_min": 46.7,
+   "lst_heat_max": 48.2,
+   "lst_heat_mean": 47.47,
+   "lst_base_mean": 43.81,
+   "events_heatwave": 79,
+   "events_baseline": 62,
+   "per_100km_day_heatwave": 1.94,
+   "per_100km_day_baseline": 1.675
+  },
+  {
+   "bin": "Q5",
+   "assets": 828,
+   "km": 351.0,
+   "lst_heat_min": 48.2,
+   "lst_heat_max": 51.7,
+   "lst_heat_mean": 49.09,
+   "lst_base_mean": 45.44,
+   "events_heatwave": 136,
+   "events_baseline": 145,
+   "per_100km_day_heatwave": 3.522,
+   "per_100km_day_baseline": 4.131
+  }
+ ],
+ "note": "Pipeline check for gate G1 (LST → assets → events). Counts are small; this is not a statistical test of heat effects."
+}

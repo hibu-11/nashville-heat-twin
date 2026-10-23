@@ -1,0 +1,12 @@
+# 【中文】原始数据不进 git（放 Drive / GCS）/ raw inputs stay out of git
+raw/*
+!raw/README.md
+# 【中文】标准表体积大，存 GCS / Zenodo / standard tables live on GCS or Zenodo
+data/standard/
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/
+
+# 【中文】本地 Python 环境 / local virtualenv
+.venv/
