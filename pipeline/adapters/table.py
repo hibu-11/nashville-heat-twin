@@ -19,6 +19,14 @@ TARGETS = ("couplings", "dependencies")
 class TableAdapter(DatasetAdapter):
     kind = "table"
 
+    @property
+    def raw_path(self):
+        # 【中文】人工整理、需要版本管理的表（如耦合参数）用 path 指向仓库内文件
+        # curated, version-controlled tables (e.g. couplings) use `path` relative to the repo root
+        if self.cfg.get("path"):
+            return self.ctx.root / self.cfg["path"]
+        return self.ctx.raw_dir / self.cfg["file"]
+
     def outputs(self):
         return []
 

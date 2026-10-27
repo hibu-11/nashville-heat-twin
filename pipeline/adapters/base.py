@@ -103,7 +103,10 @@ class DatasetAdapter:
             st = f.stat()
             h.update(f"{f.name}:{st.st_size}:{int(st.st_mtime)}".encode())
         # 【中文】adapter 所在模块（含基类）的源码也算输入 / adapter module code counts too
-        for path in sorted({inspect.getsourcefile(c) for c in type(self).__mro__ if c.__module__.startswith("pipeline.")}):
+        files = {inspect.getsourcefile(c) for c in type(self).__mro__ if c.__module__.startswith("pipeline.")}
+        # 【中文】adapter 调用的其他模块（如 twin/rules.py）在 code_modules 里声明 / extra modules it calls
+        files |= {inspect.getsourcefile(m) for m in getattr(self, "code_modules", ())}
+        for path in sorted(files):
             h.update(Path(path).read_bytes())
         for up in self.upstream():
             h.update(f"{up}:{self.ctx.fingerprints.get(up, 'missing')}".encode())
@@ -148,7 +151,19 @@ def ramp_stops(cmap_name: str, n: int = 9) -> list[str]:
 
 def write_json(path: Path, obj) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(obj, ensure_ascii=False, indent=1, default=_json_default), encoding="utf-8")
+    # 【中文】NaN / Inf 不是合法 JSON，统一写成 null / NaN and Inf become null (valid JSON)
+    path.write_text(json.dumps(_clean(obj), ensure_ascii=False, indent=1, default=_json_default, allow_nan=False),
+                    encoding="utf-8")
+
+
+def _clean(o):
+    if isinstance(o, dict):
+        return {k: _clean(v) for k, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return [_clean(v) for v in o]
+    if isinstance(o, (float, np.floating)):
+        return float(o) if np.isfinite(o) else None
+    return o
 
 
 def _json_default(o):

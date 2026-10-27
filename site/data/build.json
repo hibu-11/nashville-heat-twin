@@ -1,7 +1,7 @@
 {
- "built_at": "2026-10-23T15:09:39+00:00",
- "code_version": "src:eb524db8c13a",
- "config_sha256": "e6c04d54d0413978",
+ "built_at": "2026-10-27T18:11:35+00:00",
+ "code_version": "git:78173d6-dirty",
+ "config_sha256": "6955649e25c141a5",
  "python": "3.14.4",
  "packages": {
   "numpy": "2.5.4",
@@ -20,45 +20,102 @@
    "fingerprint": null
   },
   "lst_hourly_2023": {
-   "status": "cached",
-   "fingerprint": "b006551f78e211de"
+   "status": "built",
+   "fingerprint": "551d310f89e2fc41"
   },
   "lst_10m_final": {
    "status": "failed",
    "fingerprint": null
   },
   "lst_jja2023_mean": {
-   "status": "cached",
-   "fingerprint": "cc1eb289d85a7c12"
+   "status": "built",
+   "fingerprint": "fa81c162ec1d4364"
   },
   "lst_20240731_utc22": {
-   "status": "cached",
-   "fingerprint": "65c492e69430f0e9"
+   "status": "built",
+   "fingerprint": "10d02cd31299bf5f"
   },
   "lst_amp_2023": {
-   "status": "cached",
-   "fingerprint": "42141e30140808bf"
+   "status": "built",
+   "fingerprint": "072611f20d083d7c"
   },
   "roads_lst": {
-   "status": "cached",
-   "fingerprint": "ec032c4a81e7a29f"
+   "status": "built",
+   "fingerprint": "795adca5f67ae710"
   },
   "surface_parking": {
-   "status": "cached",
-   "fingerprint": "908acded3864c14a"
+   "status": "built",
+   "fingerprint": "53414d2a3f74a346"
   },
   "hub311_2023": {
-   "status": "cached",
-   "fingerprint": "b9bac44b4ad76103"
+   "status": "built",
+   "fingerprint": "6281840b0b614457"
+  },
+  "osm_substations": {
+   "status": "built",
+   "fingerprint": "91c95a81ba1daf3b"
+  },
+  "osm_power_lines": {
+   "status": "built",
+   "fingerprint": "1e475399f2f764c1"
+  },
+  "osm_water": {
+   "status": "built",
+   "fingerprint": "f188b51428f45a4c"
+  },
+  "osm_traffic_signals": {
+   "status": "built",
+   "fingerprint": "1cdccb9cf9c68666"
+  },
+  "tdot_bridges": {
+   "status": "built",
+   "fingerprint": "c3d70bf987aa685c"
+  },
+  "hospitals": {
+   "status": "built",
+   "fingerprint": "a7e9ad1b9a11b001"
+  },
+  "dialysis": {
+   "status": "built",
+   "fingerprint": "abe3051db4371668"
+  },
+  "nursing_homes": {
+   "status": "built",
+   "fingerprint": "ab16bea637b4abb4"
+  },
+  "zcta_population": {
+   "status": "built",
+   "fingerprint": "cf5c5a351f00b717"
+  },
+  "buildings_aoi": {
+   "status": "built",
+   "fingerprint": "b09dc13ccfdeaff2"
+  },
+  "asos_bna": {
+   "status": "built",
+   "fingerprint": "fdc8854f5ed1714c"
+  },
+  "eaglei_2023": {
+   "status": "built",
+   "fingerprint": "ee5528f1930e606f"
+  },
+  "twin_couplings": {
+   "status": "built",
+   "fingerprint": "9bb8fbf0ea45550a"
+  },
+  "twin_dependencies": {
+   "status": "built",
+   "fingerprint": "07ba86264ba4d20e"
   }
  },
  "tables": {
-  "assets": 5130,
-  "dependencies": 0,
-  "couplings": 0,
+  "assets": 72444,
+  "dependencies": 3188,
+  "couplings": 31,
   "exposures": 850587,
-  "events": 3367,
-  "sources": 9
+  "events": 5441,
+  "drivers": 11040,
+  "sources": 23
  },
  "validation": {
   "errors": 0,
@@ -66,5 +123,5 @@
   "issues": []
  },
  "chain_check": true,
- "run_id": "20261023T150939Z-b243002a"
+ "run_id": "20261027T181135Z-053157f7"
 }

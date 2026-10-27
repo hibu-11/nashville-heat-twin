@@ -17,6 +17,15 @@ Copy these files from Google Drive into this folder (keep the names), then run `
 | `nashville_roads_lst_full.shp` / `.dbf` / `.shx` / `.prj` / `.cpg` | `03_Road_Temp_Cascade/nashville_road_temp/` |
 | `nashville_surface_parking.geojson` | `handover/data/` |
 | `events_hub311.parquet` | `06_Digital_Twin/twin_demo/l2/` |
+| `buildings_aoi.parquet`（twin_demo 的 assets_buildings） | `06_Digital_Twin/twin_demo/l2/` |
+| `health/{hospitals,dialysis,nursing_homes}.geojson`、`health/zcta_health.gpkg` | 共享目录 `cascading-heat_data/06_health/` |
+| `tdot_bridge_condition_davidson.geojson` | `cascading-heat_data/04_transportation/` |
+| `noaa_BNA_daily_2017-07_2024-11.csv` | `cascading-heat_data/01_temperature/` |
+| `eaglei/eaglei_outages_2023.csv`（约 1.2 GB）+ 引用文件 | `cascading-heat_data/02_power/power_outage/` |
+| `davidson_county.parquet`（twin_demo 的 `_county_47037.parquet`） | `06_Digital_Twin/twin_demo/l1_std/ntad/` |
+| `osm/*.geojson`、`asos_bna_hourly.csv` | 运行 `python scripts/fetch_open_data.py` 自动下载 |
+
+共享目录 `cascading-heat_data` 在 Drive 里位于 `.shortcut-targets-by-id/…/cascading-heat_data`（`digital_nashville` 的快捷方式）。
 
 单个文件的直接链接见 `datasets.yaml` 里的 `drive_url`，文件夹见 `drive_folder`。
 

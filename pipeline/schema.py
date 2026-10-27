@@ -22,9 +22,12 @@ TABLES: dict[str, dict[str, tuple[str, bool]]] = {
         "valid_from": ("time", False), "valid_to": ("time", False), "source_id": ("str", True),
     },
     "dependencies": {
+        # 【中文】rule_id：生成这条边的规则（见学术手册）；placeholder：是否为占位边；
+        # gate：下游在多个上游之间的逻辑（any = 任一上游可供即可，all = 全部上游都需要）
         "from_asset": ("str", True), "to_asset": ("str", True), "dep_type": ("str", True),
-        "coupling_id": ("str", False), "valid_from": ("time", False), "valid_to": ("time", False),
-        "source_id": ("str", True),
+        "coupling_id": ("str", False), "rule_id": ("str", False), "gate": ("str", False),
+        "placeholder": ("str", False), "quality_rank": ("float", False),
+        "valid_from": ("time", False), "valid_to": ("time", False), "source_id": ("str", True),
     },
     "couplings": {
         "coupling_id": ("str", True), "driver": ("str", True), "response": ("str", True),
@@ -48,11 +51,18 @@ TABLES: dict[str, dict[str, tuple[str, bool]]] = {
         "license": ("str", False), "version": ("str", False), "retrieved_date": ("str", False),
         "temporal_res": ("str", False), "spatial_res": ("str", False), "quality_rank": ("float", False),
     },
+    # 【中文】辅助表：外部驱动（气象站逐小时气温等），不属于任何资产。设计方案六张表之外新增，
+    # 见学术手册 §2.3。Auxiliary table for external drivers (e.g. hourly station air temperature).
+    "drivers": {
+        "station_id": ("str", True), "timestamp": ("time", True), "variable": ("str", True),
+        "value": ("float", True), "units": ("str", True), "source_id": ("str", True),
+    },
 }
 GEO_TABLES = {t for t, cols in TABLES.items() if "geometry" in cols}
 ID_COLUMN = {"assets": "asset_id", "couplings": "coupling_id", "events": "event_id", "sources": "source_id"}
 TIME_PAIRS = {"assets": ("valid_from", "valid_to"), "dependencies": ("valid_from", "valid_to"),
-              "exposures": ("timestamp", "time_end"), "events": ("start_time", "end_time")}
+              "exposures": ("timestamp", "time_end"), "events": ("start_time", "end_time"),
+              "drivers": ("timestamp", "timestamp")}
 
 
 def empty(table: str) -> pd.DataFrame:
@@ -123,6 +133,16 @@ def validate(tables: dict[str, pd.DataFrame], time_range: tuple[str, str] | None
         if name == "exposures" and len(df):
             key = ["asset_id", "timestamp", "lst_source"]
             add(name, "error", "unique", "duplicate (asset_id, timestamp, lst_source)", df.duplicated(key).sum())
+        if name == "dependencies" and len(df):
+            add(name, "error", "unique", "duplicate (from_asset, to_asset, dep_type)",
+                df.duplicated(["from_asset", "to_asset", "dep_type"]).sum())
+            add(name, "error", "self_loop", "from_asset equals to_asset", (df["from_asset"] == df["to_asset"]).sum())
+        if name == "couplings" and len(df):
+            bad = ~((df["param_low"] <= df["param_mid"]) & (df["param_mid"] <= df["param_high"]))
+            add(name, "error", "range", "param_low ≤ param_mid ≤ param_high violated", bad.sum())
+        if name == "drivers" and len(df):
+            add(name, "error", "unique", "duplicate (station_id, timestamp, variable)",
+                df.duplicated(["station_id", "timestamp", "variable"]).sum())
 
         if name in TIME_PAIRS and len(df):
             a, b = TIME_PAIRS[name]

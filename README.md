@@ -16,6 +16,14 @@ pipeline/
     vector.py            Shapefile / GeoJSON → assets（+ 合成期 exposures）+ 网页 GeoJSON
     events.py            历史事件 → events（空间匹配 asset_id）+ 网页聚合统计
     table.py             CSV / Parquet → couplings 或 dependencies
+    timeseries.py        ASOS 逐小时气象 → drivers；EAGLE-I 县级停电 → events
+    dependencies.py      依赖规则 → dependencies + 供电分区 + 网页依赖图
+  twin/                级联模型 v0：rules（依赖规则 R-*）、params、cascade（Eq. 2–16）、validate
+  cascade.py           级联模拟入口：python -m pipeline.cascade
+  report.py            由最近一次运行生成 docs/RESULTS.md
+twin/                  耦合参数表 couplings.csv（每行带来源与证据）、参考文献 references.yaml
+docs/                  学术手册 HANDBOOK.md（逻辑、公式、参数、引用）、RESULTS.md（自动生成）
+scripts/               fetch_open_data.py：下载 OSM 与 ASOS 公开数据
 templates/             couplings.csv / dependencies.csv 表头模板
 raw/                   原始数据（不进 git，清单见 raw/README.md）
 data/standard/         标准表 + 标准栅格 + 校验报告 + run 清单（不进 git，存 GCS / Zenodo）
@@ -49,6 +57,23 @@ site/                  GitHub Pages 发布的网站
    ```bash
    cd site && python -m http.server 8000     # 打开 http://localhost:8000
    ```
+
+## 级联模型 v0（阶段 2 雏形）
+
+基于真实资产（OSM 变电站与电力线、CMS 医疗设施、TDOT 桥梁、OSM 信号灯与水务设施、ACS 人口）和占位依赖（Voronoi 供电分区、备用电源、储水时长等），逐小时模拟 2023 年 6–8 月热 → 电 → 水 / 医疗 / 交通 / 人口的连锁反应，并用 EAGLE-I 停电和 311 报修做验证。
+
+```bash
+.venv/bin/python scripts/fetch_open_data.py                 # 下载 OSM + ASOS 到 raw/
+.venv/bin/python -m pipeline.build                          # 标准表 + 依赖图 + 校验
+.venv/bin/python -m pipeline.cascade --runs 2000 --mid-runs 500 --scenarios 0,2,4
+.venv/bin/python -m pipeline.report                         # 生成 docs/RESULTS.md
+```
+
+- **学术手册**：[docs/HANDBOOK.md](docs/HANDBOOK.md)——逻辑体系、规则（R-*）、每一步公式（Eq. 1–18）、参数表（C-*，标明文献 / 标准 / 内部 / 占位假设）、验证设计、局限与参考文献（DOI 已核实）。
+- **结果**：[docs/RESULTS.md](docs/RESULTS.md)，由 `pipeline.report` 从运行结果生成，不手填数字。
+- **可视化**：`site/cascade.html`（网站首页左下角 "Cascade model"）。
+
+每次模拟写入 `data/standard/results/<run_id>/`，记录随机种子、全部参数抽样、耦合表哈希和所用构建的 run_id。
 
 ## 网站功能
 

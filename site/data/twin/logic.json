@@ -1,0 +1,286 @@
+{
+ "stats": {
+  "vertices": 3591,
+  "terminals": 379,
+  "connected_substations": 49,
+  "R-P1_pairs": 106,
+  "R-P1b_feeds": 51,
+  "R-P2_placeholder_feeds": 8,
+  "mv_vertices": 35948,
+  "zones": 40,
+  "edges": 3188,
+  "by_rule": {
+   "R-A1": 15,
+   "R-P1": 144,
+   "R-P1b": 51,
+   "R-P2": 8,
+   "R-P3": 40,
+   "R-P4": 548,
+   "R-P4b": 2,
+   "R-T1": 2076,
+   "R-T2": 184,
+   "R-W1": 45,
+   "R-W2": 75
+  },
+  "placeholder_share": 0.225
+ },
+ "links": [
+  {
+   "from_system": "power",
+   "to_system": "health",
+   "dep_type": "power",
+   "rule_id": "R-P4",
+   "coupling_id": "C-H1",
+   "gate": "series",
+   "placeholder": "yes",
+   "n": 6
+  },
+  {
+   "from_system": "power",
+   "to_system": "health",
+   "dep_type": "power",
+   "rule_id": "R-P4",
+   "coupling_id": "C-H2",
+   "gate": "series",
+   "placeholder": "yes",
+   "n": 4
+  },
+  {
+   "from_system": "power",
+   "to_system": "health",
+   "dep_type": "power",
+   "rule_id": "R-P4",
+   "coupling_id": "C-H3",
+   "gate": "series",
+   "placeholder": "yes",
+   "n": 5
+  },
+  {
+   "from_system": "power",
+   "to_system": "population",
+   "dep_type": "power",
+   "rule_id": "R-P4",
+   "coupling_id": "C-POP1",
+   "gate": "series",
+   "placeholder": "yes",
+   "n": 110
+  },
+  {
+   "from_system": "power",
+   "to_system": "power",
+   "dep_type": "power",
+   "rule_id": "R-P1",
+   "coupling_id": "C-P5",
+   "gate": "redundant",
+   "placeholder": "no",
+   "n": 68
+  },
+  {
+   "from_system": "power",
+   "to_system": "power",
+   "dep_type": "power",
+   "rule_id": "R-P1b",
+   "coupling_id": "C-P5",
+   "gate": "redundant",
+   "placeholder": "no",
+   "n": 51
+  },
+  {
+   "from_system": "power",
+   "to_system": "power",
+   "dep_type": "power",
+   "rule_id": "R-P2",
+   "coupling_id": "C-P5",
+   "gate": "redundant",
+   "placeholder": "yes",
+   "n": 8
+  },
+  {
+   "from_system": "power",
+   "to_system": "power",
+   "dep_type": "power",
+   "rule_id": "R-P3",
+   "coupling_id": "C-P5",
+   "gate": "series",
+   "placeholder": "yes",
+   "n": 40
+  },
+  {
+   "from_system": "power",
+   "to_system": "power",
+   "dep_type": "power_peer",
+   "rule_id": "R-P1",
+   "coupling_id": "C-P4",
+   "gate": "redundant",
+   "placeholder": "no",
+   "n": 76
+  },
+  {
+   "from_system": "power",
+   "to_system": "transportation",
+   "dep_type": "power",
+   "rule_id": "R-P4",
+   "coupling_id": "C-T2",
+   "gate": "series",
+   "placeholder": "yes",
+   "n": 422
+  },
+  {
+   "from_system": "power",
+   "to_system": "water",
+   "dep_type": "power",
+   "rule_id": "R-P4",
+   "coupling_id": "C-W2",
+   "gate": "series",
+   "placeholder": "yes",
+   "n": 1
+  },
+  {
+   "from_system": "power",
+   "to_system": "water",
+   "dep_type": "power",
+   "rule_id": "R-P4b",
+   "coupling_id": "C-W2",
+   "gate": "series",
+   "placeholder": "yes",
+   "n": 2
+  },
+  {
+   "from_system": "transportation",
+   "to_system": "health",
+   "dep_type": "access",
+   "rule_id": "R-A1",
+   "coupling_id": "C-A1",
+   "gate": "series",
+   "placeholder": "no",
+   "n": 15
+  },
+  {
+   "from_system": "transportation",
+   "to_system": "transportation",
+   "dep_type": "control",
+   "rule_id": "R-T1",
+   "coupling_id": "C-T3",
+   "gate": "series",
+   "placeholder": "no",
+   "n": 2076
+  },
+  {
+   "from_system": "transportation",
+   "to_system": "transportation",
+   "dep_type": "structural",
+   "rule_id": "R-T2",
+   "coupling_id": "C-T4",
+   "gate": "series",
+   "placeholder": "no",
+   "n": 184
+  },
+  {
+   "from_system": "water",
+   "to_system": "health",
+   "dep_type": "water",
+   "rule_id": "R-W1",
+   "coupling_id": "C-W1",
+   "gate": "redundant",
+   "placeholder": "yes",
+   "n": 45
+  },
+  {
+   "from_system": "water",
+   "to_system": "health",
+   "dep_type": "water_storage",
+   "rule_id": "R-W2",
+   "coupling_id": "C-W3",
+   "gate": "redundant",
+   "placeholder": "yes",
+   "n": 75
+  }
+ ],
+ "asset_counts": [
+  {
+   "system": "built_environment",
+   "asset_type": "building",
+   "n": 60547
+  },
+  {
+   "system": "health",
+   "asset_type": "dialysis",
+   "n": 5
+  },
+  {
+   "system": "health",
+   "asset_type": "hospital",
+   "n": 6
+  },
+  {
+   "system": "health",
+   "asset_type": "nursing_home",
+   "n": 4
+  },
+  {
+   "system": "population",
+   "asset_type": "zcta",
+   "n": 20
+  },
+  {
+   "system": "power",
+   "asset_type": "cable",
+   "n": 20
+  },
+  {
+   "system": "power",
+   "asset_type": "line",
+   "n": 289
+  },
+  {
+   "system": "power",
+   "asset_type": "minor_line",
+   "n": 5689
+  },
+  {
+   "system": "power",
+   "asset_type": "service_zone",
+   "n": 40
+  },
+  {
+   "system": "power",
+   "asset_type": "substation",
+   "n": 78
+  },
+  {
+   "system": "transportation",
+   "asset_type": "bridge",
+   "n": 184
+  },
+  {
+   "system": "transportation",
+   "asset_type": "road_segment",
+   "n": 4137
+  },
+  {
+   "system": "transportation",
+   "asset_type": "traffic_signal",
+   "n": 422
+  },
+  {
+   "system": "water",
+   "asset_type": "reservoir_covered",
+   "n": 2
+  },
+  {
+   "system": "water",
+   "asset_type": "wastewater_plant",
+   "n": 2
+  },
+  {
+   "system": "water",
+   "asset_type": "water_tower",
+   "n": 3
+  },
+  {
+   "system": "water",
+   "asset_type": "water_works",
+   "n": 3
+  }
+ ]
+}

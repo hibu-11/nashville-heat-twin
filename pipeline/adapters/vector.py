@@ -27,23 +27,38 @@ class VectorAdapter(DatasetAdapter):
     kind = "vector"
 
     def extract(self):
-        return gpd.read_file(self.raw_path)
+        p = self.raw_path
+        return gpd.read_parquet(p) if p.suffix == ".parquet" else gpd.read_file(p)
 
     def outputs(self):
-        return [self.site_path("vector", ".geojson")]
+        # 【中文】publish: false 的数据集只进标准表，不出网页文件 / standard tables only
+        return [self.site_path("vector", ".geojson")] if self.cfg.get("publish", True) else []
 
     def transform(self, gdf: gpd.GeoDataFrame) -> AdapterResult:
         c = self.cfg
-        (web_f,) = self.outputs()
+        publish = c.get("publish", True)
 
         if gdf.crs is None:
             print(f"    {self.id}: no CRS, assuming EPSG:4326")
             gdf = gdf.set_crs(4326)
+        # 【中文】裁剪前记录面积，供 area_weight_fields 按面积比例折算（如 ZCTA 人口）
+        # remember areas before clipping so area_weight_fields can be scaled by the kept share
+        weights = c.get("area_weight_fields", [])
+        if weights:
+            gdf = gdf.assign(_area0=gdf.to_crs(STORE_CRS).geometry.area)
         gdf = gdf.to_crs(4326)
-        gdf = gpd.clip(gdf, box(*self.ctx.aoi))
+        # 【中文】clip_bbox 可放宽裁剪范围（如供电分区需要 AOI 外的变电站）/ optional wider clip
+        gdf = gpd.clip(gdf, box(*c.get("clip_bbox", self.ctx.aoi)))
         gdf = gdf[~gdf.geometry.is_empty & gdf.geometry.notna()].copy()
         if gdf.empty:
             raise ValueError("no features inside the AOI")
+        if weights:
+            share = (gdf.to_crs(STORE_CRS).geometry.area / gdf["_area0"]).clip(0, 1)
+            for f in weights:
+                if f in gdf:
+                    gdf[f] = pd.to_numeric(gdf[f], errors="coerce") * share
+            gdf["area_share"] = share.round(4)
+            gdf = gdf.drop(columns="_area0")
 
         # 【中文】全局唯一 asset_id / globally unique asset_id
         idf = c.get("id_field")
@@ -65,7 +80,8 @@ class VectorAdapter(DatasetAdapter):
         assets = gpd.GeoDataFrame({
             "asset_id": gdf["asset_id"],
             "system": c.get("system", "unknown"),
-            "asset_type": c.get("asset_type", "feature"),
+            "asset_type": (gdf[c["asset_type_field"]].fillna(c.get("asset_type", "feature")).astype(str)
+                           if c.get("asset_type_field") in gdf else c.get("asset_type", "feature")),
             "attributes": gdf[attr_cols].apply(lambda r: json.dumps(r.dropna().to_dict(), ensure_ascii=False, default=str), axis=1),
             "valid_from": c.get("valid_from"),
             "valid_to": c.get("valid_to"),
@@ -87,7 +103,13 @@ class VectorAdapter(DatasetAdapter):
             e["quality_flag"] = np.where(e["lst_mean"].notna(), "ok", "no_data")
             tables["exposures"] = e
 
+        if not publish:
+            return AdapterResult(layer=None, tables=tables)
+
         # 3) web GeoJSON (simplified) / 网页文件（简化几何）
+        (web_f,) = self.outputs()
+        if c.get("web_geometry") == "centroid":   # 【中文】小面状要素在网页上画成点 / small areas as points
+            gdf["geometry"] = gdf.to_crs(STORE_CRS).geometry.centroid.to_crs(4326)
         tol = float(c.get("simplify_m", 0)) / 111_320   # 【中文】米 → 近似度 / metres → approx. degrees
         if tol > 0:
             gdf["geometry"] = gdf.geometry.simplify(tol, preserve_topology=True)

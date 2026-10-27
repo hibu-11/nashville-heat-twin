@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Heat Cascade Model</title>
+  <meta name="description" content="Dependency graph and hourly heat-cascade simulation for downtown Nashville, summer 2023 (model v0).">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vendor/maplibre-gl-4.7.1/maplibre-gl.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/cascade.css">
+</head>
+<body class="cascade">
+  <div id="map" aria-label="Map of the dependency graph"></div>
+
+  <aside class="cpanel" id="cpanel">
+    <header class="cpanel-head">
+      <a class="back" href="index.html">← Heat twin</a>
+      <h1>Heat cascade model <span class="ver">v0</span></h1>
+      <p class="lede">Hourly power → water → health → transport cascade for downtown Nashville, Jun–Aug 2023.
+        Real assets from OSM, CMS, TDOT and ACS; dashed links are placeholders.</p>
+    </header>
+
+    <section class="block">
+      <div class="seg" id="scenario" role="radiogroup" aria-label="Warming scenario"></div>
+      <p class="hint">Uniform offsets added to the observed 2023 air temperature (sensitivity scenarios, not projections).</p>
+    </section>
+
+    <section class="block" id="now">
+      <h2 id="nowTime">—</h2>
+      <div class="kpis" id="kpis"></div>
+    </section>
+
+    <section class="block">
+      <h2>Season totals <span class="sub" id="runsNote"></span></h2>
+      <div class="kpis" id="season"></div>
+    </section>
+
+    <section class="block">
+      <h2>Logic</h2>
+      <div id="logic" class="logic"></div>
+    </section>
+
+    <section class="block">
+      <h2>Layers</h2>
+      <div id="toggles" class="toggles"></div>
+    </section>
+
+    <section class="block">
+      <h2>Validation against observations</h2>
+      <div id="validation" class="validation"></div>
+    </section>
+
+    <section class="block">
+      <h2>Most sensitive parameters</h2>
+      <div id="sensitivity"></div>
+    </section>
+
+    <footer class="cpanel-foot">
+      <a href="https://github.com/hibu-11/nashville-heat-twin/blob/main/docs/HANDBOOK.md" target="_blank" rel="noopener">Model handbook (equations, sources)</a>
+      <span id="runId"></span>
+    </footer>
+  </aside>
+
+  <section class="card" id="card" hidden aria-live="polite"></section>
+
+  <section class="chart-dock" id="dock" aria-label="Hourly time series">
+    <div class="dock-row">
+      <button class="tl-play" id="play" aria-label="Play">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path id="playIcon" d="M4 2.5v11l9-5.5z"/></svg>
+      </button>
+      <div class="dock-legend" id="dockLegend"></div>
+    </div>
+    <div class="dock-chart" id="chart"></div>
+  </section>
+
+  <script src="vendor/maplibre-gl-4.7.1/maplibre-gl.js"></script>
+  <script type="module" src="js/cascade.js"></script>
+</body>
+</html>

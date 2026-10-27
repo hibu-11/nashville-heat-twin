@@ -1,0 +1,183 @@
+# References for the dependency model. DOI entries were checked against Crossref / DataCite on 2026-10-27.
+# Keys are used in twin/couplings.csv (citation column) and docs/HANDBOOK.md.
+aashto_m320:
+  apa: 'AASHTO (current edition). M 320: Standard Specification for Performance-Graded Asphalt Binder. American Association of State Highway and Transportation Officials.'
+  year: null
+  verified: Standard; no DOI. Edition to be fixed when the TDOT binder grade is confirmed.
+acs2020:
+  apa: U.S. Census Bureau (2020–2022). 2020 ZCTA cartographic boundaries and American Community Survey 5-year estimates (processed in cascading-heat zcta_health.gpkg).
+  year: 2022
+  verified: Via cascading-heat 06_health
+anderson2012:
+  apa: 'Anderson, G. B., & Bell, M. L. (2012). Lights out: Impact of the August 2003 power outage on mortality in New York, NY. Epidemiology, 23(2), 189-193. https://doi.org/10.1097/EDE.0b013e318245c61c'
+  doi: 10.1097/EDE.0b013e318245c61c
+  year: 2012
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: pubmed:22252408
+auffhammer2017:
+  apa: Auffhammer, M., Baylis, P., & Hausman, C. H. (2017). Climate change is projected to have severe impacts on the frequency and intensity of peak electricity demand across the United States. Proceedings
+    of the National Academy of Sciences, 114(8), 1886-1891. https://doi.org/10.1073/pnas.1613193114
+  doi: 10.1073/pnas.1613193114
+  year: 2017
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: crossref
+bartos2016:
+  apa: Bartos, M., Chester, M., Johnson, N., Gorman, B., Eisenberg, D., Linkov, I., & Bates, M. (2016). Impacts of rising air temperatures on electric transmission ampacity and peak electricity load in
+    the United States. Environmental Research Letters, 11(11), 114008. https://doi.org/10.1088/1748-9326/11/11/114008
+  doi: 10.1088/1748-9326/11/11/114008
+  year: 2016
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: openalex
+buldyrev2010:
+  apa: Buldyrev, S. V., Parshani, R., Paul, G., Stanley, H. E., & Havlin, S. (2010). Catastrophic cascade of failures in interdependent networks. Nature, 464(7291), 1025-1028. https://doi.org/10.1038/nature08932
+  doi: 10.1038/nature08932
+  year: 2010
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: pubmed:20393559
+cascadingheat2026:
+  apa: 'Vanderbilt Data Science Institute (2026). cascading-heat (private repository, main @ 001cd56, 2026-07-06): temp_energy_sale_model.ipynb and simulation-build results; data inventory compiled 2026-10-02.'
+  year: 2026
+  verified: Internal source; values quoted from DATA_INVENTORY.md
+chinowsky2013:
+  apa: Chinowsky, P. S., Price, J. C., & Neumann, J. E. (2013). Assessment of climate change adaptation costs for the U.S. road network. Global Environmental Change, 23(4), 764-773. https://doi.org/10.1016/j.gloenvcha.2013.03.004
+  doi: 10.1016/j.gloenvcha.2013.03.004
+  year: 2013
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: openalex
+cms2016:
+  apa: Centers for Medicare & Medicaid Services (2016). Medicare and Medicaid Programs; Emergency Preparedness Requirements for Medicare and Medicaid Participating Providers and Suppliers. Federal Register,
+    81(180), 63860–64044 (Document 2016-21404).
+  url: https://www.federalregister.gov/documents/2016/09/16/2016-21404
+  year: 2016
+  verified: Federal Register API checked 2026-10-27
+cms_provider:
+  apa: 'Centers for Medicare & Medicaid Services (2026). Provider Data Catalog: Hospital General Information, Dialysis Facility, Nursing Home Provider Information (processed in cascading-heat).'
+  url: https://data.cms.gov/provider-data/
+  year: 2026
+  verified: Via cascading-heat 06_health
+dobson2007:
+  apa: 'Dobson, I., Carreras, B. A., Lynch, V. E., & Newman, D. E. (2007). Complex systems analysis of series of blackouts: Cascading failure, critical points, and self-organization. Chaos: An Interdisciplinary
+    Journal of Nonlinear Science, 17(2), 026103. https://doi.org/10.1063/1.2737822'
+  doi: 10.1063/1.2737822
+  year: 2007
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: crossref
+eaglei2023:
+  apa: Tansakul, V., Myers, A., Tennille, S., Denman, M., Hamaker, A., Huihui, J., Medlen, K., Allen, K., Redmon, D., Chinthavali, S., Coletti, M., Grant, J., Lee, M., Maguire, D., Newby, S., Stahl, C.,
+    Bhaduri, B., & Sanyal, J. (2023). EAGLE-I Power Outage Data 2014–2022 [Data set]. Oak Ridge National Laboratory. https://doi.org/10.13139/ORNLNCCS/1975202 (the 2023 file is from the same series, as
+    distributed in cascading-heat)
+  doi: 10.13139/ORNLNCCS/1975202
+  year: 2023
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: null
+gasparrini2015:
+  apa: 'Gasparrini, A., Guo, Y., Hashizume, M., Lavigne, E., Zanobetti, A., Schwartz, J., Tobias, A., Tong, S., Rocklöv, J., Forsberg, B., Leone, M., De Sario, M., Bell, M. L., Guo, Y. L. L., Wu, C. f.,
+    Kan, H., Yi, S. M., de Sousa Zanotti Stagliorio Coelho, M., Saldiva, P. H. N., …, & Armstrong, B. (2015). Mortality risk attributable to high and low ambient temperature: a multicountry observational
+    study. The Lancet, 386(9991), 369-375. https://doi.org/10.1016/S0140-6736(14)62114-0'
+  doi: 10.1016/S0140-6736(14)62114-0
+  year: 2015
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: semanticscholar
+hines2010:
+  apa: 'Hines, P., Cotilla-Sanchez, E., & Blumsack, S. (2010). Do topological models provide good information about electricity infrastructure vulnerability? Chaos: An Interdisciplinary Journal of Nonlinear
+    Science, 20(3), 033122. https://doi.org/10.1063/1.3489887'
+  doi: 10.1063/1.3489887
+  year: 2010
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: crossref
+hub311:
+  apa: Metro Nashville (2023). hubNashville 311 Service Requests 2023. Nashville Open Data.
+  url: https://data.nashville.gov/
+  year: 2023
+  verified: Via twin_demo data_manifest.json
+ieee738_2012:
+  apa: IEEE (2013). IEEE Standard for Calculating the Current-Temperature Relationship of Bare Overhead Conductors. IEEE Standards Association. https://doi.org/10.1109/IEEESTD.2013.6692858
+  doi: 10.1109/IEEESTD.2013.6692858
+  year: 2013
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: null
+ieee_c5791_2011:
+  apa: IEEE (2012). IEEE Guide for Loading Mineral-Oil-Immersed Transformers and Step-Voltage Regulators. IEEE Standards Association. https://doi.org/10.1109/IEEESTD.2012.6166928
+  doi: 10.1109/IEEESTD.2012.6166928
+  year: 2012
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: semanticscholar
+iem_asos:
+  apa: Iowa Environmental Mesonet (2026). ASOS/AWOS one-minute and hourly archive, station BNA (Nashville International Airport), retrieved 2026-10-27.
+  url: https://mesonet.agron.iastate.edu/request/download.phtml
+  year: 2026
+  verified: Retrieval logged in raw/open_data_manifest.json
+kelman2015:
+  apa: Kelman, J., Finne, K., Bogdanov, A., Worrall, C., Margolis, G., Rising, K., MaCurdy, T. E., & Lurie, N. (2015). Dialysis Care and Death Following Hurricane Sandy. American Journal of Kidney Diseases,
+    65(1), 109-115. https://doi.org/10.1053/j.ajkd.2014.07.005
+  doi: 10.1053/j.ajkd.2014.07.005
+  year: 2015
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: pubmed:25156306
+klise2017:
+  apa: Klise, K. A., Bynum, M., Moriarty, D., & Murray, R. (2017). A software framework for assessing the resilience of drinking water systems to disasters with an example earthquake case study. Environmental
+    Modelling & Software, 95, 420-431. https://doi.org/10.1016/j.envsoft.2017.06.022
+  doi: 10.1016/j.envsoft.2017.06.022
+  year: 2017
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: pubmed:30505210
+menne2012:
+  apa: Menne, M. J., Durre, I., Vose, R. S., Gleason, B. E., & Houston, T. G. (2012). An Overview of the Global Historical Climatology Network-Daily Database. Journal of Atmospheric and Oceanic Technology,
+    29(7), 897-910. https://doi.org/10.1175/JTECH-D-11-00103.1
+  doi: 10.1175/JTECH-D-11-00103.1
+  year: 2012
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: crossref
+motter2002:
+  apa: Motter, A. E., & Lai, Y. C. (2002). Cascade-based attacks on complex networks. Physical Review E, 66(6), 065102. https://doi.org/10.1103/PhysRevE.66.065102
+  doi: 10.1103/PhysRevE.66.065102
+  year: 2002
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: pubmed:12513335
+okabe2000:
+  apa: 'Okabe, A., Boots, B., Sugihara, K., & Chiu, S. N. (2000). Spatial Tessellations: Concepts and Applications of Voronoi Diagrams (2nd ed.). Wiley Series in Probability and Statistics. John Wiley &
+    Sons. https://doi.org/10.1002/9780470317013'
+  doi: 10.1002/9780470317013
+  year: 2000
+  verified: Crossref/DataCite metadata checked 2026-10-27; title, publisher and year checked; author list not present in Crossref/OpenAlex metadata
+  abstract_source: null
+osm2026:
+  apa: OpenStreetMap contributors (2026). OpenStreetMap data via the Overpass API, retrieved 2026-10-27. Open Database License 1.0.
+  url: https://www.openstreetmap.org/copyright
+  year: 2026
+  verified: Retrieval logged in raw/open_data_manifest.json
+ouyang2014:
+  apa: Ouyang, M. (2014). Review on modeling and simulation of interdependent critical infrastructure systems. Reliability Engineering & System Safety, 121, 43-60. https://doi.org/10.1016/j.ress.2013.06.040
+  doi: 10.1016/j.ress.2013.06.040
+  year: 2014
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: openalex
+rinaldi2001:
+  apa: Rinaldi, S. M., Peerenboom, J. P., & Kelly, T. K. (2001). Identifying, understanding, and analyzing critical infrastructure interdependencies. IEEE Control Systems Magazine, 21(6), 11-25. https://doi.org/10.1109/37.969131
+  doi: 10.1109/37.969131
+  year: 2001
+  verified: Crossref/DataCite metadata checked 2026-10-27; authors from OpenAlex (Crossref record has none)
+  abstract_source: openalex
+shinozuka2000:
+  apa: Shinozuka, M., Feng, M. Q., Lee, J., & Naganuma, T. (2000). Statistical Analysis of Fragility Curves. Journal of Engineering Mechanics, 126(12), 1224-1231. https://doi.org/10.1061/(ASCE)0733-9399(2000)126:12(1224)
+  doi: 10.1061/(ASCE)0733-9399(2000)126:12(1224)
+  year: 2000
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: null
+stone2023:
+  apa: Stone, B., Gronlund, C. J., Mallen, E., Hondula, D., O’Neill, M. S., Rajput, M., Grijalva, S., Lanza, K., Harlan, S., Larsen, L., Augenbroe, G., Krayenhoff, E. S., Broadbent, A., & Georgescu, M.
+    (2023). How Blackouts during Heat Waves Amplify Mortality and Morbidity Risk. Environmental Science & Technology, 57(22), 8245-8255. https://doi.org/10.1021/acs.est.2c09588
+  doi: 10.1021/acs.est.2c09588
+  year: 2023
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: semanticscholar
+tdot_bridges:
+  apa: Tennessee Department of Transportation (2022). Bridge Condition Annual, Davidson County.
+  year: 2022
+  verified: Via cascading-heat 04_transportation
+underwood2017:
+  apa: Underwood, B. S., Guido, Z., Gudipudi, P., & Feinberg, Y. (2017). Increased costs to US pavement infrastructure from future temperature rise. Nature Climate Change, 7(10), 704-707. https://doi.org/10.1038/nclimate3390
+  doi: 10.1038/nclimate3390
+  year: 2017
+  verified: Crossref/DataCite metadata checked 2026-10-27
+  abstract_source: semanticscholar

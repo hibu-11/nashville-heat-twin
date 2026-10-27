@@ -241,19 +241,259 @@ datasets:
     coverage: "2023-06-01 – 2023-08-31"
     quality_rank: 3
 
+  # ---------------------------------------------------------------- 电力 Power（OSM 真实位置）
+  # 【中文】电力、水务取 AOI 外扩约 4 km（clip_bbox），保证 AOI 边缘的供电分区正确
+  # power and water use the AOI plus ~4 km so service zones near the AOI edge are right
+  - id: osm_substations
+    kind: vector
+    title: Substations (OSM)
+    group: Power
+    file: osm/osm_substations.geojson
+    clip_bbox: [-86.88, 36.08, -86.68, 36.25]
+    system: power
+    asset_type: substation
+    id_field: osm_id
+    web_geometry: centroid
+    popup_fields: [name, substation, voltage, operator]
+    field_labels: { name: Name, substation: Type, voltage: Voltage (V), operator: Operator }
+    fill_color: "#2a6f89"
+    visible: false
+    provider: OpenStreetMap contributors (Overpass API)
+    license: ODbL 1.0
+    retrieved_date: "2026-10-27"
+    temporal_res: snapshot
+    spatial_res: polygon
+    quality_rank: 3
+
+  - id: osm_power_lines
+    kind: vector
+    title: Power lines (OSM)
+    group: Power
+    file: osm/osm_power_lines.geojson
+    clip_bbox: [-86.88, 36.08, -86.68, 36.25]
+    system: power
+    asset_type_field: power        # 【中文】line / minor_line / cable
+    asset_type: line
+    id_field: osm_id
+    publish: false                 # 【中文】只用于拓扑，不单独出网页图层 / topology only
+    provider: OpenStreetMap contributors (Overpass API)
+    license: ODbL 1.0
+    retrieved_date: "2026-10-27"
+    temporal_res: snapshot
+    spatial_res: line
+    quality_rank: 3
+
+  # ---------------------------------------------------------------- 水 Water
+  - id: osm_water
+    kind: vector
+    title: Water works and storage (OSM)
+    group: Water
+    file: osm/osm_water.geojson
+    clip_bbox: [-86.88, 36.08, -86.68, 36.25]
+    system: water
+    asset_type_field: man_made
+    id_field: osm_id
+    web_geometry: centroid
+    popup_fields: [name, man_made, operator]
+    field_labels: { name: Name, man_made: Type, operator: Operator }
+    fill_color: "#3b7fbf"
+    visible: false
+    provider: OpenStreetMap contributors (Overpass API)
+    license: ODbL 1.0
+    retrieved_date: "2026-10-27"
+    temporal_res: snapshot
+    spatial_res: point / polygon
+    quality_rank: 3
+
+  # ---------------------------------------------------------------- 交通补充 Transportation (more)
+  - id: osm_traffic_signals
+    kind: vector
+    title: Traffic signals (OSM)
+    group: Transportation
+    file: osm/osm_traffic_signals.geojson
+    system: transportation
+    asset_type: traffic_signal
+    id_field: osm_id
+    popup_fields: []
+    fill_color: "#5b6a70"
+    visible: false
+    provider: OpenStreetMap contributors (Overpass API)
+    license: ODbL 1.0
+    retrieved_date: "2026-10-27"
+    temporal_res: snapshot
+    spatial_res: point
+    quality_rank: 3
+
+  - id: tdot_bridges
+    kind: vector
+    title: Bridges (TDOT condition)
+    group: Transportation
+    file: tdot_bridge_condition_davidson.geojson
+    system: transportation
+    asset_type: bridge
+    id_field: STRUCTURE_ID
+    popup_fields: [STRUCTURE_ID, ROUTE_NUMBER, OWNER, YEAR_BUILT, OVERALL_CONDITION]
+    field_labels: { STRUCTURE_ID: Structure ID, ROUTE_NUMBER: Route, OWNER: Owner, YEAR_BUILT: Year built,
+                    OVERALL_CONDITION: Overall condition }
+    fill_color: "#8a6d3b"
+    visible: false
+    provider: Tennessee Department of Transportation (via cascading-heat)
+    license: public
+    temporal_res: report year 2022
+    spatial_res: point
+    quality_rank: 2
+
+  # ---------------------------------------------------------------- 健康 Health（CMS）
+  - id: hospitals
+    kind: vector
+    title: Hospitals (CMS)
+    group: Health
+    file: health/hospitals.geojson
+    system: health
+    asset_type: hospital
+    id_field: Facility ID
+    popup_fields: [Facility Name, Hospital Type, Emergency Services]
+    field_labels: { Facility Name: Name, Hospital Type: Type, Emergency Services: Emergency services }
+    fill_color: "#b8432f"
+    visible: false
+    provider: CMS Provider Data (via cascading-heat)
+    license: public
+    temporal_res: snapshot
+    spatial_res: point
+    quality_rank: 2
+
+  - id: dialysis
+    kind: vector
+    title: Dialysis facilities (CMS)
+    group: Health
+    file: health/dialysis.geojson
+    system: health
+    asset_type: dialysis
+    id_field: CMS Certification Number (CCN)
+    popup_fields: [Facility Name, "# of Dialysis Stations", Profit or Non-Profit]
+    field_labels: { Facility Name: Name, "# of Dialysis Stations": Stations, Profit or Non-Profit: Ownership }
+    fill_color: "#7a3e9d"
+    visible: false
+    provider: CMS Provider Data (via cascading-heat)
+    license: public
+    temporal_res: snapshot
+    spatial_res: point
+    quality_rank: 2
+
+  - id: nursing_homes
+    kind: vector
+    title: Nursing homes (CMS)
+    group: Health
+    file: health/nursing_homes.geojson
+    system: health
+    asset_type: nursing_home
+    id_field: CMS Certification Number (CCN)
+    popup_fields: [Provider Name, Number of Certified Beds, Overall Rating]
+    field_labels: { Provider Name: Name, Number of Certified Beds: Certified beds, Overall Rating: Overall rating }
+    fill_color: "#c27c0e"
+    visible: false
+    provider: CMS Provider Data (via cascading-heat)
+    license: public
+    temporal_res: snapshot
+    spatial_res: point
+    quality_rank: 2
+
+  # ---------------------------------------------------------------- 人口 Population
+  - id: zcta_population
+    kind: vector
+    title: Population by ZCTA (ACS, clipped to AOI)
+    group: Population
+    file: health/zcta_health.gpkg
+    system: population
+    asset_type: zcta
+    id_field: zcta5
+    # 【中文】裁到 AOI 后人口按面积比例折算 / counts scaled by the area kept inside the AOI
+    area_weight_fields: [pop_total, pop_elderly, pop_below_poverty, total_occupied]
+    popup_fields: [zcta5, pop_total, pop_elderly, pct_elderly, pct_poverty, median_income, area_share]
+    field_labels: { zcta5: ZCTA, pop_total: Population (in AOI), pop_elderly: Age 65+ (in AOI),
+                    pct_elderly: Share 65+, pct_poverty: Share in poverty, median_income: Median income,
+                    area_share: Share of ZCTA inside AOI }
+    fill_color: "#9aa6a0"
+    visible: false
+    provider: U.S. Census Bureau ACS 5-year + 2020 ZCTA boundaries (via cascading-heat)
+    license: public
+    temporal_res: ACS 5-year
+    spatial_res: ZCTA
+    quality_rank: 2
+
+  - id: buildings_aoi
+    kind: vector
+    title: Building footprints
+    group: Built environment
+    file: buildings_aoi.parquet
+    system: built_environment
+    asset_type: building
+    id_field: asset_id
+    publish: false              # 【中文】只用于分区负荷权重 / used only as zone load weights
+    provider: Metro Nashville building footprints (via twin_demo)
+    license: public
+    temporal_res: snapshot
+    spatial_res: polygon
+    quality_rank: 2
+
+  # ---------------------------------------------------------------- 驱动与观测 Drivers and observations
+  - id: asos_bna
+    kind: station_series
+    title: Hourly air temperature, BNA (ASOS)
+    file: asos_bna_hourly.csv
+    station_id: BNA
+    provider: Iowa Environmental Mesonet (NOAA ASOS)
+    license: public
+    retrieved_date: "2026-10-27"
+    temporal_res: hourly
+    spatial_res: station
+    coverage: "2023-06-01 – 2023-08-31"
+    quality_rank: 1
+
+  - id: eaglei_2023
+    kind: outage_series
+    title: Power outages, Davidson County (EAGLE-I)
+    file: eaglei/eaglei_outages_2023.csv
+    region_file: davidson_county.parquet
+    fips: 47037
+    period: ["2023-06-01", "2023-08-31"]
+    provider: ORNL EAGLE-I (via cascading-heat)
+    license: "ORNL data terms; cite DOI 10.13139/ORNLNCCS/1975202"
+    temporal_res: 15 min → hourly max
+    spatial_res: county
+    coverage: "2023-06-01 – 2023-08-31"
+    quality_rank: 2
+
   # ---------------------------------------------------------------- 耦合与依赖 Couplings / dependencies
-  # 【中文】文献整理好后取消注释；格式见 templates/。阶段 2 的 cascade 模型读这两张表。
-  # Uncomment once the literature table exists; see templates/ for the format.
-  # - id: couplings_lit
-  #   kind: table
-  #   target_table: couplings
-  #   title: Literature couplings
-  #   file: couplings.csv
-  #   provider: literature review (40+ papers)
-  #   quality_rank: 2
-  # - id: deps_roads
-  #   kind: table
-  #   target_table: dependencies
-  #   title: Road dependencies
-  #   file: dependencies.csv
-  #   quality_rank: 2
+  # 【中文】耦合参数是人工整理的知识，放在仓库 twin/ 下做版本管理（path 相对仓库根目录）。
+  # Couplings are curated knowledge kept in twin/ under version control.
+  - id: twin_couplings
+    kind: table
+    target_table: couplings
+    title: Coupling parameters v0 (literature / standards / placeholders)
+    path: twin/couplings.csv
+    provider: compiled for this project; see twin/references.yaml
+    license: CC BY 4.0
+    temporal_res: static
+    quality_rank: 3
+
+  - id: twin_dependencies
+    kind: dependency_rules
+    title: Dependency graph v0 (rules R-*)
+    substations: osm_substations
+    power_lines: osm_power_lines
+    water: osm_water
+    signals: osm_traffic_signals
+    roads: roads_lst
+    bridges: tdot_bridges
+    population: zcta_population
+    buildings: buildings_aoi
+    facilities:
+      - { source: hospitals, coupling: C-H1 }
+      - { source: nursing_homes, coupling: C-H2 }
+      - { source: dialysis, coupling: C-H3 }
+    params: { line_snap_m: 60, placeholder_max_km: 12, signal_road_m: 30, bridge_road_m: 30 }
+    provider: derived (pipeline/twin/rules.py)
+    license: CC BY 4.0
+    temporal_res: static
+    quality_rank: 4

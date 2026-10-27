@@ -6,8 +6,8 @@
   -86.727,
   36.208
  ],
- "built_at": "2026-10-23T15:09+00:00",
- "run_id": "20261023T150939Z-b243002a",
+ "built_at": "2026-10-27T18:11+00:00",
+ "run_id": "20261027T181135Z-053157f7",
  "timezone": "America/Chicago",
  "heatwave": {
   "name": "July 2023 heat window",
@@ -183,6 +183,199 @@
    },
    "daily": "events/hub311_2023_daily.json",
    "aggregated": true
+  },
+  {
+   "id": "osm_substations",
+   "kind": "vector",
+   "title": "Substations (OSM)",
+   "group": "Power",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "osm_substations",
+   "data": "vector/osm_substations.geojson",
+   "geometry": "circle",
+   "popup_fields": [
+    "name",
+    "substation",
+    "voltage",
+    "operator"
+   ],
+   "field_labels": {
+    "name": "Name",
+    "substation": "Type",
+    "voltage": "Voltage (V)",
+    "operator": "Operator"
+   },
+   "count": 78,
+   "fill_color": "#2a6f89"
+  },
+  {
+   "id": "osm_water",
+   "kind": "vector",
+   "title": "Water works and storage (OSM)",
+   "group": "Water",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "osm_water",
+   "data": "vector/osm_water.geojson",
+   "geometry": "circle",
+   "popup_fields": [
+    "name",
+    "man_made",
+    "operator"
+   ],
+   "field_labels": {
+    "name": "Name",
+    "man_made": "Type",
+    "operator": "Operator"
+   },
+   "count": 10,
+   "fill_color": "#3b7fbf"
+  },
+  {
+   "id": "osm_traffic_signals",
+   "kind": "vector",
+   "title": "Traffic signals (OSM)",
+   "group": "Transportation",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "osm_traffic_signals",
+   "data": "vector/osm_traffic_signals.geojson",
+   "geometry": "circle",
+   "popup_fields": [
+    "osm_id",
+    "highway"
+   ],
+   "field_labels": {},
+   "count": 422,
+   "fill_color": "#5b6a70"
+  },
+  {
+   "id": "tdot_bridges",
+   "kind": "vector",
+   "title": "Bridges (TDOT condition)",
+   "group": "Transportation",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "tdot_bridges",
+   "data": "vector/tdot_bridges.geojson",
+   "geometry": "circle",
+   "popup_fields": [
+    "STRUCTURE_ID",
+    "ROUTE_NUMBER",
+    "OWNER",
+    "YEAR_BUILT",
+    "OVERALL_CONDITION"
+   ],
+   "field_labels": {
+    "STRUCTURE_ID": "Structure ID",
+    "ROUTE_NUMBER": "Route",
+    "OWNER": "Owner",
+    "YEAR_BUILT": "Year built",
+    "OVERALL_CONDITION": "Overall condition"
+   },
+   "count": 184,
+   "fill_color": "#8a6d3b"
+  },
+  {
+   "id": "hospitals",
+   "kind": "vector",
+   "title": "Hospitals (CMS)",
+   "group": "Health",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "hospitals",
+   "data": "vector/hospitals.geojson",
+   "geometry": "circle",
+   "popup_fields": [
+    "Facility Name",
+    "Hospital Type",
+    "Emergency Services"
+   ],
+   "field_labels": {
+    "Facility Name": "Name",
+    "Hospital Type": "Type",
+    "Emergency Services": "Emergency services"
+   },
+   "count": 6,
+   "fill_color": "#b8432f"
+  },
+  {
+   "id": "dialysis",
+   "kind": "vector",
+   "title": "Dialysis facilities (CMS)",
+   "group": "Health",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "dialysis",
+   "data": "vector/dialysis.geojson",
+   "geometry": "circle",
+   "popup_fields": [
+    "Facility Name",
+    "# of Dialysis Stations",
+    "Profit or Non-Profit"
+   ],
+   "field_labels": {
+    "Facility Name": "Name",
+    "# of Dialysis Stations": "Stations",
+    "Profit or Non-Profit": "Ownership"
+   },
+   "count": 5,
+   "fill_color": "#7a3e9d"
+  },
+  {
+   "id": "nursing_homes",
+   "kind": "vector",
+   "title": "Nursing homes (CMS)",
+   "group": "Health",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "nursing_homes",
+   "data": "vector/nursing_homes.geojson",
+   "geometry": "circle",
+   "popup_fields": [
+    "Provider Name",
+    "Number of Certified Beds",
+    "Overall Rating"
+   ],
+   "field_labels": {
+    "Provider Name": "Name",
+    "Number of Certified Beds": "Certified beds",
+    "Overall Rating": "Overall rating"
+   },
+   "count": 4,
+   "fill_color": "#c27c0e"
+  },
+  {
+   "id": "zcta_population",
+   "kind": "vector",
+   "title": "Population by ZCTA (ACS, clipped to AOI)",
+   "group": "Population",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "zcta_population",
+   "data": "vector/zcta_population.geojson",
+   "geometry": "fill",
+   "popup_fields": [
+    "zcta5",
+    "pop_total",
+    "pop_elderly",
+    "pct_elderly",
+    "pct_poverty",
+    "median_income",
+    "area_share"
+   ],
+   "field_labels": {
+    "zcta5": "ZCTA",
+    "pop_total": "Population (in AOI)",
+    "pop_elderly": "Age 65+ (in AOI)",
+    "pct_elderly": "Share 65+",
+    "pct_poverty": "Share in poverty",
+    "median_income": "Median income",
+    "area_share": "Share of ZCTA inside AOI"
+   },
+   "count": 20,
+   "fill_color": "#9aa6a0"
   }
  ]
 }
