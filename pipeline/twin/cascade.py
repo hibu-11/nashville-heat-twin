@@ -104,12 +104,23 @@ class Network:
         return np.array([self.feed[a][0] for a in ids], dtype=int)
 
 
-def simulate(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Generator, record_runs=False) -> dict:
+def simulate(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Generator, record_runs=False,
+             Ta_sub: np.ndarray | None = None, Ta_zone: np.ndarray | None = None, shed: np.ndarray | None = None) -> dict:
     """【中文】主循环。Ta_c：逐小时气温（°C），th：每个参数长度为 N 的抽样数组。
-    Main loop. Ta_c: hourly air temperature (°C); th: sampled parameters (length N each)."""
+    Ta_sub (H, S) / Ta_zone (H, Z)：各变电站 / 分区的逐小时气温（城市气温场 M-6）；不给时全城用 Ta_c（假设 A-D4）。
+    shed (H,) 或 (N, H)：系统供电缺口导致的轮流停电比例（M-18 / R-P0），只在 shed > 0 的小时抽随机数，
+    因此 shed 全为 0 时结果与不给 shed 完全相同。
+
+    Main loop. Ta_c: hourly air temperature (°C); th: sampled parameters (length N each).
+    Ta_sub / Ta_zone: local temperatures from the urban field (M-6); default is Ta_c everywhere (A-D4).
+    shed: share of serving stations shed per hour by a system supply shortfall (M-18)."""
     N, S, H = len(th["C-P1"]), len(net.sid), len(Ta_c)
     col = lambda k: th[k][:, None]  # noqa: E731
-    TF = c_to_f(Ta_c)
+    Ta_sub = np.repeat(np.asarray(Ta_c, float)[:, None], S, axis=1) if Ta_sub is None else np.asarray(Ta_sub, float)
+    Z = len(net.zone_id)
+    Ta_zone = np.repeat(np.asarray(Ta_c, float)[:, None], Z, axis=1) if Ta_zone is None else np.asarray(Ta_zone, float)
+    TF = c_to_f(Ta_sub)
+    serving_mask = net.subs["serving"].to_numpy()
 
     beta, T0, Kd, Td = col("C-P1"), col("C-P1.T0"), col("C-P1.Kd"), col("C-P1.Td")
     dTOR, dHR, R, n_, m_, tau = (col(k) for k in ("C-P2.dTOR", "C-P2.dHR", "C-P2.R", "C-P2.n", "C-P2.m", "C-P2.tau"))
@@ -138,12 +149,12 @@ def simulate(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Generator,
     zs = net.zone_sub
     out = {k: np.zeros((H, S)) for k in ("p_down", "p_thermal", "theta_h")}
     for k, w in (("hosp", len(hs)), ("nurs", len(ns)), ("dial", len(ds)), ("water_out", 1), ("signals_dark", 1),
-                 ("roads_degraded", 1), ("n_down", 1)):
+                 ("roads_degraded", 1), ("n_down", 1), ("roads_p", len(net.roads))):
         out[k] = np.zeros((H, w))
     pop_out = np.zeros((N, H))
     tot = {k: np.zeros(N) for k in ("thermal", "overload", "deenergised_hours", "pop_hours", "compound_pop_hours",
                                     "compound_elderly_hours", "compound_poverty_hours", "dialysis_hours",
-                                    "hospital_hours", "water_out_hours", "max_subs_down")}
+                                    "hospital_hours", "water_out_hours", "max_subs_down", "shed_station_hours")}
     road_deg_hours = np.zeros(len(net.roads))
 
     for h in range(H):
@@ -154,7 +165,7 @@ def simulate(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Generator,
         # Eq. 4–6：顶油温升一阶滞后 + 热点温度 / top-oil lag and hot spot
         dTOU = dTOR * ((K ** 2 * R + 1) / (R + 1)) ** n_
         dTO = dTOU if dTO is None else dTO + (dTOU - dTO) * (1 - np.exp(-1.0 / tau))
-        thetaH = Ta_c[h] + dTO + dHR * K ** (2 * m_)
+        thetaH = Ta_sub[h][None, :] + dTO + dHR * K ** (2 * m_)
         # Eq. 7：热失效 / thermal failure
         p = ndtr((thetaH - th50) / sig)
         failed = repair > 0
@@ -163,12 +174,18 @@ def simulate(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Generator,
         failed |= new_t
         tot["thermal"] += new_t.sum(1)
 
+        # M-18 / R-P0：系统缺电时按比例轮流切除供电站（不算失效，不进修复）/ rotating load shed
+        shed_now = np.zeros((N, S), bool)
+        sh = None if shed is None else (shed[:, h] if np.ndim(shed) == 2 else np.full(N, shed[h]))
+        if sh is not None and np.any(sh > 0):
+            shed_now = (rng.random((N, S)) < sh[:, None]) & serving_mask[None, :]
+
         # Eq. 8–9：供电依赖 + 负荷转移，迭代到稳定 / supply dependency and load transfer to a fixed point
         for _ in range(40):
-            up = ~failed
+            up = ~failed & ~shed_now
             for _ in range(S):
                 sup_ok = (up.astype(float) @ net.U) > 0
-                nxt = ~failed & (~net.has_supply[None, :] | sup_ok)
+                nxt = ~failed & ~shed_now & (~net.has_supply[None, :] | sup_ok)
                 if (nxt == up).all():
                     break
                 up = nxt
@@ -195,10 +212,12 @@ def simulate(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Generator,
         po = zdown.astype(float) @ net.zone_pop
         pop_out[:, h] = po
         tot["pop_hours"] += po
-        hot = Ta_c[h] >= T_heat
-        tot["compound_pop_hours"] += po * hot
-        tot["compound_elderly_hours"] += (zdown.astype(float) @ net.zone_eld) * hot
-        tot["compound_poverty_hours"] += (zdown.astype(float) @ net.zone_pov) * hot
+        # 【中文】复合暴露按分区本地气温判断 / compound exposure uses each zone's local temperature
+        zhot = (zdown & (Ta_zone[h][None, :] >= T_heat[:, None])).astype(float)
+        tot["compound_pop_hours"] += zhot @ net.zone_pop
+        tot["compound_elderly_hours"] += zhot @ net.zone_eld
+        tot["compound_poverty_hours"] += zhot @ net.zone_pov
+        tot["shed_station_hours"] += shed_now.sum(1)
 
         # Eq. 11：设施备用电源，按停电事件抽样 / backup draw at the start of each outage episode
         def backed(src_down, B, prev, pb):
@@ -220,6 +239,7 @@ def simulate(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Generator,
         out["hosp"][h] = hl.mean(0); out["nurs"][h] = nl.mean(0); out["dial"][h] = dl.mean(0)
         out["water_out"][h] = water_out.mean(); out["signals_dark"][h] = dark.sum(1).mean()
         out["roads_degraded"][h] = deg.sum(1).mean()
+        out["roads_p"][h] = deg.mean(0)
         road_deg_hours += deg.mean(0)
         tot["dialysis_hours"] += dl.sum(1); tot["hospital_hours"] += hl.sum(1)
         tot["water_out_hours"] += water_out[:, 0]

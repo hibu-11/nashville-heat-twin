@@ -10,3 +10,4 @@ __pycache__/
 
 # 【中文】本地 Python 环境 / local virtualenv
 .venv/
+.claude/settings.local.json

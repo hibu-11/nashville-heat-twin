@@ -49,6 +49,10 @@ async function init() {
       : p.dep_type === "water_storage" ? "water" : p.dep_type;
     p.ph = p.placeholder === "yes";
   });
+  // 【中文】可选结果：路网可达性、多年校准、河水冷却（文件不存在时跳过）/ optional results
+  const opt = (u) => json(u).catch(() => null);
+  [S.access, S.accessGrid, S.calib, S.river] = await Promise.all([
+    opt(RES + "access.json"), opt(RES + "access_grid.geojson"), opt(RES + "calibration.json"), opt(TWIN + "river.json")]);
   S.idx = hottestHour(ts);
   await loadScenario("+0");
 
@@ -119,6 +123,15 @@ async function addLayers() {
   map.addSource("roads", { type: "geojson", data: roads, promoteId: "asset_id" });
 
   const risk = (prop) => ["interpolate", ["linear"], ["coalesce", ["feature-state", prop], 0], ...RISK];
+  if (S.accessGrid) {
+    map.addSource("access", { type: "geojson", data: S.accessGrid });
+    const ramp = (prop) => ["interpolate", ["linear"], ["coalesce", ["get", prop], 30],
+      0, "#f1f7fb", 4, "#b9d6ea", 8, "#5b9bc8", 12, "#2a5f94", 20, "#0f2a4f"];
+    for (const k of ["pm_peak", "all_signals_dark_pm"]) {
+      map.addLayer({ id: `access-${k}`, type: "fill", source: "access", layout: { visibility: "none" },
+        paint: { "fill-color": ramp(`hospital_${k}`), "fill-opacity": 0.7 } });
+    }
+  }
   map.addLayer({ id: "zones-fill", type: "fill", source: "zones", paint: { "fill-color": risk("p"), "fill-opacity": 0.45 } });
   map.addLayer({ id: "zones-line", type: "line", source: "zones",
     paint: { "line-color": "#1e2b31", "line-width": 0.8, "line-opacity": 0.5, "line-dasharray": [3, 2] } });
@@ -213,6 +226,7 @@ function buildPanel() {
   buildLogic();
   buildToggles();
   buildValidation();
+  buildExtras();
   buildSensitivity();
 }
 
@@ -300,6 +314,10 @@ function buildToggles() {
     { id: "zones", label: "Service zones (placeholder)", color: "#eea05a", on: true, layers: ["zones-fill", "zones-line"] },
     { id: "signals", label: "Traffic signals", color: "#5b6a70", on: false, layers: ["signals"] },
     { id: "pav", label: `Pavement: P(7-day max LST > PG 64), ${S.summary.validation.pavement_requests_lst_period.period}`, color: "#d4562e", on: false, layers: ["roads-pav"] },
+    ...(S.accessGrid ? [
+      { id: "acc-pm", label: "Minutes to nearest hospital, evening peak (0–20)", color: "#2a5f94", on: false, layers: ["access-pm_peak"] },
+      { id: "acc-dark", label: "Same, every signal dark (stress test)", color: "#0f2a4f", on: false, layers: ["access-all_signals_dark_pm"] },
+    ] : []),
   ];
   $("toggles").innerHTML = rows.map((r) => `<label class="tg"><input type="checkbox" data-id="${r.id}" ${r.on ? "checked" : ""}>
     <span class="tg-sw" style="background:${r.color}"></span>${r.label}</label>`).join("");
@@ -307,6 +325,31 @@ function buildToggles() {
     const r = rows.find((x) => x.id === inp.dataset.id);
     r.layers.forEach((l) => S.map.setLayoutProperty(l, "visibility", inp.checked ? "visible" : "none"));
   }));
+}
+
+function buildExtras() {
+  const rows = [];
+  if (S.access) {
+    const c = S.access.conditions, d = c.all_signals_dark_pm, b = c.pm_peak;
+    rows.push(`<tr><th colspan="2">Road network: mean minutes to the nearest facility (M-28 / M-29)</th></tr>
+      <tr><td>Hospital, evening peak → all signals dark</td><td>${fmt(b.hospital.pop_mean_min, 1)} → ${fmt(d.hospital.pop_mean_min, 1)}</td></tr>
+      <tr><td>Fire / EMS, evening peak → all signals dark</td><td>${fmt(b.ems.pop_mean_min, 1)} → ${fmt(d.ems.pop_mean_min, 1)}</td></tr>`);
+  }
+  if (S.river) {
+    const tw = S.river.tw_c.filter((v) => v !== null);
+    rows.push(`<tr><th colspan="2">River cooling (M-18): ${S.river.plants.length} once-through plants, ${int(S.river.plant_capacity_mw)} MW</th></tr>
+      <tr><td>Max modelled river temperature, 2014–2025</td><td>${fmt(Math.max(...tw), 1)} °C</td></tr>
+      <tr><td>Stream-temperature fit (RMSE, R²)</td><td>${fmt(S.river.stream_model.rmse_c, 1)} °C, ${fmt(S.river.stream_model.r2, 2)}</td></tr>`);
+  }
+  if (S.calib) {
+    const r = S.calib.data_only.daily_tmax_vs_daily_max_outages_non_storm;
+    rows.push(`<tr><th colspan="2">Calibration ${S.calib.years[0]}–${S.calib.years.at(-1)} (M-43)</th></tr>
+      <tr><td>Effective sample size</td><td>${fmt(S.calib.ess, 0)} of ${int(S.calib.runs)}</td></tr>
+      <tr><td>Daily Tmax vs outages, non-storm days (data only)</td><td>${r.rho === null ? "—" : `${fmt(r.rho, 2)} [${fmt(r.lo, 2)}, ${fmt(r.hi, 2)}]`}</td></tr>`);
+  }
+  if (!rows.length) return;
+  $("extrasBlock").hidden = false;
+  $("extras").innerHTML = `<table class="vt"><tbody>${rows.join("")}</tbody></table>`;
 }
 
 function buildValidation() {

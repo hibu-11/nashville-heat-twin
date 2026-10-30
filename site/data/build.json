@@ -1,7 +1,7 @@
 {
- "built_at": "2026-10-27T18:11:35+00:00",
- "code_version": "git:78173d6-dirty",
- "config_sha256": "6955649e25c141a5",
+ "built_at": "2026-10-30T20:57:52+00:00",
+ "code_version": "git:5764716-dirty",
+ "config_sha256": "f88479bb02d368a6",
  "python": "3.14.4",
  "packages": {
   "numpy": "2.5.4",
@@ -21,7 +21,7 @@
   },
   "lst_hourly_2023": {
    "status": "built",
-   "fingerprint": "551d310f89e2fc41"
+   "fingerprint": "e7b89bb6a9a119c2"
   },
   "lst_10m_final": {
    "status": "failed",
@@ -29,99 +29,134 @@
   },
   "lst_jja2023_mean": {
    "status": "built",
-   "fingerprint": "fa81c162ec1d4364"
+   "fingerprint": "fb776bd052ac8027"
   },
   "lst_20240731_utc22": {
    "status": "built",
-   "fingerprint": "10d02cd31299bf5f"
+   "fingerprint": "bd7785890be12c73"
   },
   "lst_amp_2023": {
    "status": "built",
-   "fingerprint": "072611f20d083d7c"
+   "fingerprint": "3f70f89811ceee1d"
   },
   "roads_lst": {
    "status": "built",
-   "fingerprint": "795adca5f67ae710"
+   "fingerprint": "ff44153b6bab7755"
   },
   "surface_parking": {
    "status": "built",
-   "fingerprint": "53414d2a3f74a346"
+   "fingerprint": "7b5064db88fa940b"
   },
   "hub311_2023": {
    "status": "built",
-   "fingerprint": "6281840b0b614457"
+   "fingerprint": "6972c617edb79b9d"
   },
   "osm_substations": {
    "status": "built",
-   "fingerprint": "91c95a81ba1daf3b"
+   "fingerprint": "29d681982720130c"
   },
   "osm_power_lines": {
    "status": "built",
-   "fingerprint": "1e475399f2f764c1"
+   "fingerprint": "6aa023445499f6ee"
   },
   "osm_water": {
    "status": "built",
-   "fingerprint": "f188b51428f45a4c"
+   "fingerprint": "273033994e6921fa"
   },
   "osm_traffic_signals": {
    "status": "built",
-   "fingerprint": "1cdccb9cf9c68666"
+   "fingerprint": "2f2bf10c44b7d3ed"
   },
   "tdot_bridges": {
    "status": "built",
-   "fingerprint": "c3d70bf987aa685c"
+   "fingerprint": "e9791920d5c9fcd4"
+  },
+  "hpms_2024": {
+   "status": "cached",
+   "fingerprint": "b7f1757dbe579550"
+  },
+  "tmas_2023": {
+   "status": "cached",
+   "fingerprint": "5e3e8ee52264f6cc"
   },
   "hospitals": {
    "status": "built",
-   "fingerprint": "a7e9ad1b9a11b001"
+   "fingerprint": "64f13fa6a581a284"
   },
   "dialysis": {
    "status": "built",
-   "fingerprint": "abe3051db4371668"
+   "fingerprint": "8355bdae231c6567"
   },
   "nursing_homes": {
    "status": "built",
-   "fingerprint": "ab16bea637b4abb4"
+   "fingerprint": "66a7d2368321d94b"
+  },
+  "osm_fire_stations": {
+   "status": "cached",
+   "fingerprint": "ab3c53d7efc921ee"
   },
   "zcta_population": {
    "status": "built",
-   "fingerprint": "cf5c5a351f00b717"
+   "fingerprint": "fc11704d7c0f50aa"
   },
   "buildings_aoi": {
    "status": "built",
-   "fingerprint": "b09dc13ccfdeaff2"
+   "fingerprint": "8874b736ee218534"
   },
   "asos_bna": {
    "status": "built",
-   "fingerprint": "fdc8854f5ed1714c"
+   "fingerprint": "a8547701858399f5"
   },
-  "eaglei_2023": {
+  "air_field_2022": {
    "status": "built",
-   "fingerprint": "ee5528f1930e606f"
+   "fingerprint": "98aeb2f578ef6bc3"
+  },
+  "eaglei_davidson": {
+   "status": "built",
+   "fingerprint": "49edccffba6a96a9"
+  },
+  "cumberland_thermal": {
+   "status": "built",
+   "fingerprint": "c6a222c6616b42f4"
   },
   "twin_couplings": {
-   "status": "built",
-   "fingerprint": "9bb8fbf0ea45550a"
+   "status": "cached",
+   "fingerprint": "61a650d3f02dfe3b"
   },
   "twin_dependencies": {
    "status": "built",
-   "fingerprint": "07ba86264ba4d20e"
+   "fingerprint": "94ec86ae6d80a9da"
   }
  },
  "tables": {
-  "assets": 72444,
+  "assets": 75570,
   "dependencies": 3188,
-  "couplings": 31,
+  "couplings": 43,
   "exposures": 850587,
-  "events": 5441,
-  "drivers": 11040,
-  "sources": 23
+  "events": 91626,
+  "drivers": 537337,
+  "sources": 28
  },
  "validation": {
   "errors": 0,
-  "warnings": 0,
-  "issues": []
+  "warnings": 2,
+  "issues": [
+   {
+    "table": "events",
+    "level": "warn",
+    "check": "time",
+    "message": "start_time outside project time range 2014-01-01–2025-12-31",
+    "n": 19
+   },
+   {
+    "table": "drivers",
+    "level": "warn",
+    "check": "time",
+    "message": "timestamp outside project time range 2014-01-01–2025-12-31",
+    "n": 120
+   }
+  ]
  },
  "chain_check": true,
- "run_id": "20261027T181135Z-053157f7"
+ "run_id": "20261030T205752Z-acb2617f"
 }

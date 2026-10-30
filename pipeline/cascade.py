@@ -24,14 +24,17 @@ from scipy.stats import spearmanr
 
 from .adapters.base import write_json
 from .build import ROOT, code_version
-from .twin.cascade import Network, pavement, simulate
+from .twin.airfield import local_temperatures
+from .twin.cascade import Network, c_to_f, pavement, simulate
+from .twin.river import mohseni, shed_fraction
 from .twin.params import Params
 from .twin.validate import auc, outage_vs_temperature, spearman_ci, stratified_auc
 
 # 【中文】进入电力 / 设施模拟的参数（敏感性分析只看这些；C-H4、C-H5 只作背景，C-T1 只用于路面）
 # parameters that enter the power/facility simulation (sensitivity is computed for these only)
 POWER_PARAMS = ["C-P1", "C-P1.T0", "C-P1.Kd", "C-P1.Td", "C-P2.dTOR", "C-P2.dHR", "C-P2.R", "C-P2.n", "C-P2.m",
-                "C-P2.tau", "C-P3", "C-P3.sigma", "C-P4", "C-P6", "C-H1", "C-H2", "C-W2", "C-W3", "C-T2", "C-POP2"]
+                "C-P2.tau", "C-P3", "C-P3.sigma", "C-P4", "C-P6", "C-H1", "C-H2", "C-W2", "C-W3", "C-T2", "C-POP2",
+                "C-P9", "C-P9.span", "C-P9.Qmin", "C-P9.flow", "C-P9.avail", "C-P9.imp"]
 
 
 def load(std: Path, name: str):
@@ -39,6 +42,71 @@ def load(std: Path, name: str):
     if not f.exists():
         sys.exit(f"missing standard table {f}; run `python -m pipeline.build` first")
     return gpd.read_parquet(f) if name in ("assets", "events") else pd.read_parquet(f)
+
+
+def river_inputs(cfg, hours):
+    """【中文】读取 river_thermal 适配器的逐小时表（河温、流量、TVA 负荷）和模型；没有则返回 None。
+    Hourly river / load table and model from the river_thermal dataset, or None."""
+    rv = next((d for d in cfg["datasets"] if d["kind"] == "river_thermal"), None)
+    if rv is None:
+        return None
+    std = ROOT / cfg["project"].get("standard_dir", "data/standard") / "river"
+    f, mj = std / f"{rv['id']}_hourly.parquet", std / f"{rv['id']}_model.json"
+    if not f.exists():
+        print(f"[cascade] {rv['id']} not built; no water → power link (R-P0 tier 0)")
+        return None
+    h = pd.read_parquet(f).set_index("timestamp").reindex(hours)
+    m = json.loads(mj.read_text(encoding="utf-8"))
+    print(f"[cascade] {rv['id']}: {m['plant_capacity_mw']:,.0f} MW once-through cooled, load data for "
+          f"{int(h['load_mw'].notna().sum())} of {len(hours)} hours")
+    return {"hourly": h, "model": m, "dataset": rv["id"]}
+
+
+def river_shed(river, Ta, th, dT):
+    """【中文】M-18：每次运行的逐小时火电降额（MW）与轮流停电比例 (N, H)。情景增温同时抬高河温
+    （按河温模型）和 TVA 负荷（按 C-P1 斜率）。没有负荷数据的小时不计缺口。
+    Per-run hourly derate and shed share; scenario warming raises river temperature and TVA load."""
+    if river is None:
+        return None, None
+    h, sm = river["hourly"], river["model"]["stream_model"]
+    tw = mohseni(h["ta7_c"].to_numpy(float) + dT, sm["mu"], sm["alpha"], sm["beta"], sm["gamma"])
+    TF = c_to_f(Ta)[None, :]
+    beta, T0 = th["C-P1"][:, None], th["C-P1.T0"][:, None]
+    scale = (1 + beta * np.maximum(0, TF + dT * 9 / 5 - T0)) / (1 + beta * np.maximum(0, TF - T0))
+    load = h["load_mw"].to_numpy(float)[None, :] * scale
+    derate, shed = shed_fraction(np.nan_to_num(tw, nan=0.0), np.nan_to_num(h["q_cfs"].to_numpy(float), nan=1e9),
+                                 np.nan_to_num(load, nan=0.0), river["model"]["plant_capacity_mw"],
+                                 river["model"]["system_capacity_mw"], th)
+    return shed, derate
+
+
+def river_summary(shed, derate):
+    if shed is None:
+        return None
+    return {"runs_with_shed": round(float((shed.max(1) > 0).mean()), 4),
+            "shed_hours_mean": round(float((shed > 0).sum(1).mean()), 2),
+            "derate_mw_max_mean": round(float(derate.max(1).mean()), 1),
+            "derate_hours_mean": round(float((derate > 0).sum(1).mean()), 2)}
+
+
+def air_field_temperatures(cfg, assets, net, Ta, hours, tz, mode="on"):
+    """【中文】读取城市气温场（kind: air_field）的标准栅格，给每个变电站（中心点）和供电分区（内部平均）
+    算逐小时气温。没有气温场或 mode = off 时返回 None（全城用 BNA）。
+    Local hourly temperatures at substations and zones from the air field; None if unavailable."""
+    af = next((d for d in cfg["datasets"] if d["kind"] == "air_field"), None)
+    if mode == "off" or af is None:
+        return None, None, {"method": "BNA everywhere (A-D4)"}
+    std = ROOT / cfg["project"].get("standard_dir", "data/standard") / "air_field"
+    tif, mj = std / f"{af['id']}.tif", std / f"{af['id']}_model.json"
+    if not tif.exists():
+        print(f"[cascade] air field {af['id']} not built; using BNA everywhere (A-D4)")
+        return None, None, {"method": "BNA everywhere (A-D4)", "note": "air field not built"}
+    geom = assets.set_index("asset_id").geometry
+    subs = gpd.GeoSeries(geom.loc[net.sid].centroid.values, crs=assets.crs)
+    zones = list(geom.loc[net.zone_id].values)
+    Ta_sub, Ta_zone, info = local_temperatures(tif, mj, Ta, hours, tz, subs, zones)
+    print(f"[cascade] air field {af['id']}: station offsets {info['station_offset_c']} °C, zone offsets {info['zone_offset_c']} °C")
+    return Ta_sub, Ta_zone, info | {"dataset": af["id"]}
 
 
 def main(argv=None):
@@ -49,6 +117,9 @@ def main(argv=None):
     ap.add_argument("--start", default="2023-06-01")
     ap.add_argument("--end", default="2023-08-31")
     ap.add_argument("--scenarios", default="0,2,4", help="uniform air-temperature offsets in °C; 0 must be included")
+    # 【中文】城市气温场（M-6）：on = 各变电站 / 分区用本地气温；off = 全城用 BNA（v0 的假设 A-D4）
+    ap.add_argument("--air-field", choices=["on", "off"], default="on", help="local temperatures from the urban field (M-6)")
+    ap.add_argument("--outage-source", default="eaglei_davidson", help="events source_id of the observed outages")
     args = ap.parse_args(argv)
     scen = [float(x) for x in args.scenarios.split(",")]
     if 0.0 not in scen:
@@ -76,6 +147,8 @@ def main(argv=None):
 
     params = Params(couplings)
     net = Network(assets, deps, dep_cfg)
+    Ta_sub, Ta_zone, air_info = air_field_temperatures(cfg, assets, net, Ta, hours, tz, args.air_field)
+    river = river_inputs(cfg, hours)
     print(f"[cascade] {len(net.sid)} substations, {len(net.zone_id)} zones, {int(net.U.sum())} supply edges, "
           f"{int(net.P.sum() / 2)} peer links, {len(hours)} hours")
 
@@ -86,14 +159,25 @@ def main(argv=None):
         rng = np.random.default_rng(args.seed)
         th = params.sample(args.runs, rng)
         print(f"[cascade] Monte Carlo {dT:+.0f} °C: {args.runs} runs (parameters sampled) …")
-        sims[dT] = simulate(net, Ta + dT, th, rng)
+        shed, derate = river_shed(river, Ta, th, dT)
+        sims[dT] = simulate(net, Ta + dT, th, rng, Ta_sub=None if Ta_sub is None else Ta_sub + dT,
+                            Ta_zone=None if Ta_zone is None else Ta_zone + dT, shed=shed)
+        sims[dT]["river"] = river_summary(shed, derate)
     rng = np.random.default_rng(args.seed)
     th = params.sample(args.runs, rng)
     mc = sims[0.0]
     rng = np.random.default_rng(args.seed + 1)
     th_mid = params.sample(args.mid_runs, rng, mode="mid")
     print(f"[cascade] baseline: {args.mid_runs} runs (parameters at mid) …")
-    mid = simulate(net, Ta, th_mid, rng)
+    mid = simulate(net, Ta, th_mid, rng, Ta_sub=Ta_sub, Ta_zone=Ta_zone, shed=river_shed(river, Ta, th_mid, 0.0)[0])
+    # 【中文】对照：同样的随机数，但全城用 BNA 一个站（A-D4），量化城市气温场的影响
+    # comparison with the same draws but one station for the whole city (A-D4)
+    station_only = None
+    if Ta_sub is not None:
+        print("[cascade] comparison: observed temperature, BNA everywhere (A-D4) …")
+        rng = np.random.default_rng(args.seed)
+        th_cmp = params.sample(args.runs, rng)
+        station_only = simulate(net, Ta, th_cmp, rng)["totals"]
 
     # 【中文】路面模块（只在有逐小时 LST 的时段）/ pavement module on the LST period
     roads_src = proj.get("chain_check", {}).get("assets", "roads_lst")
@@ -104,7 +188,7 @@ def main(argv=None):
     pav["length_m"] = pav["asset_id"].map(road_len).to_numpy()
 
     # ------------------------------------------------------------------ validation
-    eagle = events[events["source_id"] == "eaglei_2023"].set_index("start_time")["severity"]
+    eagle = events[events["source_id"] == args.outage_source].set_index("start_time")["severity"]
     obs = eagle.reindex(hours).fillna(0).to_numpy()          # 【中文】无记录的小时按 0 处理（A-D2）
     day = hours.tz_convert(tz).date
     model = mc["pop_out"].mean(0)
@@ -170,7 +254,7 @@ def main(argv=None):
     run = {"run_id": run_id, "created": stamp.isoformat(timespec="seconds"), "code_version": code_version(),
            "inputs_build_run_id": build.get("run_id"), "couplings_sha256": phash, "seed": args.seed,
            "runs": args.runs, "mid_runs": args.mid_runs, "period": [args.start, args.end], "timezone": tz,
-           "scenarios_delta_c": scen,
+           "scenarios_delta_c": scen, "air_field": air_info, "outage_source": args.outage_source,
            "hours": len(hours), "network": {"substations": len(net.sid), "zones": len(net.zone_id),
                                              "supply_edges": int(net.U.sum()), "peer_links": int(net.P.sum() / 2),
                                              "hospitals": len(net.hosp), "nursing_homes": len(net.nurs),
@@ -182,12 +266,14 @@ def main(argv=None):
         scen_summary[f"{dT:+.0f}"] = {k: q(v) for k, v in t.items()} | {
             "amplification": q(t["overload"] / np.maximum(1, t["thermal"])),
             "share_runs_with_any_failure": round(float((t["thermal"] + t["overload"] > 0).mean()), 3),
+            "river": r.get("river"),
             "max_air_temp_c": round(float(np.max(Ta) + dT), 1)}
     summary = run | {
         "population_in_zones": int(net.zone_pop.sum()), "elderly_in_zones": int(net.zone_eld.sum()),
         "mc": {k: q(v) for k, v in tot.items()} | {"amplification": q(amp)},
         "scenarios": scen_summary,
         "mid": {k: q(v) for k, v in mid["totals"].items()},
+        "station_only": None if station_only is None else {k: q(v) for k, v in station_only.items()},
         "validation": val, "sensitivity": sens,
         "substations_top": sub_risk.head(15).round(3).to_dict(orient="records"),
         "pavement": {"roads": int(len(pav)), "p_exceed_mean": round(float(pav["p_exceed"].mean()), 3),
@@ -238,6 +324,19 @@ def main(argv=None):
                                         "roads": dict(zip(pav["asset_id"], np.round(pav["p_exceed"], 3))),
                                         "t7": dict(zip(pav["asset_id"], pav["lst_t7_max"]))})
     write_json(site / "summary.json", summary)
+    # 【中文】路网可达性（pipeline.access）的输入：每个情景中预期降级路段最多的小时，及该小时各路段与设施的失效概率
+    # stress hour per scenario for pipeline.access: road degradation and facility outage probabilities
+    stress = {"run_id": run_id, "roads": net.roads, "hospitals": net.hosp, "dialysis": net.dial, "scenarios": {}}
+    for dT, r in sims.items():
+        hh = r["hourly"]
+        k = int(np.argmax(hh["roads_degraded"][:, 0]))
+        stress["scenarios"][f"{dT:+.0f}"] = {
+            "hour_utc": hours[k].isoformat(), "hour_local": hours[k].tz_convert(tz).isoformat(),
+            "roads_degraded_mean": round(float(hh["roads_degraded"][k, 0]), 2),
+            "p_road_degraded": np.round(hh["roads_p"][k], 4).tolist(),
+            "p_hospital_down": np.round(hh["hosp"][k], 4).tolist(), "p_dialysis_down": np.round(hh["dial"][k], 4).tolist()}
+    write_json(res_dir / "stress_hours.json", stress)
+    write_json(site / "stress_hours.json", stress)
     print(f"[cascade] {run_id}\n  pop-hours without power (median): {summary['mc']['pop_hours'][50]:,.0f}"
           f"\n  thermal failures (median): {summary['mc']['thermal'][50]}, overload trips: {summary['mc']['overload'][50]}"
           f"\n  ρ(model, EAGLE-I) all hours: {val['power_all_hours']['rho']}  non-storm: {val['power_non_storm_hours']['rho']}"

@@ -78,10 +78,12 @@ class OutageSeriesAdapter(DatasetAdapter):
     def extract(self):
         c = self.cfg
         parts = []
-        # 【中文】原文件约 1.2 GB，分块读取并只保留目标县 / read in chunks, keep one county
-        for chunk in pd.read_csv(self.raw_path, usecols=["fips_code", "sum", "run_start_time"], chunksize=2_000_000):
+        # 【中文】全国文件约 1.2 GB，分块读取并只保留目标县；停电列在 2023 年文件里叫 sum，其他年份 / 提取文件叫 customers_out
+        # read in chunks, keep one county; the outage column is "sum" in the 2023 national file, "customers_out" elsewhere
+        col = "customers_out" if "customers_out" in pd.read_csv(self.raw_path, nrows=0).columns else "sum"
+        for chunk in pd.read_csv(self.raw_path, usecols=["fips_code", col, "run_start_time"], chunksize=2_000_000):
             parts.append(chunk[chunk["fips_code"] == int(c["fips"])])
-        return pd.concat(parts, ignore_index=True)
+        return pd.concat(parts, ignore_index=True).rename(columns={col: "sum"})
 
     def transform(self, df: pd.DataFrame) -> AdapterResult:
         c = self.cfg
@@ -112,3 +114,29 @@ class OutageSeriesAdapter(DatasetAdapter):
                            "n": len(full), "customers_out": [None if pd.isna(v) else int(v) for v in s.values],
                            "customers_total": c.get("customers_total")})
         return AdapterResult(layer=None, tables={"events": ev})
+
+
+class TrafficCountAdapter(DatasetAdapter):
+    """【中文】FHWA TMAS 逐小时计数（twin_demo 的长表：按站 / 方向 / 车道）→ drivers，
+    每站每小时合计为双向总流量 volume_vph（veh/h）。station_id = TMAS 站号。
+    FHWA TMAS hourly counts → drivers; lanes and directions summed per station and hour."""
+    kind = "traffic_counts"
+
+    def outputs(self):
+        return [self.site_path("drivers", ".json")]
+
+    def extract(self):
+        return pd.read_parquet(self.raw_path)
+
+    def transform(self, df: pd.DataFrame) -> AdapterResult:
+        (web_f,) = self.outputs()
+        df = df[df["metric"] == "hourly_volume"]
+        v = df.groupby(["system_id", "time_utc"])["value"].sum().reset_index()
+        drv = pd.DataFrame({"station_id": v["system_id"], "timestamp": pd.to_datetime(v["time_utc"], utc=True),
+                            "variable": "volume_vph", "value": v["value"].astype(float), "units": "veh/h",
+                            "source_id": self.id})
+        print(f"    {self.id}: {drv['station_id'].nunique()} stations, {len(drv):,} station-hours")
+        prof = (drv.assign(h=drv["timestamp"].dt.tz_convert(self.ctx.project.get("timezone", "UTC")).dt.hour)
+                .groupby(["station_id", "h"])["value"].mean().unstack())
+        write_json(web_f, {"stations": list(prof.index), "mean_by_local_hour": prof.round(1).values.tolist()})
+        return AdapterResult(layer=None, tables={"drivers": drv})

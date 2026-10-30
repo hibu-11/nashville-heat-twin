@@ -1,0 +1,689 @@
+{
+ "run_id": "calibration-20261030T213618Z-45a0e28623",
+ "created": "2026-10-30T21:36:18+00:00",
+ "code_version": "git:5764716-dirty",
+ "method": "PIPELINE_SPEC M-43 (self-normalised importance sampling of prior runs)",
+ "years": [
+  2015,
+  2016,
+  2017,
+  2018,
+  2019,
+  2020,
+  2021,
+  2022,
+  2023,
+  2024,
+  2025
+ ],
+ "runs": 2000,
+ "seed": 20261027,
+ "outage_source": "eaglei_davidson",
+ "customers_total": 359052.0,
+ "population_in_zones": 115203.0,
+ "air_field": "on",
+ "assumptions": {
+  "A-C1": "heat-outage risk per customer elsewhere in Davidson equals the AOI's",
+  "A-C2": "daily maxima on non-storm days are independent given background b_y and shape k_y",
+  "A-C3": "TVA had no summer rotating outages 2015–2025, so runs with system shed get zero weight"
+ },
+ "years_excluded": [
+  2018
+ ],
+ "min_background": 100.0,
+ "max_k": 50.0,
+ "ess": 1441.8,
+ "abc": {
+  "statistic": "mean daily max customers out, hot (Tmax >= 35 C) minus cool (< 32 C) non-storm days",
+  "observed": 692.7,
+  "observed_se": 429.3,
+  "n_hot_days": 93,
+  "n_cool_days": 329,
+  "model_prior_5_50_95": [
+   0.0,
+   0.0,
+   27406.9
+  ],
+  "model_posterior_mean": 76.9,
+  "share_runs_within_2se": 0.786
+ },
+ "ess_full_nb_likelihood": 1.4,
+ "max_weight_full_nb": 0.8558,
+ "runs_rejected_by_shed_constraint": 0,
+ "max_weight": 0.0022,
+ "per_year": {
+  "2015": {
+   "used_in_likelihood": true,
+   "days": 92,
+   "non_storm_days": 71,
+   "hot_non_storm_days": 2,
+   "cool_days_for_background": 35,
+   "background_customers": 876.0,
+   "nb_shape_k": 0.561,
+   "obs_max_non_storm": 30336.0,
+   "tmax_max_c": 36.1,
+   "model_mean_daily_max_customers_hot_days": 2044.0,
+   "runs_with_system_shed": 0.0
+  },
+  "2016": {
+   "used_in_likelihood": true,
+   "days": 92,
+   "non_storm_days": 56,
+   "hot_non_storm_days": 9,
+   "cool_days_for_background": 26,
+   "background_customers": 813.9,
+   "nb_shape_k": 0.5,
+   "obs_max_non_storm": 6835.0,
+   "tmax_max_c": 36.1,
+   "model_mean_daily_max_customers_hot_days": 2183.7,
+   "runs_with_system_shed": 0.0
+  },
+  "2017": {
+   "used_in_likelihood": true,
+   "days": 92,
+   "non_storm_days": 69,
+   "hot_non_storm_days": 5,
+   "cool_days_for_background": 44,
+   "background_customers": 820.4,
+   "nb_shape_k": 0.371,
+   "obs_max_non_storm": 10955.0,
+   "tmax_max_c": 36.1,
+   "model_mean_daily_max_customers_hot_days": 2638.6,
+   "runs_with_system_shed": 0.0
+  },
+  "2018": {
+   "used_in_likelihood": false,
+   "days": 92,
+   "non_storm_days": 60,
+   "hot_non_storm_days": 6,
+   "cool_days_for_background": 21,
+   "background_customers": 4.4,
+   "nb_shape_k": 50.0,
+   "obs_max_non_storm": 12.0,
+   "tmax_max_c": 36.7,
+   "model_mean_daily_max_customers_hot_days": 2877.6,
+   "runs_with_system_shed": 0.0
+  },
+  "2019": {
+   "used_in_likelihood": true,
+   "days": 92,
+   "non_storm_days": 59,
+   "hot_non_storm_days": 6,
+   "cool_days_for_background": 28,
+   "background_customers": 1246.1,
+   "nb_shape_k": 0.861,
+   "obs_max_non_storm": 5307.0,
+   "tmax_max_c": 35.6,
+   "model_mean_daily_max_customers_hot_days": 1599.4,
+   "runs_with_system_shed": 0.0
+  },
+  "2020": {
+   "used_in_likelihood": true,
+   "days": 92,
+   "non_storm_days": 56,
+   "hot_non_storm_days": 2,
+   "cool_days_for_background": 26,
+   "background_customers": 855.4,
+   "nb_shape_k": 0.653,
+   "obs_max_non_storm": 4276.0,
+   "tmax_max_c": 36.7,
+   "model_mean_daily_max_customers_hot_days": 3884.9,
+   "runs_with_system_shed": 0.0
+  },
+  "2021": {
+   "used_in_likelihood": true,
+   "days": 92,
+   "non_storm_days": 74,
+   "hot_non_storm_days": 8,
+   "cool_days_for_background": 37,
+   "background_customers": 1575.4,
+   "nb_shape_k": 0.788,
+   "obs_max_non_storm": 8260.0,
+   "tmax_max_c": 36.1,
+   "model_mean_daily_max_customers_hot_days": 2204.9,
+   "runs_with_system_shed": 0.0
+  },
+  "2022": {
+   "used_in_likelihood": true,
+   "days": 92,
+   "non_storm_days": 69,
+   "hot_non_storm_days": 15,
+   "cool_days_for_background": 27,
+   "background_customers": 901.4,
+   "nb_shape_k": 0.394,
+   "obs_max_non_storm": 6120.0,
+   "tmax_max_c": 37.8,
+   "model_mean_daily_max_customers_hot_days": 7360.4,
+   "runs_with_system_shed": 0.0
+  },
+  "2023": {
+   "used_in_likelihood": true,
+   "days": 92,
+   "non_storm_days": 63,
+   "hot_non_storm_days": 6,
+   "cool_days_for_background": 39,
+   "background_customers": 1561.6,
+   "nb_shape_k": 0.395,
+   "obs_max_non_storm": 20111.0,
+   "tmax_max_c": 36.7,
+   "model_mean_daily_max_customers_hot_days": 6728.1,
+   "runs_with_system_shed": 0.0
+  },
+  "2024": {
+   "used_in_likelihood": true,
+   "days": 92,
+   "non_storm_days": 80,
+   "hot_non_storm_days": 24,
+   "cool_days_for_background": 36,
+   "background_customers": 1420.9,
+   "nb_shape_k": 0.589,
+   "obs_max_non_storm": 7342.0,
+   "tmax_max_c": 38.9,
+   "model_mean_daily_max_customers_hot_days": 8453.2,
+   "runs_with_system_shed": 0.0
+  },
+  "2025": {
+   "used_in_likelihood": true,
+   "days": 92,
+   "non_storm_days": 70,
+   "hot_non_storm_days": 16,
+   "cool_days_for_background": 31,
+   "background_customers": 1391.0,
+   "nb_shape_k": 0.559,
+   "obs_max_non_storm": 11130.0,
+   "tmax_max_c": 37.2,
+   "model_mean_daily_max_customers_hot_days": 4637.7,
+   "runs_with_system_shed": 0.0
+  }
+ },
+ "posterior": [
+  {
+   "param": "C-P1.Kd",
+   "name": "K_design",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    0.7475,
+    0.8481,
+    0.9527
+   ],
+   "posterior_5_50_95": [
+    0.7422,
+    0.8348,
+    0.931
+   ],
+   "posterior_mean": 0.8354,
+   "prior_mean": 0.8491,
+   "shift_in_prior_sd": -0.222
+  },
+  {
+   "param": "C-P3",
+   "name": "theta_50",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    133.3927,
+    139.9601,
+    146.9562
+   ],
+   "posterior_5_50_95": [
+    133.6423,
+    140.4287,
+    147.1494
+   ],
+   "posterior_mean": 140.4293,
+   "prior_mean": 140.0067,
+   "shift_in_prior_sd": 0.102
+  },
+  {
+   "param": "C-P3.sigma",
+   "name": "sigma",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    5.996,
+    8.1939,
+    10.7431
+   ],
+   "posterior_5_50_95": [
+    5.9314,
+    8.04,
+    10.6
+   ],
+   "posterior_mean": 8.1301,
+   "prior_mean": 8.271,
+   "shift_in_prior_sd": -0.098
+  },
+  {
+   "param": "C-P2.dTOR",
+   "name": "dTheta_TO_R",
+   "basis": "standard",
+   "prior_5_50_95": [
+    51.6688,
+    55.0304,
+    58.4033
+   ],
+   "posterior_5_50_95": [
+    51.5637,
+    54.9348,
+    58.2193
+   ],
+   "posterior_mean": 54.9021,
+   "prior_mean": 55.0314,
+   "shift_in_prior_sd": -0.065
+  },
+  {
+   "param": "C-P2.dHR",
+   "name": "dTheta_H_R",
+   "basis": "standard",
+   "prior_5_50_95": [
+    21.625,
+    25.0092,
+    28.3105
+   ],
+   "posterior_5_50_95": [
+    21.5567,
+    24.9047,
+    28.2048
+   ],
+   "posterior_mean": 24.8904,
+   "prior_mean": 24.9789,
+   "shift_in_prior_sd": -0.044
+  },
+  {
+   "param": "C-POP2",
+   "name": "T_heat",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    30.7631,
+    32.2415,
+    34.0585
+   ],
+   "posterior_5_50_95": [
+    30.7718,
+    32.1847,
+    34.0814
+   ],
+   "posterior_mean": 32.2877,
+   "prior_mean": 32.3224,
+   "shift_in_prior_sd": -0.036
+  },
+  {
+   "param": "C-H2",
+   "name": "p_backup_fail",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    0.1632,
+    0.2991,
+    0.4394
+   ],
+   "posterior_5_50_95": [
+    0.1668,
+    0.3013,
+    0.4401
+   ],
+   "posterior_mean": 0.3021,
+   "prior_mean": 0.2992,
+   "shift_in_prior_sd": 0.035
+  },
+  {
+   "param": "C-P1.Td",
+   "name": "T_design",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    93.636,
+    94.984,
+    96.359
+   ],
+   "posterior_5_50_95": [
+    93.6382,
+    95.0099,
+    96.4009
+   ],
+   "posterior_mean": 95.0176,
+   "prior_mean": 94.991,
+   "shift_in_prior_sd": 0.032
+  },
+  {
+   "param": "C-P6",
+   "name": "repair_hours",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    6.0854,
+    11.6624,
+    19.6721
+   ],
+   "posterior_5_50_95": [
+    6.0846,
+    11.4701,
+    19.7263
+   ],
+   "posterior_mean": 12.055,
+   "prior_mean": 12.1642,
+   "shift_in_prior_sd": -0.026
+  },
+  {
+   "param": "C-P9",
+   "name": "T_lim",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    29.716,
+    31.0528,
+    32.378
+   ],
+   "posterior_5_50_95": [
+    29.6839,
+    31.0364,
+    32.358
+   ],
+   "posterior_mean": 31.0329,
+   "prior_mean": 31.053,
+   "shift_in_prior_sd": -0.025
+  },
+  {
+   "param": "C-W2",
+   "name": "p_backup_fail",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    0.0872,
+    0.1647,
+    0.2573
+   ],
+   "posterior_5_50_95": [
+    0.0851,
+    0.1624,
+    0.2578
+   ],
+   "posterior_mean": 0.1664,
+   "prior_mean": 0.1675,
+   "shift_in_prior_sd": -0.023
+  },
+  {
+   "param": "C-P2.tau",
+   "name": "tau_TO",
+   "basis": "standard",
+   "prior_5_50_95": [
+    2.3073,
+    3.0058,
+    3.6966
+   ],
+   "posterior_5_50_95": [
+    2.3131,
+    3.0091,
+    3.6995
+   ],
+   "posterior_mean": 3.0113,
+   "prior_mean": 3.0033,
+   "shift_in_prior_sd": 0.02
+  },
+  {
+   "param": "C-H1",
+   "name": "p_backup_fail",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    0.033,
+    0.0677,
+    0.1264
+   ],
+   "posterior_5_50_95": [
+    0.0322,
+    0.0674,
+    0.1261
+   ],
+   "posterior_mean": 0.0723,
+   "prior_mean": 0.0728,
+   "shift_in_prior_sd": -0.018
+  },
+  {
+   "param": "C-P4",
+   "name": "alpha",
+   "basis": "internal",
+   "prior_5_50_95": [
+    0.2727,
+    0.5982,
+    1.1817
+   ],
+   "posterior_5_50_95": [
+    0.278,
+    0.6001,
+    1.1767
+   ],
+   "posterior_mean": 0.6502,
+   "prior_mean": 0.6461,
+   "shift_in_prior_sd": 0.015
+  },
+  {
+   "param": "C-P9.flow",
+   "name": "f_low",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    0.1573,
+    0.2742,
+    0.4321
+   ],
+   "posterior_5_50_95": [
+    0.1575,
+    0.2735,
+    0.4332
+   ],
+   "posterior_mean": 0.2834,
+   "prior_mean": 0.2826,
+   "shift_in_prior_sd": 0.01
+  },
+  {
+   "param": "C-W3",
+   "name": "storage_hours",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    8.2917,
+    13.7264,
+    20.7413
+   ],
+   "posterior_5_50_95": [
+    8.301,
+    13.7462,
+    20.825
+   ],
+   "posterior_mean": 14.138,
+   "prior_mean": 14.1097,
+   "shift_in_prior_sd": 0.008
+  },
+  {
+   "param": "C-P9.span",
+   "name": "span",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    3.6698,
+    5.2656,
+    7.0886
+   ],
+   "posterior_5_50_95": [
+    3.6881,
+    5.2578,
+    7.1064
+   ],
+   "posterior_mean": 5.3194,
+   "prior_mean": 5.3118,
+   "shift_in_prior_sd": 0.007
+  },
+  {
+   "param": "C-P9.avail",
+   "name": "a",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    0.8373,
+    0.8764,
+    0.9115
+   ],
+   "posterior_5_50_95": [
+    0.8373,
+    0.876,
+    0.9116
+   ],
+   "posterior_mean": 0.8758,
+   "prior_mean": 0.876,
+   "shift_in_prior_sd": -0.007
+  },
+  {
+   "param": "C-T2",
+   "name": "p_no_battery",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    0.5815,
+    0.7497,
+    0.9176
+   ],
+   "posterior_5_50_95": [
+    0.5866,
+    0.7493,
+    0.9187
+   ],
+   "posterior_mean": 0.7501,
+   "prior_mean": 0.7495,
+   "shift_in_prior_sd": 0.006
+  },
+  {
+   "param": "C-P9.imp",
+   "name": "P_imp",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    515.9106,
+    1515.9109,
+    2564.0631
+   ],
+   "posterior_5_50_95": [
+    498.826,
+    1495.0111,
+    2564.7637
+   ],
+   "posterior_mean": 1514.0705,
+   "prior_mean": 1517.9359,
+   "shift_in_prior_sd": -0.006
+  },
+  {
+   "param": "C-P1",
+   "name": "beta",
+   "basis": "internal",
+   "prior_5_50_95": [
+    0.0193,
+    0.0257,
+    0.0345
+   ],
+   "posterior_5_50_95": [
+    0.0192,
+    0.0257,
+    0.0345
+   ],
+   "posterior_mean": 0.0261,
+   "prior_mean": 0.0261,
+   "shift_in_prior_sd": -0.005
+  },
+  {
+   "param": "C-P9.Qmin",
+   "name": "Q_min",
+   "basis": "assumption",
+   "prior_5_50_95": [
+    3319.0067,
+    4006.3414,
+    4689.7793
+   ],
+   "posterior_5_50_95": [
+    3319.0507,
+    4001.9698,
+    4686.2506
+   ],
+   "posterior_mean": 4006.4006,
+   "prior_mean": 4007.7084,
+   "shift_in_prior_sd": -0.003
+  },
+  {
+   "param": "C-P2.R",
+   "name": "R",
+   "basis": "standard",
+   "prior_5_50_95": [
+    3.5247,
+    4.4992,
+    5.5095
+   ],
+   "posterior_5_50_95": [
+    3.5268,
+    4.4973,
+    5.5002
+   ],
+   "posterior_mean": 4.4987,
+   "prior_mean": 4.4988,
+   "shift_in_prior_sd": -0.0
+  }
+ ],
+ "data_only": {
+  "daily_tmax_vs_daily_max_outages_non_storm": {
+   "rho": -0.003,
+   "lo": -0.08,
+   "hi": 0.063,
+   "n": 667,
+   "n_days": 667
+  },
+  "by_year_spearman": {
+   "2015": -0.041,
+   "2016": 0.001,
+   "2017": 0.135,
+   "2019": -0.268,
+   "2020": 0.038,
+   "2021": -0.066,
+   "2022": 0.094,
+   "2023": 0.216,
+   "2024": -0.104,
+   "2025": -0.124
+  },
+  "median_daily_max_hot_days": 307.0,
+  "median_daily_max_cool_days": 395.0,
+  "hot_minus_cool_median": {
+   "est": -88.0,
+   "lo": -258.0,
+   "hi": 239.0999999999999
+  },
+  "n_hot_days": 93,
+  "n_cool_days": 329,
+  "binned_by_tmax": [
+   {
+    "bin_c": "(20, 28]",
+    "hours": 59,
+    "median": 417.0,
+    "p90": 3580.2000000000003,
+    "share_hours_over_1000": 0.305
+   },
+   {
+    "bin_c": "(28, 30]",
+    "hours": 132,
+    "median": 381.0,
+    "p90": 2931.9000000000005,
+    "share_hours_over_1000": 0.333
+   },
+   {
+    "bin_c": "(30, 32]",
+    "hours": 137,
+    "median": 364.0,
+    "p90": 3642.2000000000007,
+    "share_hours_over_1000": 0.328
+   },
+   {
+    "bin_c": "(32, 34]",
+    "hours": 203,
+    "median": 323.0,
+    "p90": 3559.2000000000003,
+    "share_hours_over_1000": 0.291
+   },
+   {
+    "bin_c": "(34, 36]",
+    "hours": 102,
+    "median": 383.0,
+    "p90": 3629.4,
+    "share_hours_over_1000": 0.294
+   },
+   {
+    "bin_c": "(36, 40]",
+    "hours": 33,
+    "median": 307.0,
+    "p90": 4637.0,
+    "share_hours_over_1000": 0.394
+   }
+  ]
+ }
+}

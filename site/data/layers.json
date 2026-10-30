@@ -6,8 +6,8 @@
   -86.727,
   36.208
  ],
- "built_at": "2026-10-27T18:11+00:00",
- "run_id": "20261027T181135Z-053157f7",
+ "built_at": "2026-10-30T20:57+00:00",
+ "run_id": "20261030T205752Z-acb2617f",
  "timezone": "America/Chicago",
  "heatwave": {
   "name": "July 2023 heat window",
@@ -347,6 +347,27 @@
    "fill_color": "#c27c0e"
   },
   {
+   "id": "osm_fire_stations",
+   "kind": "vector",
+   "title": "Fire / EMS stations (OSM)",
+   "group": "Health",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "osm_fire_stations",
+   "data": "vector/osm_fire_stations.geojson",
+   "geometry": "circle",
+   "popup_fields": [
+    "name",
+    "operator"
+   ],
+   "field_labels": {
+    "name": "Name",
+    "operator": "Operator"
+   },
+   "count": 12,
+   "fill_color": "#d9480f"
+  },
+  {
    "id": "zcta_population",
    "kind": "vector",
    "title": "Population by ZCTA (ACS, clipped to AOI)",
@@ -376,6 +397,18 @@
    },
    "count": 20,
    "fill_color": "#9aa6a0"
+  },
+  {
+   "id": "air_field_2022",
+   "kind": "raster",
+   "title": "Afternoon air temperature vs airport (2022 traverse model)",
+   "group": "Air temperature",
+   "visible": false,
+   "opacity": 0.75,
+   "source_id": "air_field_2022",
+   "image": "raster/air_field_2022.png",
+   "values": "raster/air_field_2022.bin",
+   "meta": "raster/air_field_2022.json"
   }
  ]
 }

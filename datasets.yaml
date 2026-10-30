@@ -17,7 +17,7 @@ project:
   aoi: [-86.837, 36.118, -86.727, 36.208]   # [west, south, east, north], EPSG:4326
   timezone: America/Chicago
   # 【中文】校验用：时间字段超出这个范围会给出警告 / timestamps outside this range are flagged
-  time_range: ["2023-06-01", "2023-09-30"]
+  time_range: ["2014-01-01", "2025-12-31"]
   # 【中文】热浪时间窗沿用 twin_demo 的定义（in_event_window），对照期为之前 10 天。
   # 代表性热浪的选择仍是待决问题（设计方案第 9 节），确认后改这里即可。
   # Heat window follows twin_demo's in_event_window; baseline = the 10 days before.
@@ -343,6 +343,36 @@ datasets:
     spatial_res: point
     quality_rank: 2
 
+  # 【中文】路网行程时间（PIPELINE_SPEC M-28 / M-29）的输入：HPMS 2024 路段属性（AADT、车道、限速）与 TMAS 逐小时计数
+  # inputs of the network travel-time model: HPMS 2024 sections and TMAS hourly counts (both via twin_demo)
+  - id: hpms_2024
+    kind: vector
+    title: HPMS 2024 road sections (Davidson)
+    group: Transportation
+    file: traffic/hpms_2024_davidson.parquet
+    drive_folder: 06_Digital_Twin/twin_demo/l1_std/ntad
+    system: transportation
+    asset_type: hpms_section
+    id_field: route_id
+    publish: false
+    provider: FHWA Highway Performance Monitoring System 2024 (via twin_demo / NTAD)
+    license: public
+    temporal_res: annual 2024
+    spatial_res: section
+    quality_rank: 2
+
+  - id: tmas_2023
+    kind: traffic_counts
+    title: Hourly traffic counts (FHWA TMAS, Davidson, Jun–Aug 2023)
+    file: traffic/state_tmas_hourly.parquet
+    drive_folder: 06_Digital_Twin/twin_demo/l2
+    provider: FHWA Travel Monitoring Analysis System (via twin_demo)
+    license: public
+    temporal_res: hourly
+    spatial_res: count station
+    coverage: "2023-06-01 – 2023-08-31"
+    quality_rank: 2
+
   # ---------------------------------------------------------------- 健康 Health（CMS）
   - id: hospitals
     kind: vector
@@ -398,6 +428,27 @@ datasets:
     spatial_res: point
     quality_rank: 2
 
+  - id: osm_fire_stations
+    kind: vector
+    title: Fire / EMS stations (OSM)
+    group: Health
+    file: osm/osm_fire_stations.geojson
+    clip_bbox: [-86.88, 36.08, -86.68, 36.25]
+    system: health
+    asset_type: ems_station
+    id_field: osm_id
+    web_geometry: centroid
+    popup_fields: [name, operator]
+    field_labels: { name: Name, operator: Operator }
+    fill_color: "#d9480f"
+    visible: false
+    provider: OpenStreetMap contributors (Overpass API)
+    license: ODbL 1.0
+    retrieved_date: "2026-10-30"
+    temporal_res: snapshot
+    spatial_res: point / polygon
+    quality_rank: 3
+
   # ---------------------------------------------------------------- 人口 Population
   - id: zcta_population
     kind: vector
@@ -444,25 +495,82 @@ datasets:
     station_id: BNA
     provider: Iowa Environmental Mesonet (NOAA ASOS)
     license: public
-    retrieved_date: "2026-10-27"
+    retrieved_date: "2026-10-30"
     temporal_res: hourly
     spatial_res: station
-    coverage: "2023-06-01 – 2023-08-31"
+    coverage: "2014-01-01 – 2025-12-31"
     quality_rank: 1
 
-  - id: eaglei_2023
+  # 【中文】城市气温场（PIPELINE_SPEC M-6）：2022 年走航测温标定，替换"全城用 BNA 一个站"的假设 A-D4。
+  # 走航时段的当地时刻取 Heat Watch 惯例（约 6–7 时、15–16 时、19–20 时），文件本身没有记录时间，待确认。
+  # Urban air-temperature field calibrated on the 2022 traverses; replaces assumption A-D4.
+  - id: air_field_2022
+    kind: air_field
+    title: Afternoon air temperature vs airport (2022 traverse model)
+    group: Air temperature
+    traverse:
+      morning: traverse_2022/Morning_Traverse_Points.geojson
+      afternoon: traverse_2022/Afternoon_Traverse_Points.geojson
+      evening: traverse_2022/Evening_Traverse_Points.geojson
+    drive_folder: cascading-heat_data/01_temperature/traverse_2022
+    grids: { dem: grids/dem_3dep.tif, impervious: grids/nlcd2021_impervious.tif, landcover: grids/nlcd2021_landcover.tif }
+    anchors_local: [6.5, 15.5, 19.5]
+    reference: { station_id: BNA, lon: -86.6892, lat: 36.1189 }   # 【中文】IEM 站点元数据 / IEM station metadata
+    asos_file: asos_bna_hourly.csv
+    cell_m: 100
+    block_m: 1000
+    colormap: RdBu_r
+    stretch: [1, 99]
+    opacity: 0.75
+    visible: false
+    provider: "Nashville 2022 heat-mapping traverse (ArcGIS Traverse_Points_Temperature, via cascading-heat); USGS 3DEP; MRLC NLCD 2021"
+    license: public / research use
+    temporal_res: 3 traverse periods → hourly by interpolation
+    spatial_res: 30 m
+    quality_rank: 3
+
+  # 【中文】Davidson 县 2014-11 – 2025 的 EAGLE-I（由 scripts/extract_eaglei.py 从 Drive 上逐年的全国文件提取）。
+  # 2014 年文件从 11 月才开始，所以夏季校准用 2015–2025。用户总数取 EAGLE-I 的 MCC.csv。
+  # EAGLE-I for Davidson County, extracted year by year from the national files; summers 2015–2025 are usable.
+  - id: eaglei_davidson
     kind: outage_series
-    title: Power outages, Davidson County (EAGLE-I)
-    file: eaglei/eaglei_outages_2023.csv
+    title: Power outages, Davidson County (EAGLE-I 2014–2025)
+    file: eaglei/eaglei_davidson_2014_2025.csv
     region_file: davidson_county.parquet
     fips: 47037
-    period: ["2023-06-01", "2023-08-31"]
+    period: ["2014-11-01", "2025-12-31"]
+    customers_total: 359052          # 【中文】EAGLE-I MCC.csv（模型用户数）/ modelled customer count
+    drive_folder: cascading-heat_data/02_power/power_outage
     provider: ORNL EAGLE-I (via cascading-heat)
     license: "ORNL data terms; cite DOI 10.13139/ORNLNCCS/1975202"
     temporal_res: 15 min → hourly max
     spatial_res: county
-    coverage: "2023-06-01 – 2023-08-31"
+    coverage: "2014-11-01 – 2025-12-31"
     quality_rank: 2
+
+  # 【中文】河水温度 → 火电降额（PIPELINE_SPEC M-18，关系 R-P0 / R-W5）。Clay 县站位于 Wolf Creek 大坝下游，
+  # 受水库底层冷水下泄影响，不代表电厂附近河段，排除。降额参数 C-P9.* 在 twin/couplings.csv。
+  # River temperature → thermal derate (M-18). The Clay County station (cold tailwater below Wolf Creek Dam) is excluded.
+  - id: cumberland_thermal
+    kind: river_thermal
+    title: Cumberland River temperature and thermal cooling (M-18)
+    tdec_file: water/tn_surface_water_chemical_data.csv
+    usgs_file: usgs/usgs_03431500_dv.rdb
+    asos_file: asos_bna_hourly.csv
+    eia860_file: eia/eia8602022.zip
+    eia930_file: eia/eia930_tva.csv
+    river: Cumberland River
+    counties: [Davidson, Wilson, Cheatham, Montgomery, Stewart]
+    excluded_note: "Clay County (CUMBE381.1CY) is cold tailwater below Wolf Creek Dam"
+    window_days: 7
+    balancing_authority: TVA
+    water_body: Cumberland
+    period: ["2014-01-01", "2025-12-31"]
+    provider: "TDEC surface-water chemistry; USGS NWIS 03431500; EIA-860 2022; EIA-930 (TVA); IEM ASOS"
+    license: public
+    temporal_res: daily river / hourly load
+    spatial_res: river reach / balancing authority
+    quality_rank: 3
 
   # ---------------------------------------------------------------- 耦合与依赖 Couplings / dependencies
   # 【中文】耦合参数是人工整理的知识，放在仓库 twin/ 下做版本管理（path 相对仓库根目录）。

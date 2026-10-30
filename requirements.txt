@@ -10,3 +10,4 @@ matplotlib>=3.7
 pillow>=10
 pyyaml>=6
 scipy>=1.11
+openpyxl>=3.1      # 【中文】读取 EIA-860 Excel / EIA-860 workbooks

@@ -1,9 +1,9 @@
 {
- "run_id": "cascade-20261027T181442Z-48723ea5b7",
- "created": "2026-10-27T18:14:42+00:00",
- "code_version": "git:78173d6-dirty",
- "inputs_build_run_id": "20261027T181135Z-053157f7",
- "couplings_sha256": "48723ea5b7",
+ "run_id": "cascade-20261030T210232Z-45a0e28623",
+ "created": "2026-10-30T21:02:32+00:00",
+ "code_version": "git:5764716-dirty",
+ "inputs_build_run_id": "20261030T205752Z-acb2617f",
+ "couplings_sha256": "45a0e28623",
  "seed": 20261027,
  "runs": 2000,
  "mid_runs": 500,
@@ -17,6 +17,27 @@
   2.0,
   4.0
  ],
+ "air_field": {
+  "method": "PIPELINE_SPEC M-6",
+  "source": "/Users/taoziyi/Downloads/nashville-heat-twin/data/standard/air_field/air_field_2022.tif",
+  "station_offset_c": {
+   "min": -3.03,
+   "mean": -0.61,
+   "max": 0.85
+  },
+  "zone_offset_c": {
+   "min": -2.54,
+   "mean": -0.67,
+   "max": 0.61
+  },
+  "cv_rmse_c": {
+   "morning": 0.656,
+   "afternoon": 0.585,
+   "evening": 0.444
+  },
+  "dataset": "air_field_2022"
+ },
+ "outage_source": "eaglei_davidson",
  "hours": 2208,
  "network": {
   "substations": 78,
@@ -39,63 +60,63 @@
    "50": 0.0,
    "75": 0.0,
    "95": 9.0,
-   "mean": 2.28
+   "mean": 2.18
   },
   "overload": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 18.0,
-   "mean": 6.47
+   "95": 22.0,
+   "mean": 6.33
   },
   "deenergised_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 242.15,
-   "mean": 83.27
+   "95": 290.15,
+   "mean": 78.93
   },
   "pop_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 1092009.9,
-   "mean": 413514.92
+   "95": 1370879.9,
+   "mean": 386255.19
   },
   "compound_pop_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 342207.2,
-   "mean": 81202.0
+   "95": 397932.05,
+   "mean": 79584.65
   },
   "compound_elderly_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 30670.95,
-   "mean": 7533.99
+   "95": 35957.5,
+   "mean": 7323.82
   },
   "compound_poverty_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 55825.65,
-   "mean": 12902.54
+   "95": 67512.75,
+   "mean": 12947.23
   },
   "dialysis_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 56.2,
-   "mean": 26.43
+   "95": 80.0,
+   "mean": 23.87
   },
   "hospital_hours": {
    "5": 0.0,
@@ -103,7 +124,7 @@
    "50": 0.0,
    "75": 0.0,
    "95": 0.0,
-   "mean": 3.06
+   "mean": 2.77
   },
   "water_out_hours": {
    "5": 0.0,
@@ -118,16 +139,24 @@
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 25.05,
-   "mean": 2.68
+   "95": 26.0,
+   "mean": 2.91
+  },
+  "shed_station_hours": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 0.0,
+   "mean": 0.0
   },
   "amplification": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 2.13,
-   "mean": 0.3
+   "95": 2.7,
+   "mean": 0.39
   }
  },
  "scenarios": {
@@ -138,63 +167,63 @@
     "50": 0.0,
     "75": 0.0,
     "95": 9.0,
-    "mean": 2.28
+    "mean": 2.18
    },
    "overload": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 18.0,
-    "mean": 6.47
+    "95": 22.0,
+    "mean": 6.33
    },
    "deenergised_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 242.15,
-    "mean": 83.27
+    "95": 290.15,
+    "mean": 78.93
    },
    "pop_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 1092009.9,
-    "mean": 413514.92
+    "95": 1370879.9,
+    "mean": 386255.19
    },
    "compound_pop_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 342207.2,
-    "mean": 81202.0
+    "95": 397932.05,
+    "mean": 79584.65
    },
    "compound_elderly_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 30670.95,
-    "mean": 7533.99
+    "95": 35957.5,
+    "mean": 7323.82
    },
    "compound_poverty_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 55825.65,
-    "mean": 12902.54
+    "95": 67512.75,
+    "mean": 12947.23
    },
    "dialysis_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 56.2,
-    "mean": 26.43
+    "95": 80.0,
+    "mean": 23.87
    },
    "hospital_hours": {
     "5": 0.0,
@@ -202,7 +231,7 @@
     "50": 0.0,
     "75": 0.0,
     "95": 0.0,
-    "mean": 3.06
+    "mean": 2.77
    },
    "water_out_hours": {
     "5": 0.0,
@@ -217,18 +246,32 @@
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 25.05,
-    "mean": 2.68
+    "95": 26.0,
+    "mean": 2.91
+   },
+   "shed_station_hours": {
+    "5": 0.0,
+    "25": 0.0,
+    "50": 0.0,
+    "75": 0.0,
+    "95": 0.0,
+    "mean": 0.0
    },
    "amplification": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 2.13,
-    "mean": 0.3
+    "95": 2.7,
+    "mean": 0.39
    },
-   "share_runs_with_any_failure": 0.152,
+   "share_runs_with_any_failure": 0.149,
+   "river": {
+    "runs_with_shed": 0.0,
+    "shed_hours_mean": 0.0,
+    "derate_mw_max_mean": 192.4,
+    "derate_hours_mean": 4.42
+   },
    "max_air_temp_c": 36.7
   },
   "+2": {
@@ -237,72 +280,72 @@
     "25": 0.0,
     "50": 0.0,
     "75": 4.0,
-    "95": 105.05,
-    "mean": 16.82
+    "95": 97.05,
+    "mean": 16.31
    },
    "overload": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 8.0,
-    "95": 271.05,
-    "mean": 50.23
+    "75": 15.0,
+    "95": 285.0,
+    "mean": 52.39
    },
    "deenergised_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 76.5,
-    "95": 3499.15,
-    "mean": 617.79
+    "75": 182.0,
+    "95": 3660.65,
+    "mean": 662.24
    },
    "pop_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 398892.25,
-    "95": 15762380.75,
-    "mean": 3035024.68
+    "75": 794936.25,
+    "95": 17558069.25,
+    "mean": 3167926.2
    },
    "compound_pop_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 202883.0,
-    "95": 5241691.75,
-    "mean": 844080.13
+    "75": 324356.5,
+    "95": 5254911.05,
+    "mean": 854245.76
    },
    "compound_elderly_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 19079.0,
-    "95": 488630.05,
-    "mean": 78370.48
+    "75": 29675.75,
+    "95": 486321.7,
+    "mean": 78469.32
    },
    "compound_poverty_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 33370.0,
-    "95": 814976.6,
-    "mean": 132034.56
+    "75": 57850.75,
+    "95": 835138.6,
+    "mean": 137001.38
    },
    "dialysis_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 19.25,
-    "95": 940.35,
-    "mean": 191.38
+    "75": 44.0,
+    "95": 1021.25,
+    "mean": 197.68
    },
    "hospital_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 65.0,
-    "mean": 18.26
+    "95": 96.0,
+    "mean": 20.34
    },
    "water_out_hours": {
     "5": 0.0,
@@ -310,99 +353,113 @@
     "50": 0.0,
     "75": 0.0,
     "95": 0.0,
-    "mean": 0.01
+    "mean": 0.0
    },
    "max_subs_down": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 15.0,
-    "95": 65.0,
-    "mean": 11.4
+    "75": 22.0,
+    "95": 67.0,
+    "mean": 13.24
+   },
+   "shed_station_hours": {
+    "5": 0.0,
+    "25": 0.0,
+    "50": 0.0,
+    "75": 0.0,
+    "95": 1.0,
+    "mean": 0.26
    },
    "amplification": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 1.33,
-    "95": 4.33,
-    "mean": 1.03
+    "75": 1.93,
+    "95": 7.0,
+    "mean": 2.18
    },
-   "share_runs_with_any_failure": 0.383,
+   "share_runs_with_any_failure": 0.404,
+   "river": {
+    "runs_with_shed": 0.087,
+    "shed_hours_mean": 0.41,
+    "derate_mw_max_mean": 192.4,
+    "derate_hours_mean": 4.42
+   },
    "max_air_temp_c": 38.7
   },
   "+4": {
    "thermal": {
     "5": 0.0,
     "25": 0.0,
-    "50": 5.0,
-    "75": 61.0,
-    "95": 455.3,
-    "mean": 79.25
+    "50": 9.0,
+    "75": 62.0,
+    "95": 445.05,
+    "mean": 75.88
    },
    "overload": {
     "5": 0.0,
-    "25": 0.0,
-    "50": 12.0,
-    "75": 184.25,
-    "95": 1272.9,
-    "mean": 224.65
+    "25": 2.0,
+    "50": 76.0,
+    "75": 345.0,
+    "95": 1323.3,
+    "mean": 292.13
    },
    "deenergised_hours": {
     "5": 0.0,
-    "25": 0.0,
-    "50": 139.5,
-    "75": 2236.75,
-    "95": 14739.0,
-    "mean": 2625.26
+    "25": 19.5,
+    "50": 859.0,
+    "75": 3910.75,
+    "95": 15607.8,
+    "mean": 3327.62
    },
    "pop_hours": {
     "5": 0.0,
-    "25": 0.0,
-    "50": 661266.0,
-    "75": 10302521.75,
-    "95": 74200790.1,
-    "mean": 12924107.74
+    "25": 55504.5,
+    "50": 3942430.5,
+    "75": 17476630.5,
+    "95": 76358417.4,
+    "mean": 16051682.52
    },
    "compound_pop_hours": {
     "5": 0.0,
-    "25": 0.0,
-    "50": 437620.5,
-    "75": 4765299.25,
-    "95": 26984010.1,
-    "mean": 4917846.66
+    "25": 34959.75,
+    "50": 1972337.0,
+    "75": 7634054.0,
+    "95": 26162007.35,
+    "mean": 5908339.88
    },
    "compound_elderly_hours": {
     "5": 0.0,
-    "25": 0.0,
-    "50": 39852.5,
-    "75": 442461.0,
-    "95": 2503421.75,
-    "mean": 458204.06
+    "25": 3300.5,
+    "50": 181343.5,
+    "75": 707724.25,
+    "95": 2399412.2,
+    "mean": 542780.86
    },
    "compound_poverty_hours": {
     "5": 0.0,
-    "25": 0.0,
-    "50": 68588.5,
-    "75": 750824.5,
-    "95": 4147196.1,
-    "mean": 773882.62
+    "25": 6702.75,
+    "50": 319960.5,
+    "75": 1215485.5,
+    "95": 4039417.0,
+    "mean": 929889.24
    },
    "dialysis_hours": {
     "5": 0.0,
-    "25": 0.0,
-    "50": 36.0,
-    "75": 640.5,
-    "95": 4761.9,
-    "mean": 784.83
+    "25": 1.0,
+    "50": 224.5,
+    "75": 1035.25,
+    "95": 5029.1,
+    "mean": 996.28
    },
    "hospital_hours": {
     "5": 0.0,
     "25": 0.0,
-    "50": 0.0,
-    "75": 24.0,
-    "95": 376.1,
-    "mean": 69.39
+    "50": 1.0,
+    "75": 48.0,
+    "95": 442.25,
+    "mean": 90.03
    },
    "water_out_hours": {
     "5": 0.0,
@@ -414,21 +471,35 @@
    },
    "max_subs_down": {
     "5": 0.0,
-    "25": 0.0,
-    "50": 21.0,
-    "75": 60.0,
+    "25": 5.0,
+    "50": 40.0,
+    "75": 64.0,
     "95": 77.0,
-    "mean": 28.57
+    "mean": 38.35
+   },
+   "shed_station_hours": {
+    "5": 0.0,
+    "25": 0.0,
+    "50": 1.0,
+    "75": 13.0,
+    "95": 74.05,
+    "mean": 14.28
    },
    "amplification": {
     "5": 0.0,
-    "25": 0.0,
-    "50": 1.48,
-    "75": 2.84,
-    "95": 7.08,
-    "mean": 2.36
+    "25": 1.0,
+    "50": 2.87,
+    "75": 7.45,
+    "95": 131.14,
+    "mean": 28.96
    },
-   "share_runs_with_any_failure": 0.657,
+   "share_runs_with_any_failure": 0.794,
+   "river": {
+    "runs_with_shed": 0.6065,
+    "shed_hours_mean": 10.3,
+    "derate_mw_max_mean": 192.4,
+    "derate_hours_mean": 4.42
+   },
    "max_air_temp_c": 40.7
   }
  },
@@ -520,50 +591,156 @@
    "75": 0.0,
    "95": 0.0,
    "mean": 0.0
+  },
+  "shed_station_hours": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 0.0,
+   "mean": 0.0
+  }
+ },
+ "station_only": {
+  "thermal": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 9.0,
+   "mean": 2.07
+  },
+  "overload": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 19.0,
+   "mean": 5.64
+  },
+  "deenergised_hours": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 222.3,
+   "mean": 70.31
+  },
+  "pop_hours": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 990311.95,
+   "mean": 346690.56
+  },
+  "compound_pop_hours": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 296832.55,
+   "mean": 72979.05
+  },
+  "compound_elderly_hours": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 27535.3,
+   "mean": 6785.99
+  },
+  "compound_poverty_hours": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 49245.95,
+   "mean": 11685.01
+  },
+  "dialysis_hours": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 56.05,
+   "mean": 21.84
+  },
+  "hospital_hours": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 0.0,
+   "mean": 2.02
+  },
+  "water_out_hours": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 0.0,
+   "mean": 0.0
+  },
+  "max_subs_down": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 22.0,
+   "mean": 2.66
+  },
+  "shed_station_hours": {
+   "5": 0.0,
+   "25": 0.0,
+   "50": 0.0,
+   "75": 0.0,
+   "95": 0.0,
+   "mean": 0.0
   }
  },
  "validation": {
   "power_all_hours": {
-   "rho": -0.024,
-   "lo": -0.13,
-   "hi": 0.09,
+   "rho": 0.019,
+   "lo": -0.095,
+   "hi": 0.133,
    "n": 2208,
    "n_days": 92
   },
   "power_non_storm_hours": {
-   "rho": -0.036,
-   "lo": -0.144,
-   "hi": 0.075,
+   "rho": 0.015,
+   "lo": -0.092,
+   "hi": 0.124,
    "n": 1994,
    "n_days": 92
   },
   "temperature_vs_observed_non_storm": {
-   "rho": 0.186,
-   "lo": 0.096,
-   "hi": 0.275,
+   "rho": 0.189,
+   "lo": 0.1,
+   "hi": 0.278,
    "n": 1994,
    "n_days": 92
   },
   "temperature_vs_observed_all": {
-   "rho": 0.136,
-   "lo": 0.046,
-   "hi": 0.235,
+   "rho": 0.139,
+   "lo": 0.048,
+   "hi": 0.236,
    "n": 2208,
    "n_days": 92
   },
   "observed_by_temperature_non_storm": [
    {
     "bin_c": "(20, 24]",
-    "hours": 556,
-    "median": 12.0,
-    "p90": 566.0,
+    "hours": 559,
+    "median": 11.0,
+    "p90": 563.5999999999999,
     "share_hours_over_1000": 0.088
    },
    {
     "bin_c": "(24, 28]",
-    "hours": 634,
+    "hours": 630,
     "median": 13.0,
-    "p90": 710.0,
+    "p90": 710.1,
     "share_hours_over_1000": 0.065
    },
    {
@@ -603,9 +780,9 @@
    }
   ],
   "daily_max_model_vs_observed": {
-   "rho": 0.04,
-   "lo": -0.161,
-   "hi": 0.252,
+   "rho": 0.02,
+   "lo": -0.168,
+   "hi": 0.249,
    "n": 92,
    "n_days": 92
   },
@@ -712,291 +889,345 @@
    "param": "C-P1.Kd",
    "name": "K_design",
    "basis": "assumption",
-   "pop_hours": 0.401,
-   "compound_pop_hours": 0.4,
-   "thermal_failures": 0.432,
-   "overload_failures": 0.374
+   "pop_hours": 0.413,
+   "compound_pop_hours": 0.416,
+   "thermal_failures": 0.428,
+   "overload_failures": 0.385
   },
   {
    "param": "C-P3.sigma",
    "name": "sigma",
    "basis": "assumption",
-   "pop_hours": 0.289,
-   "compound_pop_hours": 0.289,
-   "thermal_failures": 0.315,
-   "overload_failures": 0.25
+   "pop_hours": 0.286,
+   "compound_pop_hours": 0.282,
+   "thermal_failures": 0.299,
+   "overload_failures": 0.241
   },
   {
    "param": "C-P3",
    "name": "theta_50",
    "basis": "assumption",
-   "pop_hours": -0.245,
-   "compound_pop_hours": -0.245,
-   "thermal_failures": -0.249,
-   "overload_failures": -0.222
+   "pop_hours": -0.252,
+   "compound_pop_hours": -0.251,
+   "thermal_failures": -0.269,
+   "overload_failures": -0.227
   },
   {
    "param": "C-P2.dTOR",
    "name": "dTheta_TO_R",
    "basis": "standard",
-   "pop_hours": 0.115,
+   "pop_hours": 0.114,
    "compound_pop_hours": 0.114,
    "thermal_failures": 0.121,
-   "overload_failures": 0.109
+   "overload_failures": 0.108
   },
   {
    "param": "C-P2.dHR",
    "name": "dTheta_H_R",
    "basis": "standard",
-   "pop_hours": 0.081,
-   "compound_pop_hours": 0.08,
-   "thermal_failures": 0.087,
-   "overload_failures": 0.085
-  },
-  {
-   "param": "C-P2.tau",
-   "name": "tau_TO",
-   "basis": "standard",
-   "pop_hours": -0.076,
-   "compound_pop_hours": -0.078,
-   "thermal_failures": -0.068,
-   "overload_failures": -0.076
-  },
-  {
-   "param": "C-P6",
-   "name": "repair_hours",
-   "basis": "assumption",
-   "pop_hours": 0.06,
-   "compound_pop_hours": 0.056,
-   "thermal_failures": 0.06,
-   "overload_failures": 0.027
+   "pop_hours": 0.107,
+   "compound_pop_hours": 0.108,
+   "thermal_failures": 0.092,
+   "overload_failures": 0.093
   },
   {
    "param": "C-P1.Td",
    "name": "T_design",
    "basis": "assumption",
-   "pop_hours": -0.054,
-   "compound_pop_hours": -0.054,
-   "thermal_failures": -0.052,
-   "overload_failures": -0.061
-  },
-  {
-   "param": "C-POP2",
-   "name": "T_heat",
-   "basis": "assumption",
-   "pop_hours": 0.034,
-   "compound_pop_hours": 0.03,
-   "thermal_failures": 0.038,
-   "overload_failures": 0.037
-  },
-  {
-   "param": "C-W3",
-   "name": "storage_hours",
-   "basis": "assumption",
-   "pop_hours": 0.032,
-   "compound_pop_hours": 0.032,
-   "thermal_failures": 0.028,
-   "overload_failures": 0.028
-  },
-  {
-   "param": "C-W2",
-   "name": "p_backup_fail",
-   "basis": "assumption",
-   "pop_hours": 0.028,
-   "compound_pop_hours": 0.027,
-   "thermal_failures": 0.02,
-   "overload_failures": 0.033
-  },
-  {
-   "param": "C-T2",
-   "name": "p_no_battery",
-   "basis": "assumption",
-   "pop_hours": -0.027,
-   "compound_pop_hours": -0.025,
-   "thermal_failures": -0.023,
-   "overload_failures": -0.031
-  },
-  {
-   "param": "C-H1",
-   "name": "p_backup_fail",
-   "basis": "assumption",
-   "pop_hours": 0.025,
-   "compound_pop_hours": 0.024,
-   "thermal_failures": 0.009,
-   "overload_failures": 0.016
-  },
-  {
-   "param": "C-P2.R",
-   "name": "R",
-   "basis": "standard",
-   "pop_hours": -0.018,
-   "compound_pop_hours": -0.019,
-   "thermal_failures": -0.025,
-   "overload_failures": -0.023
+   "pop_hours": -0.064,
+   "compound_pop_hours": -0.062,
+   "thermal_failures": -0.065,
+   "overload_failures": -0.067
   },
   {
    "param": "C-H2",
    "name": "p_backup_fail",
    "basis": "assumption",
-   "pop_hours": -0.016,
-   "compound_pop_hours": -0.014,
-   "thermal_failures": -0.017,
-   "overload_failures": -0.025
+   "pop_hours": -0.056,
+   "compound_pop_hours": -0.055,
+   "thermal_failures": -0.05,
+   "overload_failures": -0.039
+  },
+  {
+   "param": "C-P2.tau",
+   "name": "tau_TO",
+   "basis": "standard",
+   "pop_hours": -0.053,
+   "compound_pop_hours": -0.052,
+   "thermal_failures": -0.058,
+   "overload_failures": -0.051
+  },
+  {
+   "param": "C-P6",
+   "name": "repair_hours",
+   "basis": "assumption",
+   "pop_hours": 0.049,
+   "compound_pop_hours": 0.045,
+   "thermal_failures": 0.046,
+   "overload_failures": 0.032
+  },
+  {
+   "param": "C-T2",
+   "name": "p_no_battery",
+   "basis": "assumption",
+   "pop_hours": -0.037,
+   "compound_pop_hours": -0.035,
+   "thermal_failures": -0.037,
+   "overload_failures": -0.028
+  },
+  {
+   "param": "C-P9.avail",
+   "name": "a",
+   "basis": "assumption",
+   "pop_hours": 0.025,
+   "compound_pop_hours": 0.022,
+   "thermal_failures": 0.033,
+   "overload_failures": 0.031
+  },
+  {
+   "param": "C-P9.imp",
+   "name": "P_imp",
+   "basis": "assumption",
+   "pop_hours": -0.022,
+   "compound_pop_hours": -0.022,
+   "thermal_failures": -0.023,
+   "overload_failures": -0.01
+  },
+  {
+   "param": "C-W3",
+   "name": "storage_hours",
+   "basis": "assumption",
+   "pop_hours": 0.019,
+   "compound_pop_hours": 0.021,
+   "thermal_failures": 0.016,
+   "overload_failures": 0.026
   },
   {
    "param": "C-P4",
    "name": "alpha",
    "basis": "internal",
-   "pop_hours": 0.006,
-   "compound_pop_hours": 0.006,
-   "thermal_failures": 0.01,
+   "pop_hours": 0.016,
+   "compound_pop_hours": 0.016,
+   "thermal_failures": 0.029,
+   "overload_failures": -0.006
+  },
+  {
+   "param": "C-POP2",
+   "name": "T_heat",
+   "basis": "assumption",
+   "pop_hours": 0.016,
+   "compound_pop_hours": 0.009,
+   "thermal_failures": 0.029,
+   "overload_failures": 0.028
+  },
+  {
+   "param": "C-P9.flow",
+   "name": "f_low",
+   "basis": "assumption",
+   "pop_hours": -0.015,
+   "compound_pop_hours": -0.013,
+   "thermal_failures": -0.01,
+   "overload_failures": -0.014
+  },
+  {
+   "param": "C-W2",
+   "name": "p_backup_fail",
+   "basis": "assumption",
+   "pop_hours": 0.013,
+   "compound_pop_hours": 0.01,
+   "thermal_failures": 0.008,
+   "overload_failures": 0.021
+  },
+  {
+   "param": "C-P2.R",
+   "name": "R",
+   "basis": "standard",
+   "pop_hours": -0.011,
+   "compound_pop_hours": -0.012,
+   "thermal_failures": -0.013,
+   "overload_failures": -0.019
+  },
+  {
+   "param": "C-P9.Qmin",
+   "name": "Q_min",
+   "basis": "assumption",
+   "pop_hours": -0.011,
+   "compound_pop_hours": -0.012,
+   "thermal_failures": -0.013,
    "overload_failures": 0.005
+  },
+  {
+   "param": "C-P9",
+   "name": "T_lim",
+   "basis": "assumption",
+   "pop_hours": 0.008,
+   "compound_pop_hours": 0.01,
+   "thermal_failures": 0.015,
+   "overload_failures": -0.007
+  },
+  {
+   "param": "C-H1",
+   "name": "p_backup_fail",
+   "basis": "assumption",
+   "pop_hours": 0.005,
+   "compound_pop_hours": 0.005,
+   "thermal_failures": 0.017,
+   "overload_failures": -0.005
   },
   {
    "param": "C-P1",
    "name": "beta",
    "basis": "internal",
-   "pop_hours": -0.005,
-   "compound_pop_hours": -0.006,
-   "thermal_failures": -0.012,
-   "overload_failures": -0.011
+   "pop_hours": -0.001,
+   "compound_pop_hours": -0.0,
+   "thermal_failures": -0.003,
+   "overload_failures": 0.014
+  },
+  {
+   "param": "C-P9.span",
+   "name": "span",
+   "basis": "assumption",
+   "pop_hours": -0.001,
+   "compound_pop_hours": 0.0,
+   "thermal_failures": -0.003,
+   "overload_failures": -0.009
   }
  ],
  "substations_top": [
-  {
-   "asset_id": "osm_substations:w1489149494",
-   "name": "Harding Pike Substation",
-   "type": "minor_distribution",
-   "kv_max": 23.9,
-   "expected_down_hours": 6.853,
-   "mean_hourly_p_thermal_peak": 0.001,
-   "theta_h_peak_c": 103.582
-  },
   {
    "asset_id": "osm_substations:w207878702",
    "name": "Green Hills Substation",
    "type": "distribution",
    "kv_max": 69.0,
-   "expected_down_hours": 6.843,
+   "expected_down_hours": 5.858,
    "mean_hourly_p_thermal_peak": 0.003,
-   "theta_h_peak_c": 103.661
-  },
-  {
-   "asset_id": "osm_substations:w207878703",
-   "name": "w207878703",
-   "type": "distribution",
-   "kv_max": 69.0,
-   "expected_down_hours": 6.795,
-   "mean_hourly_p_thermal_peak": 0.003,
-   "theta_h_peak_c": 103.659
+   "theta_h_peak_c": 104.755
   },
   {
    "asset_id": "osm_substations:w107096287",
    "name": "Battlefield Substation",
    "type": "distribution",
    "kv_max": 69.0,
-   "expected_down_hours": 6.784,
-   "mean_hourly_p_thermal_peak": 0.002,
-   "theta_h_peak_c": 103.646
+   "expected_down_hours": 5.765,
+   "mean_hourly_p_thermal_peak": 0.003,
+   "theta_h_peak_c": 104.493
   },
   {
-   "asset_id": "osm_substations:w1489136127",
-   "name": "w1489136127",
+   "asset_id": "osm_substations:w1489149494",
+   "name": "Harding Pike Substation",
    "type": "minor_distribution",
    "kv_max": 23.9,
-   "expected_down_hours": 6.751,
+   "expected_down_hours": 5.74,
    "mean_hourly_p_thermal_peak": 0.001,
-   "theta_h_peak_c": 103.582
+   "theta_h_peak_c": 103.477
   },
   {
    "asset_id": "osm_substations:w208020441",
    "name": "Edgehill Substation",
    "type": "distribution",
    "kv_max": 69.0,
-   "expected_down_hours": 6.589,
+   "expected_down_hours": 5.73,
    "mean_hourly_p_thermal_peak": 0.002,
-   "theta_h_peak_c": 103.643
-  },
-  {
-   "asset_id": "osm_substations:w207869586",
-   "name": "w207869586",
-   "type": "distribution",
-   "kv_max": 69.0,
-   "expected_down_hours": 6.543,
-   "mean_hourly_p_thermal_peak": 0.004,
-   "theta_h_peak_c": 103.718
-  },
-  {
-   "asset_id": "osm_substations:w1489136194",
-   "name": "w1489136194",
-   "type": "minor_distribution",
-   "kv_max": 23.9,
-   "expected_down_hours": 6.521,
-   "mean_hourly_p_thermal_peak": 0.001,
-   "theta_h_peak_c": 103.582
+   "theta_h_peak_c": 102.907
   },
   {
    "asset_id": "osm_substations:w1088464206",
    "name": "w1088464206",
    "type": "minor_distribution",
    "kv_max": 23.9,
-   "expected_down_hours": 6.514,
-   "mean_hourly_p_thermal_peak": 0.001,
-   "theta_h_peak_c": 103.582
+   "expected_down_hours": 5.684,
+   "mean_hourly_p_thermal_peak": 0.002,
+   "theta_h_peak_c": 105.356
   },
   {
-   "asset_id": "osm_substations:w1489136079",
-   "name": "w1489136079",
-   "type": "minor_distribution",
-   "kv_max": 23.9,
-   "expected_down_hours": 6.51,
-   "mean_hourly_p_thermal_peak": 0.001,
-   "theta_h_peak_c": 103.582
-  },
-  {
-   "asset_id": "osm_substations:w208608301",
-   "name": "w208608301",
-   "type": "minor_distribution",
-   "kv_max": 23.9,
-   "expected_down_hours": 6.506,
-   "mean_hourly_p_thermal_peak": 0.001,
-   "theta_h_peak_c": 103.582
-  },
-  {
-   "asset_id": "osm_substations:w205255845",
-   "name": "Sharondale Substation",
+   "asset_id": "osm_substations:w207878703",
+   "name": "w207878703",
    "type": "distribution",
    "kv_max": 69.0,
-   "expected_down_hours": 6.501,
-   "mean_hourly_p_thermal_peak": 0.002,
-   "theta_h_peak_c": 103.664
+   "expected_down_hours": 5.638,
+   "mean_hourly_p_thermal_peak": 0.001,
+   "theta_h_peak_c": 98.172
+  },
+  {
+   "asset_id": "osm_substations:w1489136127",
+   "name": "w1489136127",
+   "type": "minor_distribution",
+   "kv_max": 23.9,
+   "expected_down_hours": 5.627,
+   "mean_hourly_p_thermal_peak": 0.0,
+   "theta_h_peak_c": 100.79
   },
   {
    "asset_id": "osm_substations:w207706768",
    "name": "Peabody Substation",
    "type": "distribution",
    "kv_max": 69.0,
-   "expected_down_hours": 6.5,
-   "mean_hourly_p_thermal_peak": 0.002,
-   "theta_h_peak_c": 103.636
+   "expected_down_hours": 5.624,
+   "mean_hourly_p_thermal_peak": 0.003,
+   "theta_h_peak_c": 105.968
   },
   {
-   "asset_id": "osm_substations:w1489137267",
-   "name": "w1489137267",
-   "type": "industrial",
+   "asset_id": "osm_substations:w207869586",
+   "name": "w207869586",
+   "type": "distribution",
    "kv_max": 69.0,
-   "expected_down_hours": 6.444,
+   "expected_down_hours": 5.614,
+   "mean_hourly_p_thermal_peak": 0.003,
+   "theta_h_peak_c": 103.852
+  },
+  {
+   "asset_id": "osm_substations:w1489136194",
+   "name": "w1489136194",
+   "type": "minor_distribution",
+   "kv_max": 23.9,
+   "expected_down_hours": 5.584,
    "mean_hourly_p_thermal_peak": 0.001,
-   "theta_h_peak_c": 103.62
+   "theta_h_peak_c": 102.698
   },
   {
    "asset_id": "osm_substations:w1462175334",
    "name": "11th Avenue Substation",
    "type": null,
    "kv_max": 69.0,
-   "expected_down_hours": 6.325,
+   "expected_down_hours": 5.562,
+   "mean_hourly_p_thermal_peak": 0.002,
+   "theta_h_peak_c": 106.206
+  },
+  {
+   "asset_id": "osm_substations:w205255845",
+   "name": "Sharondale Substation",
+   "type": "distribution",
+   "kv_max": 69.0,
+   "expected_down_hours": 5.56,
+   "mean_hourly_p_thermal_peak": 0.002,
+   "theta_h_peak_c": 103.396
+  },
+  {
+   "asset_id": "osm_substations:w208608301",
+   "name": "w208608301",
+   "type": "minor_distribution",
+   "kv_max": 23.9,
+   "expected_down_hours": 5.525,
    "mean_hourly_p_thermal_peak": 0.001,
-   "theta_h_peak_c": 103.594
+   "theta_h_peak_c": 101.853
+  },
+  {
+   "asset_id": "osm_substations:w1489137267",
+   "name": "w1489137267",
+   "type": "industrial",
+   "kv_max": 69.0,
+   "expected_down_hours": 5.524,
+   "mean_hourly_p_thermal_peak": 0.002,
+   "theta_h_peak_c": 103.597
+  },
+  {
+   "asset_id": "osm_substations:w1489136079",
+   "name": "w1489136079",
+   "type": "minor_distribution",
+   "kv_max": 23.9,
+   "expected_down_hours": 5.494,
+   "mean_hourly_p_thermal_peak": 0.001,
+   "theta_h_peak_c": 101.885
   }
  ],
  "pavement": {

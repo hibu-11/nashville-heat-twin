@@ -181,3 +181,153 @@ underwood2017:
   year: 2017
   verified: Crossref/DataCite metadata checked 2026-10-27
   abstract_source: semanticscholar
+# ---- Added 2026-10-30 for docs/PIPELINE_SPEC.md (methods M-*, relations in twin/relations.csv).
+# ---- DOI entries checked against Crossref on 2026-10-30.
+alduchov1996:
+  apa: Alduchov, O. A., & Eskridge, R. E. (1996). Improved Magnus form approximation of saturation vapor pressure. Journal of Applied Meteorology, 35(4), 601-609. https://doi.org/10.1175/1520-0450(1996)035<0601:IMFAOS>2.0.CO;2
+  doi: 10.1175/1520-0450(1996)035<0601:IMFAOS>2.0.CO;2
+  year: 1996
+  verified: Crossref metadata checked 2026-10-30
+baker2015:
+  apa: Baker, J. W. (2015). Efficient analytical fragility function fitting using dynamic structural analysis. Earthquake Spectra, 31(1), 579-599. https://doi.org/10.1193/021113EQS025M
+  doi: 10.1193/021113EQS025M
+  year: 2015
+  verified: Crossref metadata checked 2026-10-30
+birchfield2017:
+  apa: Birchfield, A. B., Xu, T., Gegner, K. M., Shetye, K. S., & Overbye, T. J. (2017). Grid structural characteristics as validation criteria for synthetic networks. IEEE Transactions on Power Systems, 32(4), 3258-3265. https://doi.org/10.1109/TPWRS.2016.2616385
+  doi: 10.1109/TPWRS.2016.2616385
+  year: 2017
+  verified: Crossref metadata checked 2026-10-30
+bpr1964:
+  apa: Bureau of Public Roads (1964). Traffic Assignment Manual. U.S. Department of Commerce, Urban Planning Division.
+  year: 1964
+  verified: Manual; no DOI. Source of the BPR volume-delay function (a = 0.15, b = 4).
+cannon2015:
+  apa: 'Cannon, A. J., Sobie, S. R., & Murdock, T. Q. (2015). Bias correction of GCM precipitation by quantile mapping: How well do methods preserve changes in quantiles and extremes? Journal of Climate, 28(17), 6938-6959. https://doi.org/10.1175/JCLI-D-14-00754.1'
+  doi: 10.1175/JCLI-D-14-00754.1
+  year: 2015
+  verified: Crossref metadata checked 2026-10-30
+dobney2009:
+  apa: Dobney, K., Baker, C. J., Quinn, A. D., & Chapman, L. (2009). Quantifying the effects of high summer temperatures due to climate change on buckling and rail related delays in south-east United Kingdom. Meteorological Applications, 16(2), 245-251. https://doi.org/10.1002/met.114
+  doi: 10.1002/met.114
+  year: 2009
+  verified: Crossref metadata checked 2026-10-30 (published online 2008)
+eia860:
+  apa: U.S. Energy Information Administration (2023). Form EIA-860 detailed data, 2022 (annual electric generator report).
+  year: 2023
+  verified: Data set; file eia8602022.zip in cascading-heat 02_power
+eia930:
+  apa: U.S. Energy Information Administration. Hourly Electric Grid Monitor (Form EIA-930), balancing authority TVA.
+  year: null
+  verified: Data set; not yet downloaded
+empower:
+  apa: U.S. Department of Health and Human Services, ASPR. HHS emPOWER Map (electricity-dependent Medicare beneficiaries by ZIP code).
+  year: null
+  verified: Data set; not yet downloaded
+flanagan2011:
+  apa: Flanagan, B. E., Gregory, E. W., Hallisey, E. J., Heitgerd, J. L., & Lewis, B. (2011). A social vulnerability index for disaster management. Journal of Homeland Security and Emergency Management, 8(1). https://doi.org/10.2202/1547-7355.1792
+  doi: 10.2202/1547-7355.1792
+  year: 2011
+  verified: Crossref metadata checked 2026-10-30
+gasparrini2010:
+  apa: Gasparrini, A., Armstrong, B., & Kenward, M. G. (2010). Distributed lag non-linear models. Statistics in Medicine, 29(21), 2224-2234. https://doi.org/10.1002/sim.3940
+  doi: 10.1002/sim.3940
+  year: 2010
+  verified: Crossref metadata checked 2026-10-30
+haimes2001:
+  apa: Haimes, Y. Y., & Jiang, P. (2001). Leontief-based model of risk in complex interconnected infrastructures. Journal of Infrastructure Systems, 7(1), 1-12. https://doi.org/10.1061/(ASCE)1076-0342(2001)7:1(1)
+  doi: 10.1061/(ASCE)1076-0342(2001)7:1(1)
+  year: 2001
+  verified: Crossref metadata checked 2026-10-30
+hcm2022:
+  apa: 'Transportation Research Board (2022). Highway Capacity Manual, 7th edition: A Guide for Multimodal Mobility Analysis. National Academies Press.'
+  year: 2022
+  verified: Manual; DOI not checked. Cited for all-way-stop capacity (placeholder C-T5).
+ho2014:
+  apa: Ho, H. C., Knudby, A., Sirovyak, P., Xu, Y., Hodul, M., & Henderson, S. B. (2014). Mapping maximum urban air temperature on hot summer days. Remote Sensing of Environment, 154, 38-45. https://doi.org/10.1016/j.rse.2014.08.012
+  doi: 10.1016/j.rse.2014.08.012
+  year: 2014
+  verified: Crossref metadata checked 2026-10-30
+housepeters2011:
+  apa: 'House-Peters, L. A., & Chang, H. (2011). Urban water demand modeling: Review of concepts, methods, and organizing principles. Water Resources Research, 47(5), W05401. https://doi.org/10.1029/2010WR009624'
+  doi: 10.1029/2010WR009624
+  year: 2011
+  verified: Crossref metadata checked 2026-10-30
+kennedy2001:
+  apa: Kennedy, M. C., & O'Hagan, A. (2001). Bayesian calibration of computer models. Journal of the Royal Statistical Society Series B, 63(3), 425-464. https://doi.org/10.1111/1467-9868.00294
+  doi: 10.1111/1467-9868.00294
+  year: 2001
+  verified: Crossref metadata checked 2026-10-30
+liljegren2008:
+  apa: Liljegren, J. C., Carhart, R. A., Lawday, P., Tschopp, S., & Sharp, R. (2008). Modeling the wet bulb globe temperature using standard meteorological measurements. Journal of Occupational and Environmental Hygiene, 5(10), 645-655. https://doi.org/10.1080/15459620802310770
+  doi: 10.1080/15459620802310770
+  year: 2008
+  verified: Crossref metadata checked 2026-10-30
+liu2007:
+  apa: Liu, H., Davidson, R. A., & Apanasovich, T. V. (2007). Statistical forecasting of electric power restoration times in hurricanes and ice storms. IEEE Transactions on Power Systems, 22(4), 2270-2279. https://doi.org/10.1109/TPWRS.2007.907587
+  doi: 10.1109/TPWRS.2007.907587
+  year: 2007
+  verified: Crossref metadata checked 2026-10-30
+mennis2003:
+  apa: Mennis, J. (2003). Generating surface models of population using dasymetric mapping. The Professional Geographer, 55(1), 31-42. https://doi.org/10.1111/0033-0124.10042
+  doi: 10.1111/0033-0124.10042
+  year: 2003
+  verified: Crossref metadata checked 2026-10-30
+mohseni1998:
+  apa: Mohseni, A. (1998). LTPP Seasonal Asphalt Concrete (AC) Pavement Temperature Models (FHWA-RD-97-103). Federal Highway Administration.
+  year: 1998
+  verified: FHWA report; no DOI. Coefficients of the LTPPBind high-temperature model (M-10) to be checked against the report before use.
+mohseni1998stream:
+  apa: 'Mohseni, O., Stefan, H. G., & Erickson, T. R. (1998). A nonlinear regression model for weekly stream temperatures. Water Resources Research, 34(10), 2685-2692. https://doi.org/10.1029/98WR01877'
+  doi: 10.1029/98WR01877
+  year: 1998
+  verified: Crossref metadata checked 2026-10-30
+molinari2017:
+  apa: Molinari, N. A. M., Chen, B., Krishna, N., & Morris, T. (2017). Who's at risk when the power goes out? The at-home electricity-dependent population in the United States, 2012. Journal of Public Health Management and Practice, 23(2), 152-159. https://doi.org/10.1097/PHH.0000000000000345
+  doi: 10.1097/PHH.0000000000000345
+  year: 2017
+  verified: Crossref metadata checked 2026-10-30
+nairn2015:
+  apa: 'Nairn, J., & Fawcett, R. (2015). The excess heat factor: A metric for heatwave intensity and its use in classifying heatwave severity. International Journal of Environmental Research and Public Health, 12(1), 227-253. https://doi.org/10.3390/ijerph120100227'
+  doi: 10.3390/ijerph120100227
+  year: 2015
+  verified: Crossref metadata checked 2026-10-30 (published online 2014)
+pierce2023:
+  apa: Pierce, D. W., Cayan, D. R., Feldman, D. R., & Risser, M. D. (2023). Future increases in North American extreme precipitation in CMIP6 downscaled with LOCA. Journal of Hydrometeorology, 24(5), 951-975. https://doi.org/10.1175/JHM-D-22-0194.1
+  doi: 10.1175/JHM-D-22-0194.1
+  year: 2023
+  verified: Crossref metadata checked 2026-10-30. Describes the LOCA2 downscaling used for CLM-24.
+rothfusz1990:
+  apa: Rothfusz, L. P. (1990). The heat index "equation" (or, more than you ever wanted to know about heat index). NWS Southern Region Technical Attachment SR 90-23.
+  year: 1990
+  verified: NWS technical attachment; no DOI. Coefficients as published by NWS (M-2).
+saltelli2010:
+  apa: Saltelli, A., Annoni, P., Azzini, I., Campolongo, F., Ratto, M., & Tarantola, S. (2010). Variance based sensitivity analysis of model output. Design and estimator for the total sensitivity index. Computer Physics Communications, 181(2), 259-270. https://doi.org/10.1016/j.cpc.2009.09.018
+  doi: 10.1016/j.cpc.2009.09.018
+  year: 2010
+  verified: Crossref metadata checked 2026-10-30
+shandas2019:
+  apa: Shandas, V., Voelkel, J., Williams, J., & Hoffman, J. (2019). Integrating satellite and ground measurements for predicting locations of extreme urban heat. Climate, 7(1), 5. https://doi.org/10.3390/cli7010005
+  doi: 10.3390/cli7010005
+  year: 2019
+  verified: Crossref metadata checked 2026-10-30
+sun2020:
+  apa: 'Sun, K., Specian, M., & Hong, T. (2020). Nexus of thermal resilience and energy efficiency in buildings: A case study of a nursing home. Building and Environment, 177, 106842. https://doi.org/10.1016/j.buildenv.2020.106842'
+  doi: 10.1016/j.buildenv.2020.106842
+  year: 2020
+  verified: Crossref metadata checked 2026-10-30
+vanvliet2012:
+  apa: van Vliet, M. T. H., Yearsley, J. R., Ludwig, F., Vögele, S., Lettenmaier, D. P., & Kabat, P. (2012). Vulnerability of US and European electricity supply to climate change. Nature Climate Change, 2(9), 676-681. https://doi.org/10.1038/nclimate1546
+  doi: 10.1038/nclimate1546
+  year: 2012
+  verified: Crossref metadata checked 2026-10-30
+wagner1988:
+  apa: 'Wagner, J. M., Shamir, U., & Marks, D. H. (1988). Water distribution reliability: Simulation methods. Journal of Water Resources Planning and Management, 114(3), 276-294. https://doi.org/10.1061/(ASCE)0733-9496(1988)114:3(276)'
+  doi: 10.1061/(ASCE)0733-9496(1988)114:3(276)
+  year: 1988
+  verified: Crossref metadata checked 2026-10-30
+wols2014:
+  apa: 'Wols, B. A., & van Thienen, P. (2014). Impact of weather conditions on pipe failure: A statistical analysis. Journal of Water Supply: Research and Technology-AQUA, 63(3), 212-223. https://doi.org/10.2166/aqua.2013.088'
+  doi: 10.2166/aqua.2013.088
+  year: 2014
+  verified: Crossref metadata checked 2026-10-30
