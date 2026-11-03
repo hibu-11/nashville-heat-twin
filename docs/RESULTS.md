@@ -243,3 +243,43 @@ Diagnostic: the full daily negative-binomial likelihood collapses onto a few run
 
 By-year Spearman ρ: 2015 -0.04, 2016 0.00, 2017 0.14, 2019 -0.27, 2020 0.04, 2021 -0.07, 2022 0.09, 2023 0.22, 2024 -0.10, 2025 -0.12.
 
+## 11. Core skeleton model
+
+Run `core-20261103T183128Z-553fa444cb`: 2,000 Monte Carlo runs per scenario, links K1, K2, K3, K4, K5, K6, K7, K8, K9; deferred D1, D2, D3, D4, D5, D6, D7, D8. Selection and equations: [CORE_MODEL.md](CORE_MODEL.md). Population in zones 115,203 (65+ 10,873, below poverty 19,853).
+
+| Output (mean per run) | +0 °C | +2 °C | +4 °C |
+| --- | --- | --- | --- |
+| Runs with any outage | 12.0% | 38.1% | 79.9% |
+| Thermal failures (core) | 1.01 | 9.65 | 57.80 |
+| Thermal failures + overload trips (full) | 8.51 | 68.70 | 368.01 |
+| Person-hours without power (core) | 34,225 | 319,658 | 1,734,384 |
+| Person-hours without power (full) | 386,255 | 3,167,926 | 16,051,683 |
+| Person-hours without AC due to outages | 31,347 | 292,388 | 1,585,081 |
+| Indoor heat person-hours from outages, all | 3,996 | 67,150 | 567,384 |
+| … aged 65+ | 374 | 6,262 | 53,426 |
+| … below poverty | 727 | 12,185 | 101,641 |
+| Background indoor heat person-hours (homes without AC) | 6,744,854 | 13,013,403 | 18,328,991 |
+| Highest indoor temperature in an AC home during an outage (°C) | 32.5 | 36.3 | 40.7 |
+| Dialysis facility-hours lost (core) | 1.0 | 10.1 | 59.8 |
+| Hospital facility-hours lost (core) | 0.05 | 0.81 | 5.54 |
+| Runs with a TVA shortfall | 0.0% | 8.7% | 60.7% |
+| K8 runs with degraded segments | 11.5% | 36.9% | 78.8% |
+| K8 hospital Δ population mean, min (p99) | 0.003 (0.06) | 0.013 (0.15) | 0.046 (0.28) |
+| K8 hospital largest cell increase p95, min | 0.4 | 1.2 | 2.0 |
+| K8 dialysis Δ population mean, min (p99) | 0.029 (1.57) | 0.151 (1.80) | 0.463 (5.28) |
+| K8 runs with no dialysis centre available | 0.0% | 1.1% | 9.3% |
+| K8 EMS Δ population mean, min (p99) | 0.002 (0.04) | 0.007 (0.06) | 0.023 (0.10) |
+
+Validation: ρ(model, EAGLE-I) all hours 0.05 [-0.06, 0.17] (n = 2,208 h, 92 days); non-storm 0.04 [-0.07, 0.13] (n = 1,994 h, 92 days).
+
+| Parameter | Basis | ρ with person-hours without power | ρ with indoor heat person-hours from outages |
+| --- | --- | --- | --- |
+| `C-P1.Kd` K_design | assumption | 0.414 | 0.237 |
+| `C-P3.sigma` sigma | assumption | 0.277 | 0.16 |
+| `C-P3` theta_50 | assumption | -0.213 | -0.109 |
+| `C-P2.dTOR` dTheta_TO_R | standard | 0.11 | 0.034 |
+| `C-P2.dHR` dTheta_H_R | standard | 0.097 | 0.088 |
+| `C-P1.Td` T_design | assumption | -0.061 | -0.035 |
+| `C-P2.tau` tau_TO | standard | -0.042 | -0.034 |
+| `C-P6` repair_hours | assumption | 0.039 | 0.082 |
+

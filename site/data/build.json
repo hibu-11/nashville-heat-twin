@@ -1,6 +1,6 @@
 {
- "built_at": "2026-10-30T20:57:52+00:00",
- "code_version": "git:5764716-dirty",
+ "built_at": "2026-11-03T18:17:13+00:00",
+ "code_version": "git:04eb531-dirty",
  "config_sha256": "f88479bb02d368a6",
  "python": "3.14.4",
  "packages": {
@@ -20,7 +20,7 @@
    "fingerprint": null
   },
   "lst_hourly_2023": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "e7b89bb6a9a119c2"
   },
   "lst_10m_final": {
@@ -28,47 +28,47 @@
    "fingerprint": null
   },
   "lst_jja2023_mean": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "fb776bd052ac8027"
   },
   "lst_20240731_utc22": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "bd7785890be12c73"
   },
   "lst_amp_2023": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "3f70f89811ceee1d"
   },
   "roads_lst": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "ff44153b6bab7755"
   },
   "surface_parking": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "7b5064db88fa940b"
   },
   "hub311_2023": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "6972c617edb79b9d"
   },
   "osm_substations": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "29d681982720130c"
   },
   "osm_power_lines": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "6aa023445499f6ee"
   },
   "osm_water": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "273033994e6921fa"
   },
   "osm_traffic_signals": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "2f2bf10c44b7d3ed"
   },
   "tdot_bridges": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "e9791920d5c9fcd4"
   },
   "hpms_2024": {
@@ -80,15 +80,15 @@
    "fingerprint": "5e3e8ee52264f6cc"
   },
   "hospitals": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "64f13fa6a581a284"
   },
   "dialysis": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "8355bdae231c6567"
   },
   "nursing_homes": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "66a7d2368321d94b"
   },
   "osm_fire_stations": {
@@ -96,42 +96,42 @@
    "fingerprint": "ab3c53d7efc921ee"
   },
   "zcta_population": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "fc11704d7c0f50aa"
   },
   "buildings_aoi": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "8874b736ee218534"
   },
   "asos_bna": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "a8547701858399f5"
   },
   "air_field_2022": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "98aeb2f578ef6bc3"
   },
   "eaglei_davidson": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "49edccffba6a96a9"
   },
   "cumberland_thermal": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "c6a222c6616b42f4"
   },
   "twin_couplings": {
    "status": "cached",
-   "fingerprint": "61a650d3f02dfe3b"
+   "fingerprint": "d18545a915ce5f61"
   },
   "twin_dependencies": {
-   "status": "built",
+   "status": "cached",
    "fingerprint": "94ec86ae6d80a9da"
   }
  },
  "tables": {
   "assets": 75570,
   "dependencies": 3188,
-  "couplings": 43,
+  "couplings": 48,
   "exposures": 850587,
   "events": 91626,
   "drivers": 537337,
@@ -158,5 +158,5 @@
   ]
  },
  "chain_check": true,
- "run_id": "20261030T205752Z-acb2617f"
+ "run_id": "20261103T181713Z-c7a31cbf"
 }

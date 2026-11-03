@@ -53,6 +53,8 @@
 | M-28 / M-29 路网行程时间与可达性 network travel time and access | `pipeline/twin/traffic.py`、`pipeline/access.py` | `hpms_2024`、`tmas_2023`、`osm_fire_stations` | 无向图；各道路等级共用一条 TMAS 工作日小时曲线；信号灯熄灭按期望通行能力折减（不是逐次运行）；不含交叉口延误，所以是下限。Undirected; one hourly profile for all classes; expected-capacity approximation; no intersection delay (lower bound). |
 | M-43 多年校准 multi-year calibration | `pipeline/calibrate.py` | `eaglei_davidson`（2014-11 – 2025）、`asos_bna`（2014–2025） | 用非风暴日的日最大值（而非逐小时）降低自相关；研究区结果按用户比例放大到全县（A-C1）；TVA 夏季未甩负荷作为硬约束（A-C3）。Daily maxima on non-storm days; AOI scaled to county (A-C1); no-shed constraint (A-C3). 逐日负二项似然退化（ESS 1.4 / 2000），只作诊断；主结果用 ABC：统计量 S = 热日（Tmax ≥ 35 °C）均值 − 凉日（< 32 °C）均值，高斯核，SE 由自助法估计；2018 年覆盖缺口剔除。Per-day NB likelihood is degenerate (ESS 1.4 of 2000) and kept as a diagnostic; the posterior uses ABC on S = hot-day mean − cool-day mean with a Gaussian kernel and bootstrap SE; 2018 excluded as a coverage gap. |
 
+**精简主线模型 / Core skeleton (2026-11-03):** 按文献选出主线环节 K1–K9（含新实现的 M-32、M-33 室内温度与室内高温暴露），其余暂缓为 D1–D8，代码保留；见 [`CORE_MODEL.md`](CORE_MODEL.md) 与 [`twin/core.yaml`](../twin/core.yaml)。The core keeps links K1–K9 (including the newly implemented M-32 and M-33) and defers D1–D8 with their code kept; the full model is preserved on git branch `full-model` (tag `full-model-v1`).
+
 **新增假设 / New assumptions:** A-M6（走航当天的空间距平模式适用于所有日子 / the traverse-day anomaly pattern applies to every day）、A-C1、A-C2、A-C3（见 `pipeline/calibrate.py`）。
 
 ---

@@ -1,0 +1,175 @@
+# 【中文】精简主线模型（骨架）的组成：主线环节 links 与暂缓的细节 deferred。说明见 docs/CORE_MODEL.md。
+# relations 写成 "关系编号:级别"；couplings / citations / methods 必须分别在 couplings.csv / references.yaml /
+# PIPELINE_SPEC.md 中存在（python -m pipeline.registry 检查）。relations.csv 的 current 列表示代码库中已实现的
+# 最高级别（任一模型）；本文件说明骨架模型实际用哪一级。
+# Core (skeleton) model: main-chain links and deferred details. Checked by `python -m pipeline.registry`.
+# relations.csv "current" = highest tier implemented anywhere in the code; this file states what the core uses.
+
+full_model:
+  code: pipeline/cascade.py + pipeline/twin/cascade.py
+  preserved_as: "git branch full-model, tag full-model-v1 (commit 04eb531)"
+
+selection_rule:
+  en: >-
+    A link is in the core if (1) the literature documents it as a pathway from heat to population harm during
+    heat-wave power outages, (2) removing it would cut the chain from air temperature to the outcome, and (3) it
+    can be run on data we already hold. Links that add a second-order effect, rely on a mechanism the literature
+    warns against, or showed no effect in our own data are deferred, with the code kept.
+  zh: >-
+    入选主线的条件：（1）文献把它记录为"高温 → 停电 → 人群受害"链条上的一环；（2）去掉它，从气温到结局的链条就断了；
+    （3）用现有数据就能运行。属于二阶效应、所用机制被文献质疑、或在我们自己的数据中没有作用的环节暂缓，代码保留。
+
+links:
+  - id: K1
+    name_en: Urban air-temperature field
+    name_zh: 城市气温场
+    methods: [M-6]
+    relations: []
+    couplings: []
+    citations: [shandas2019, ho2014]
+    evidence_en: Traverse-based air-temperature models resolve intra-urban differences of several kelvin; every later link is driven by local air temperature.
+    evidence_zh: 基于走航测温的气温模型能分辨城市内部数开尔文的差异；后面每一环都由本地气温驱动。
+  - id: K2
+    name_en: Air temperature → electric load
+    name_zh: 气温 → 用电负荷
+    methods: []
+    relations: []
+    couplings: [C-P1, C-P1.T0, C-P1.Kd, C-P1.Td]
+    citations: [auffhammer2017, bartos2016, cascadingheat2026]
+    evidence_en: Peak demand rises with temperature (cooling load); this is the first step of every heat–grid pathway.
+    evidence_zh: 峰值负荷随气温上升（制冷负荷），是所有"高温 → 电网"路径的第一步。
+  - id: K3
+    name_en: Load and air temperature → transformer hot spot → thermal failure
+    name_zh: 负荷与气温 → 变压器热点温度 → 热失效
+    methods: []
+    relations: []
+    couplings: [C-P2.dTOR, C-P2.dHR, C-P2.R, C-P2.n, C-P2.m, C-P2.tau, C-P3, C-P3.sigma]
+    citations: [ieee_c5791_2011, bartos2016, shinozuka2000]
+    evidence_en: Heat reduces substation capacity while load rises; the IEEE C57.91 thermal model is the standard way to turn both into insulation stress.
+    evidence_zh: 高温降低变电设备容量、同时推高负荷；IEEE C57.91 热模型是把两者转换为绝缘热应力的标准方法。
+  - id: K4
+    name_en: System supply shortfall → rotating outages (demand side)
+    name_zh: 系统供需缺口 → 轮流停电（负荷侧）
+    methods: [M-18]
+    relations: ["R-P0:2"]
+    couplings: [C-P9.avail, C-P9.imp]
+    citations: [auffhammer2017, eia860, eia930]
+    evidence_en: Rising peak demand erodes reserve margins. Only the demand side is kept; in the full model this produced all TVA shortfalls at +2 and +4 °C.
+    evidence_zh: 峰值负荷上升会吃掉备用容量。只保留负荷侧；完整模型中 +2、+4 °C 情景下 TVA 的缺口全部来自负荷侧。
+  - id: K5
+    name_en: Supply dependency along the grid topology; fixed restoration time
+    name_zh: 沿电网拓扑的供电依赖；固定修复时长
+    methods: []
+    relations: ["R-P1:1", "R-P1b:1", "R-P2:0", "R-P3:0", "R-P4:0", "R-POP1:1"]
+    couplings: [C-P5, C-P6, C-POP1]
+    citations: [buldyrev2010, rinaldi2001]
+    evidence_en: A station without any energised upstream source loses power (functional dependency); this turns station failures into customer outages.
+    evidence_zh: 上游电源全部失电的变电站随之失电（功能依赖）；这一步把设备失效变成用户停电。
+  - id: K6
+    name_en: Zone outage → water plants (backup) → storage exhausted → water loss
+    name_zh: 分区停电 → 水厂（备用电源）→ 储水耗尽 → 断水
+    methods: []
+    relations: ["R-W3:0", "R-W1:0", "R-W2:0"]
+    couplings: [C-W1, C-W2, C-W3]
+    citations: [rinaldi2001, klise2017]
+    evidence_en: Water treatment and pumping depend on electric power; storage gives hours of buffer. This is the water system's main dependency on power.
+    evidence_zh: 制水和加压依赖电力，储水提供数小时缓冲；这是供水系统对电力的主要依赖。
+  - id: K7
+    name_en: Zone outage → hospitals and nursing homes (backup power); dialysis (power or water)
+    name_zh: 分区停电 → 医院与养老院（备用电源）；透析中心（电或水）
+    methods: []
+    relations: ["R-H1:0"]
+    couplings: [C-H1, C-H2, C-H3]
+    citations: [cms2016, kelman2015, anderson2012]
+    evidence_en: Backup power is required but can fail; dialysis interruptions after Hurricane Sandy were associated with excess deaths.
+    evidence_zh: 法规要求备用电源但它可能失效；飓风桑迪后透析中断与超额死亡相关。
+  - id: K8
+    name_en: Zone outage → dark traffic signals → link capacity → travel time to hospitals, dialysis and EMS
+    name_zh: 分区停电 → 信号灯熄灭 → 路段通行能力下降 → 到医院、透析中心和急救站的行程时间
+    methods: [M-28, M-29]
+    relations: ["R-T3:0", "R-T1:1", "R-T4:2", "R-H3:2"]
+    couplings: [C-T2, C-T3, C-T5, C-T6.a, C-T6.b, C-T6.cap_fwy, C-T6.cap_art, C-T6.cap_loc]
+    citations: [rinaldi2001, ouyang2014, hcm2022, bpr1964, kelman2015]
+    evidence_en: >-
+      The transport link with a direct health consequence: signals depend on grid power (Rinaldi et al. 2001), a dark
+      signal operates as an all-way stop with reduced capacity (HCM), and patients displaced from a closed dialysis
+      centre must travel to another (Kelman et al. 2015). Computed per run at that run's worst hour, with the run's
+      own dark signals and facility outages, so tail cases are kept rather than averaged away.
+    evidence_zh: >-
+      交通系统中与健康结局直接相关的一环：信号灯依赖电网供电（Rinaldi 等 2001）；信号灯熄灭后按全向停车控制处理，
+      通行能力下降（HCM）；透析中心停电时患者必须去另一家（Kelman 等 2015）。按每次运行在其最坏小时的实际状态
+      （该次运行熄灭的信号灯和停电的设施）计算，保留尾部情形，而不是像完整模型那样按期望值平均掉。
+  - id: K9
+    name_en: Outage → loss of air conditioning → indoor temperature → indoor heat exposure
+    name_zh: 停电 → 失去空调 → 室内温度 → 室内高温暴露
+    methods: [M-32, M-33]
+    relations: ["R-H5:1"]
+    couplings: [C-B1, C-B2, C-B3, C-B4, C-H10]
+    citations: [stone2023, sun2020]
+    evidence_en: Stone et al. (2023) found that a multiday blackout during a heat wave more than doubles heat-related mortality, through indoor temperature once cooling is lost. This is the link from infrastructure to health.
+    evidence_zh: Stone 等（2023）发现热浪期间的多日停电使高温死亡率增加一倍以上，机制是失去制冷后的室内温度。这是从基础设施到健康的关键一环。
+
+deferred:
+  - id: D1
+    name_en: Peer load transfer and overload trips (Motter–Lai)
+    name_zh: 同电压站之间的负荷转移与过载跳闸（Motter–Lai）
+    relations: ["R-P1:1"]
+    couplings: [C-P4]
+    citations: [motter2002, hines2010, dobson2007]
+    reason_en: >-
+      Topological load redistribution can misrepresent power-system vulnerability (Hines et al. 2010); real cascades
+      follow power flow (Dobson et al. 2007). In the full model, with an assumed tolerance α, overload trips were
+      2.9 times the thermal failures and made up about 91% of person-hours without power at +0 °C (386k vs 34k in
+      the core). Return as a DC power-flow tier (R-P5 tier 2–3) when ratings are available.
+    reason_zh: >-
+      纯拓扑的负荷重分配可能误判电网脆弱性（Hines 等 2010）；真实的连锁停电服从潮流（Dobson 等 2007）。
+      完整模型中，在假设的容忍度 α 下，过载跳闸次数是热失效的 2.9 倍，+0 °C 时约 91% 的停电人·小时来自这一机制
+      （完整模型 386k，骨架 34k）。有额定值后以直流潮流（R-P5 2–3 级）的形式加回。
+  - id: D2
+    name_en: River temperature → thermal plant derating (supply side of K4)
+    name_zh: 河水温度 → 火电降额（K4 的供给侧）
+    relations: ["R-W5:2"]
+    couplings: [C-P9, C-P9.span, C-P9.Qmin, C-P9.flow]
+    citations: [vanvliet2012, mohseni1998stream]
+    reason_en: Documented for drought–heat years, but the modelled Cumberland temperature stayed below the derating threshold in 2014–2025 (max 27.3 °C) and derating was identical across scenarios.
+    reason_zh: 文献记录了干旱高温年份的降额，但 2014–2025 年模拟的坎伯兰河水温始终低于降额阈值（最高 27.3 °C），各情景降额相同。
+  - id: D3
+    name_en: Pavement heat distress
+    name_zh: 路面高温病害
+    relations: ["R-T7:1"]
+    couplings: [C-T1, C-T1.sigma]
+    citations: [underwood2017, chinowsky2013]
+    reason_en: A long-run maintenance-cost pathway rather than an acute cascade; our LST-based score did not beat segment length as a predictor of 311 requests.
+    reason_zh: 属于长期养护成本路径，而不是急性级联；基于 LST 的指标预测 311 报修并不优于路段长度。
+  - id: D5
+    name_en: Outdoor compound heat–outage threshold
+    name_zh: 室外复合暴露阈值
+    relations: ["R-H5:0"]
+    couplings: [C-POP2]
+    citations: [stone2023]
+    reason_en: Replaced by K9, which models the mechanism (indoor temperature) instead of an outdoor threshold.
+    reason_zh: 由 K9 取代：K9 模拟的是机制本身（室内温度），而不是室外阈值。
+  - id: D6
+    name_en: Heat- and outage-attributable deaths and ED visits
+    name_zh: 高温与停电归因死亡和急诊
+    relations: ["R-H5:2"]
+    couplings: [C-H4, C-H5]
+    citations: [gasparrini2015, anderson2012, stone2023]
+    reason_en: Needs a Nashville temperature–mortality curve and baseline deaths (HLT-13, HLT-14); the core stops at indoor exposure, the input such a model would take.
+    reason_zh: 需要 Nashville 的温度–死亡曲线和基线死亡数（HLT-13、HLT-14）；骨架停在室内暴露，这正是该模型需要的输入。
+  - id: D7
+    name_en: Restoration as a crew and access process
+    name_zh: 以抢修队和可达性描述的修复过程
+    relations: ["R-X1:2"]
+    couplings: []
+    citations: [liu2007]
+    reason_en: Fixed repair time is kept until NES restoration records are available.
+    reason_zh: 在拿到 NES 修复记录之前保留固定修复时长。
+  - id: D8
+    name_en: Distribution transformers, line ampacity, water hydraulics, electricity-dependent residents, dialysis relocation, cooling centres
+    name_zh: 配电变压器、线路载流量、供水水力、依赖电力设备的居民、透析转诊、避暑中心
+    relations: ["R-P6:1", "R-P5:2", "R-W1:2s", "R-H6:2", "R-H2:2", "R-H4:1"]
+    couplings: []
+    citations: [bartos2016, ieee738_2012, klise2017, molinari2017, kelman2015]
+    reason_en: Each refines a core link but needs data we do not hold (NES assets, Metro Water model, emPOWER, patient counts).
+    reason_zh: 每一项都是对某个主线环节的细化，但需要尚未获得的数据（NES 资产、Metro Water 模型、emPOWER、患者数）。

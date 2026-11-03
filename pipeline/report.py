@@ -157,6 +157,55 @@ def calibration_section(w, path):
     w("\nBy-year Spearman ρ: " + ", ".join(f"{y} {n(r, 2)}" for y, r in d["by_year_spearman"].items()) + ".\n")
 
 
+def core_section(w, path):
+    """【中文】11. 精简主线模型（骨架）与完整模型的对比 / core skeleton vs full model."""
+    x = read(path)
+    w("## 11. Core skeleton model\n")
+    if not x:
+        w("Not run (`python -m pipeline.core`).\n")
+        return
+    w(f"Run `{x['run_id']}`: {x['runs']:,} Monte Carlo runs per scenario, links {', '.join(x['links'])}; deferred "
+      f"{', '.join(x['deferred'])}. Selection and equations: [CORE_MODEL.md](CORE_MODEL.md). "
+      f"Population in zones {n(x['population_in_zones'])} (65+ {n(x['elderly_in_zones'])}, below poverty {n(x['poverty_in_zones'])}).\n")
+    full = (x.get("full_model") or {}).get("scenarios", {})
+
+    def acc(v, k):
+        d = v["access"][k]["delta_pop_mean_min"]
+        return f"{d['mean']:.3f} ({d['99']:.2f})"
+    sc = x["scenarios"]
+    keys = list(sc)
+    w("| Output (mean per run) | " + " | ".join(f"{k} °C" for k in keys) + " |")
+    w("| --- |" + " --- |" * len(keys))
+    rows = [("Runs with any outage", lambda v, f: f"{v['share_runs_with_any_outage']:.1%}"),
+            ("Thermal failures (core)", lambda v, f: n(v["thermal"]["mean"], 2)),
+            ("Thermal failures + overload trips (full)", lambda v, f: n(f["thermal"] + f["overload"], 2) if f else "—"),
+            ("Person-hours without power (core)", lambda v, f: n(v["pop_hours"]["mean"])),
+            ("Person-hours without power (full)", lambda v, f: n(f["pop_hours"]) if f else "—"),
+            ("Person-hours without AC due to outages", lambda v, f: n(v["ac_loss_pop_hours"]["mean"])),
+            ("Indoor heat person-hours from outages, all", lambda v, f: n(v["indoor_outage_pop_hours"]["mean"])),
+            ("… aged 65+", lambda v, f: n(v["indoor_outage_elderly_hours"]["mean"])),
+            ("… below poverty", lambda v, f: n(v["indoor_outage_poverty_hours"]["mean"])),
+            ("Background indoor heat person-hours (homes without AC)", lambda v, f: n(v["indoor_no_ac_pop_hours"]["mean"])),
+            ("Highest indoor temperature in an AC home during an outage (°C)", lambda v, f: n(v["indoor_ac_max_c"], 1)),
+            ("Dialysis facility-hours lost (core)", lambda v, f: n(v["dialysis_hours"]["mean"], 1)),
+            ("Hospital facility-hours lost (core)", lambda v, f: n(v["hospital_hours"]["mean"], 2)),
+            ("Runs with a TVA shortfall", lambda v, f: "—" if v["runs_with_shed"] is None else f"{v['runs_with_shed']:.1%}"),
+            ("K8 runs with degraded segments", lambda v, f: f"{v['access']['runs_with_degraded_segments']:.1%}"),
+            ("K8 hospital Δ population mean, min (p99)", lambda v, f: acc(v, "hospital")),
+            ("K8 hospital largest cell increase p95, min", lambda v, f: n(v["access"]["hospital"]["largest_cell_increase_min"]["95"], 1)),
+            ("K8 dialysis Δ population mean, min (p99)", lambda v, f: acc(v, "dialysis")),
+            ("K8 runs with no dialysis centre available", lambda v, f: f"{v['access']['dialysis']['runs_with_none_available']:.1%}"),
+            ("K8 EMS Δ population mean, min (p99)", lambda v, f: acc(v, "ems"))]
+    for label, fn in rows:
+        w(f"| {label} | " + " | ".join(fn(sc[k], full.get(k)) for k in keys) + " |")
+    v = x["validation"]
+    w(f"\nValidation: ρ(model, EAGLE-I) all hours {ci(v['power_all_hours'])}; non-storm {ci(v['power_non_storm_hours'])}.\n")
+    w("| Parameter | Basis | ρ with person-hours without power | ρ with indoor heat person-hours from outages |\n| --- | --- | --- | --- |")
+    for r in x["sensitivity"][:8]:
+        w(f"| `{r['param']}` {r['name']} | {r['basis']} | {r['pop_hours']} | {r['indoor_outage_pop_hours']} |")
+    w("")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--summary", default=str(ROOT / "site/data/twin/results/summary.json"))
@@ -249,6 +298,7 @@ def main(argv=None):
     river_section(w, s, std)
     access_section(w, res / "access.json")
     calibration_section(w, res / "calibration.json")
+    core_section(w, res.parent / "core" / "summary.json")
     Path(a.out).write_text("\n".join(L) + "\n", encoding="utf-8")
     print(f"wrote {a.out}")
 

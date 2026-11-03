@@ -54,6 +54,7 @@ def load():
         # 【中文】规范中定义的方法：以 "#### M-n" 或 "### G-n" 开头的标题 / methods defined as headings
         "methods": set(re.findall(r"^#{3,4} ([MG]-\d+)\b", spec, flags=re.M)),
         "project": cfg.get("project", {}),
+        "core": yaml.safe_load((ROOT / "twin/core.yaml").read_text(encoding="utf-8")) if (ROOT / "twin/core.yaml").exists() else None,
     }
 
 
@@ -116,6 +117,31 @@ def check(R: dict) -> list[dict]:
         for m in METHOD_RE.findall(row["equations"]):
             if m not in R["methods"]:
                 add("error", where, f"{m} is not defined in docs/PIPELINE_SPEC.md")
+    return issues
+
+
+def check_core(R: dict) -> list[dict]:
+    """【中文】twin/core.yaml（骨架模型）中的关系级别、参数、文献和方法必须已登记。
+    Every relation tier, coupling, citation and method named in twin/core.yaml must exist."""
+    issues, core = [], R["core"]
+    if not core:
+        return issues
+    tiers = set(zip(R["rels"]["relation_id"], R["rels"]["tier"]))
+    for item in core.get("links", []) + core.get("deferred", []):
+        where = f"core {item['id']}"
+        for rt in item.get("relations", []):
+            rid, _, tier = rt.partition(":")
+            if (rid, tier) not in tiers:
+                issues.append({"level": "error", "where": where, "message": f"relation tier {rt} not in relations.csv"})
+        for c in item.get("couplings", []):
+            if c not in R["couplings"]:
+                issues.append({"level": "error", "where": where, "message": f"coupling {c} not in couplings.csv"})
+        for ref in item.get("citations", []):
+            if ref not in R["refs"]:
+                issues.append({"level": "error", "where": where, "message": f"citation '{ref}' not in references.yaml"})
+        for m in item.get("methods", []):
+            if m not in R["methods"]:
+                issues.append({"level": "error", "where": where, "message": f"{m} is not defined in docs/PIPELINE_SPEC.md"})
     return issues
 
 
@@ -239,7 +265,7 @@ def main(argv=None):
     ap.add_argument("--out", default=str(ROOT / "docs/DATA_CATALOG.md"))
     a = ap.parse_args(argv)
     R = load()
-    issues = check(R)
+    issues = check(R) + check_core(R)
     if a.check_data:
         issues += check_data(R)
     write_catalog(R, issues, Path(a.out))
