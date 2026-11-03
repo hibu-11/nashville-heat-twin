@@ -1,0 +1,752 @@
+<title>Nashville Heat Twin Architecture</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: engineering-drawing stack — a 3D stage of five system planes beside a spec sheet, link register below */
+:root {
+  color-scheme: light;
+  --paper: #eef1f3;
+  --stage: #e3e8ec;
+  --ink: #17212b;
+  --muted: #56636e;
+  --rule: #c5ced5;
+  --sheet: #f7f9fa;
+  --l-climate: #c0531a;
+  --l-power: #2d4cc0;
+  --l-water: #0c8582;
+  --l-transport: #8f6c00;
+  --l-health: #b52f58;
+  --font-display: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --plane-alpha: 0.07;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #0f151b;
+    --stage: #0a0f14;
+    --ink: #e2e8ed;
+    --muted: #93a0ab;
+    --rule: #28333e;
+    --sheet: #141c24;
+    --l-climate: #f0894a;
+    --l-power: #7e97ff;
+    --l-water: #3cc6c0;
+    --l-transport: #e2b53d;
+    --l-health: #f26e94;
+    --plane-alpha: 0.11;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0f151b;
+  --stage: #0a0f14;
+  --ink: #e2e8ed;
+  --muted: #93a0ab;
+  --rule: #28333e;
+  --sheet: #141c24;
+  --l-climate: #f0894a;
+  --l-power: #7e97ff;
+  --l-water: #3cc6c0;
+  --l-transport: #e2b53d;
+  --l-health: #f26e94;
+  --plane-alpha: 0.11;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 15px/1.55 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 40px;
+}
+.wrap { max-width: 1440px; margin: 0 auto; display: grid; gap: 18px; }
+
+header { display: grid; grid-template-columns: 1fr auto; gap: 8px 24px; align-items: end; border-bottom: 1px solid var(--rule); padding-bottom: 14px; }
+h1 { font: 700 clamp(26px, 3.2vw, 38px)/1.05 var(--font-display); letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+.lede { grid-column: 1; margin: 0; color: var(--muted); max-width: 72ch; }
+.runtag { grid-column: 2; grid-row: 1 / span 2; font: 400 12px/1.5 var(--font-mono); color: var(--muted); text-align: right; }
+.runtag b { color: var(--ink); font-weight: 500; }
+
+.bench { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px; align-items: stretch; }
+.stage-wrap { position: relative; background: var(--stage); border: 1px solid var(--rule); min-height: 560px; height: min(76vh, 780px); overflow: hidden; }
+#stage { position: absolute; inset: 0; }
+#stage canvas { display: block; }
+.toolbar { position: absolute; left: 12px; top: 12px; display: flex; flex-wrap: wrap; gap: 8px; z-index: 3; }
+.toolbar button, .seg button {
+  font: 500 12px/1 var(--font-body); color: var(--ink); background: var(--sheet); border: 1px solid var(--rule);
+  padding: 7px 10px; cursor: pointer;
+}
+.toolbar button[aria-pressed="true"], .seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.toolbar label { display: inline-flex; align-items: center; gap: 8px; font: 500 12px/1 var(--font-body); background: var(--sheet); border: 1px solid var(--rule); padding: 4px 10px; }
+.toolbar input[type="range"] { width: 90px; accent-color: var(--ink); }
+button:focus-visible, input:focus-visible, .lrow:focus-visible { outline: 2px solid var(--l-power); outline-offset: 2px; }
+.legend { position: absolute; left: 12px; bottom: 12px; z-index: 3; display: flex; flex-wrap: wrap; gap: 6px 16px; font: 400 12px/1.4 var(--font-mono); color: var(--muted); background: color-mix(in srgb, var(--sheet) 88%, transparent); border: 1px solid var(--rule); padding: 8px 10px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 22px; height: 0; border-top: 2px solid var(--ink); }
+.legend i.dash { border-top: 2px dashed var(--muted); }
+.hint { position: absolute; right: 12px; bottom: 12px; z-index: 3; font: 400 12px/1.4 var(--font-mono); color: var(--muted); }
+
+/* CSS2D labels */
+.nlabel {
+  font: 500 12px/1.2 var(--font-body); color: var(--ink); background: color-mix(in srgb, var(--sheet) 82%, transparent);
+  border: 1px solid var(--rule); padding: 3px 6px; white-space: nowrap; cursor: pointer; pointer-events: auto;
+  transform: translateY(-22px); transition: opacity .2s;
+}
+.nlabel .id { font: 500 10px/1 var(--font-mono); color: var(--lc); margin-right: 5px; letter-spacing: 0.04em; }
+.nlabel.deferred { font-style: italic; color: var(--muted); border-style: dashed; }
+.nlabel.sel { border-color: var(--lc); box-shadow: 0 0 0 1px var(--lc); }
+.nlabel.dim { opacity: 0.3; z-index: 0; }
+.elabel { font: 400 11px/1.2 var(--font-mono); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); padding: 2px 5px; white-space: nowrap; pointer-events: none; }
+.elabel.deferred { color: var(--muted); border-style: dashed; }
+.llabel { font: 700 13px/1.1 var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--lc); pointer-events: none; white-space: nowrap; }
+.llabel small { display: block; font: 400 11px/1.3 var(--font-mono); letter-spacing: 0; text-transform: none; color: var(--muted); }
+
+/* spec sheet */
+aside { background: var(--sheet); border: 1px solid var(--rule); padding: 16px 18px; display: grid; align-content: start; gap: 14px; overflow-y: auto; max-height: min(76vh, 780px); min-height: 560px; }
+.seg { display: flex; gap: 0; }
+.seg button { padding: 6px 10px; margin-left: -1px; font-variant-numeric: tabular-nums; }
+.seg-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.seg-row span { font: 500 11px/1 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font: 500 11px/1 var(--font-mono); padding: 4px 7px; border: 1px solid var(--lc, var(--rule)); color: var(--lc, var(--muted)); letter-spacing: 0.03em; }
+.chip.core { background: var(--lc); color: var(--paper); }
+.chip.def { border-style: dashed; }
+aside h2 { font: 600 22px/1.15 var(--font-display); margin: 0; text-wrap: balance; }
+aside p { margin: 0; }
+aside h3 { font: 600 11px/1 var(--font-body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 4px 0 6px; }
+.kv { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; margin: 0; font-size: 13px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; font: 500 13px/1.45 var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; }
+.plist { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font: 400 12.5px/1.45 var(--font-mono); }
+.links { display: grid; gap: 4px; }
+.links button { all: unset; cursor: pointer; font: 400 13px/1.4 var(--font-body); display: grid; grid-template-columns: 16px 1fr; gap: 6px; }
+.links button:hover .t, .links button:focus-visible .t { text-decoration: underline; }
+.links button .a { font-family: var(--font-mono); color: var(--muted); }
+.links button .t small { color: var(--muted); font-family: var(--font-mono); font-size: 11.5px; }
+.src { font-size: 12.5px; color: var(--muted); }
+
+/* side tabs and relation switches */
+.tabs { display: flex; border-bottom: 1px solid var(--rule); margin: -4px 0 0; }
+.tabs button { all: unset; cursor: pointer; font: 600 12px/1 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 8px 12px 10px; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+.tabs button:focus-visible { outline: 2px solid var(--l-power); outline-offset: -2px; }
+#panel, #rels { display: grid; gap: 14px; align-content: start; }
+.quick { display: flex; flex-wrap: wrap; gap: 6px; }
+.quick button { font: 500 12px/1 var(--font-body); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); padding: 6px 9px; cursor: pointer; }
+.quick .count { margin-left: auto; align-self: center; font: 400 12px/1 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.rgroup { border-top: 1px solid var(--rule); padding-top: 8px; display: grid; gap: 2px; }
+.rgroup > label { display: flex; align-items: center; gap: 8px; font: 600 12.5px/1.3 var(--font-body); cursor: pointer; }
+.rgroup > label .gk { font: 500 11px/1 var(--font-mono); color: var(--lc); min-width: 22px; }
+.rgroup.def > label .gk { color: var(--muted); }
+.rrow { display: grid; grid-template-columns: 18px 1fr auto; gap: 6px; align-items: start; padding: 3px 0 3px 2px; font-size: 12.5px; }
+.rrow label { cursor: pointer; line-height: 1.35; }
+.rrow label small { display: block; font: 400 11.5px/1.35 var(--font-mono); color: var(--muted); }
+.rrow input, .rgroup > label input { accent-color: var(--lc); margin: 2px 0 0; }
+.rrow .only { all: unset; cursor: pointer; font: 500 11px/1 var(--font-mono); color: var(--muted); padding: 3px 5px; border: 1px solid var(--rule); }
+.rrow .only:hover, .rrow .only:focus-visible { color: var(--ink); border-color: var(--ink); }
+.rrow.off label { color: var(--muted); }
+
+/* register */
+.register { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.register section { border-top: 2px solid var(--ink); padding-top: 10px; }
+.register h2 { font: 600 18px/1.2 var(--font-display); margin: 0 0 8px; }
+.register h2 small { font: 400 12px/1 var(--font-mono); color: var(--muted); margin-left: 8px; }
+.lrow { all: unset; display: grid; grid-template-columns: 38px 110px 1fr; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--rule); cursor: pointer; font-size: 13.5px; width: 100%; box-sizing: border-box; }
+.lrow:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.lrow .k { font: 500 12px/1.5 var(--font-mono); color: var(--lc); }
+.lrow .sys { font: 500 11px/1.6 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lrow.def .k { color: var(--muted); }
+.lrow.def .t { color: var(--muted); }
+
+@media (max-width: 960px) {
+  .bench { grid-template-columns: 1fr; }
+  aside { max-height: none; min-height: 0; }
+  .register { grid-template-columns: 1fr; }
+  header { grid-template-columns: 1fr; }
+  .runtag { grid-column: 1; grid-row: auto; text-align: left; }
+}
+@media (max-width: 520px) {
+  .stage-wrap { height: 70vh; min-height: 440px; }
+  .lrow { grid-template-columns: 34px 1fr; }
+  .lrow .sys { display: none; }
+  .hint { display: none; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Nashville Heat Twin Architecture</h1>
+    <p class="lede">Nine core links carry a heat signal from the air through power, water and transport to people. Each plane is one system; solid arrows are the core skeleton, dashed elements are deferred details whose code is kept. Select any element to read its method, parameters and core-run results.</p>
+    <div class="runtag">core run <b>core-20261103T183128Z</b><br>2,000 Monte Carlo runs · Jun–Aug 2023<br>full model kept on branch <b>full-model</b></div>
+  </header>
+
+  <div class="bench">
+    <div class="stage-wrap">
+      <div id="stage" role="img" aria-label="Three-dimensional stack of five system planes: climate at the bottom, then power, water, transportation, and health and population at the top, connected by the core cascade links."></div>
+      <div class="toolbar">
+        <button id="btn-deferred" type="button" aria-pressed="true">Deferred details</button>
+        <button id="btn-flow" type="button" aria-pressed="true">Flow</button>
+        <label for="spread">Spread <input id="spread" type="range" min="8" max="20" step="1" value="14"></label>
+        <button id="btn-reset" type="button">Reset view</button>
+      </div>
+      <div class="legend">
+        <span><i></i>core link</span>
+        <span><i class="dash"></i>deferred detail</span>
+        <span>K = core · D = deferred</span>
+      </div>
+      <div class="hint">drag to orbit · scroll to zoom</div>
+    </div>
+
+    <aside>
+      <div class="tabs" role="tablist" aria-label="Side panel">
+        <button type="button" role="tab" id="tab-el" aria-controls="panel" aria-selected="true">Element</button>
+        <button type="button" role="tab" id="tab-rel" aria-controls="rels" aria-selected="false">Relations</button>
+      </div>
+      <div id="panel" role="tabpanel" aria-labelledby="tab-el" aria-live="polite"></div>
+      <div id="rels" role="tabpanel" aria-labelledby="tab-rel" hidden></div>
+    </aside>
+  </div>
+
+  <div class="register">
+    <section>
+      <h2>Core links <small>K1–K9</small></h2>
+      <div id="reg-core"></div>
+    </section>
+    <section>
+      <h2>Deferred details <small>D1–D8, code kept</small></h2>
+      <div id="reg-def"></div>
+    </section>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS2DRenderer.js"></script>
+<script>
+(function () {
+  const LAYERS = [
+    { id: "climate", name: "Climate", sub: "hazard" },
+    { id: "power", name: "Power", sub: "grid and supply" },
+    { id: "water", name: "Water", sub: "treatment and storage" },
+    { id: "transport", name: "Transportation", sub: "signals and network" },
+    { id: "health", name: "Health & Population", sub: "services and exposure" },
+  ];
+  const SCEN = ["+0 °C", "+2 °C", "+4 °C"];
+
+  // x, z on a 64 × 30 plane; d = deferred
+  const N = [
+    { id: "bna", L: 0, x: -25, z: -5, name: "BNA air temperature", k: "Driver",
+      desc: "Hourly ASOS observations at Nashville International Airport. Warming scenarios add a uniform offset to every hour.",
+      params: ["Scenarios +0 / +2 / +4 °C", "Period Jun 1 – Aug 31, 2023 (2,208 h)"], src: "Iowa Environmental Mesonet ASOS archive" },
+    { id: "field", L: 0, x: -12, z: 3, name: "Urban air field θA(x,t)", k: "K1", method: "M-6",
+      desc: "Ridge regression on the 2022 heat traverse (impervious cover, forest, water, elevation) gives a local anomaly for every substation and zone, interpolated between morning, afternoon and evening.",
+      params: ["CV RMSE 0.44–0.66 °C", "Station offsets −3.0 to +0.9 °C", "Zone offsets −2.5 to +0.6 °C"], src: "Shandas et al. 2019; Ho et al. 2014" },
+    { id: "lst", L: 0, x: 8, z: 10, d: "D3", name: "Land surface temperature", k: "D3",
+      desc: "Hourly 10 m LST for July 2023. Used only by the deferred pavement module.",
+      params: ["165 frames, 26 flagged suspect"], src: "Nashville LST hourly 2023" },
+
+    { id: "load", L: 1, x: -18, z: -7, name: "Electric load", k: "K2", method: "Eq. 2–3",
+      desc: "Load rises linearly with air temperature above a threshold; per-unit loading is set relative to the design temperature.",
+      params: ["β 0.0166 / 0.0238 / 0.0381 per °F", "T0 75 °F", "K_design 0.70 / 0.85 / 1.00", "T_design 93 / 95 / 97 °F"], src: "Auffhammer et al. 2017; Bartos et al. 2016" },
+    { id: "hotspot", L: 1, x: -8, z: 5, name: "Transformer hot spot θH", k: "K3", method: "Eq. 4–6",
+      desc: "IEEE C57.91 top-oil rise with a first-order lag plus the hot-spot gradient, driven by local air temperature and per-unit load.",
+      params: ["Δθ_TO,R 50 / 55 / 60 K", "Δθ_H,R 20 / 25 / 30 K", "R 3.0 / 4.5 / 6.0", "τ_TO 2 / 3 / 4 h"], src: "IEEE C57.91-2011" },
+    { id: "failure", L: 1, x: 2, z: 5, name: "Substation thermal failure", k: "K3", method: "Eq. 7, 10",
+      desc: "Probit fragility on hot-spot temperature. A failed station stays out for a fixed repair time.",
+      params: ["θ50 130 / 140 / 150 °C", "σ 5 / 8 / 12 K", "Repair 4 / 8 / 24 h"], src: "Shinozuka et al. 2000",
+      stats: [["Thermal failures per run", ["1.01", "9.65", "57.8"]]] },
+    { id: "margin", L: 1, x: -7, z: -10, name: "TVA supply margin", k: "K4", method: "M-18, demand side",
+      desc: "Hourly TVA load from EIA-930, scaled by the load slope under warming, against available capacity a · 38,472 MW plus imports.",
+      params: ["a 0.82 / 0.88 / 0.93", "Imports 0 / 1,500 / 3,000 MW"], src: "EIA-930; EIA-860 (2022)" },
+    { id: "shed", L: 1, x: 4, z: -10, name: "Rotating outages", k: "K4", method: "M-18",
+      desc: "A shortfall is shed pro rata across serving substations, hour by hour.",
+      params: ["Shed share = max(0, L − supply) / L"], src: "EIA-930",
+      stats: [["Runs with a TVA shortfall", ["0%", "8.7%", "60.7%"]]] },
+    { id: "topo", L: 1, x: 13, z: -2, name: "Supply dependency", k: "K5", method: "Eq. 9",
+      desc: "A station with no energised upstream source loses power. Topology from OSM transmission lines: 78 substations, 127 supply edges.",
+      params: ["p_propagate 1"], src: "Buldyrev et al. 2010; Rinaldi et al. 2001",
+      stats: [["Runs with any outage", ["12.0%", "38.1%", "79.9%"]]] },
+    { id: "zone", L: 1, x: 24, z: -2, name: "Service-zone outage", k: "K5", method: "Eq. 14",
+      desc: "40 Voronoi service zones; everyone in a zone shares its substation's power state.",
+      params: ["115,203 people in zones"], src: "Okabe et al. 2000",
+      stats: [["Person-hours without power", ["34k", "320k", "1.73M"]], ["Full model, same seed", ["386k", "3.17M", "16.05M"]]] },
+    { id: "overload", L: 1, x: -2, z: 13, d: "D1", name: "Peer overload transfer", k: "D1",
+      desc: "Motter–Lai redistribution among equal-voltage peers. Deferred: with an assumed tolerance α it produced about 91% of person-hours without power in the full model, and topological redistribution can misstate grid vulnerability. Returns as DC power flow once ratings are available.",
+      params: ["α 0.15 / 0.35 / 1.45"], src: "Motter & Lai 2002; Hines et al. 2010; Dobson et al. 2007" },
+    { id: "river", L: 1, x: -24, z: 10, d: "D2", name: "River-temperature derate", k: "D2",
+      desc: "Cumberland water temperature from a Mohseni model limits once-through cooled plants (Cumberland 2,470 MW, Gallatin 1,556 MW). Deferred: the modelled river never reached the threshold in 2014–2025 (max 27.3 °C).",
+      params: ["T_lim 29 / 31 / 33 °C", "Q_min 3,000 / 4,000 / 5,000 cfs"], src: "van Vliet et al. 2012; Mohseni et al. 1998" },
+
+    { id: "plant", L: 2, x: 10, z: -9, name: "Water treatment plants", k: "K6", method: "Eq. 13",
+      desc: "Each plant is powered by its zone; standby generation can fail on demand.",
+      params: ["Backup fails 0.05 / 0.15 / 0.30"], src: "Rinaldi et al. 2001; Klise et al. 2017" },
+    { id: "storage", L: 2, x: 19, z: -9, name: "Storage buffer", k: "K6", method: "Eq. 13",
+      desc: "Towers and covered reservoirs keep supply going after every plant stops.",
+      params: ["Buffer 6 / 12 / 24 h"], src: "Klise et al. 2017" },
+    { id: "wservice", L: 2, x: 27, z: -3, name: "Water service", k: "K6",
+      desc: "Facilities lose water once every plant is down and storage is exhausted.",
+      params: ["Redundant across plants"], src: "Rinaldi et al. 2001",
+      stats: [["Water-out hours per run", ["0.00", "0.00", "0.01"]]] },
+    { id: "hydraulics", L: 2, x: 24, z: 10, d: "D8", name: "Hydraulic network", k: "D8",
+      desc: "Pressure zones and pipe hydraulics in WNTR. Deferred until the Metro Water model is available.",
+      params: [], src: "Klise et al. 2017" },
+
+    { id: "signals", L: 3, x: 6, z: 4, name: "Traffic signals", k: "K8", method: "Eq. 11",
+      desc: "A signal goes dark when its zone is out and its battery backup fails (drawn once per run).",
+      params: ["No working battery 0.50 / 0.75 / 1.00"], src: "Rinaldi et al. 2001",
+      stats: [["Runs with degraded segments", ["11.5%", "36.9%", "78.8%"]]] },
+    { id: "capacity", L: 3, x: 15, z: 7, name: "Link capacity", k: "K8", method: "Eq. 16",
+      desc: "Segments within 30 m of a dark signal operate as all-way stops at reduced capacity.",
+      params: ["φ_dark 0.40 / 0.50 / 0.70", "Lane capacity 2,000 / 900 / 600 veh/h (fwy / art / local)"], src: "HCM 2022" },
+    { id: "travel", L: 3, x: 25, z: 4, name: "BPR travel time", k: "K8", method: "M-28",
+      desc: "12,526 links with HPMS volumes and lanes and the TMAS weekday hourly profile. Link delay only; all-way-stop delay at dark intersections is not yet counted, so this is a lower bound.",
+      params: ["a 0.15, b 4", "HPMS AADT matched on 25.9% of links"], src: "BPR 1964; HCM 2022",
+      stats: [["Largest cell increase to a hospital, p95", ["0.4 min", "1.2 min", "2.0 min"]]] },
+    { id: "pavement", L: 3, x: -8, z: 8, d: "D3", name: "Pavement heat distress", k: "D3",
+      desc: "7-day maximum LST against the PG binder grade. Deferred: a long-run maintenance pathway, and the LST score did not beat segment length as a predictor of 311 requests.",
+      params: ["x50 60 / 64 / 70 °C"], src: "Underwood et al. 2017; Chinowsky et al. 2013" },
+
+    { id: "pop", L: 4, x: -6, z: -10, name: "Population in zones", k: "Input",
+      desc: "ACS counts by ZCTA allocated to service zones by area.",
+      params: ["115,203 people", "10,873 aged 65+", "19,853 below poverty"], src: "U.S. Census ACS 2020–2022" },
+    { id: "hosp", L: 4, x: 14, z: 8, name: "Hospitals & nursing homes", k: "K7", method: "Eq. 11",
+      desc: "Lose power when their zone is out and backup fails, drawn at the start of each outage episode.",
+      params: ["Hospital backup fails 0.02 / 0.05 / 0.15", "Nursing home 0.10 / 0.30 / 0.50"], src: "CMS 2016; Anderson & Bell 2012",
+      stats: [["Hospital facility-hours lost", ["0.05", "0.81", "5.54"]]] },
+    { id: "dial", L: 4, x: 22, z: 0, name: "Dialysis centres", k: "K7", method: "Eq. 11",
+      desc: "Series dependency with no backup: out whenever power or water is lost.",
+      params: ["5 centres in the AOI"], src: "Kelman et al. 2015",
+      stats: [["Dialysis facility-hours lost", ["1.0", "10.1", "59.8"]], ["Runs with no centre available", ["0%", "1.1%", "9.3%"]]] },
+    { id: "access", L: 4, x: 29, z: 8, name: "Time to care", k: "K8", method: "M-29",
+      desc: "For each run at its worst hour: population-weighted time from 1,585 cells to the nearest open hospital, dialysis centre and EMS station, minus the normal time at that hour.",
+      params: ["Thresholds 15 / 15 / 8 min"], src: "Ouyang 2014; Kelman et al. 2015",
+      stats: [["Hospital Δ mean (p99)", ["0.003 (0.06) min", "0.013 (0.15) min", "0.046 (0.28) min"]], ["Dialysis Δ mean (p99)", ["0.03 (1.6) min", "0.15 (1.8) min", "0.46 (5.3) min"]], ["EMS Δ mean (p99)", ["0.002 (0.04) min", "0.007 (0.06) min", "0.023 (0.10) min"]]] },
+    { id: "indoor", L: 4, x: 4, z: -2, name: "Indoor temperature", k: "K9", method: "M-32",
+      desc: "First-order RC model. A powered home with AC holds its set point; after power loss it relaxes toward outdoor air plus gains. Homes without AC always free-run.",
+      params: ["τ_b 5 / 15 / 40 h", "ΔT_gain 1 / 3 / 6 K (day), 1 K night", "T_set 23 / 24 / 25 °C", "AC share 0.85 / 0.92 / 0.97"], src: "Stone et al. 2023; Sun et al. 2020",
+      stats: [["Highest indoor °C, AC home in outage", ["32.5", "36.3", "40.7"]], ["Person-hours without AC from outages", ["31k", "292k", "1.59M"]]] },
+    { id: "exposure", L: 4, x: 12, z: -10, name: "Indoor heat exposure", k: "K9", method: "M-33",
+      desc: "Person-hours with indoor temperature at or above the threshold, caused by outages; the no-AC background is reported alongside as a yardstick.",
+      params: ["T_thr 26 / 28 / 32 °C"], src: "Stone et al. 2023",
+      stats: [["From outages, everyone", ["4.0k", "67k", "567k"]], ["Aged 65+", ["374", "6.3k", "53k"]], ["Below poverty", ["727", "12k", "102k"]], ["Background, homes without AC", ["6.7M", "13.0M", "18.3M"]]] },
+    { id: "deaths", L: 4, x: 24, z: -10, d: "D6", name: "Deaths & ED visits", k: "D6",
+      desc: "Exposure–response with an outage modifier. Deferred until a Nashville temperature–mortality curve and baseline deaths are available; indoor exposure is its input.",
+      params: ["Outage RR 1.12 / 1.25 / 1.41 (context)"], src: "Gasparrini et al. 2015; Anderson & Bell 2012; Stone et al. 2023" },
+  ];
+  // [from, to, label, deferred, group]
+  const E = [
+    ["bna", "field", "+ΔT scenario", 0, "K1"], ["field", "load", "local Ta", 0, "K2"], ["field", "hotspot", "ambient θA", 0, "K3"],
+    ["load", "hotspot", "per-unit load K", 0, "K3"], ["hotspot", "failure", "probit fragility", 0, "K3"], ["load", "margin", "scales TVA load", 0, "K4"],
+    ["margin", "shed", "shortfall > 0", 0, "K4"], ["shed", "topo", "station shed", 0, "K4"], ["failure", "topo", "station out", 0, "K5"],
+    ["topo", "zone", "no energised source", 0, "K5"], ["zone", "plant", "plant loses power", 0, "K6"], ["plant", "storage", "production lost", 0, "K6"],
+    ["storage", "wservice", "storage empty", 0, "K6"], ["zone", "hosp", "backup fails", 0, "K7"], ["zone", "dial", "power lost", 0, "K7"],
+    ["wservice", "dial", "no water", 0, "K7"], ["zone", "signals", "battery fails", 0, "K8"], ["signals", "capacity", "all-way stop", 0, "K8"],
+    ["capacity", "travel", "BPR delay", 0, "K8"], ["travel", "access", "shortest path", 0, "K8"], ["hosp", "access", "closed destination", 0, "K8"],
+    ["dial", "access", "closed destination", 0, "K8"], ["zone", "indoor", "AC lost", 0, "K9"], ["field", "indoor", "outdoor Ta", 0, "K9"],
+    ["indoor", "exposure", "≥ T_thr", 0, "K9"], ["pop", "exposure", "people per zone", 0, "K9"],
+    ["overload", "failure", "overload trips", 1, "D1"], ["river", "margin", "derate MW", 1, "D2"], ["lst", "pavement", "7-day max LST", 1, "D3"],
+    ["exposure", "deaths", "exposure–response", 1, "D6"], ["hydraulics", "wservice", "pressure", 1, "D8"],
+  ];
+  const GROUPS = [...new Set(E.map(e => e[4]))];
+  const FEW = 8;     // labels stay on for every shown line when this many or fewer are shown
+  let edgeOn = E.map(() => true);
+  try {
+    const saved = JSON.parse(localStorage.getItem("twin-arch-edges") || "null");
+    if (Array.isArray(saved) && saved.length === E.length) edgeOn = saved.map(Boolean);
+  } catch (e) { /* storage unavailable */ }
+  const saveEdges = () => { try { localStorage.setItem("twin-arch-edges", JSON.stringify(edgeOn)); } catch (e) { /* ignore */ } };
+  const CORE = [
+    ["K1", "climate", "Urban air-temperature field", "field"], ["K2", "power", "Air temperature → electric load", "load"],
+    ["K3", "power", "Hot spot → substation thermal failure", "failure"], ["K4", "power", "TVA shortfall → rotating outages", "shed"],
+    ["K5", "power", "Supply dependency → zone outage", "zone"], ["K6", "water", "Plant power → storage → water service", "wservice"],
+    ["K7", "health", "Hospitals, nursing homes, dialysis", "dial"], ["K8", "transport", "Dark signals → capacity → time to care", "access"],
+    ["K9", "health", "Loss of AC → indoor heat exposure", "exposure"],
+  ];
+  const DEF = [
+    ["D1", "power", "Peer overload transfer (Motter–Lai)", "overload"], ["D2", "power", "River-temperature derate", "river"],
+    ["D3", "transport", "Pavement heat distress", "pavement"], ["D5", "health", "Outdoor compound threshold, replaced by K9", "exposure"],
+    ["D6", "health", "Deaths and ED visits", "deaths"], ["D7", "power", "Restoration as a crew process", "failure"],
+    ["D8", "water", "Hydraulics, distribution transformers, line ampacity, emPOWER, relocation, cooling centres", "hydraulics"],
+  ];
+  const byId = Object.fromEntries(N.map(n => [n.id, n]));
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let showDeferred = true, flow = !reduce, gap = 14, scen = 2, selected = "zone";
+
+  const root = document.documentElement;
+  const css = name => getComputedStyle(root).getPropertyValue(name).trim();
+  const lcolor = L => css("--l-" + LAYERS[L].id);
+
+  // ---------------------------------------------------------------- three.js setup
+  const host = document.getElementById("stage");
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  host.appendChild(renderer.domElement);
+  const labels = new THREE.CSS2DRenderer();
+  labels.domElement.style.position = "absolute";
+  labels.domElement.style.inset = "0";
+  labels.domElement.style.pointerEvents = "none";
+  host.appendChild(labels.domElement);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 1, 1, 2000);
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.minDistance = 50;
+  controls.maxDistance = 320;
+  scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+  const sun = new THREE.DirectionalLight(0xffffff, 0.55);
+  sun.position.set(40, 90, 30);
+  scene.add(sun);
+
+  function resetView() {
+    camera.position.set(78, 2 * gap + 50, 122);
+    controls.target.set(4, 2 * gap - 1, 0);
+    controls.update();
+  }
+
+  let group = null, domLabels = [], nodeMeshes = [], edgeObjs = [], pulses = [], labelEls = {};
+
+  function clear() {
+    if (group) {
+      scene.remove(group);
+      group.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
+    }
+    domLabels.forEach(el => el.remove());
+    domLabels = []; nodeMeshes = []; edgeObjs = []; pulses = []; labelEls = {};
+  }
+
+  function label(html, cls, pos, color) {
+    const el = document.createElement("div");
+    el.className = cls;
+    el.innerHTML = html;
+    if (color) el.style.setProperty("--lc", color);
+    const o = new THREE.CSS2DObject(el);
+    o.position.copy(pos);
+    group.add(o);
+    domLabels.push(el);
+    el._obj = o;
+    return el;
+  }
+
+  const pos = n => new THREE.Vector3(n.x, n.L * gap, n.z);
+  const visible = n => showDeferred || !n.d;
+
+  function build() {
+    clear();
+    group = new THREE.Group();
+    scene.add(group);
+    scene.background = new THREE.Color(css("--stage"));
+    const ink = new THREE.Color(css("--ink"));
+    const muted = new THREE.Color(css("--muted"));
+    const alpha = parseFloat(css("--plane-alpha")) || 0.08;
+
+    LAYERS.forEach((ly, i) => {
+      const c = new THREE.Color(lcolor(i));
+      const y = i * gap;
+      const plane = new THREE.Mesh(new THREE.PlaneGeometry(68, 32),
+        new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: alpha, side: THREE.DoubleSide, depthWrite: false }));
+      plane.rotation.x = -Math.PI / 2;
+      plane.position.set(2, y, 0);
+      group.add(plane);
+      const rim = new THREE.LineSegments(new THREE.EdgesGeometry(plane.geometry),
+        new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: 0.75 }));
+      rim.rotation.x = -Math.PI / 2;
+      rim.position.copy(plane.position);
+      group.add(rim);
+      // drawing grid at 4-unit pitch
+      const pts = [];
+      for (let x = -32; x <= 36; x += 4) pts.push(x, y, -16, x, y, 16);
+      for (let z = -16; z <= 16; z += 4) pts.push(-32, y, z, 36, y, z);
+      const g = new THREE.BufferGeometry();
+      g.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3));
+      group.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: 0.12 })));
+      const nCore = N.filter(n => n.L === i && !n.d).length, nDef = N.filter(n => n.L === i && n.d).length;
+      label(`${ly.name}<small>${ly.sub} · ${nCore} core${nDef ? " · " + nDef + " deferred" : ""}</small>`, "llabel",
+        new THREE.Vector3(-32, y, 17.5), lcolor(i));
+    });
+
+    N.filter(visible).forEach(n => {
+      const c = new THREE.Color(lcolor(n.L));
+      const p = pos(n);
+      let mesh;
+      if (n.d) {
+        mesh = new THREE.Mesh(new THREE.CylinderGeometry(1.15, 1.15, 0.5, 32),
+          new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.18, depthWrite: false }));
+        const ring = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.CylinderGeometry(1.15, 1.15, 0.5, 24)),
+          new THREE.LineDashedMaterial({ color: c, dashSize: 0.3, gapSize: 0.25 }));
+        ring.computeLineDistances();
+        mesh.add(ring);
+      } else {
+        mesh = new THREE.Mesh(new THREE.CylinderGeometry(1.15, 1.15, 0.6, 32),
+          new THREE.MeshStandardMaterial({ color: c, roughness: 0.55, metalness: 0.05 }));
+      }
+      mesh.position.copy(p);
+      mesh.userData.id = n.id;
+      group.add(mesh);
+      nodeMeshes.push(mesh);
+      const el = label(`<span class="id">${n.k}</span>${n.name}`, "nlabel" + (n.d ? " deferred" : ""), p, lcolor(n.L));
+      el.addEventListener("click", () => select(n.id));
+      labelEls[n.id] = el;
+    });
+
+    E.forEach(([a, b, txt, def], i) => {
+      const na = byId[a], nb = byId[b];
+      if (!visible(na) || !visible(nb)) return;
+      const pa = pos(na), pb = pos(nb);
+      const dy = pb.y - pa.y;
+      let curve;
+      if (Math.abs(dy) < 0.01) {
+        const m = pa.clone().add(pb).multiplyScalar(0.5); m.y += 1.6;
+        curve = new THREE.QuadraticBezierCurve3(pa, m, pb);
+      } else {
+        curve = new THREE.CubicBezierCurve3(pa, pa.clone().add(new THREE.Vector3(0, dy * 0.55, 0)),
+          pb.clone().add(new THREE.Vector3(0, -dy * 0.55, 0)), pb);
+      }
+      const len = curve.getLength();
+      const t1 = Math.max(0.5, 1 - 1.7 / len), t0 = Math.min(0.3, 1.3 / len);
+      const pts = curve.getSpacedPoints(60).filter((_, i, arr) => { const t = i / (arr.length - 1); return t >= t0 && t <= t1; });
+      const c = def ? muted.clone() : ink.clone();
+      let obj;
+      if (def) {
+        obj = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
+          new THREE.LineDashedMaterial({ color: c, dashSize: 0.7, gapSize: 0.5, transparent: true, opacity: 0.9 }));
+        obj.computeLineDistances();
+      } else {
+        obj = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 48, 0.085, 6, false),
+          new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.85 }));
+      }
+      group.add(obj);
+      const tip = curve.getPointAt(t1), tan = curve.getTangentAt(t1).normalize();
+      const cone = new THREE.Mesh(new THREE.ConeGeometry(0.42, 1.1, 12),
+        new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.9 }));
+      cone.position.copy(tip);
+      cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), tan);
+      group.add(cone);
+      const el = label(txt, "elabel" + (def ? " deferred" : ""), curve.getPointAt(0.5));
+      el._obj.visible = false;
+      const eo = { i, a, b, obj, cone, el, def, dot: null };
+      if (!def) {
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.26, 10, 8), new THREE.MeshBasicMaterial({ color: new THREE.Color(lcolor(nb.L)) }));
+        group.add(dot);
+        eo.dot = dot;
+        pulses.push({ curve, t0, t1, dot, off: Math.random(), eo });
+      }
+      edgeObjs.push(eo);
+    });
+    highlight();
+  }
+
+  // ---------------------------------------------------------------- selection
+  function highlight() {
+    const shown = edgeObjs.filter(e => edgeOn[e.i]);
+    const few = shown.length <= FEW;
+    const touched = new Set([selected]);
+    shown.forEach(e => { touched.add(e.a); touched.add(e.b); });
+    const inc = new Set([selected]);
+    edgeObjs.forEach(e => {
+      const on = edgeOn[e.i];
+      const near = e.a === selected || e.b === selected;
+      if (on && near) { inc.add(e.a); inc.add(e.b); }
+      e.obj.visible = e.cone.visible = on;
+      if (e.dot) e.dot.visible = on && flow;
+      e.el._obj.visible = on && (near || few);
+      const op = few || near ? 1 : 0.28;
+      e.obj.material.opacity = e.def ? op * 0.9 : op * 0.85;
+      e.cone.material.opacity = op;
+    });
+    nodeMeshes.forEach(m => {
+      const s = m.userData.id === selected ? 1.35 : 1;
+      m.scale.set(s, s, s);
+      m.material.opacity = touched.has(m.userData.id) ? (byId[m.userData.id].d ? 0.18 : 1) : 0.12;
+      m.material.transparent = true;
+    });
+    Object.entries(labelEls).forEach(([id, el]) => {
+      el.classList.toggle("sel", id === selected);
+      el.classList.toggle("dim", few ? !touched.has(id) : !inc.has(id));
+    });
+  }
+
+  // ---------------------------------------------------------------- relation switches
+  const groupName = g => {
+    const c = CORE.find(r => r[0] === g) || DEF.find(r => r[0] === g);
+    return c ? c[2] : g;
+  };
+  const groupSys = g => (CORE.find(r => r[0] === g) || DEF.find(r => r[0] === g) || [0, "power"])[1];
+  function rels() {
+    const host = document.getElementById("rels");
+    const n = edgeOn.filter(Boolean).length;
+    host.innerHTML = `
+      <div class="quick">
+        <button type="button" id="q-all">Show all</button>
+        <button type="button" id="q-none">Hide all</button>
+        <button type="button" id="q-core">Core only</button>
+        <span class="count">${n} of ${E.length} shown</span>
+      </div>
+      ${GROUPS.map(g => {
+        const idx = E.map((e, i) => i).filter(i => E[i][4] === g);
+        const all = idx.every(i => edgeOn[i]), some = idx.some(i => edgeOn[i]);
+        const def = g.startsWith("D");
+        return `<div class="rgroup${def ? " def" : ""}" style="--lc:var(--l-${groupSys(g)})">
+          <label for="grp-${g}"><input type="checkbox" id="grp-${g}" data-grp="${g}" ${all ? "checked" : ""} ${!all && some ? 'data-mixed="1"' : ""}>
+            <span class="gk">${g}</span>${esc(groupName(g))}</label>
+          ${idx.map(i => {
+            const [a, b, txt, d] = E[i];
+            const hiddenNode = d && !showDeferred;
+            return `<div class="rrow${edgeOn[i] ? "" : " off"}">
+              <input type="checkbox" id="edge-${i}" data-edge="${i}" ${edgeOn[i] ? "checked" : ""}>
+              <label for="edge-${i}">${esc(byId[a].name)} → ${esc(byId[b].name)}<small>${esc(txt)}${hiddenNode ? " · turn on Deferred details to see it" : ""}</small></label>
+              <button type="button" class="only" data-only="${i}" aria-label="Show only this relation">Only</button>
+            </div>`;
+          }).join("")}
+        </div>`;
+      }).join("")}`;
+    host.querySelectorAll("[data-mixed]").forEach(cb => { cb.indeterminate = true; });
+    const apply = () => { saveEdges(); highlight(); rels(); };
+    host.querySelector("#q-all").addEventListener("click", () => { edgeOn = E.map(() => true); apply(); });
+    host.querySelector("#q-none").addEventListener("click", () => { edgeOn = E.map(() => false); apply(); });
+    host.querySelector("#q-core").addEventListener("click", () => { edgeOn = E.map(e => !e[3]); apply(); });
+    host.querySelectorAll("[data-edge]").forEach(cb => cb.addEventListener("change", () => { edgeOn[+cb.dataset.edge] = cb.checked; apply(); }));
+    host.querySelectorAll("[data-grp]").forEach(cb => cb.addEventListener("change", () => {
+      E.forEach((e, i) => { if (e[4] === cb.dataset.grp) edgeOn[i] = cb.checked; });
+      apply();
+    }));
+    host.querySelectorAll("[data-only]").forEach(bt => bt.addEventListener("click", () => {
+      const i = +bt.dataset.only;
+      edgeOn = E.map((_, j) => j === i);
+      if (E[i][3] && !showDeferred) { showDeferred = true; syncButtons(); build(); }
+      selected = E[i][0];
+      saveEdges(); highlight(); panel(); rels();
+    }));
+  }
+
+  const tabEl = document.getElementById("tab-el"), tabRel = document.getElementById("tab-rel");
+  function showTab(rel) {
+    tabEl.setAttribute("aria-selected", !rel); tabRel.setAttribute("aria-selected", rel);
+    document.getElementById("panel").hidden = rel;
+    document.getElementById("rels").hidden = !rel;
+    if (rel) rels();
+  }
+  tabEl.addEventListener("click", () => showTab(false));
+  tabRel.addEventListener("click", () => showTab(true));
+
+  const esc = s => String(s).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+
+  function panel() {
+    const n = byId[selected];
+    const col = lcolor(n.L);
+    const ins = E.filter(e => e[1] === n.id), outs = E.filter(e => e[0] === n.id);
+    const linkBtn = (e, dir) => {
+      const o = byId[dir === "in" ? e[0] : e[1]];
+      return `<button type="button" data-go="${o.id}"><span class="a">${dir === "in" ? "←" : "→"}</span><span class="t">${esc(o.name)} <small>${esc(e[2])}${e[3] ? " · deferred" : ""}</small></span></button>`;
+    };
+    const status = n.d ? `<span class="chip def">Deferred ${n.k}</span>` : (n.k.startsWith("K") ? `<span class="chip core">Core ${n.k}</span>` : `<span class="chip">${n.k}</span>`);
+    const stats = (n.stats || []).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v[scen])}</dd>`).join("");
+    const el = document.getElementById("panel");
+    el.style.setProperty("--lc", col);
+    el.innerHTML = `
+      <div class="seg-row"><span>Scenario</span><div class="seg" role="group" aria-label="Warming scenario">
+        ${SCEN.map((s, i) => `<button type="button" id="scen-${i}" data-scen="${i}" aria-pressed="${i === scen}">${s}</button>`).join("")}</div></div>
+      <div class="chips"><span class="chip">${LAYERS[n.L].name}</span>${status}${n.method ? `<span class="chip">${esc(n.method)}</span>` : ""}</div>
+      <h2>${esc(n.name)}</h2>
+      <p>${esc(n.desc)}</p>
+      ${stats ? `<div><h3>Core run, ${SCEN[scen]} (mean per run)</h3><dl class="kv">${stats}</dl></div>` : ""}
+      ${n.params && n.params.length ? `<div><h3>Parameters (low / mid / high)</h3><ul class="plist">${n.params.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>` : ""}
+      ${ins.length ? `<div><h3>Driven by</h3><div class="links">${ins.map(e => linkBtn(e, "in")).join("")}</div></div>` : ""}
+      ${outs.length ? `<div><h3>Drives</h3><div class="links">${outs.map(e => linkBtn(e, "out")).join("")}</div></div>` : ""}
+      <p class="src">Sources: ${esc(n.src)}</p>`;
+    el.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => select(b.dataset.go)));
+    el.querySelectorAll("[data-scen]").forEach(b => b.addEventListener("click", () => { scen = +b.dataset.scen; panel(); }));
+  }
+
+  function select(id) {
+    if (byId[id].d && !showDeferred) { showDeferred = true; syncButtons(); build(); }
+    selected = id;
+    highlight();
+    panel();
+    if (!document.getElementById("rels").hidden) rels();
+  }
+
+  // ---------------------------------------------------------------- register
+  function register(list, elId, def) {
+    const host = document.getElementById(elId);
+    host.innerHTML = list.map(([k, sys, t, go]) => {
+      const L = LAYERS.findIndex(l => l.id === sys);
+      return `<button type="button" class="lrow${def ? " def" : ""}" data-go="${go}" style="--lc:var(--l-${sys})">
+        <span class="k">${k}</span><span class="sys">${LAYERS[L].name}</span><span class="t">${esc(t)}</span></button>`;
+    }).join("");
+    host.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => {
+      select(b.dataset.go);
+      document.querySelector(".stage-wrap").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" });
+    }));
+  }
+  register(CORE, "reg-core", false);
+  register(DEF, "reg-def", true);
+
+  // ---------------------------------------------------------------- controls
+  const bDef = document.getElementById("btn-deferred"), bFlow = document.getElementById("btn-flow");
+  function syncButtons() { bDef.setAttribute("aria-pressed", showDeferred); bFlow.setAttribute("aria-pressed", flow); }
+  bDef.addEventListener("click", () => {
+    showDeferred = !showDeferred;
+    if (!showDeferred && byId[selected].d) selected = "zone";
+    syncButtons(); build(); panel();
+    if (!document.getElementById("rels").hidden) rels();
+  });
+  bFlow.addEventListener("click", () => { flow = !flow; syncButtons(); highlight(); });
+  document.getElementById("spread").addEventListener("input", e => { gap = +e.target.value; build(); });
+  document.getElementById("btn-reset").addEventListener("click", resetView);
+  syncButtons();
+
+  // click on discs
+  const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
+  let down = null;
+  renderer.domElement.addEventListener("pointerdown", e => { down = [e.clientX, e.clientY]; });
+  renderer.domElement.addEventListener("pointerup", e => {
+    if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 4) return;
+    const r = renderer.domElement.getBoundingClientRect();
+    mouse.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(mouse, camera);
+    const hit = ray.intersectObjects(nodeMeshes, false)[0];
+    if (hit) select(hit.object.userData.id);
+  });
+
+  function resize() {
+    const w = host.clientWidth, h = host.clientHeight;
+    renderer.setSize(w, h);
+    labels.setSize(w, h);
+    camera.aspect = w / Math.max(h, 1);
+    camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(host);
+
+  // theme changes rebuild colours
+  const rebuild = () => { build(); panel(); };
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", rebuild);
+  new MutationObserver(rebuild).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+
+  const clock = new THREE.Clock();
+  function tick() {
+    const t = clock.getElapsedTime();
+    if (flow) pulses.forEach(p => {
+      if (!edgeOn[p.eo.i]) return;
+      const u = (t * 0.22 + p.off) % 1;
+      p.dot.position.copy(p.curve.getPointAt(p.t0 + (p.t1 - p.t0) * u));
+    });
+    controls.update();
+    renderer.render(scene, camera);
+    labels.render(scene, camera);
+    requestAnimationFrame(tick);
+  }
+
+  resize();
+  resetView();
+  build();
+  panel();
+  tick();
+})();
+</script>
