@@ -16,12 +16,12 @@
 | Land surface temperature 地表温度 | 1 | 3 | 4 | · | 2 | · | 1 | 1 | 12 |
 | Built environment 建成环境 | 8 | 1 | · | 1 | 2 | · | · | · | 12 |
 | Power 电力 | 13 | 1 | 7 | 2 | · | 6 | 3 | 2 | 34 |
-| Water 供水 | 4 | 1 | 3 | 2 | · | 5 | 4 | 1 | 20 |
+| Water 供水 | 4 | 1 | 3 | 2 | 2 | 5 | 2 | 1 | 20 |
 | Transportation 交通 | 11 | · | 6 | 3 | · | 2 | 2 | · | 24 |
 | Health 健康 | 8 | · | 5 | · | 7 | 2 | 4 | · | 26 |
 | Population 人口 | 4 | 2 | 5 | 1 | 6 | 1 | · | · | 19 |
 | Model controls 模型控制 | 4 | · | · | · | · | · | · | · | 4 |
-| **合计 Total** | **56** | **12** | **32** | **11** | **26** | **16** | **14** | **9** | **176** |
+| **合计 Total** | **56** | **12** | **32** | **11** | **28** | **16** | **12** | **9** | **176** |
 
 ## 2. 骨架模型所需变量 Core skeleton variables
 
@@ -31,7 +31,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 
 | 合计 Summary | ✅ have 已有 | ⬜ assumed / placeholder 假设或占位 | 🟡 obtainable 可获取 | 🔒 partner 需合作 |
 | --- | ---: | ---: | ---: | ---: |
-| 69 variables | 49 | 17 | 0 | 3 |
+| 69 variables | 58 | 7 | 1 | 3 |
 
 ### K1 Urban air-temperature field / 城市气温场
 
@@ -52,8 +52,8 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | BLD-01 | Building footprint area<br>建筑占地面积 | attribute | ✅ in_model | buildings_aoi | ✅ have 已有 | Metro footprints + parcels |
 | PWR-03 | Transformer rated capacity<br>变压器额定容量 | attribute | 🔒 restricted | L^r = L^d / K_d (C-P1.Kd) | 🔒 needs partner 需合作 | NES / TVA nameplate data |
 | PWR-04 | Design (peak) load of a substation<br>变电站设计（峰值）负荷 | attribute | ⬜ placeholder | buildings_aoi | ⬜ placeholder 占位 | NES SCADA peak loads |
-| PWR-05 | Load–temperature slope<br>负荷–气温斜率 | parameter | ✅ in_model | twin_couplings | ✅ have 已有 | Hourly refit on EIA-930 TVA demand (M-11) |
-| PWR-06 | Load–temperature threshold<br>负荷–气温阈值 | parameter | ✅ in_model | twin_couplings | ✅ have 已有 | Hourly refit (M-11) |
+| PWR-05 | Load–temperature slope<br>负荷–气温斜率 | parameter | ✅ in_model | couplings: auffhammer2017, bartos2016, cascadingheat2026 | ✅ have 已有 | Hourly refit on EIA-930 TVA demand (M-11) |
+| PWR-06 | Load–temperature threshold<br>负荷–气温阈值 | parameter | ✅ in_model | couplings: cascadingheat2026 | ✅ have 已有 | Hourly refit (M-11) |
 
 ### K3 Load and air temperature → transformer hot spot → thermal failure / 负荷与气温 → 变压器热点温度 → 热失效
 
@@ -61,11 +61,11 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | --- | --- | --- | --- | --- | --- | --- |
 | CLM-19 | Urban air temperature field<br>城市气温场（空间化气温） | state | ✅ derived | air_field_2022 | ✅ have 已有 | M-6 calibrated on CLM-20 |
 | PWR-01 | Substation location type and voltage<br>变电站位置、类型和电压 | attribute | ✅ in_model | osm_substations | ✅ have 已有 | NES / TVA asset GIS |
-| PWR-11 | Transformer thermal constants<br>变压器热参数 | parameter | ✅ in_model | twin_couplings | ✅ have 已有 | Nameplate / heat-run test reports |
+| PWR-11 | Transformer thermal constants<br>变压器热参数 | parameter | ✅ in_model | couplings: ieee_c5791_2011 | ✅ have 已有 | Nameplate / heat-run test reports |
 | PWR-12 | Top-oil rise over ambient<br>顶层油温升 | state | ✅ derived | — | ✅ have 已有 | - |
 | PWR-13 | Winding hot-spot temperature<br>绕组热点温度 | state | ✅ derived | — | ✅ have 已有 | - |
 | PWR-14 | Hourly thermal failure probability<br>逐小时热失效概率 | state | ✅ derived | — | ✅ have 已有 | - |
-| PWR-15 | Hot-spot fragility median and dispersion<br>热点温度易损性中位数与离散度 | parameter | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | Fit to failure records (M-17) |
+| PWR-15 | Hot-spot fragility median and dispersion<br>热点温度易损性中位数与离散度 | parameter | ✅ in_model | couplings: ieee_c5791_2011, shinozuka2000 | ⬜ assumed value 假设值 | Fit to failure records (M-17) |
 
 ### K4 System supply shortfall → rotating outages (demand side) / 系统供需缺口 → 轮流停电（负荷侧）
 
@@ -74,8 +74,8 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | CLM-01 | Air temperature (2 m)<br>近地面气温（2 米） | driver | ✅ in_model | asos_bna | ✅ have 已有 | ASOS BNA + additional stations (CLM-22) |
 | PWR-07 | TVA hourly demand (EIA-930)<br>TVA 逐小时负荷（EIA-930） | observation | ✅ in_model | cumberland_thermal | ✅ have 已有 | EIA-930 Hourly Electric Grid Monitor |
 | PWR-09 | Generator capacity and cooling type (EIA-860)<br>发电机容量与冷却方式（EIA-860） | attribute | ✅ in_model | cumberland_thermal | ✅ have 已有 | EIA-860 2022 |
-| PWR-32 | Available share of TVA summer capacity<br>TVA 夏季容量的可用比例 | parameter | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | TVA forced and planned outage data |
-| PWR-33 | Net import capability at peak<br>峰值时的净进口能力 | parameter | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | EIA-930 interchange; TVA |
+| PWR-32 | Available share of TVA summer capacity<br>TVA 夏季容量的可用比例 | parameter | ✅ in_model | couplings: eia860, nerc_sra, tva10k | ✅ have 已有 | TVA unit outage data (GADS) |
+| PWR-33 | Net import capability at peak<br>峰值时的净进口能力 | parameter | ✅ in_model | couplings: eia930, nerc_itcs2024, nerc_sra | ✅ have 已有 | TVA / NERC transfer studies |
 | PWR-34 | Rotating-outage share from a system shortfall<br>系统缺口造成的轮流停电比例 | state | ✅ derived | cumberland_thermal | ✅ have 已有 | TVA energy emergency records |
 
 ### K5 Supply dependency along the grid topology; fixed restoration time / 沿电网拓扑的供电依赖；固定修复时长
@@ -85,7 +85,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | PWR-01 | Substation location type and voltage<br>变电站位置、类型和电压 | attribute | ✅ in_model | osm_substations | ✅ have 已有 | NES / TVA asset GIS |
 | PWR-02 | Power line geometry and voltage<br>电力线路几何与电压 | attribute | ✅ in_model | osm_power_lines | ✅ have 已有 | NES / TVA asset GIS |
 | PWR-17 | Energised state<br>带电状态 | state | ✅ derived | — | ✅ have 已有 | - |
-| PWR-18 | Repair duration after failure<br>失效后修复时长 | parameter | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | NES restoration records (M-16) |
+| PWR-18 | Repair duration after failure<br>失效后修复时长 | parameter | ✅ in_model | couplings: eaglei2023 | ✅ have 已有 | NES restoration records (M-16) |
 | PWR-20 | Feeder / service territory polygons<br>馈线 / 供电区域多边形 | attribute | 🔒 restricted | Voronoi of serving stations (R-P3) | 🔒 needs partner 需合作 | NES feeder GIS |
 | PWR-24 | Switch states and normally-open ties<br>开关状态与常开联络开关 | attribute | 🔒 restricted | All distribution lines treated as connected for R-P1b only (A-P6) | 🔒 needs partner 需合作 | NES distribution GIS |
 | PWR-28 | Zone outage state and outage duration so far<br>分区停电状态与已停电时长 | state | ✅ derived | — | ✅ have 已有 | - |
@@ -99,8 +99,8 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | --- | --- | --- | --- | --- | --- | --- |
 | PWR-28 | Zone outage state and outage duration so far<br>分区停电状态与已停电时长 | state | ✅ derived | — | ✅ have 已有 | - |
 | WAT-01 | Water works / towers / covered reservoirs / wastewater plants<br>水厂 / 水塔 / 有盖水库 / 污水厂 | attribute | ✅ in_model | osm_water | ✅ have 已有 | Metro Water asset list |
-| WAT-04 | Storage volume<br>储水容量 | attribute | ⬜ placeholder | Hours of supply Tri(6; 12; 24) (C-W3) | ⬜ placeholder 占位 | Metro Water |
-| WAT-09 | Plant backup power failure on demand<br>水厂备用电源失效概率 | parameter | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | Metro Water generator tests |
+| WAT-04 | Storage volume<br>储水容量 | attribute | 🟡 public | Hours of supply Tri(6; 12; 24) (C-W3) | 🟡 public 可公开获取 | Metro Water |
+| WAT-09 | Plant backup power failure on demand<br>水厂备用电源失效概率 | parameter | ✅ in_model | couplings: marqusee2020, metrowater2024 | ✅ have 已有 | Metro Water generator tests |
 | WAT-10 | Storage state<br>储水状态 | state | ✅ derived | — | ✅ have 已有 | - |
 | WAT-11 | Water service lost<br>供水中断状态 | state | ✅ derived | — | ✅ have 已有 | - |
 
@@ -111,10 +111,10 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | PWR-28 | Zone outage state and outage duration so far<br>分区停电状态与已停电时长 | state | ✅ derived | — | ✅ have 已有 | - |
 | WAT-11 | Water service lost<br>供水中断状态 | state | ✅ derived | — | ✅ have 已有 | - |
 | HLT-01 | Hospitals (type; emergency services)<br>医院（类型；急诊） | attribute | ✅ in_model | hospitals | ✅ have 已有 | CMS Provider Data |
-| HLT-03 | Hospital backup power failure on demand<br>医院备用电源失效概率 | parameter | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | Facility generator test logs |
+| HLT-03 | Hospital backup power failure on demand<br>医院备用电源失效概率 | parameter | ✅ in_model | couplings: cms2016, hhs_oig_sandy2014, irvinbarnwell2020, klinger2014, marqusee2020 | ✅ have 已有 | Facility generator test logs |
 | HLT-05 | Dialysis facilities and stations<br>透析中心与透析位 | attribute | ✅ in_model | dialysis | ✅ have 已有 | CMS Dialysis Facilities |
 | HLT-07 | Nursing homes and certified beds<br>养老院与认证床位 | attribute | ✅ in_model | nursing_homes | ✅ have 已有 | CMS Nursing Homes |
-| HLT-08 | Nursing-home backup power failure<br>养老院备用电源失效概率 | parameter | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | Facility surveys |
+| HLT-08 | Nursing-home backup power failure<br>养老院备用电源失效概率 | parameter | ✅ in_model | couplings: cms2016, hhs_oig_nh2026, tn_0720_18 | ⬜ literature-informed placeholder 文献推断占位 | Facility surveys |
 | HLT-20 | Facility loss of service<br>设施服务中断 | state | ✅ derived | — | ✅ have 已有 | - |
 
 ### K8 Zone outage → dark traffic signals → link capacity → travel time to hospitals, dialysis and EMS / 分区停电 → 信号灯熄灭 → 路段通行能力下降 → 到医院、透析中心和急救站的行程时间
@@ -126,14 +126,14 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | TRN-01 | Road segments and class<br>路段及道路等级 | attribute | ✅ in_model | roads_lst | ✅ have 已有 | TIGER/Line + OSM |
 | TRN-02 | Segment length<br>路段长度 | attribute | ✅ derived | roads_lst | ✅ have 已有 | - |
 | TRN-06 | Traffic signals<br>交通信号灯 | attribute | ✅ in_model | osm_traffic_signals | ✅ have 已有 | Metro signal inventory |
-| TRN-07 | Signal battery backup (share without battery; battery hours)<br>信号灯备用电池（无电池比例；电池时长） | parameter | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | Metro Public Works UPS inventory |
+| TRN-07 | Signal battery backup (share without battery; battery hours)<br>信号灯备用电池（无电池比例；电池时长） | parameter | ✅ in_model | couplings: nysdot2009, wsmv2025 | ⬜ literature-informed placeholder 文献推断占位 | Metro Public Works UPS inventory |
 | TRN-08 | Signal dark<br>信号灯熄灭 | state | ✅ derived | — | ✅ have 已有 | - |
 | TRN-10 | Annual average daily traffic<br>年平均日交通量 | attribute | ✅ in_model | hpms_2024 | ✅ have 已有 | HPMS 2024 Davidson (twin_demo l1_std/ntad) |
 | TRN-11 | Hourly traffic counts (TMAS)<br>逐小时交通量计数（TMAS） | observation | ✅ in_model | tmas_2023 | ✅ have 已有 | twin_demo l2/state_tmas_hourly.parquet |
 | TRN-12 | Link capacity and lanes<br>路段通行能力与车道数 | attribute | ✅ in_model | hpms_2024 | ⬜ assumed value 假设值 | HPMS through lanes |
 | TRN-13 | Free-flow travel time<br>自由流行程时间 | attribute | ✅ derived | hpms_2024 | ✅ have 已有 | OSM maxspeed / HPMS |
-| TRN-14 | BPR volume-delay parameters<br>BPR 流量–延误函数参数 | parameter | ✅ in_model | twin_couplings | ✅ have 已有 | Local calibration on TMAS speeds |
-| TRN-15 | Capacity factor of a dark signal<br>信号灯熄灭后的通行能力系数 | parameter | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | HCM all-way-stop capacity |
+| TRN-14 | BPR volume-delay parameters<br>BPR 流量–延误函数参数 | parameter | ✅ in_model | couplings: bpr1964 | ✅ have 已有 | Local calibration on TMAS speeds |
+| TRN-15 | Capacity factor of a dark signal<br>信号灯熄灭后的通行能力系数 | parameter | ✅ in_model | couplings: alkaisy2023, french1956, hcm2022, kyte1994 | ✅ have 已有 | HCM all-way-stop capacity |
 | TRN-16 | Travel time to nearest functional facility<br>到最近可用设施的行程时间 | state | ✅ derived | hpms_2024 | ✅ have 已有 | M-29 network routing |
 | TRN-21 | Fire / EMS stations (OSM)<br>消防 / 急救站 | attribute | ✅ in_model | osm_fire_stations | ✅ have 已有 | Metro Nashville Fire Department station list |
 | TRN-24 | Change in time to care at each run's worst hour<br>每次运行最坏小时的就医时间增量 | output | ✅ derived | hpms_2024;tmas_2023 | ✅ have 已有 | Probe travel times during outages |
@@ -148,13 +148,13 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | Id | 变量 Variable | 类型 Kind | 状态 Status | 来源 Source | 骨架需求 Need | 目标来源 Target |
 | --- | --- | --- | --- | --- | --- | --- |
 | CLM-19 | Urban air temperature field<br>城市气温场（空间化气温） | state | ✅ derived | air_field_2022 | ✅ have 已有 | M-6 calibrated on CLM-20 |
-| BLD-04 | Share of homes with air conditioning<br>有空调住户比例 | attribute | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | American Housing Survey (Nashville metro) |
-| BLD-08 | Building thermal time constant<br>建筑热时间常数 | parameter | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | EnergyPlus archetypes / literature (Sun et al. 2020) |
-| BLD-09 | Internal + solar gain temperature lift<br>内部与太阳得热造成的温升 | parameter | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | EnergyPlus archetypes |
-| BLD-12 | Air-conditioning set point<br>空调设定温度 | parameter | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | Residential energy surveys (RECS) |
+| BLD-04 | Share of homes with air conditioning<br>有空调住户比例 | attribute | ✅ in_model | couplings: census_lace2023, eia_recs2020 | ✅ have 已有 | Census LACE tract estimates (spatial AC share) |
+| BLD-08 | Building thermal time constant<br>建筑热时间常数 | parameter | ✅ in_model | couplings: leigh2014, stone2023, sun2020, wijesuriya2024 | ⬜ literature-informed placeholder 文献推断占位 | EnergyPlus / ResStock archetypes for Nashville housing; indoor sensor records |
+| BLD-09 | Internal + solar gain temperature lift<br>内部与太阳得热造成的温升 | parameter | ✅ in_model | couplings: leigh2014, stone2023, sun2020 | ⬜ literature-informed placeholder 文献推断占位 | EnergyPlus archetypes |
+| BLD-12 | Air-conditioning set point<br>空调设定温度 | parameter | ✅ in_model | couplings: eia_recs2020, stone2023, wijesuriya2024 | ✅ have 已有 | Residential energy surveys (RECS) |
 | PWR-28 | Zone outage state and outage duration so far<br>分区停电状态与已停电时长 | state | ✅ derived | — | ✅ have 已有 | - |
 | HLT-22 | Indoor air temperature<br>室内气温 | state | ✅ derived | — | ✅ have 已有 | M-32 |
-| HLT-23 | Indoor heat threshold<br>室内高温阈值 | parameter | ✅ in_model | twin_couplings | ⬜ assumed value 假设值 | WHO housing and health guidance / literature |
+| HLT-23 | Indoor heat threshold<br>室内高温阈值 | parameter | ✅ in_model | couplings: huizenga2024, meade2024, stone2023 | ✅ have 已有 | WHO housing and health guidance / literature |
 | HLT-24 | Indoor equilibrium temperature<br>室内平衡温度 | state | ✅ derived | air_field_2022 | ✅ have 已有 | EnergyPlus archetypes |
 | HLT-25 | Indoor heat person-hours caused by outages (all; 65+; below poverty)<br>停电造成的室内高温暴露人·小时（全体、65 岁以上、贫困） | output | ✅ derived | zcta_population | ✅ have 已有 | ESSENCE heat-related ED visits (validation) |
 | HLT-26 | Background indoor heat person-hours in homes without AC<br>无空调住户的背景室内高温暴露人·小时 | output | ✅ derived | zcta_population | ✅ have 已有 | - |
@@ -170,26 +170,17 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 
 | 优先级 Priority | Id | 变量 Variable | 环节 Links | 需求 Need | 目标来源 Target |
 | ---: | --- | --- | --- | --- | --- |
-| 1 | BLD-04 | Share of homes with air conditioning<br>有空调住户比例 | K9 | ⬜ assumed value 假设值 | American Housing Survey (Nashville metro) |
-| 1 | BLD-08 | Building thermal time constant<br>建筑热时间常数 | K9 | ⬜ assumed value 假设值 | EnergyPlus archetypes / literature (Sun et al. 2020) |
+| 1 | BLD-08 | Building thermal time constant<br>建筑热时间常数 | K9 | ⬜ literature-informed placeholder 文献推断占位 | EnergyPlus / ResStock archetypes for Nashville housing; indoor sensor records |
 | 1 | PWR-03 | Transformer rated capacity<br>变压器额定容量 | K2 | 🔒 needs partner 需合作 | NES / TVA nameplate data |
 | 1 | PWR-04 | Design (peak) load of a substation<br>变电站设计（峰值）负荷 | K2 | ⬜ placeholder 占位 | NES SCADA peak loads |
 | 1 | PWR-15 | Hot-spot fragility median and dispersion<br>热点温度易损性中位数与离散度 | K3 | ⬜ assumed value 假设值 | Fit to failure records (M-17) |
-| 1 | PWR-18 | Repair duration after failure<br>失效后修复时长 | K5 | ⬜ assumed value 假设值 | NES restoration records (M-16) |
 | 1 | PWR-20 | Feeder / service territory polygons<br>馈线 / 供电区域多边形 | K5 | 🔒 needs partner 需合作 | NES feeder GIS |
-| 1 | PWR-32 | Available share of TVA summer capacity<br>TVA 夏季容量的可用比例 | K4 | ⬜ assumed value 假设值 | TVA forced and planned outage data |
-| 1 | WAT-04 | Storage volume<br>储水容量 | K6 | ⬜ placeholder 占位 | Metro Water |
-| 2 | BLD-09 | Internal + solar gain temperature lift<br>内部与太阳得热造成的温升 | K9 | ⬜ assumed value 假设值 | EnergyPlus archetypes |
-| 2 | BLD-12 | Air-conditioning set point<br>空调设定温度 | K9 | ⬜ assumed value 假设值 | Residential energy surveys (RECS) |
-| 2 | HLT-03 | Hospital backup power failure on demand<br>医院备用电源失效概率 | K7 | ⬜ assumed value 假设值 | Facility generator test logs |
-| 2 | HLT-08 | Nursing-home backup power failure<br>养老院备用电源失效概率 | K7 | ⬜ assumed value 假设值 | Facility surveys |
-| 2 | HLT-23 | Indoor heat threshold<br>室内高温阈值 | K9 | ⬜ assumed value 假设值 | WHO housing and health guidance / literature |
+| 1 | WAT-04 | Storage volume<br>储水容量 | K6 | 🟡 public 可公开获取 | Metro Water |
+| 2 | BLD-09 | Internal + solar gain temperature lift<br>内部与太阳得热造成的温升 | K9 | ⬜ literature-informed placeholder 文献推断占位 | EnergyPlus archetypes |
+| 2 | HLT-08 | Nursing-home backup power failure<br>养老院备用电源失效概率 | K7 | ⬜ literature-informed placeholder 文献推断占位 | Facility surveys |
 | 2 | PWR-24 | Switch states and normally-open ties<br>开关状态与常开联络开关 | K5 | 🔒 needs partner 需合作 | NES distribution GIS |
-| 2 | PWR-33 | Net import capability at peak<br>峰值时的净进口能力 | K4 | ⬜ assumed value 假设值 | EIA-930 interchange; TVA |
-| 2 | TRN-07 | Signal battery backup (share without battery; battery hours)<br>信号灯备用电池（无电池比例；电池时长） | K8 | ⬜ assumed value 假设值 | Metro Public Works UPS inventory |
+| 2 | TRN-07 | Signal battery backup (share without battery; battery hours)<br>信号灯备用电池（无电池比例；电池时长） | K8 | ⬜ literature-informed placeholder 文献推断占位 | Metro Public Works UPS inventory |
 | 2 | TRN-12 | Link capacity and lanes<br>路段通行能力与车道数 | K8 | ⬜ assumed value 假设值 | HPMS through lanes |
-| 2 | TRN-15 | Capacity factor of a dark signal<br>信号灯熄灭后的通行能力系数 | K8 | ⬜ assumed value 假设值 | HCM all-way-stop capacity |
-| 2 | WAT-09 | Plant backup power failure on demand<br>水厂备用电源失效概率 | K6 | ⬜ assumed value 假设值 | Metro Water generator tests |
 
 ## 3. 变量 Variables
 
@@ -292,27 +283,27 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | BLD-01 | Building footprint area<br>建筑占地面积 | `A_b` | m2 | building; static | ✅ in_model | `buildings_aoi` | Metro footprints + parcels | Eq.3 (A-P3);M-12;M-39 | K2;K8 | 1 |
 | BLD-02 | Building use class (residential / commercial / industrial)<br>建筑用途类别（住宅 / 商业 / 工业） | `u_b` | class | building / parcel; static | 🟡 public | fallback: All buildings equal load intensity (A-P3) | Metro Nashville parcels land use | M-12;M-39 | - | 1 |
 | BLD-03 | Year built and number of floors<br>建造年份与楼层数 | `yb;nf` | year; count | parcel; static | 🟡 public | fallback: Single building archetype | Metro Nashville assessor parcels | M-12;M-32 | - | 2 |
-| BLD-04 | Share of homes with air conditioning<br>有空调住户比例 | `f_AC` | fraction | metro area; survey year | ✅ in_model | `twin_couplings` · fallback: Tri(0.85, 0.92, 0.97) (placeholder) | American Housing Survey (Nashville metro) | M-32;M-33 | K9 | 1 |
+| BLD-04 | Share of homes with air conditioning<br>有空调住户比例 | `f_AC` | fraction | metro area; survey year | ✅ in_model | `twin_couplings` · fallback: Tri(0.90, 0.94, 0.98) [eia_recs2020; census_lace2023] | Census LACE tract estimates (spatial AC share) | M-32;M-33 | K9 | 1 |
 | BLD-05 | Impervious surface fraction<br>不透水面比例 | `ISA` | fraction | 30 m; 2021 | ✅ in_model | `air_field_2022` | NLCD 2021 (MRLC WCS) | M-6 | K1 | 2 |
 | BLD-06 | Forest share (NLCD 2021 classes 41–43; canopy proxy)<br>林地比例（NLCD 2021 第 41–43 类，代替树冠） | `forest` | fraction | 30 m; 2021 | ✅ in_model | `air_field_2022` | NLCD tree canopy | M-6 | K1 | 2 |
 | BLD-07 | Surface parking polygons<br>地面停车场多边形 | `-` | polygon | polygon; static | ✅ ingested | `surface_parking` | - | Eq.1 | - | 3 |
-| BLD-08 | Building thermal time constant<br>建筑热时间常数 | `tau_b` | h | building class; static | ✅ in_model | `twin_couplings` · fallback: Tri(5, 15, 40) h (placeholder) | EnergyPlus archetypes / literature (Sun et al. 2020) | M-32 | K9 | 1 |
-| BLD-09 | Internal + solar gain temperature lift<br>内部与太阳得热造成的温升 | `G_b/UA` | K | building class; hourly profile | ✅ in_model | `twin_couplings` · fallback: Tri(1, 3, 6) K daytime; 1 K night (placeholder) | EnergyPlus archetypes | M-32 | K9 | 2 |
+| BLD-08 | Building thermal time constant<br>建筑热时间常数 | `tau_b` | h | building class; static | ✅ in_model | `twin_couplings` · fallback: Tri(5, 12, 40) h (literature-informed placeholder) [wijesuriya2024; sun2020; leigh2014] | EnergyPlus / ResStock archetypes for Nashville housing; indoor sensor records | M-32 | K9 | 1 |
+| BLD-09 | Internal + solar gain temperature lift<br>内部与太阳得热造成的温升 | `G_b/UA` | K | building class; hourly profile | ✅ in_model | `twin_couplings` · fallback: Tri(2, 4, 7) K daytime; 1 K night (literature-informed placeholder) [sun2020; leigh2014] | EnergyPlus archetypes | M-32 | K9 | 2 |
 | BLD-10 | County-wide building footprints (Microsoft)<br>全县建筑轮廓（Microsoft） | `-` | polygon | building; static | 🟡 on_drive | fallback: Metro footprints inside AOI | Microsoft US Building Footprints (link in cascading-heat 09_buildings) | M-12;M-39 | - | 3 |
 | BLD-11 | Elevation and topographic position (3DEP)<br>高程与地形位置（3DEP） | `z_elev` | m | 30 m; static | ✅ in_model | `air_field_2022` | USGS 3DEP | M-6 | K1 | 2 |
-| BLD-12 | Air-conditioning set point<br>空调设定温度 | `T_set` | degC | system; static | ✅ in_model | `twin_couplings` · fallback: Tri(23, 24, 25) degC (placeholder) | Residential energy surveys (RECS) | M-32 | K9 | 2 |
+| BLD-12 | Air-conditioning set point<br>空调设定温度 | `T_set` | degC | system; static | ✅ in_model | `twin_couplings` · fallback: Tri(21, 22.5, 24.5) degC [eia_recs2020 HC7.8] | Residential energy surveys (RECS) | M-32 | K9 | 2 |
 
 备注 Notes:
 
 - **BLD-01** — v0 中只作为分区负荷权重。 / Only used as zone load weights in v0.
 - **BLD-02** — 区分住宅负荷（夜间室内）与商业负荷。 / Separates residential load (night peak indoors) from commercial load.
 - **BLD-03** — 决定建筑面积和热工原型。 / Sets floor area and thermal archetype.
-- **BLD-04** — 无空调住户即使有电也达不到设定温度。 / Homes without AC do not reach the set point even with power.
+- **BLD-04** — 无空调住户即使有电也达不到设定温度。RECS 2020 田纳西 93%；人口普查局 LACE 2023 Davidson 县 97.7%，普查区 89.7–100%。 / Homes without AC do not reach the set point even with power. RECS 2020 Tennessee 93%; Census LACE 2023 Davidson 97.7%, tracts 89.7–100%.
 - **BLD-05** — 城市气温的预测因子。 / Predictor of urban air temperature.
 - **BLD-06** — MRLC WCS 不提供全美树冠层，用林地比例代替。 / NLCD tree canopy is not offered by the MRLC WCS; forest share is used instead.
 - **BLD-07** — 只计算逐小时 LST 暴露；无下游依赖。 / Hourly LST exposure only; no downstream dependency.
 - **BLD-08** — 决定停电后室内温度上升的快慢。 / Controls how fast indoor temperature rises after power loss.
-- **BLD-09** — 顶层室内温度可以高于室外。 / Indoor temperature can exceed outdoor in top floors.
+- **BLD-09** — 顶层室内温度可能高于室外。关窗模拟显示夜间高出 5–7 K，现在固定的 1 K 可能偏低。 / Indoor temperature can exceed outdoor in top floors. Closed-window simulations suggest night lifts of 5–7 K; the fixed 1 K is likely low.
 - **BLD-10** — 只有把研究区扩展到全县时才需要。 / Needed only if the AOI is extended to the whole county.
 - **BLD-11** — 早晨地势高处偏暖（逆温）；午后 / 傍晚反之。 / Morning: higher ground warmer (inversion); afternoon / evening: cooler.
 - **BLD-12** — 有电且有空调时的室内温度。 / Indoor temperature of a powered home with AC.
@@ -338,7 +329,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | PWR-15 | Hot-spot fragility median and dispersion<br>热点温度易损性中位数与离散度 | `theta_50;sigma` | degC; K | station; static | ✅ in_model | `twin_couplings` · fallback: Placeholder anchored on C57.91 guidance | Fit to failure records (M-17) | Eq.7;M-17 | K3 | 1 |
 | PWR-16 | Overload tolerance<br>过载容忍度 | `alpha` | fraction | station; static | ✅ in_model | `twin_couplings` | Protection settings / emergency ratings | Eq.8 | D1 | 2 |
 | PWR-17 | Energised state<br>带电状态 | `e_s(t)` | 0/1 | station; hourly | ✅ derived | — | - | Eq.9;Eq.11 | K5 | 1 |
-| PWR-18 | Repair duration after failure<br>失效后修复时长 | `R_h` | h | station; per event | ✅ in_model | `twin_couplings` · fallback: Fixed Tri(4; 8; 24) h | NES restoration records (M-16) | Eq.10;M-16 | K5 | 1 |
+| PWR-18 | Repair duration after failure<br>失效后修复时长 | `R_h` | h | station; per event | ✅ in_model | `twin_couplings` · fallback: Tri(1, 3, 12) h [eaglei2023 via scripts/eaglei_restoration.py] | NES restoration records (M-16) | Eq.10;M-16 | K5 | 1 |
 | PWR-19 | Insulation aging acceleration factor<br>绝缘老化加速系数 | `F_AA(t)` | ratio | station; hourly | ⬜ planned | — | IEEE C57.91 (M-14) | M-14 | - | 3 |
 | PWR-20 | Feeder / service territory polygons<br>馈线 / 供电区域多边形 | `z(s)` | polygon | feeder; static | 🔒 restricted | fallback: Voronoi of serving stations (R-P3) | NES feeder GIS | R-P3;R-P4 | K5 | 1 |
 | PWR-21 | Distribution (service) transformers<br>配电（用户）变压器 | `n_dt` | count; kVA | zone; static | 🔒 restricted | fallback: One per c residential buildings (placeholder c = 8) | NES asset GIS | M-15 | D8 | 2 |
@@ -352,16 +343,16 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | PWR-29 | Thermal generation derate<br>火电出力降额 | `Delta_P_g(t)` | MW | plant; daily | ✅ derived | `cumberland_thermal` | M-18 | M-18;R-P0 | D2 | 3 |
 | PWR-30 | Repair crews and depots<br>抢修队数量与驻点 | `N_crew` | count; point | utility; static | ⬜ placeholder | fallback: Unlimited crews (implicit in Eq.10) | NES operations data | M-16 | D7 | 2 |
 | PWR-31 | 311 electric requests<br>311 电力类报修 | `Y_311_e` | request | address point; event | ✅ ingested | `hub311_2023` | NES outage reports (after 2024-11 311 no longer takes them) | M-43 | - | 3 |
-| PWR-32 | Available share of TVA summer capacity<br>TVA 夏季容量的可用比例 | `a` | fraction | balancing authority; static | ✅ in_model | `twin_couplings` · fallback: Tri(0.82, 0.88, 0.93) (placeholder) | TVA forced and planned outage data | M-18 | K4 | 1 |
-| PWR-33 | Net import capability at peak<br>峰值时的净进口能力 | `P_imp` | MW | balancing authority; static | ✅ in_model | `twin_couplings` · fallback: Tri(0, 1500, 3000) MW (placeholder) | EIA-930 interchange; TVA | M-18 | K4 | 2 |
+| PWR-32 | Available share of TVA summer capacity<br>TVA 夏季容量的可用比例 | `a` | fraction | balancing authority; static | ✅ in_model | `twin_couplings` · fallback: Tri(0.83, 0.90, 0.95) [nerc_sra 2022–2026 SERC-Central; tva10k] | TVA unit outage data (GADS) | M-18 | K4 | 1 |
+| PWR-33 | Net import capability at peak<br>峰值时的净进口能力 | `P_imp` | MW | balancing authority; static | ✅ in_model | `twin_couplings` · fallback: Tri(1000, 4000, 6900) MW [eia930 observed 2016–2025; nerc_itcs2024] | TVA / NERC transfer studies | M-18 | K4 | 2 |
 | PWR-34 | Rotating-outage share from a system shortfall<br>系统缺口造成的轮流停电比例 | `s(t)` | fraction | balancing authority; hourly | ✅ derived | `cumberland_thermal` | TVA energy emergency records | M-18 | K4 | 1 |
 
 备注 Notes:
 
 - **PWR-01** — 研究区外扩 4 km 范围内共 78 座变电站。 / 78 stations within AOI + 4 km.
 - **PWR-02** — 开关状态未知（A-P6）。 / Switch states unknown (A-P6).
-- **PWR-03** — 与 C-P3 并列为最大不确定性来源。 / Top source of uncertainty with C-P3.
-- **PWR-04** — v0 只用相对负荷。 / Only relative loads matter in v0.
+- **PWR-03** — 与 C-P3 并列为最大不确定性来源。没有公开清单。仅有旁证：NES 一份采购标书（RFB Z4523，2026 年 9 月，第三方网站所见，未核实）为 69/13.8 kV、24/32/40 MVA；推断每台 20–45 MVA、每站 1–4 台。 / Top source of uncertainty with C-P3. No public inventory. Proxy only: an NES bid (RFB Z4523, Sept 2026, seen on a third-party site, unverified) for a 69/13.8 kV 24/32/40 MVA unit; inferred 20–45 MVA, 1–4 per substation.
+- **PWR-04** — v0 只用相对负荷。公开量级：NES 2024 年夏季峰值 2,539 MW [eia861]，FY2025 有 195 座配电变电站 [nes_fiscalfacts]，平均每站同时峰值约 13 MW（10–17 MW）。 / Only relative loads in v0. Public scale: NES summer peak 2,539 MW in 2024 [eia861] over 195 distribution substations in FY2025 [nes_fiscalfacts] gives a mean coincident peak of ~13 MW (10–17 MW).
 - **PWR-05** — 用月度售电斜率代替逐时斜率（A-P4）。 / Monthly-sales slope applied hourly (A-P4).
 - **PWR-07** — 用于系统供电裕度（M-18）。夏季峰值 28,764–32,126 MW。 / Used for the system supply margin (M-18). Summer peaks 28,764–32,126 MW.
 - **PWR-08** — 现有斜率的数据来源。 / Source of the current slope.
@@ -369,6 +360,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 - **PWR-10** — 合成电网：可做敏感性分析，不能当作真实 NES / TVA 电网。 / Synthetic: usable for sensitivity, never as the real NES / TVA network.
 - **PWR-11** — 取自 IEEE C57.91 的 ONAN 典型值。 / Typical ONAN values from IEEE C57.91.
 - **PWR-15** — 纯占位；敏感性排名第一。 / Pure placeholder; top sensitivity.
+- **PWR-18** — 用户停电时长（含倒闸转供），不是设备修复时长。见 twin/evidence/eaglei_restoration.json。 / Customer outage time (includes switching), not equipment repair time. See twin/evidence/eaglei_restoration.json.
 - **PWR-19** — 应力指标；累计寿命损失。 / Stress indicator; cumulative loss of life.
 - **PWR-20** — 电网图中第二大不确定性。 / Second largest uncertainty in the power graph.
 - **PWR-21** — 高温停电常发生在配电层；v0 没有这一层。 / Heat outages are often distribution-level; v0 has none.
@@ -386,14 +378,14 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | Id | 变量 Variable | 符号 Symbol | 单位 Units | 分辨率 Resolution | 状态 Status | 来源 / 占位 Source / fallback | 目标来源 Target | 用于 Used in | 骨架 Core | 优先级 Priority |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
 | WAT-01 | Water works / towers / covered reservoirs / wastewater plants<br>水厂 / 水塔 / 有盖水库 / 污水厂 | `k` | point / polygon | facility; snapshot | ✅ in_model | `osm_water` | Metro Water asset list | R-W1;R-W2;R-P4 | K6 | 1 |
-| WAT-02 | Treatment plant capacity<br>水厂处理能力 | `Q_k` | MGD | plant; static | ⬜ placeholder | fallback: Equal capacity; total = demand (implicit in Eq.13) | Metro Water / EPA SDWIS | M-20;M-21 | D8 | 1 |
+| WAT-02 | Treatment plant capacity<br>水厂处理能力 | `Q_k` | MGD | plant; static | 🟡 public | fallback: Equal capacity; total = demand (implicit in Eq.13) | Metro Water / EPA SDWIS | M-20;M-21 | D8 | 1 |
 | WAT-03 | Pump / lift stations (location and capacity)<br>泵站 / 提升泵站（位置与能力） | `j;Q_j` | point; MGD | station; static | 🔒 restricted | fallback: Not modelled | Metro Water assets (OSM pumping_station is partial) | R-W4;M-21 | D8 | 1 |
-| WAT-04 | Storage volume<br>储水容量 | `S_max` | MG or hours of demand | tank; static | ⬜ placeholder | fallback: Hours of supply Tri(6; 12; 24) (C-W3) | Metro Water | Eq.13;M-20 | K6 | 1 |
+| WAT-04 | Storage volume<br>储水容量 | `S_max` | MG or hours of demand | tank; static | 🟡 public | fallback: Hours of supply Tri(6; 12; 24) (C-W3) | Metro Water | Eq.13;M-20 | K6 | 1 |
 | WAT-05 | Pressure zones<br>压力分区 | `pz` | polygon | zone; static | 🔒 restricted | fallback: One system-wide zone (R-W1 redundant) | Metro Water | R-W1;R-W4 | D8 | 1 |
 | WAT-06 | Pipe network (EPANET)<br>供水管网（EPANET） | `G_w` | nodes; pipes | network; static | 🟡 on_drive | fallback: No hydraulics | Real: Metro Water model (restricted); synthetic: DiTEC large.inp on Drive | R-W1 (tier 2s);M-22 | D8 | 2 |
 | WAT-07 | Water demand<br>用水需求 | `D(t)` | MGD | system or zone; hourly | ⬜ placeholder | fallback: Production = demand when powered (implicit) | Metro Water SCADA / billing | M-19;M-20;M-22 | D8 | 1 |
 | WAT-08 | Water demand–temperature slope and threshold<br>用水需求–气温斜率与阈值 | `beta_w;T_w0` | fraction per K; degC | system; static | ⬜ placeholder | fallback: Tri(0.005, 0.01, 0.02) per K above 25 degC (placeholder) | Fit on Metro Water daily production (House-Peters & Chang 2011) | M-19 | D8 | 2 |
-| WAT-09 | Plant backup power failure on demand<br>水厂备用电源失效概率 | `p_bf_w` | probability | plant; per outage episode | ✅ in_model | `twin_couplings` | Metro Water generator tests | Eq.11;Eq.13 | K6 | 2 |
+| WAT-09 | Plant backup power failure on demand<br>水厂备用电源失效概率 | `p_bf_w` | probability | plant; per outage episode | ✅ in_model | `twin_couplings` · fallback: Tri(0.02, 0.05, 0.15) [metrowater2024; marqusee2020] | Metro Water generator tests | Eq.11;Eq.13 | K6 | 2 |
 | WAT-10 | Storage state<br>储水状态 | `S(t)` | h or MG | system; hourly | ✅ derived | — | - | Eq.13;M-20 | K6 | 1 |
 | WAT-11 | Water service lost<br>供水中断状态 | `w_out(t)` | 0/1 | system; hourly | ✅ derived | — | - | Eq.11;Eq.13 | K6;K7 | 1 |
 | WAT-12 | Node pressure<br>节点压力 | `p_n(t)` | m | node; hourly | ⬜ planned | — | WNTR on WAT-06 | M-22 | D8 | 2 |
@@ -409,9 +401,11 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 备注 Notes:
 
 - **WAT-01** — A-W1：所有 OSM water_works 都视为供水来源。 / A-W1: every OSM water_works treated as production.
-- **WAT-02** — cascading-heat 配置文件里有产能数字，但标注「待核实」。 / cascading-heat config lists capacities marked 'to verify'.
+- **WAT-02** — Omohundro 90 MGD（4 台 2.5 MW 发电机），K.R. Harrington 90 MGD（4 台 1,750 kW 发电机，备用电源下 72 MGD）[metrowater2024 第 6 页]。骨架未使用。 / Omohundro 90 MGD (four 2.5 MW generators) and K.R. Harrington 90 MGD (four 1,750 kW generators, 72 MGD on backup) [metrowater2024 p. 6]. Not used by the core.
 - **WAT-03** — 在 cascading-heat 模拟中，泵站是「电 → 水」的主要耦合点。 / Pumps are the main power → water link in the cascading-heat simulation.
+- **WAT-04** — 51.7 MG（统计表）或 98.3 MG（正文）[metrowater2024 第 6–7 页]，两者不一致。在 C-W3 中换算为 9–22 小时用水量。 / 51.7 MG (Facts in Brief) or 98.3 MG (narrative) [metrowater2024 pp. 6–7]; the two figures disagree. Converted to 9–22 h of demand in C-W3.
 - **WAT-06** — DiTEC 管网为合成数据（坐标无量纲，没有泵）。 / DiTEC network is synthetic (dimensionless coordinates; no pumps).
+- **WAT-07** — FY2024 日均 109.5 MGD，最大日 137.8 MGD [metrowater2024 第 6 页]；仍缺逐小时曲线。 / FY2024 average 109.5 MGD, maximum day 137.8 MGD [metrowater2024 p. 6]; hourly profile still needed.
 - **WAT-13** — 2014–2025 年日均流量；夏季最低 4,420–8,550 cfs。 / Daily discharge 2014–2025; summer minima 4,420–8,550 cfs.
 - **WAT-14** — 161 个干流采样（排除 Clay 县坝下冷水）拟合 Mohseni 模型：RMSE 2.4 °C，R² 0.86。 / 161 main-stem samples (Clay County tailwater excluded) fit the Mohseni model: RMSE 2.4 °C, R² 0.86.
 - **WAT-15** — cascading-heat 的探索分析得到每升温 1 °C 下降 0.26 mg/L。 / −0.26 mg/L per degC in the cascading-heat EDA.
@@ -427,7 +421,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | TRN-04 | Pavement roughness / condition<br>路面平整度 / 状况 | `IRI_i` | m/km | segment; annual | 🔒 restricted | — | TDOT statewide data (collaborator copy) | M-17;V4 | D3 | 2 |
 | TRN-05 | Pavement heat-distress probability<br>路面高温病害概率 | `p_i` | probability | segment; season | ✅ derived | — | - | Eq.15 | D3 | 1 |
 | TRN-06 | Traffic signals<br>交通信号灯 | `g` | point | signal; snapshot | ✅ in_model | `osm_traffic_signals` | Metro signal inventory | R-T1;Eq.11 | K8 | 1 |
-| TRN-07 | Signal battery backup (share without battery; battery hours)<br>信号灯备用电池（无电池比例；电池时长） | `p_nb;h_b` | probability; h | signal; static | ✅ in_model | `twin_couplings` · fallback: Bernoulli without duration (Eq.11) | Metro Public Works UPS inventory | Eq.11;M-27 | K8 | 2 |
+| TRN-07 | Signal battery backup (share without battery; battery hours)<br>信号灯备用电池（无电池比例；电池时长） | `p_nb;h_b` | probability; h | signal; static | ✅ in_model | `twin_couplings` · fallback: Tri(0.75, 0.90, 1.00) without battery [wsmv2025; nysdot2009]; battery hours 2–8 h not modelled | Metro Public Works UPS inventory | Eq.11;M-27 | K8 | 2 |
 | TRN-08 | Signal dark<br>信号灯熄灭 | `dark_g(t)` | 0/1 | signal; hourly | ✅ derived | — | - | Eq.11;Eq.16;M-28 | K8 | 1 |
 | TRN-09 | Bridges and condition<br>桥梁及其状况 | `b;cond_b` | point; rating | bridge; annual | ✅ in_model | `tdot_bridges` | NBI (on Drive via twin_demo) | R-T2 | - | 3 |
 | TRN-10 | Annual average daily traffic<br>年平均日交通量 | `AADT_i` | veh/day | segment; annual 2024 | ✅ in_model | `hpms_2024` · fallback: By road class (placeholder table) | HPMS 2024 Davidson (twin_demo l1_std/ntad) | M-28 | K8 | 2 |
@@ -435,7 +429,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | TRN-12 | Link capacity and lanes<br>路段通行能力与车道数 | `c_i;lanes_i` | veh/h; count | segment; static | ✅ in_model | `hpms_2024` · fallback: By road class: 1,800 veh/h/lane freeway; 900 arterial (placeholder) | HPMS through lanes | M-28 | K8 | 2 |
 | TRN-13 | Free-flow travel time<br>自由流行程时间 | `t0_i` | min | segment; static | ✅ derived | `hpms_2024` · fallback: Length / speed by class | OSM maxspeed / HPMS | M-28;M-29 | K8 | 2 |
 | TRN-14 | BPR volume-delay parameters<br>BPR 流量–延误函数参数 | `a;b` | - | network; static | ✅ in_model | `twin_couplings` · fallback: a = 0.15; b = 4 (BPR 1964) | Local calibration on TMAS speeds | M-28 | K8 | 3 |
-| TRN-15 | Capacity factor of a dark signal<br>信号灯熄灭后的通行能力系数 | `phi_dark` | fraction | intersection; static | ✅ in_model | `twin_couplings` · fallback: Tri(0.4, 0.5, 0.7) (all-way-stop placeholder) | HCM all-way-stop capacity | M-28 | K8 | 2 |
+| TRN-15 | Capacity factor of a dark signal<br>信号灯熄灭后的通行能力系数 | `phi_dark` | fraction | intersection; static | ✅ in_model | `twin_couplings` · fallback: Tri(0.35, 0.50, 0.65) [french1956; kyte1994; alkaisy2023] | HCM all-way-stop capacity | M-28 | K8 | 2 |
 | TRN-16 | Travel time to nearest functional facility<br>到最近可用设施的行程时间 | `tau_f(z;t)` | min | zone; hourly | ✅ derived | `hpms_2024` · fallback: Nearest segment within 300 m (R-A1; not propagated) | M-29 network routing | M-29;M-31;M-35 | K8 | 1 |
 | TRN-17 | Rail lines<br>铁路线 | `r` | line | segment; static | 🟡 on_drive | — | NTAD North American Rail Network (twin_demo) | R-T5;M-26 | - | 3 |
 | TRN-18 | Rail neutral temperature and buckling margin<br>钢轨中和温度与屈曲裕度 | `RNT;dT_crit` | degC | segment; static | ⬜ placeholder | fallback: RNT Tri(32, 35, 38) degC; margin Tri(15, 20, 25) K (placeholder) | Railroad maintenance records | M-26 | - | 3 |
@@ -450,7 +444,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 
 - **TRN-02** — 路面验证中的混杂因素。 / Confounder in the pavement validation.
 - **TRN-04** — 仓库里的副本是空文件。 / The repository copy is an empty file.
-- **TRN-07** — 电池时长（C-T2.h）在计划中。 / Duration (C-T2.h) is planned.
+- **TRN-07** — 电池时长（2–8 小时）尚未建模。已知只有 Lebanon Pike 沿线 36 个信号灯有电池柜（新闻报道）。是骨架中最弱的来源，需向 NDOT 申请 UPS 清单。 / Duration (2–8 h) not modelled yet. Only 36 Lebanon Pike signals are known to have battery cabinets (news reports). Weakest source in the core; request the NDOT UPS inventory.
 - **TRN-09** — 已记录；v0 不传播。 / Recorded; not propagated in v0.
 - **TRN-10** — 匹配到 92% 的州际 / 干道路段、16% 的地方道路。 / Matched to 92% of interstate / arterial edges, 16% of local streets.
 - **TRN-11** — 提供逐小时需求曲线和事件期间的异常。 / Gives hourly demand profiles and event anomalies.
@@ -464,12 +458,12 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
 | HLT-01 | Hospitals (type; emergency services)<br>医院（类型；急诊） | `f_H` | point | facility; snapshot | ✅ in_model | `hospitals` | CMS Provider Data | R-P4;R-W1;Eq.11 | K7;K8 | 1 |
 | HLT-02 | Hospital beds and ED capacity<br>医院床位与急诊容量 | `beds_f;ED_f` | beds; visits/day | facility; annual | 🟡 public | fallback: Equal weight per hospital | CMS Hospital Cost Reports / AHA (restricted) | M-37 | - | 2 |
-| HLT-03 | Hospital backup power failure on demand<br>医院备用电源失效概率 | `p_bf_H` | probability | facility; per outage episode | ✅ in_model | `twin_couplings` | Facility generator test logs | Eq.11;M-31 | K7 | 2 |
+| HLT-03 | Hospital backup power failure on demand<br>医院备用电源失效概率 | `p_bf_H` | probability | facility; per outage episode | ✅ in_model | `twin_couplings` · fallback: Tri(0.01, 0.05, 0.15) [marqusee2020; irvinbarnwell2020; klinger2014] | Facility generator test logs | Eq.11;M-31 | K7 | 2 |
 | HLT-04 | Generator fuel autonomy<br>发电机燃料续航时间 | `h_fuel` | h | facility; static | ⬜ placeholder | fallback: Unlimited (implicit in Eq.11) | Facility emergency plans (CMS rule requires a plan, not a fixed duration) | M-31 | - | 2 |
 | HLT-05 | Dialysis facilities and stations<br>透析中心与透析位 | `f_D;st_f` | point; stations | facility; snapshot | ✅ in_model | `dialysis` | CMS Dialysis Facilities | R-P4;R-W1;Eq.11;M-35 | K7;K8 | 1 |
 | HLT-06 | Dialysis patients per facility<br>每个透析中心的患者数 | `P_f` | patients | facility; annual | 🟡 public | fallback: Stations × 6 (two shifts × three-times-weekly cycle; placeholder) | CMS Dialysis Facility Reports | M-35 | D8 | 2 |
 | HLT-07 | Nursing homes and certified beds<br>养老院与认证床位 | `f_N;beds_N` | point; beds | facility; snapshot | ✅ in_model | `nursing_homes` | CMS Nursing Homes | R-P4;Eq.11;M-32;M-33 | K7 | 1 |
-| HLT-08 | Nursing-home backup power failure<br>养老院备用电源失效概率 | `p_bf_N` | probability | facility; per outage episode | ✅ in_model | `twin_couplings` | Facility surveys | Eq.11;M-31 | K7 | 2 |
+| HLT-08 | Nursing-home backup power failure<br>养老院备用电源失效概率 | `p_bf_N` | probability | facility; per outage episode | ✅ in_model | `twin_couplings` · fallback: Tri(0.10, 0.30, 0.50), defined as cooling not maintained [hhs_oig_nh2026; tn_0720_18] | Facility surveys | Eq.11;M-31 | K7 | 2 |
 | HLT-09 | On-site water storage of a facility<br>设施自备储水时长 | `h_wst` | h | facility; static | ⬜ placeholder | fallback: Zero (dialysis fails with water) | Facility surveys | M-31 | - | 2 |
 | HLT-10 | Cooling centres (location; hours; capacity)<br>避暑中心（位置；开放时间；容量） | `cc;cap_cc` | point; persons | site; seasonal | 🟡 public | — | Metro Nashville Office of Emergency Management / Social Services seasonal list | R-H4;M-38 | D8 | 2 |
 | HLT-11 | EMS calls<br>急救呼叫 | `EMS(t)` | calls | address; event | 🔒 restricted | — | Nashville Fire Department | M-37;M-43 | - | 2 |
@@ -484,7 +478,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | HLT-20 | Facility loss of service<br>设施服务中断 | `y_f(t)` | 0/1 | facility; hourly | ✅ derived | — | - | Eq.11;M-31 | K7;K8 | 1 |
 | HLT-21 | Chronic disease prevalence (CDC PLACES)<br>慢性病患病率（CDC PLACES） | `prev_k` | fraction | tract; annual | 🟡 public | — | CDC PLACES | M-40 | - | 3 |
 | HLT-22 | Indoor air temperature<br>室内气温 | `T_in(t)` | degC | zone × building class; hourly | ✅ derived | — | M-32 | M-32;M-33 | K9 | 1 |
-| HLT-23 | Indoor heat threshold<br>室内高温阈值 | `T_in_thr` | degC | group; static | ✅ in_model | `twin_couplings` · fallback: Tri(26, 28, 32) degC (placeholder) | WHO housing and health guidance / literature | M-33 | K9 | 2 |
+| HLT-23 | Indoor heat threshold<br>室内高温阈值 | `T_in_thr` | degC | group; static | ✅ in_model | `twin_couplings` · fallback: Tri(26, 28, 32) degC [meade2024; huizenga2024] | WHO housing and health guidance / literature | M-33 | K9 | 2 |
 | HLT-24 | Indoor equilibrium temperature<br>室内平衡温度 | `T_eq(t)` | degC | zone; hourly | ✅ derived | `air_field_2022` | EnergyPlus archetypes | M-32 | K9 | 2 |
 | HLT-25 | Indoor heat person-hours caused by outages (all; 65+; below poverty)<br>停电造成的室内高温暴露人·小时（全体、65 岁以上、贫困） | `E_out_g` | person-h | study area; per run | ✅ derived | `zcta_population` | ESSENCE heat-related ED visits (validation) | M-33 | K9 | 1 |
 | HLT-26 | Background indoor heat person-hours in homes without AC<br>无空调住户的背景室内高温暴露人·小时 | `E_noAC` | person-h | study area; per run | ✅ derived | `zcta_population` | - | M-33 | K9 | 2 |
@@ -494,8 +488,10 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 - **HLT-01** — 研究区内 6 家。 / 6 inside the AOI.
 - **HLT-05** — 研究区内 5 家。 / 5 inside the AOI.
 - **HLT-07** — 研究区内 4 家。 / 4 inside the AOI.
+- **HLT-08** — 田纳西州规定发电机须覆盖生命支持设备，但不要求覆盖制冷（规章 0720-18-.14）。 / Tennessee requires generators for life-sustaining equipment, not for cooling (rule 0720-18-.14).
 - **HLT-17** — Molinari 等（2017）描述了这一人群。 / Molinari et al. (2017) describe this population.
 - **HLT-22** — 连接停电与健康的核心环节。 / Core link between power outage and health.
+- **HLT-23** — 干球温度阈值；潮湿时体感温度会高几度。 / Dry-bulb threshold; humid heat index is several K higher.
 - **HLT-24** — 本地气温加白天得热温升（夜间 1 K）。 / Local air temperature plus the daytime gain lift (1 K at night).
 - **HLT-25** — 骨架模型的结局指标。 / Core endpoint of the skeleton.
 - **HLT-26** — 与停电无关的对照量；主要取决于空调普及率的占位值。 / Yardstick unrelated to outages; driven by the AC share placeholder.

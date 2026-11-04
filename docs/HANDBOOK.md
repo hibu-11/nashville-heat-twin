@@ -310,22 +310,24 @@ The basis column takes one of four values:
 | C-P3.sigma | fragility dispersion | 5 / 8 / 12 | K | assumption | [shinozuka2000] |
 | C-P4 | tolerance α | 0.15 / 0.35 / 1.45 | — | internal | [motter2002]; thresholds 1.15 / 1.35 / 2.45 from [cascadingheat2026] |
 | C-P5 | supply dependency | 1 | — | literature | [buldyrev2010], [rinaldi2001] |
-| C-P6 | repair duration | 4 / 8 / 24 | h | assumption | — |
-| C-H1 | hospital backup fails on demand | 0.02 / 0.05 / 0.15 | — | assumption | requirement: [cms2016] |
-| C-H2 | nursing-home backup fails | 0.10 / 0.30 / 0.50 | — | assumption | requirement: [cms2016] |
+| C-P6 | repair duration (customer outage time) | 1 / 3 / 12 | h | internal | EAGLE-I Davidson 2015–2025 [eaglei2023], `scripts/eaglei_restoration.py` |
+| C-H1 | hospital backup fails on demand | 0.01 / 0.05 / 0.15 | — | literature | [marqusee2020], [irvinbarnwell2020], [klinger2014]; requirement: [cms2016] |
+| C-H2 | nursing home cannot maintain cooling | 0.10 / 0.30 / 0.50 | — | literature (no measured rate) | [hhs_oig_nh2026], [tn_0720_18]; requirement: [cms2016] |
 | C-H3 | dialysis series dependency | 1 | — | literature | [kelman2015] |
 | C-H4 | outage RR, non-accidental mortality | 1.12 / 1.25 / 1.41 | — | literature (context) | [anderson2012] |
 | C-H5 | heat + blackout amplification | ≥ 2 | — | literature (context) | [stone2023] |
 | C-W1 | redundant production | 1 | — | literature | [rinaldi2001], [klise2017] |
-| C-W2 | plant backup fails | 0.05 / 0.15 / 0.30 | — | assumption | — |
-| C-W3 | storage | 6 / 12 / 24 | h | assumption | — |
+| C-W2 | plant backup fails | 0.02 / 0.05 / 0.15 | — | literature | [metrowater2024], [marqusee2020] |
+| C-W3 | storage | 6 / 12 / 24 | h | internal | storage ÷ demand from [metrowater2024] |
 | C-T1 | pavement fragility median | 60 / 64 / 70 | °C | standard | [aashto_m320], [underwood2017] |
 | C-T1.sigma | pavement dispersion | 3 / 5 / 8 | K | assumption | [shinozuka2000] |
-| C-T2 | signals without battery | 0.50 / 0.75 / 1.00 | — | assumption | — |
+| C-T2 | signals without battery | 0.75 / 0.90 / 1.00 | — | literature (news) | [wsmv2025], [nysdot2009] |
 | C-T3 | signal → road | 1 | — | literature | [rinaldi2001] |
 | C-T4, C-A1 | bridge / access links | 0 (not propagated) | — | — | [ouyang2014] |
 | C-POP1 | zone → population | 1 | — | literature | [stone2023] |
 | C-POP2 | compound-exposure threshold | 30 / 32 / 35 | °C | assumption | context [gasparrini2015] |
+
+Rows C-P6, C-H1, C-H2, C-W2, C-W3 and C-T2 were updated with public data on 2026-11-04 (v0 results on the `full-model-v1` tag used the earlier placeholders). Later couplings (C-P9.*, C-T5, C-B*, C-H10) and every locator are listed in [`CORE_MODEL.md`](CORE_MODEL.md) §4.1 and in the `evidence` column of `twin/couplings.csv`.
 
 **Evidence quotes (from abstracts).**
 - Bartos et al. (2016): "by mid-century (2040–2060), increases in ambient air temperature may reduce average summertime transmission capacity by 1.9%–5.8% … peak per-capita summertime loads may rise by 4.2%–15% on average due to increases in ambient air temperature."

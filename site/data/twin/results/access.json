@@ -1,5 +1,5 @@
 {
- "run_id": "cascade-20261030T210232Z-45a0e28623",
+ "run_id": "cascade-20261104T183107Z-e8e2407fbb",
  "method": "PIPELINE_SPEC M-28 / M-29",
  "cell_m": 250.0,
  "network": {
@@ -159,90 +159,22 @@
    }
   },
   "stress_+0": {
-   "hour_local": 21,
+   "hour_local": 18,
    "hospital": {
-    "pop_mean_min": 3.96,
-    "pop_p90_min": 7.93,
-    "max_min": 10.82,
-    "pop_share_over_15_min": 0.0,
-    "pop_unreachable_share": 0.0,
-    "facilities_available": 6
-   },
-   "dialysis": {
-    "pop_mean_min": 3.72,
-    "pop_p90_min": 6.22,
-    "max_min": 10.11,
-    "pop_share_over_15_min": 0.0,
-    "pop_unreachable_share": 0.0,
-    "facilities_available": 5
-   },
-   "ems": {
-    "pop_mean_min": 2.84,
-    "pop_p90_min": 4.46,
-    "max_min": 7.6,
-    "pop_share_over_8_min": 0.0,
-    "pop_unreachable_share": 0.0,
-    "facilities_available": 7
-   },
-   "hour_local_iso": "2023-08-25T21:00:00-05:00",
-   "roads_degraded_mean": 19.13,
-   "delta_pop_mean_min": {
-    "hospital": 0.0,
-    "dialysis": 0.0,
-    "ems": 0.0
-   }
-  },
-  "stress_+2": {
-   "hour_local": 19,
-   "hospital": {
-    "pop_mean_min": 3.97,
-    "pop_p90_min": 7.95,
-    "max_min": 10.86,
+    "pop_mean_min": 3.98,
+    "pop_p90_min": 7.97,
+    "max_min": 10.92,
     "pop_share_over_15_min": 0.0,
     "pop_unreachable_share": 0.0,
     "facilities_available": 6
    },
    "dialysis": {
     "pop_mean_min": 3.73,
-    "pop_p90_min": 6.23,
-    "max_min": 10.11,
+    "pop_p90_min": 6.24,
+    "max_min": 10.12,
     "pop_share_over_15_min": 0.0,
     "pop_unreachable_share": 0.0,
     "facilities_available": 5
-   },
-   "ems": {
-    "pop_mean_min": 2.84,
-    "pop_p90_min": 4.47,
-    "max_min": 7.6,
-    "pop_share_over_8_min": 0.0,
-    "pop_unreachable_share": 0.0,
-    "facilities_available": 7
-   },
-   "hour_local_iso": "2023-08-25T19:00:00-05:00",
-   "roads_degraded_mean": 92.23,
-   "delta_pop_mean_min": {
-    "hospital": 0.0,
-    "dialysis": 0.0,
-    "ems": 0.0
-   }
-  },
-  "stress_+4": {
-   "hour_local": 19,
-   "hospital": {
-    "pop_mean_min": 3.98,
-    "pop_p90_min": 7.97,
-    "max_min": 10.9,
-    "pop_share_over_15_min": 0.0,
-    "pop_unreachable_share": 0.0,
-    "facilities_available": 6
-   },
-   "dialysis": {
-    "pop_mean_min": null,
-    "pop_p90_min": null,
-    "max_min": null,
-    "pop_share_over_15_min": 1.0,
-    "pop_unreachable_share": 1.0,
-    "facilities_available": 0
    },
    "ems": {
     "pop_mean_min": 2.85,
@@ -252,11 +184,79 @@
     "pop_unreachable_share": 0.0,
     "facilities_available": 7
    },
-   "hour_local_iso": "2023-08-25T19:00:00-05:00",
-   "roads_degraded_mean": 282.48,
+   "hour_local_iso": "2023-08-25T18:00:00-05:00",
+   "roads_degraded_mean": 15.07,
+   "delta_pop_mean_min": {
+    "hospital": 0.0,
+    "dialysis": 0.0,
+    "ems": 0.0
+   }
+  },
+  "stress_+2": {
+   "hour_local": 18,
+   "hospital": {
+    "pop_mean_min": 3.98,
+    "pop_p90_min": 7.98,
+    "max_min": 10.94,
+    "pop_share_over_15_min": 0.0,
+    "pop_unreachable_share": 0.0,
+    "facilities_available": 6
+   },
+   "dialysis": {
+    "pop_mean_min": 3.73,
+    "pop_p90_min": 6.25,
+    "max_min": 10.12,
+    "pop_share_over_15_min": 0.0,
+    "pop_unreachable_share": 0.0,
+    "facilities_available": 5
+   },
+   "ems": {
+    "pop_mean_min": 2.85,
+    "pop_p90_min": 4.48,
+    "max_min": 7.6,
+    "pop_share_over_8_min": 0.0,
+    "pop_unreachable_share": 0.0,
+    "facilities_available": 7
+   },
+   "hour_local_iso": "2023-08-25T18:00:00-05:00",
+   "roads_degraded_mean": 72.98,
+   "delta_pop_mean_min": {
+    "hospital": 0.0,
+    "dialysis": 0.0,
+    "ems": 0.0
+   }
+  },
+  "stress_+4": {
+   "hour_local": 18,
+   "hospital": {
+    "pop_mean_min": 3.99,
+    "pop_p90_min": 7.99,
+    "max_min": 10.97,
+    "pop_share_over_15_min": 0.0,
+    "pop_unreachable_share": 0.0,
+    "facilities_available": 6
+   },
+   "dialysis": {
+    "pop_mean_min": 3.74,
+    "pop_p90_min": 6.26,
+    "max_min": 10.13,
+    "pop_share_over_15_min": 0.0,
+    "pop_unreachable_share": 0.0,
+    "facilities_available": 5
+   },
+   "ems": {
+    "pop_mean_min": 2.86,
+    "pop_p90_min": 4.49,
+    "max_min": 7.61,
+    "pop_share_over_8_min": 0.0,
+    "pop_unreachable_share": 0.0,
+    "facilities_available": 7
+   },
+   "hour_local_iso": "2023-08-25T18:00:00-05:00",
+   "roads_degraded_mean": 197.98,
    "delta_pop_mean_min": {
     "hospital": 0.01,
-    "dialysis": null,
+    "dialysis": 0.01,
     "ems": 0.01
    }
   }

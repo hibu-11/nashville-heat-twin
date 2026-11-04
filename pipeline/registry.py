@@ -50,6 +50,8 @@ def load():
         "rels": read("twin/relations.csv"),
         "couplings": set(read("twin/couplings.csv")["coupling_id"]),
         "basis": dict(zip(read("twin/couplings.csv")["coupling_id"], read("twin/couplings.csv")["basis"])),
+        "cite": dict(zip(read("twin/couplings.csv")["coupling_id"], read("twin/couplings.csv")["citation"])),
+        "placeholder": dict(zip(read("twin/couplings.csv")["coupling_id"], read("twin/couplings.csv")["placeholder"])),
         "datasets": {d["id"] for d in cfg["datasets"]},
         "refs": set(yaml.safe_load((ROOT / "twin/references.yaml").read_text(encoding="utf-8"))),
         # 【中文】规范中定义的方法：以 "#### M-n" 或 "### G-n" 开头的标题 / methods defined as headings
@@ -201,13 +203,16 @@ def md_cell(x) -> str:
 HAVE = {"in_model", "ingested", "derived"}
 
 
-def core_need(x, basis: dict) -> str:
+def core_need(x, basis: dict, ph: dict | None = None) -> str:
     """【中文】骨架模型对该变量的数据需求：已有数据 / 假设值 / 占位 / 可获取 / 需合作。
     What the core still needs for this variable."""
+    ph = ph or {}
     if x["status"] in HAVE:
         cs = [c for c in tokens(x["coupling_id"]) if c in basis]
         if x["kind"] in ("parameter", "attribute") and cs and all(basis[c] == "assumption" for c in cs):
             return "⬜ assumed value 假设值"
+        if x["kind"] in ("parameter", "attribute") and cs and all(ph.get(c) == "yes" for c in cs):
+            return "⬜ literature-informed placeholder 文献推断占位"
         return "✅ have 已有"
     return {"on_drive": "🟡 on Drive 在手", "public": "🟡 public 可公开获取", "restricted": "🔒 needs partner 需合作",
             "placeholder": "⬜ placeholder 占位", "planned": "⬜ planned 计划"}[x["status"]]
@@ -226,7 +231,7 @@ def core_section(R: dict, w) -> None:
     w("English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/core.yaml) (the `core` column). "
       "\"Assumed value\" marks parameters that run in the model with placeholder values and are the first to replace with data. "
       "A variable can serve several links. Deferred (D*) and validation-only (val) variables are in section 3.\n")
-    need = v.apply(lambda x: core_need(x, R["basis"]), axis=1)
+    need = v.apply(lambda x: core_need(x, R["basis"], R["placeholder"]), axis=1)
     tagged = v[v["core"].map(lambda c: any(t.startswith("K") for t in tokens(c)))]
     cnt = need[tagged.index].map(lambda s: s.split(" ")[0]).value_counts()
     w("| 合计 Summary | ✅ have 已有 | ⬜ assumed / placeholder 假设或占位 | 🟡 obtainable 可获取 | 🔒 partner 需合作 |\n| --- | ---: | ---: | ---: | ---: |")
@@ -237,6 +242,10 @@ def core_section(R: dict, w) -> None:
         w("| Id | 变量 Variable | 类型 Kind | 状态 Status | 来源 Source | 骨架需求 Need | 目标来源 Target |\n| --- | --- | --- | --- | --- | --- | --- |")
         for i, x in sub.iterrows():
             src = x["source_dataset"] if tokens(x["source_dataset"]) else (x["fallback"] if tokens(x["fallback"]) else "")
+            # 【中文】参数类变量：显示耦合参数的文献出处 / for coupling parameters, show the cited sources
+            refs = sorted({k for c in tokens(x["coupling_id"]) for k in tokens(R["cite"].get(c, "")) if k != "assumption"})
+            if src == "twin_couplings" and refs:
+                src = "couplings: " + ", ".join(refs)
             w(f"| {x['var_id']} | {md_cell(x['name_en'])}<br>{md_cell(x['name_zh'])} | {x['kind']} | {MARK[x['status']]} {x['status']} | "
               f"{md_cell(src)} | {need[i]} | {md_cell(x['target_source'])} |")
         w("")

@@ -219,11 +219,11 @@ eia860:
 eia930:
   apa: U.S. Energy Information Administration. Hourly Electric Grid Monitor (Form EIA-930), balancing authority TVA.
   year: null
-  verified: Data set; not yet downloaded
+  verified: Six-month BALANCE files 2016–2025 (TVA rows) downloaded and read 2026-11-04
 empower:
   apa: U.S. Department of Health and Human Services, ASPR. HHS emPOWER Map (electricity-dependent Medicare beneficiaries by ZIP code).
   year: null
-  verified: Data set; not yet downloaded
+  verified: Six-month BALANCE files 2016–2025 (TVA rows) downloaded and read 2026-11-04
 flanagan2011:
   apa: Flanagan, B. E., Gregory, E. W., Hallisey, E. J., Heitgerd, J. L., & Lewis, B. (2011). A social vulnerability index for disaster management. Journal of Homeland Security and Emergency Management, 8(1). https://doi.org/10.2202/1547-7355.1792
   doi: 10.2202/1547-7355.1792
@@ -331,3 +331,120 @@ wols2014:
   doi: 10.2166/aqua.2013.088
   year: 2014
   verified: Crossref metadata checked 2026-10-30
+# --- Added 2026-11-04 (data search for the core skeleton). DOIs checked on Crossref; documents without DOI were
+# --- opened at the URL given and the values in twin/couplings.csv were read from the table or page named there.
+alkaisy2023:
+  apa: 'Al-Kaisy, A., & Doruk, D. (2023). Capacity at all-way stop control intersections: Case study. Transportation Research Record, 2677(8), 148-157. https://doi.org/10.1177/03611981231155899'
+  doi: 10.1177/03611981231155899
+  year: 2023
+  verified: Crossref metadata checked 2026-11-04
+census_lace2023:
+  apa: U.S. Census Bureau (2025). Local Air Conditioning Estimates (LACE), 2023 vintage [Experimental data product; county and tract files].
+  url: https://www.census.gov/data/experimental-data-products/lace.html
+  year: 2025
+  verified: County file LACE_23_County.csv and tract file LACE_23_Tract.csv read 2026-11-04. Experimental model-based estimates (AHS responses transferred to ACS).
+eia861:
+  apa: U.S. Energy Information Administration. Form EIA-861 Annual Electric Power Industry Report, detailed data 2015–2024 (Operational_Data, Sales_Ult_Cust, Distribution_Systems).
+  url: https://www.eia.gov/electricity/data/eia861/
+  year: 2025
+  verified: Files f861{2015..2024}.zip read 2026-11-04; NES utility number 13216.
+eia_recs2020:
+  apa: U.S. Energy Information Administration (2023). 2020 Residential Energy Consumption Survey (RECS), state air-conditioning highlights and Table HC7.8 (air conditioning by Census division).
+  url: https://www.eia.gov/consumption/residential/data/2020/
+  year: 2023
+  verified: 'State Air Conditioning.pdf (Tennessee row and RSE table) and HC 7.8.pdf (East South Central) read 2026-11-04'
+french1956:
+  apa: French, A. (1956). Traffic capacity of all-way stop intersections. Highway Research Board Bulletin 112, 23-31.
+  url: https://onlinepubs.trb.org/Onlinepubs/hrbbulletin/112/112-002.pdf
+  year: 1956
+  verified: PDF on TRB site read 2026-11-04 (pp. 22, 27-28, 31). No DOI. Title as printed in the bulletin to be rechecked.
+hhs_oig_nh2026:
+  apa: U.S. Department of Health and Human Services, Office of Inspector General (2026). Most nursing homes throughout the United States do not have adequate or reliable emergency power systems (A-02-23-01022).
+  url: https://oig.hhs.gov/reports/all/2026/most-nursing-homes-throughout-the-united-states-do-not-have-adequate-or-reliable-emergency-power-systems/
+  year: 2026
+  verified: Report page and PDF read 2026-11-04
+hhs_oig_sandy2014:
+  apa: U.S. Department of Health and Human Services, Office of Inspector General (2014). Hospital emergency preparedness and response during Superstorm Sandy (OEI-06-13-00260).
+  url: https://oig.hhs.gov/oei/reports/oei-06-13-00260.pdf
+  year: 2014
+  verified: PDF read 2026-11-04 (p. 13)
+huizenga2024:
+  apa: Huizenga, C., et al. (2024). Defining a maximum safe indoor temperature for U.S. homes. Proceedings of Comfort at the Extremes 2024. eScholarship, University of California.
+  url: https://escholarship.org/content/qt2bt19287/qt2bt19287_noSplash_7859660d81a36b48ccf58e98ed9cc0e7.pdf
+  year: 2024
+  verified: PDF read 2026-11-04 (pp. 3, 7-8, Table 1). No DOI; author list and title to be rechecked against the proceedings.
+irvinbarnwell2020:
+  apa: 'Irvin-Barnwell, E. A., Cruz, M., Maniglier-Poulet, C., Cabrera, J., Rivera Diaz, J., De La Cruz Perez, R., Forrester, C., & Shumate, A. (2020). Evaluating disaster damages and operational status of health-care facilities during the emergency response phase of Hurricane Maria in Puerto Rico. Disaster Medicine and Public Health Preparedness, 14(1), 80-88. https://doi.org/10.1017/dmp.2019.85'
+  doi: 10.1017/dmp.2019.85
+  year: 2020
+  verified: Crossref metadata checked 2026-11-04 (via PMC7064411)
+klinger2014:
+  apa: 'Klinger, C., Landeg, O., & Murray, V. (2014). Power outages, extreme events and health: A systematic review of the literature from 2011-2012. PLoS Currents Disasters. https://doi.org/10.1371/currents.dis.04eb1dc5e73dd1377e05a10e9edde673'
+  doi: 10.1371/currents.dis.04eb1dc5e73dd1377e05a10e9edde673
+  year: 2014
+  verified: Crossref metadata checked 2026-11-04. Japan 2011 hospital generator figure is a secondary citation in this review.
+kyte1994:
+  apa: Kyte, M., et al. (1994). Capacity and level of service at all-way stop-controlled intersections. Transportation Research Record 1457, 110-117.
+  url: https://onlinepubs.trb.org/Onlinepubs/trr/1994/1457/1457-013.pdf
+  year: 1994
+  verified: PDF on TRB site read 2026-11-04 (p. 111). No DOI; author list and pages to be rechecked.
+leigh2014:
+  apa: 'Leigh, R., Kleinberg, J., Scheib, C., Kraus, N., & Sheehan, P. (2014). Leaks and lives: How better building envelopes make blackouts less dangerous. ACEEE Summer Study on Energy Efficiency in Buildings, 1-153 to 1-164.'
+  url: https://aceee.org/files/proceedings/2014/data/papers/1-439.pdf
+  year: 2014
+  verified: PDF read 2026-11-04 (Fig. 4). No DOI; author list to be rechecked.
+marqusee2020:
+  apa: 'Marqusee, J., & Jenket, D. (2020). Reliability of emergency and standby diesel generators: Impact on energy resiliency solutions. Applied Energy, 268, 114918. https://doi.org/10.1016/j.apenergy.2020.114918'
+  doi: 10.1016/j.apenergy.2020.114918
+  year: 2020
+  verified: Crossref metadata checked 2026-11-04; values read from the NREL preprint https://www.osti.gov/servlets/purl/1659849 (Tables 2-4)
+meade2024:
+  apa: 'Meade, R. D., Akerman, A. P., Notley, S. R., Kirby, N. V., Sigal, R. J., & Kenny, G. P. (2024). Effects of daylong exposure to indoor overheating on thermal and cardiovascular strain in older adults: A randomized crossover trial. Environmental Health Perspectives, 132(2), 027003. https://doi.org/10.1289/EHP13159'
+  doi: 10.1289/EHP13159
+  year: 2024
+  verified: Crossref metadata checked 2026-11-04
+metrowater2024:
+  apa: Metro Water Services, Metropolitan Government of Nashville and Davidson County (2025). Water and Sewer Revenue Bonds continuing disclosure, fiscal year 2024.
+  url: https://www.nashville.gov/sites/default/files/2025-04/Metro_Water_Services_Disclosure_2024.pdf
+  year: 2025
+  verified: 'PDF read 2026-11-04 (pp. 6-7). The narrative storage (35 + 63.3 MG) and the Facts in Brief table (51.7 MG) disagree.'
+nerc_itcs2024:
+  apa: North American Electric Reliability Corporation (2024). Interregional Transfer Capability Study (ITCS), final report, November 2024.
+  url: https://www.nerc.com/globalassets/initiatives/itcs/itcs_final_report.pdf
+  year: 2024
+  verified: PDF read 2026-11-04 (interface ETI07 'Into SERC Central', report p. 64)
+nerc_sra:
+  apa: North American Electric Reliability Corporation (2022–2026). Summer Reliability Assessment, editions 2022 to 2026 (SERC-Central assessment area).
+  url: https://www.nerc.com/our-work/assessments
+  year: 2026
+  verified: 'PDFs read 2026-11-04: risk-scenario reserve-margin table (2022-23 Table 1, 2024-25 Table 2, 2026 Table 3) and SERC-Central demand and resource tables. SERC-Central is larger than TVA alone.'
+nes_fiscalfacts:
+  apa: Nashville Electric Service. Fiscal Facts, fiscal years 2015–2025 (blocks "The NES System" and "Peak Demand & Consumption").
+  url: https://www.nespower.com/about-us/annual-reports/
+  year: 2025
+  verified: PDFs read 2026-11-04 (FY2019 file is image-only and was not read)
+nysdot2009:
+  apa: New York State Department of Transportation & Rensselaer Polytechnic Institute (2009). Traffic signal operations during power outages (Report C-06-08).
+  url: https://www.dot.ny.gov/divisions/engineering/technical-services/trans-r-and-d-repository/C-06-08_final%20report_August%202009.pdf
+  year: 2009
+  verified: PDF read 2026-11-04 (pp. 19, 23, 25). Title as given here to be rechecked.
+tn_0720_18:
+  apa: Tennessee Health Services and Development Agency / Board for Licensing Health Care Facilities. Tenn. Comp. R. & Regs. 0720-18 (nursing homes), rules .06 and .14.
+  url: https://www.law.cornell.edu/regulations/tennessee/Tenn-Comp-R-Regs-0720-18-.14
+  year: null
+  verified: Rule text read 2026-11-04
+tva10k:
+  apa: Tennessee Valley Authority. Annual Report on Form 10-K, fiscal years 2023 and 2025.
+  url: https://www.sec.gov/Archives/edgar/data/1376986/000137698625000056/tve-20250930.htm
+  year: 2025
+  verified: 'Filings read 2026-11-04 (FY2025 Power Operations Performance Indicator table; FY2023 Winter Storm Elliott, ~7,300 MW unavailable)'
+wijesuriya2024:
+  apa: 'Wijesuriya, S., Kishore, R. A., Bianchi, M. V. A., & Booten, C. (2024). Enhancing thermal resilience of US residential homes in hot humid climates during extreme temperature events. Cell Reports Physical Science, 5(6), 101986. https://doi.org/10.1016/j.xcrp.2024.101986'
+  doi: 10.1016/j.xcrp.2024.101986
+  year: 2024
+  verified: Crossref metadata checked 2026-11-04
+wsmv2025:
+  apa: 'WSMV News (2025, December 12; 2026, January 12). Nashville smart traffic signals on Lebanon Pike (36 intersections) [News reports].'
+  url: https://www.wsmv.com/2025/12/12/nashville-unveils-new-smart-signals-36-intersections-along-lebanon-pike/
+  year: 2025
+  verified: 'News reports, not an official inventory; the two articles give 2-3 h and up to 8 h of battery backup. Second article: https://www.wsmv.com/2026/01/12/one-nashvilles-busiest-corridors-has-new-smart-traffic-signals-aimed-easing-your-commute/'

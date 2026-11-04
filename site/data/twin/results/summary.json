@@ -1,9 +1,9 @@
 {
- "run_id": "cascade-20261030T210232Z-45a0e28623",
- "created": "2026-10-30T21:02:32+00:00",
- "code_version": "git:5764716-dirty",
- "inputs_build_run_id": "20261030T205752Z-acb2617f",
- "couplings_sha256": "45a0e28623",
+ "run_id": "cascade-20261104T183107Z-e8e2407fbb",
+ "created": "2026-11-04T18:31:07+00:00",
+ "code_version": "git:d73a39d-dirty",
+ "inputs_build_run_id": "20261104T182412Z-20960c7c",
+ "couplings_sha256": "e8e2407fbb",
  "seed": 20261027,
  "runs": 2000,
  "mid_runs": 500,
@@ -59,64 +59,64 @@
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 9.0,
-   "mean": 2.18
+   "95": 6.0,
+   "mean": 1.67
   },
   "overload": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 22.0,
-   "mean": 6.33
+   "95": 12.0,
+   "mean": 5.18
   },
   "deenergised_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 290.15,
-   "mean": 78.93
+   "95": 99.25,
+   "mean": 30.23
   },
   "pop_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 1370879.9,
-   "mean": 386255.19
+   "95": 381649.3,
+   "mean": 142118.41
   },
   "compound_pop_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 397932.05,
-   "mean": 79584.65
+   "95": 194275.4,
+   "mean": 48136.11
   },
   "compound_elderly_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 35957.5,
-   "mean": 7323.82
+   "95": 17726.55,
+   "mean": 4443.82
   },
   "compound_poverty_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 67512.75,
-   "mean": 12947.23
+   "95": 32020.6,
+   "mean": 7880.69
   },
   "dialysis_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 80.0,
-   "mean": 23.87
+   "95": 21.05,
+   "mean": 8.93
   },
   "hospital_hours": {
    "5": 0.0,
@@ -124,7 +124,7 @@
    "50": 0.0,
    "75": 0.0,
    "95": 0.0,
-   "mean": 2.77
+   "mean": 0.74
   },
   "water_out_hours": {
    "5": 0.0,
@@ -140,7 +140,7 @@
    "50": 0.0,
    "75": 0.0,
    "95": 26.0,
-   "mean": 2.91
+   "mean": 2.85
   },
   "shed_station_hours": {
    "5": 0.0,
@@ -155,8 +155,8 @@
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 2.7,
-   "mean": 0.39
+   "95": 2.46,
+   "mean": 0.41
   }
  },
  "scenarios": {
@@ -166,64 +166,64 @@
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 9.0,
-    "mean": 2.18
+    "95": 6.0,
+    "mean": 1.67
    },
    "overload": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 22.0,
-    "mean": 6.33
+    "95": 12.0,
+    "mean": 5.18
    },
    "deenergised_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 290.15,
-    "mean": 78.93
+    "95": 99.25,
+    "mean": 30.23
    },
    "pop_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 1370879.9,
-    "mean": 386255.19
+    "95": 381649.3,
+    "mean": 142118.41
    },
    "compound_pop_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 397932.05,
-    "mean": 79584.65
+    "95": 194275.4,
+    "mean": 48136.11
    },
    "compound_elderly_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 35957.5,
-    "mean": 7323.82
+    "95": 17726.55,
+    "mean": 4443.82
    },
    "compound_poverty_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 67512.75,
-    "mean": 12947.23
+    "95": 32020.6,
+    "mean": 7880.69
    },
    "dialysis_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 80.0,
-    "mean": 23.87
+    "95": 21.05,
+    "mean": 8.93
    },
    "hospital_hours": {
     "5": 0.0,
@@ -231,7 +231,7 @@
     "50": 0.0,
     "75": 0.0,
     "95": 0.0,
-    "mean": 2.77
+    "mean": 0.74
    },
    "water_out_hours": {
     "5": 0.0,
@@ -247,7 +247,7 @@
     "50": 0.0,
     "75": 0.0,
     "95": 26.0,
-    "mean": 2.91
+    "mean": 2.85
    },
    "shed_station_hours": {
     "5": 0.0,
@@ -262,10 +262,10 @@
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 2.7,
-    "mean": 0.39
+    "95": 2.46,
+    "mean": 0.41
    },
-   "share_runs_with_any_failure": 0.149,
+   "share_runs_with_any_failure": 0.15,
    "river": {
     "runs_with_shed": 0.0,
     "shed_hours_mean": 0.0,
@@ -280,72 +280,72 @@
     "25": 0.0,
     "50": 0.0,
     "75": 4.0,
-    "95": 97.05,
-    "mean": 16.31
+    "95": 85.0,
+    "mean": 14.19
    },
    "overload": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 15.0,
-    "95": 285.0,
-    "mean": 52.39
+    "75": 8.0,
+    "95": 214.05,
+    "mean": 49.65
    },
    "deenergised_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 182.0,
-    "95": 3660.65,
-    "mean": 662.24
+    "75": 42.0,
+    "95": 1319.4,
+    "mean": 277.05
    },
    "pop_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 794936.25,
-    "95": 17558069.25,
-    "mean": 3167926.2
+    "75": 221261.0,
+    "95": 6473521.5,
+    "mean": 1350403.51
    },
    "compound_pop_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 324356.5,
-    "95": 5254911.05,
-    "mean": 854245.76
+    "75": 157091.0,
+    "95": 3157989.6,
+    "mean": 507454.52
    },
    "compound_elderly_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 29675.75,
-    "95": 486321.7,
-    "mean": 78469.32
+    "75": 14298.5,
+    "95": 293528.05,
+    "mean": 46645.79
    },
    "compound_poverty_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 57850.75,
-    "95": 835138.6,
-    "mean": 137001.38
+    "75": 25852.5,
+    "95": 518035.45,
+    "mean": 81061.35
    },
    "dialysis_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 44.0,
-    "95": 1021.25,
-    "mean": 197.68
+    "75": 12.0,
+    "95": 363.05,
+    "mean": 88.0
    },
    "hospital_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 96.0,
-    "mean": 20.34
+    "95": 21.0,
+    "mean": 9.1
    },
    "water_out_hours": {
     "5": 0.0,
@@ -359,30 +359,30 @@
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 22.0,
-    "95": 67.0,
-    "mean": 13.24
+    "75": 16.0,
+    "95": 62.0,
+    "mean": 11.62
    },
    "shed_station_hours": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
     "75": 0.0,
-    "95": 1.0,
-    "mean": 0.26
+    "95": 0.0,
+    "mean": 0.0
    },
    "amplification": {
     "5": 0.0,
     "25": 0.0,
     "50": 0.0,
-    "75": 1.93,
-    "95": 7.0,
-    "mean": 2.18
+    "75": 1.4,
+    "95": 5.4,
+    "mean": 1.2
    },
-   "share_runs_with_any_failure": 0.404,
+   "share_runs_with_any_failure": 0.374,
    "river": {
-    "runs_with_shed": 0.087,
-    "shed_hours_mean": 0.41,
+    "runs_with_shed": 0.0,
+    "shed_hours_mean": 0.0,
     "derate_mw_max_mean": 192.4,
     "derate_hours_mean": 4.42
    },
@@ -392,74 +392,74 @@
    "thermal": {
     "5": 0.0,
     "25": 0.0,
-    "50": 9.0,
-    "75": 62.0,
-    "95": 445.05,
-    "mean": 75.88
+    "50": 4.5,
+    "75": 51.25,
+    "95": 411.0,
+    "mean": 74.53
    },
    "overload": {
     "5": 0.0,
-    "25": 2.0,
-    "50": 76.0,
-    "75": 345.0,
-    "95": 1323.3,
-    "mean": 292.13
+    "25": 0.0,
+    "50": 12.0,
+    "75": 201.75,
+    "95": 1553.5,
+    "mean": 264.59
    },
    "deenergised_hours": {
     "5": 0.0,
-    "25": 19.5,
-    "50": 859.0,
-    "75": 3910.75,
-    "95": 15607.8,
-    "mean": 3327.62
+    "25": 0.0,
+    "50": 64.0,
+    "75": 1055.0,
+    "95": 7291.35,
+    "mean": 1334.61
    },
    "pop_hours": {
     "5": 0.0,
-    "25": 55504.5,
-    "50": 3942430.5,
-    "75": 17476630.5,
-    "95": 76358417.4,
-    "mean": 16051682.52
+    "25": 0.0,
+    "50": 309781.0,
+    "75": 4865754.5,
+    "95": 38198570.9,
+    "mean": 6629058.88
    },
    "compound_pop_hours": {
     "5": 0.0,
-    "25": 34959.75,
-    "50": 1972337.0,
-    "75": 7634054.0,
-    "95": 26162007.35,
-    "mean": 5908339.88
+    "25": 0.0,
+    "50": 265404.0,
+    "75": 3027953.5,
+    "95": 15633808.6,
+    "mean": 2973064.29
    },
    "compound_elderly_hours": {
     "5": 0.0,
-    "25": 3300.5,
-    "50": 181343.5,
-    "75": 707724.25,
-    "95": 2399412.2,
-    "mean": 542780.86
+    "25": 0.0,
+    "50": 24409.0,
+    "75": 283532.75,
+    "95": 1428446.7,
+    "mean": 273619.66
    },
    "compound_poverty_hours": {
     "5": 0.0,
-    "25": 6702.75,
-    "50": 319960.5,
-    "75": 1215485.5,
-    "95": 4039417.0,
-    "mean": 929889.24
+    "25": 0.0,
+    "50": 43111.0,
+    "75": 475493.75,
+    "95": 2456277.65,
+    "mean": 470774.33
    },
    "dialysis_hours": {
     "5": 0.0,
-    "25": 1.0,
-    "50": 224.5,
-    "75": 1035.25,
-    "95": 5029.1,
-    "mean": 996.28
+    "25": 0.0,
+    "50": 17.0,
+    "75": 287.25,
+    "95": 2638.75,
+    "mean": 419.25
    },
    "hospital_hours": {
     "5": 0.0,
     "25": 0.0,
-    "50": 1.0,
-    "75": 48.0,
-    "95": 442.25,
-    "mean": 90.03
+    "50": 0.0,
+    "75": 12.0,
+    "95": 182.05,
+    "mean": 38.61
    },
    "water_out_hours": {
     "5": 0.0,
@@ -467,36 +467,36 @@
     "50": 0.0,
     "75": 0.0,
     "95": 0.0,
-    "mean": 0.01
+    "mean": 0.0
    },
    "max_subs_down": {
     "5": 0.0,
-    "25": 5.0,
-    "50": 40.0,
-    "75": 64.0,
+    "25": 0.0,
+    "50": 21.0,
+    "75": 59.0,
     "95": 77.0,
-    "mean": 38.35
+    "mean": 28.7
    },
    "shed_station_hours": {
     "5": 0.0,
     "25": 0.0,
-    "50": 1.0,
-    "75": 13.0,
-    "95": 74.05,
-    "mean": 14.28
+    "50": 0.0,
+    "75": 0.0,
+    "95": 0.0,
+    "mean": 0.18
    },
    "amplification": {
     "5": 0.0,
-    "25": 1.0,
-    "50": 2.87,
-    "75": 7.45,
-    "95": 131.14,
-    "mean": 28.96
+    "25": 0.0,
+    "50": 1.46,
+    "75": 3.36,
+    "95": 11.94,
+    "mean": 4.35
    },
-   "share_runs_with_any_failure": 0.794,
+   "share_runs_with_any_failure": 0.659,
    "river": {
-    "runs_with_shed": 0.6065,
-    "shed_hours_mean": 10.3,
+    "runs_with_shed": 0.0415,
+    "shed_hours_mean": 0.23,
     "derate_mw_max_mean": 192.4,
     "derate_hours_mean": 4.42
    },
@@ -607,64 +607,64 @@
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 9.0,
-   "mean": 2.07
+   "95": 6.0,
+   "mean": 1.75
   },
   "overload": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 19.0,
-   "mean": 5.64
+   "95": 12.0,
+   "mean": 5.3
   },
   "deenergised_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 222.3,
-   "mean": 70.31
+   "95": 80.2,
+   "mean": 30.38
   },
   "pop_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 990311.95,
-   "mean": 346690.56
+   "95": 328443.7,
+   "mean": 147730.44
   },
   "compound_pop_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 296832.55,
-   "mean": 72979.05
+   "95": 190115.5,
+   "mean": 46564.37
   },
   "compound_elderly_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 27535.3,
-   "mean": 6785.99
+   "95": 17362.8,
+   "mean": 4333.95
   },
   "compound_poverty_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 49245.95,
-   "mean": 11685.01
+   "95": 30328.6,
+   "mean": 7426.86
   },
   "dialysis_hours": {
    "5": 0.0,
    "25": 0.0,
    "50": 0.0,
    "75": 0.0,
-   "95": 56.05,
-   "mean": 21.84
+   "95": 21.0,
+   "mean": 9.57
   },
   "hospital_hours": {
    "5": 0.0,
@@ -672,7 +672,7 @@
    "50": 0.0,
    "75": 0.0,
    "95": 0.0,
-   "mean": 2.02
+   "mean": 0.5
   },
   "water_out_hours": {
    "5": 0.0,
@@ -688,7 +688,7 @@
    "50": 0.0,
    "75": 0.0,
    "95": 22.0,
-   "mean": 2.66
+   "mean": 2.54
   },
   "shed_station_hours": {
    "5": 0.0,
@@ -701,16 +701,16 @@
  },
  "validation": {
   "power_all_hours": {
-   "rho": 0.019,
-   "lo": -0.095,
-   "hi": 0.133,
+   "rho": -0.04,
+   "lo": -0.145,
+   "hi": 0.075,
    "n": 2208,
    "n_days": 92
   },
   "power_non_storm_hours": {
-   "rho": 0.015,
-   "lo": -0.092,
-   "hi": 0.124,
+   "rho": -0.046,
+   "lo": -0.153,
+   "hi": 0.053,
    "n": 1994,
    "n_days": 92
   },
@@ -780,9 +780,9 @@
    }
   ],
   "daily_max_model_vs_observed": {
-   "rho": 0.02,
-   "lo": -0.168,
-   "hi": 0.249,
+   "rho": 0.1,
+   "lo": -0.109,
+   "hi": 0.324,
    "n": 92,
    "n_days": 92
   },
@@ -889,37 +889,37 @@
    "param": "C-P1.Kd",
    "name": "K_design",
    "basis": "assumption",
-   "pop_hours": 0.413,
-   "compound_pop_hours": 0.416,
-   "thermal_failures": 0.428,
-   "overload_failures": 0.385
+   "pop_hours": 0.426,
+   "compound_pop_hours": 0.427,
+   "thermal_failures": 0.449,
+   "overload_failures": 0.4
   },
   {
    "param": "C-P3.sigma",
    "name": "sigma",
    "basis": "assumption",
-   "pop_hours": 0.286,
-   "compound_pop_hours": 0.282,
-   "thermal_failures": 0.299,
-   "overload_failures": 0.241
+   "pop_hours": 0.29,
+   "compound_pop_hours": 0.287,
+   "thermal_failures": 0.312,
+   "overload_failures": 0.259
   },
   {
    "param": "C-P3",
    "name": "theta_50",
    "basis": "assumption",
-   "pop_hours": -0.252,
-   "compound_pop_hours": -0.251,
-   "thermal_failures": -0.269,
-   "overload_failures": -0.227
+   "pop_hours": -0.221,
+   "compound_pop_hours": -0.221,
+   "thermal_failures": -0.223,
+   "overload_failures": -0.205
   },
   {
    "param": "C-P2.dTOR",
    "name": "dTheta_TO_R",
    "basis": "standard",
-   "pop_hours": 0.114,
-   "compound_pop_hours": 0.114,
+   "pop_hours": 0.12,
+   "compound_pop_hours": 0.12,
    "thermal_failures": 0.121,
-   "overload_failures": 0.108
+   "overload_failures": 0.116
   },
   {
    "param": "C-P2.dHR",
@@ -927,170 +927,170 @@
    "basis": "standard",
    "pop_hours": 0.107,
    "compound_pop_hours": 0.108,
-   "thermal_failures": 0.092,
-   "overload_failures": 0.093
+   "thermal_failures": 0.095,
+   "overload_failures": 0.105
   },
   {
    "param": "C-P1.Td",
    "name": "T_design",
    "basis": "assumption",
-   "pop_hours": -0.064,
-   "compound_pop_hours": -0.062,
-   "thermal_failures": -0.065,
-   "overload_failures": -0.067
-  },
-  {
-   "param": "C-H2",
-   "name": "p_backup_fail",
-   "basis": "assumption",
-   "pop_hours": -0.056,
-   "compound_pop_hours": -0.055,
-   "thermal_failures": -0.05,
-   "overload_failures": -0.039
+   "pop_hours": -0.059,
+   "compound_pop_hours": -0.059,
+   "thermal_failures": -0.046,
+   "overload_failures": -0.053
   },
   {
    "param": "C-P2.tau",
    "name": "tau_TO",
    "basis": "standard",
-   "pop_hours": -0.053,
-   "compound_pop_hours": -0.052,
-   "thermal_failures": -0.058,
-   "overload_failures": -0.051
+   "pop_hours": -0.05,
+   "compound_pop_hours": -0.048,
+   "thermal_failures": -0.064,
+   "overload_failures": -0.039
   },
   {
    "param": "C-P6",
    "name": "repair_hours",
-   "basis": "assumption",
-   "pop_hours": 0.049,
-   "compound_pop_hours": 0.045,
-   "thermal_failures": 0.046,
-   "overload_failures": 0.032
-  },
-  {
-   "param": "C-T2",
-   "name": "p_no_battery",
-   "basis": "assumption",
-   "pop_hours": -0.037,
-   "compound_pop_hours": -0.035,
-   "thermal_failures": -0.037,
-   "overload_failures": -0.028
-  },
-  {
-   "param": "C-P9.avail",
-   "name": "a",
-   "basis": "assumption",
-   "pop_hours": 0.025,
-   "compound_pop_hours": 0.022,
-   "thermal_failures": 0.033,
-   "overload_failures": 0.031
-  },
-  {
-   "param": "C-P9.imp",
-   "name": "P_imp",
-   "basis": "assumption",
-   "pop_hours": -0.022,
-   "compound_pop_hours": -0.022,
-   "thermal_failures": -0.023,
-   "overload_failures": -0.01
-  },
-  {
-   "param": "C-W3",
-   "name": "storage_hours",
-   "basis": "assumption",
-   "pop_hours": 0.019,
-   "compound_pop_hours": 0.021,
-   "thermal_failures": 0.016,
-   "overload_failures": 0.026
-  },
-  {
-   "param": "C-P4",
-   "name": "alpha",
    "basis": "internal",
-   "pop_hours": 0.016,
-   "compound_pop_hours": 0.016,
-   "thermal_failures": 0.029,
-   "overload_failures": -0.006
+   "pop_hours": 0.044,
+   "compound_pop_hours": 0.04,
+   "thermal_failures": 0.025,
+   "overload_failures": 0.021
   },
   {
    "param": "C-POP2",
    "name": "T_heat",
    "basis": "assumption",
-   "pop_hours": 0.016,
-   "compound_pop_hours": 0.009,
-   "thermal_failures": 0.029,
-   "overload_failures": 0.028
+   "pop_hours": 0.037,
+   "compound_pop_hours": 0.033,
+   "thermal_failures": 0.033,
+   "overload_failures": 0.029
   },
   {
-   "param": "C-P9.flow",
-   "name": "f_low",
-   "basis": "assumption",
-   "pop_hours": -0.015,
-   "compound_pop_hours": -0.013,
-   "thermal_failures": -0.01,
-   "overload_failures": -0.014
+   "param": "C-P9.imp",
+   "name": "P_imp",
+   "basis": "literature",
+   "pop_hours": -0.037,
+   "compound_pop_hours": -0.038,
+   "thermal_failures": -0.051,
+   "overload_failures": -0.044
   },
   {
-   "param": "C-W2",
+   "param": "C-H2",
    "name": "p_backup_fail",
-   "basis": "assumption",
-   "pop_hours": 0.013,
-   "compound_pop_hours": 0.01,
-   "thermal_failures": 0.008,
-   "overload_failures": 0.021
+   "basis": "literature",
+   "pop_hours": -0.034,
+   "compound_pop_hours": -0.034,
+   "thermal_failures": -0.039,
+   "overload_failures": -0.038
   },
   {
    "param": "C-P2.R",
    "name": "R",
    "basis": "standard",
-   "pop_hours": -0.011,
-   "compound_pop_hours": -0.012,
-   "thermal_failures": -0.013,
-   "overload_failures": -0.019
+   "pop_hours": -0.029,
+   "compound_pop_hours": -0.028,
+   "thermal_failures": -0.033,
+   "overload_failures": -0.026
   },
   {
-   "param": "C-P9.Qmin",
-   "name": "Q_min",
+   "param": "C-P9.avail",
+   "name": "a",
+   "basis": "literature",
+   "pop_hours": 0.025,
+   "compound_pop_hours": 0.024,
+   "thermal_failures": 0.033,
+   "overload_failures": 0.03
+  },
+  {
+   "param": "C-T2",
+   "name": "p_no_battery",
+   "basis": "literature",
+   "pop_hours": -0.02,
+   "compound_pop_hours": -0.017,
+   "thermal_failures": -0.023,
+   "overload_failures": -0.034
+  },
+  {
+   "param": "C-P9.flow",
+   "name": "f_low",
    "basis": "assumption",
-   "pop_hours": -0.011,
-   "compound_pop_hours": -0.012,
-   "thermal_failures": -0.013,
-   "overload_failures": 0.005
+   "pop_hours": -0.014,
+   "compound_pop_hours": -0.013,
+   "thermal_failures": -0.006,
+   "overload_failures": -0.023
   },
   {
-   "param": "C-P9",
-   "name": "T_lim",
-   "basis": "assumption",
-   "pop_hours": 0.008,
-   "compound_pop_hours": 0.01,
-   "thermal_failures": 0.015,
-   "overload_failures": -0.007
-  },
-  {
-   "param": "C-H1",
-   "name": "p_backup_fail",
-   "basis": "assumption",
-   "pop_hours": 0.005,
-   "compound_pop_hours": 0.005,
-   "thermal_failures": 0.017,
-   "overload_failures": -0.005
-  },
-  {
-   "param": "C-P1",
-   "name": "beta",
+   "param": "C-W3",
+   "name": "storage_hours",
    "basis": "internal",
-   "pop_hours": -0.001,
-   "compound_pop_hours": -0.0,
-   "thermal_failures": -0.003,
-   "overload_failures": 0.014
+   "pop_hours": 0.012,
+   "compound_pop_hours": 0.014,
+   "thermal_failures": 0.001,
+   "overload_failures": 0.017
   },
   {
    "param": "C-P9.span",
    "name": "span",
    "basis": "assumption",
-   "pop_hours": -0.001,
-   "compound_pop_hours": 0.0,
+   "pop_hours": -0.01,
+   "compound_pop_hours": -0.009,
+   "thermal_failures": -0.001,
+   "overload_failures": -0.001
+  },
+  {
+   "param": "C-P9.Qmin",
+   "name": "Q_min",
+   "basis": "assumption",
+   "pop_hours": -0.009,
+   "compound_pop_hours": -0.009,
+   "thermal_failures": -0.006,
+   "overload_failures": -0.006
+  },
+  {
+   "param": "C-H1",
+   "name": "p_backup_fail",
+   "basis": "literature",
+   "pop_hours": 0.006,
+   "compound_pop_hours": 0.005,
+   "thermal_failures": 0.011,
+   "overload_failures": 0.001
+  },
+  {
+   "param": "C-P1",
+   "name": "beta",
+   "basis": "internal",
+   "pop_hours": 0.002,
+   "compound_pop_hours": 0.003,
+   "thermal_failures": -0.001,
+   "overload_failures": -0.002
+  },
+  {
+   "param": "C-W2",
+   "name": "p_backup_fail",
+   "basis": "literature",
+   "pop_hours": -0.002,
+   "compound_pop_hours": -0.004,
    "thermal_failures": -0.003,
-   "overload_failures": -0.009
+   "overload_failures": 0.01
+  },
+  {
+   "param": "C-P4",
+   "name": "alpha",
+   "basis": "internal",
+   "pop_hours": 0.0,
+   "compound_pop_hours": -0.002,
+   "thermal_failures": 0.006,
+   "overload_failures": -0.004
+  },
+  {
+   "param": "C-P9",
+   "name": "T_lim",
+   "basis": "assumption",
+   "pop_hours": 0.0,
+   "compound_pop_hours": 0.0,
+   "thermal_failures": 0.009,
+   "overload_failures": 0.013
   }
  ],
  "substations_top": [
@@ -1099,135 +1099,135 @@
    "name": "Green Hills Substation",
    "type": "distribution",
    "kv_max": 69.0,
-   "expected_down_hours": 5.858,
+   "expected_down_hours": 2.278,
    "mean_hourly_p_thermal_peak": 0.003,
-   "theta_h_peak_c": 104.755
+   "theta_h_peak_c": 104.701
   },
   {
    "asset_id": "osm_substations:w107096287",
    "name": "Battlefield Substation",
    "type": "distribution",
    "kv_max": 69.0,
-   "expected_down_hours": 5.765,
-   "mean_hourly_p_thermal_peak": 0.003,
-   "theta_h_peak_c": 104.493
-  },
-  {
-   "asset_id": "osm_substations:w1489149494",
-   "name": "Harding Pike Substation",
-   "type": "minor_distribution",
-   "kv_max": 23.9,
-   "expected_down_hours": 5.74,
-   "mean_hourly_p_thermal_peak": 0.001,
-   "theta_h_peak_c": 103.477
+   "expected_down_hours": 2.231,
+   "mean_hourly_p_thermal_peak": 0.002,
+   "theta_h_peak_c": 104.468
   },
   {
    "asset_id": "osm_substations:w208020441",
    "name": "Edgehill Substation",
    "type": "distribution",
    "kv_max": 69.0,
-   "expected_down_hours": 5.73,
+   "expected_down_hours": 2.23,
    "mean_hourly_p_thermal_peak": 0.002,
-   "theta_h_peak_c": 102.907
+   "theta_h_peak_c": 102.877
   },
   {
-   "asset_id": "osm_substations:w1088464206",
-   "name": "w1088464206",
+   "asset_id": "osm_substations:w1489149494",
+   "name": "Harding Pike Substation",
    "type": "minor_distribution",
    "kv_max": 23.9,
-   "expected_down_hours": 5.684,
-   "mean_hourly_p_thermal_peak": 0.002,
-   "theta_h_peak_c": 105.356
-  },
-  {
-   "asset_id": "osm_substations:w207878703",
-   "name": "w207878703",
-   "type": "distribution",
-   "kv_max": 69.0,
-   "expected_down_hours": 5.638,
+   "expected_down_hours": 2.204,
    "mean_hourly_p_thermal_peak": 0.001,
-   "theta_h_peak_c": 98.172
-  },
-  {
-   "asset_id": "osm_substations:w1489136127",
-   "name": "w1489136127",
-   "type": "minor_distribution",
-   "kv_max": 23.9,
-   "expected_down_hours": 5.627,
-   "mean_hourly_p_thermal_peak": 0.0,
-   "theta_h_peak_c": 100.79
+   "theta_h_peak_c": 103.477
   },
   {
    "asset_id": "osm_substations:w207706768",
    "name": "Peabody Substation",
    "type": "distribution",
    "kv_max": 69.0,
-   "expected_down_hours": 5.624,
-   "mean_hourly_p_thermal_peak": 0.003,
-   "theta_h_peak_c": 105.968
-  },
-  {
-   "asset_id": "osm_substations:w207869586",
-   "name": "w207869586",
-   "type": "distribution",
-   "kv_max": 69.0,
-   "expected_down_hours": 5.614,
-   "mean_hourly_p_thermal_peak": 0.003,
-   "theta_h_peak_c": 103.852
-  },
-  {
-   "asset_id": "osm_substations:w1489136194",
-   "name": "w1489136194",
-   "type": "minor_distribution",
-   "kv_max": 23.9,
-   "expected_down_hours": 5.584,
-   "mean_hourly_p_thermal_peak": 0.001,
-   "theta_h_peak_c": 102.698
-  },
-  {
-   "asset_id": "osm_substations:w1462175334",
-   "name": "11th Avenue Substation",
-   "type": null,
-   "kv_max": 69.0,
-   "expected_down_hours": 5.562,
+   "expected_down_hours": 2.193,
    "mean_hourly_p_thermal_peak": 0.002,
-   "theta_h_peak_c": 106.206
+   "theta_h_peak_c": 105.945
   },
   {
    "asset_id": "osm_substations:w205255845",
    "name": "Sharondale Substation",
    "type": "distribution",
    "kv_max": 69.0,
-   "expected_down_hours": 5.56,
+   "expected_down_hours": 2.166,
    "mean_hourly_p_thermal_peak": 0.002,
-   "theta_h_peak_c": 103.396
+   "theta_h_peak_c": 103.36
   },
   {
-   "asset_id": "osm_substations:w208608301",
-   "name": "w208608301",
+   "asset_id": "osm_substations:w207878703",
+   "name": "w207878703",
+   "type": "distribution",
+   "kv_max": 69.0,
+   "expected_down_hours": 2.159,
+   "mean_hourly_p_thermal_peak": 0.001,
+   "theta_h_peak_c": 98.114
+  },
+  {
+   "asset_id": "osm_substations:w1489136127",
+   "name": "w1489136127",
    "type": "minor_distribution",
    "kv_max": 23.9,
-   "expected_down_hours": 5.525,
+   "expected_down_hours": 2.157,
+   "mean_hourly_p_thermal_peak": 0.0,
+   "theta_h_peak_c": 100.79
+  },
+  {
+   "asset_id": "osm_substations:w207869586",
+   "name": "w207869586",
+   "type": "distribution",
+   "kv_max": 69.0,
+   "expected_down_hours": 2.157,
+   "mean_hourly_p_thermal_peak": 0.002,
+   "theta_h_peak_c": 103.819
+  },
+  {
+   "asset_id": "osm_substations:w1462175334",
+   "name": "11th Avenue Substation",
+   "type": null,
+   "kv_max": 69.0,
+   "expected_down_hours": 2.15,
+   "mean_hourly_p_thermal_peak": 0.002,
+   "theta_h_peak_c": 106.202
+  },
+  {
+   "asset_id": "osm_substations:w1489136194",
+   "name": "w1489136194",
+   "type": "minor_distribution",
+   "kv_max": 23.9,
+   "expected_down_hours": 2.129,
    "mean_hourly_p_thermal_peak": 0.001,
-   "theta_h_peak_c": 101.853
+   "theta_h_peak_c": 102.698
+  },
+  {
+   "asset_id": "osm_substations:w1088464206",
+   "name": "w1088464206",
+   "type": "minor_distribution",
+   "kv_max": 23.9,
+   "expected_down_hours": 2.127,
+   "mean_hourly_p_thermal_peak": 0.002,
+   "theta_h_peak_c": 105.356
   },
   {
    "asset_id": "osm_substations:w1489137267",
    "name": "w1489137267",
    "type": "industrial",
    "kv_max": 69.0,
-   "expected_down_hours": 5.524,
+   "expected_down_hours": 2.119,
    "mean_hourly_p_thermal_peak": 0.002,
-   "theta_h_peak_c": 103.597
+   "theta_h_peak_c": 103.58
   },
   {
    "asset_id": "osm_substations:w1489136079",
    "name": "w1489136079",
    "type": "minor_distribution",
    "kv_max": 23.9,
-   "expected_down_hours": 5.494,
+   "expected_down_hours": 2.11,
    "mean_hourly_p_thermal_peak": 0.001,
    "theta_h_peak_c": 101.885
+  },
+  {
+   "asset_id": "osm_substations:w208608301",
+   "name": "w208608301",
+   "type": "minor_distribution",
+   "kv_max": 23.9,
+   "expected_down_hours": 2.099,
+   "mean_hourly_p_thermal_peak": 0.001,
+   "theta_h_peak_c": 101.853
   }
  ],
  "pavement": {

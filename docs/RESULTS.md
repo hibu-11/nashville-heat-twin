@@ -1,6 +1,6 @@
 # Results — heat-cascade model v0
 
-Generated from cascade run `cascade-20261030T210232Z-45a0e28623` (build `20261030T205752Z-acb2617f`, code `git:5764716-dirty`, seed 20261027, 2,000 Monte Carlo runs per scenario plus 500 runs at mid parameters). Period 2023-06-01 – 2023-08-31, 2,208 hours. Methods: [HANDBOOK.md](HANDBOOK.md).
+Generated from cascade run `cascade-20261104T183107Z-e8e2407fbb` (build `20261104T182412Z-20960c7c`, code `git:d73a39d-dirty`, seed 20261027, 2,000 Monte Carlo runs per scenario plus 500 runs at mid parameters). Period 2023-06-01 – 2023-08-31, 2,208 hours. Methods: [HANDBOOK.md](HANDBOOK.md).
 
 > These are preliminary results from a model with placeholder links and parameters (HANDBOOK §3.4). They show how the coupled system responds under stated assumptions; they are not estimates of actual outages.
 
@@ -26,9 +26,9 @@ Mean over runs, with the 95th percentile in brackets. Scenarios add a uniform of
 
 | Scenario | Peak air temp. | Runs with any failure | Thermal failures | Overload trips | Trips per thermal failure | Person-hours without power | Compound heat–outage person-hours | Dialysis facility-hours down |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2023 observed | 36.7 °C | 14.9% | 2.2 [9] | 6.3 [22] | 0.39 | 386,255 [1,370,880] | 79,585 [397,932] | 23.9 |
-| +2 °C | 38.7 °C | 40.4% | 16.3 [97] | 52.4 [285] | 2.18 | 3,167,926 [17,558,069] | 854,246 [5,254,911] | 197.7 |
-| +4 °C | 40.7 °C | 79.4% | 75.9 [445] | 292.1 [1,323] | 28.96 | 16,051,683 [76,358,417] | 5,908,340 [26,162,007] | 996.3 |
+| 2023 observed | 36.7 °C | 15.0% | 1.7 [6] | 5.2 [12] | 0.41 | 142,118 [381,649] | 48,136 [194,275] | 8.9 |
+| +2 °C | 38.7 °C | 37.4% | 14.2 [85] | 49.6 [214] | 1.20 | 1,350,404 [6,473,522] | 507,455 [3,157,990] | 88.0 |
+| +4 °C | 40.7 °C | 65.9% | 74.5 [411] | 264.6 [1,554] | 4.35 | 6,629,059 [38,198,571] | 2,973,064 [15,633,809] | 419.2 |
 
 With every parameter at its mid value (observed 2023), the mean is 0.00 thermal failures and 0 person-hours without power. Most of the risk in the full Monte Carlo therefore comes from the tails of the parameter ranges, not from the Bernoulli draws.
 
@@ -38,39 +38,39 @@ Spearman ρ between each sampled parameter and the season totals of a run. Sorte
 
 | Parameter | Name | Basis | ρ person-hours | ρ compound person-hours | ρ thermal failures | ρ overload trips |
 | --- | --- | --- | --- | --- | --- | --- |
-| `C-P1.Kd` | K_design | assumption | 0.41 | 0.42 | 0.43 | 0.39 |
-| `C-P3.sigma` | sigma | assumption | 0.29 | 0.28 | 0.30 | 0.24 |
-| `C-P3` | theta_50 | assumption | -0.25 | -0.25 | -0.27 | -0.23 |
-| `C-P2.dTOR` | dTheta_TO_R | standard | 0.11 | 0.11 | 0.12 | 0.11 |
-| `C-P2.dHR` | dTheta_H_R | standard | 0.11 | 0.11 | 0.09 | 0.09 |
-| `C-P1.Td` | T_design | assumption | -0.06 | -0.06 | -0.07 | -0.07 |
-| `C-H2` | p_backup_fail | assumption | -0.06 | -0.06 | -0.05 | -0.04 |
-| `C-P2.tau` | tau_TO | standard | -0.05 | -0.05 | -0.06 | -0.05 |
-| `C-P6` | repair_hours | assumption | 0.05 | 0.04 | 0.05 | 0.03 |
-| `C-T2` | p_no_battery | assumption | -0.04 | -0.04 | -0.04 | -0.03 |
-| `C-P9.avail` | a | assumption | 0.03 | 0.02 | 0.03 | 0.03 |
-| `C-P9.imp` | P_imp | assumption | -0.02 | -0.02 | -0.02 | -0.01 |
-| `C-W3` | storage_hours | assumption | 0.02 | 0.02 | 0.02 | 0.03 |
-| `C-P4` | alpha | internal | 0.02 | 0.02 | 0.03 | -0.01 |
-| `C-POP2` | T_heat | assumption | 0.02 | 0.01 | 0.03 | 0.03 |
-| `C-P9.flow` | f_low | assumption | -0.01 | -0.01 | -0.01 | -0.01 |
-| `C-W2` | p_backup_fail | assumption | 0.01 | 0.01 | 0.01 | 0.02 |
-| `C-P2.R` | R | standard | -0.01 | -0.01 | -0.01 | -0.02 |
-| `C-P9.Qmin` | Q_min | assumption | -0.01 | -0.01 | -0.01 | 0.01 |
-| `C-P9` | T_lim | assumption | 0.01 | 0.01 | 0.01 | -0.01 |
-| `C-H1` | p_backup_fail | assumption | 0.01 | 0.01 | 0.02 | -0.01 |
-| `C-P1` | beta | internal | -0.00 | -0.00 | -0.00 | 0.01 |
-| `C-P9.span` | span | assumption | -0.00 | 0.00 | -0.00 | -0.01 |
+| `C-P1.Kd` | K_design | assumption | 0.43 | 0.43 | 0.45 | 0.40 |
+| `C-P3.sigma` | sigma | assumption | 0.29 | 0.29 | 0.31 | 0.26 |
+| `C-P3` | theta_50 | assumption | -0.22 | -0.22 | -0.22 | -0.20 |
+| `C-P2.dTOR` | dTheta_TO_R | standard | 0.12 | 0.12 | 0.12 | 0.12 |
+| `C-P2.dHR` | dTheta_H_R | standard | 0.11 | 0.11 | 0.10 | 0.10 |
+| `C-P1.Td` | T_design | assumption | -0.06 | -0.06 | -0.05 | -0.05 |
+| `C-P2.tau` | tau_TO | standard | -0.05 | -0.05 | -0.06 | -0.04 |
+| `C-P6` | repair_hours | internal | 0.04 | 0.04 | 0.03 | 0.02 |
+| `C-POP2` | T_heat | assumption | 0.04 | 0.03 | 0.03 | 0.03 |
+| `C-P9.imp` | P_imp | literature | -0.04 | -0.04 | -0.05 | -0.04 |
+| `C-H2` | p_backup_fail | literature | -0.03 | -0.03 | -0.04 | -0.04 |
+| `C-P2.R` | R | standard | -0.03 | -0.03 | -0.03 | -0.03 |
+| `C-P9.avail` | a | literature | 0.03 | 0.02 | 0.03 | 0.03 |
+| `C-T2` | p_no_battery | literature | -0.02 | -0.02 | -0.02 | -0.03 |
+| `C-P9.flow` | f_low | assumption | -0.01 | -0.01 | -0.01 | -0.02 |
+| `C-W3` | storage_hours | internal | 0.01 | 0.01 | 0.00 | 0.02 |
+| `C-P9.span` | span | assumption | -0.01 | -0.01 | -0.00 | -0.00 |
+| `C-P9.Qmin` | Q_min | assumption | -0.01 | -0.01 | -0.01 | -0.01 |
+| `C-H1` | p_backup_fail | literature | 0.01 | 0.01 | 0.01 | 0.00 |
+| `C-P1` | beta | internal | 0.00 | 0.00 | -0.00 | -0.00 |
+| `C-W2` | p_backup_fail | literature | -0.00 | -0.00 | -0.00 | 0.01 |
+| `C-P4` | alpha | internal | 0.00 | -0.00 | 0.01 | -0.00 |
+| `C-P9` | T_lim | assumption | 0.00 | 0.00 | 0.01 | 0.01 |
 
 ## 4. Validation
 
 | Check | Result |
 | --- | --- |
-| V1 Model vs EAGLE-I, all hours (Spearman ρ, 95% day-block CI) | 0.02 [-0.10, 0.13] (n = 2,208 h, 92 days) |
-| V2 Model vs EAGLE-I, non-storm hours | 0.01 [-0.09, 0.12] (n = 1,994 h, 92 days) |
+| V1 Model vs EAGLE-I, all hours (Spearman ρ, 95% day-block CI) | -0.04 [-0.14, 0.07] (n = 2,208 h, 92 days) |
+| V2 Model vs EAGLE-I, non-storm hours | -0.05 [-0.15, 0.05] (n = 1,994 h, 92 days) |
 | V3 Air temperature vs EAGLE-I, non-storm hours (data only) | 0.19 [0.10, 0.28] (n = 1,994 h, 92 days) |
 | V3 Daily max air temperature vs daily max outages (data only) | 0.22 [0.02, 0.42] (n = 92 days) |
-| Model daily max vs observed daily max | 0.02 [-0.17, 0.25] (n = 92 days) |
+| Model daily max vs observed daily max | 0.10 [-0.11, 0.32] (n = 92 days) |
 | V4 Pavement requests (2023-07-01 – 2023-07-21, 71 of 4,137 segments): AUC of P(T7 > x50) (Eq. 15) | 0.746 |
 | V4 Same, T7 itself / single-day peak LST | 0.746 / 0.744 |
 | V5 Same, segment length only (baseline) | 0.808 |
@@ -94,16 +94,16 @@ Observed customers out (Davidson County, EAGLE-I) on non-storm hours, by air tem
 
 | Substation | Type | Max kV | Expected hours down | Peak mean hot-spot (°C) |
 | --- | --- | --- | --- | --- |
-| Green Hills Substation | distribution | 69.0 | 5.86 | 104.8 |
-| Battlefield Substation | distribution | 69.0 | 5.76 | 104.5 |
-| Harding Pike Substation | minor_distribution | 23.9 | 5.74 | 103.5 |
-| Edgehill Substation | distribution | 69.0 | 5.73 | 102.9 |
-| w1088464206 | minor_distribution | 23.9 | 5.68 | 105.4 |
-| w207878703 | distribution | 69.0 | 5.64 | 98.2 |
-| w1489136127 | minor_distribution | 23.9 | 5.63 | 100.8 |
-| Peabody Substation | distribution | 69.0 | 5.62 | 106.0 |
-| w207869586 | distribution | 69.0 | 5.61 | 103.9 |
-| w1489136194 | minor_distribution | 23.9 | 5.58 | 102.7 |
+| Green Hills Substation | distribution | 69.0 | 2.28 | 104.7 |
+| Battlefield Substation | distribution | 69.0 | 2.23 | 104.5 |
+| Edgehill Substation | distribution | 69.0 | 2.23 | 102.9 |
+| Harding Pike Substation | minor_distribution | 23.9 | 2.20 | 103.5 |
+| Peabody Substation | distribution | 69.0 | 2.19 | 105.9 |
+| Sharondale Substation | distribution | 69.0 | 2.17 | 103.4 |
+| w207878703 | distribution | 69.0 | 2.16 | 98.1 |
+| w1489136127 | minor_distribution | 23.9 | 2.16 | 100.8 |
+| w207869586 | distribution | 69.0 | 2.16 | 103.8 |
+| 11th Avenue Substation | — | 69.0 | 2.15 | 106.2 |
 
 ## 6. Pavement module
 
@@ -125,10 +125,10 @@ Substation temperature offsets relative to BNA: -3.03 to 0.85 °C (mean -0.61); 
 
 | Observed 2023, same random draws | Urban field (M-6) | BNA everywhere (A-D4) |
 | --- | --- | --- |
-| Thermal failures, mean | 2.2 | 2.1 |
-| Overload trips, mean | 6.3 | 5.6 |
-| Person-hours without power, mean | 386,255.2 | 346,690.6 |
-| Compound person-hours, mean | 79,584.6 | 72,979.1 |
+| Thermal failures, mean | 1.7 | 1.8 |
+| Overload trips, mean | 5.2 | 5.3 |
+| Person-hours without power, mean | 142,118.4 | 147,730.4 |
+| Compound person-hours, mean | 48,136.1 | 46,564.4 |
 
 ## 8. River temperature → thermal derating → system supply (M-18)
 
@@ -159,8 +159,8 @@ TVA operable summer capacity 38,472 MW (EIA-860 2022).
 | Scenario | Runs with any system shed | Mean shed hours | Mean peak derate | Mean derate hours |
 | --- | --- | --- | --- | --- |
 | +0 °C | 0.0% | 0.0 | 192 MW | 4.42 |
-| +2 °C | 8.7% | 0.41 | 192 MW | 4.42 |
-| +4 °C | 60.7% | 10.3 | 192 MW | 4.42 |
+| +2 °C | 0.0% | 0.0 | 192 MW | 4.42 |
+| +4 °C | 4.2% | 0.23 | 192 MW | 4.42 |
 
 Shed in the warming scenarios comes from TVA demand rising with the C-P1 load slope against a placeholder supply margin (C-P9.avail, C-P9.imp), not from river derating. Section 10 rejects parameter sets that shed load in an observed summer.
 
@@ -176,9 +176,9 @@ Population-weighted travel time to the nearest available facility (minutes; 90th
 | am_peak | 8 | — | 3.98 [7.97] (6 open) | 3.73 [6.24] (5 open) | 2.85 [4.48] (7 open) | 0.0% |
 | pm_peak | 17 | — | 3.99 [7.99] (6 open) | 3.74 [6.25] (5 open) | 2.86 [4.48] (7 open) | 0.0% |
 | all_signals_dark_pm | 17 | — | 4.14 [8.31] (6 open) | 3.81 [6.42] (5 open) | 2.95 [4.65] (7 open) | 0.0% |
-| stress_+0 | 21 | 19.1 | 3.96 [7.93] (6 open) | 3.72 [6.22] (5 open) | 2.84 [4.46] (7 open) | 0.0% |
-| stress_+2 | 19 | 92.2 | 3.97 [7.95] (6 open) | 3.73 [6.23] (5 open) | 2.84 [4.47] (7 open) | 0.0% |
-| stress_+4 | 19 | 282.5 | 3.98 [7.97] (6 open) | none available | 2.85 [4.48] (7 open) | 0.0% |
+| stress_+0 | 18 | 15.1 | 3.98 [7.97] (6 open) | 3.73 [6.24] (5 open) | 2.85 [4.48] (7 open) | 0.0% |
+| stress_+2 | 18 | 73.0 | 3.98 [7.98] (6 open) | 3.73 [6.25] (5 open) | 2.85 [4.48] (7 open) | 0.0% |
+| stress_+4 | 18 | 198.0 | 3.99 [7.99] (6 open) | 3.74 [6.26] (5 open) | 2.86 [4.49] (7 open) | 0.0% |
 
 Stress conditions use expected capacity, 1 − (1 − φ_dark)·P(signal dark), and drop facilities with P(down) ≥ 0.5. `all_signals_dark_pm` is an upper bound: every signal-controlled link at φ_dark in the evening peak.
 
@@ -245,41 +245,41 @@ By-year Spearman ρ: 2015 -0.04, 2016 0.00, 2017 0.14, 2019 -0.27, 2020 0.04, 20
 
 ## 11. Core skeleton model
 
-Run `core-20261103T183128Z-553fa444cb`: 2,000 Monte Carlo runs per scenario, links K1, K2, K3, K4, K5, K6, K7, K8, K9; deferred D1, D2, D3, D4, D5, D6, D7, D8. Selection and equations: [CORE_MODEL.md](CORE_MODEL.md). Population in zones 115,203 (65+ 10,873, below poverty 19,853).
+Run `core-20261104T184037Z-e8e2407fbb`: 2,000 Monte Carlo runs per scenario, links K1, K2, K3, K4, K5, K6, K7, K8, K9; deferred D1, D2, D3, D5, D6, D7, D8. Selection and equations: [CORE_MODEL.md](CORE_MODEL.md). Population in zones 115,203 (65+ 10,873, below poverty 19,853).
 
 | Output (mean per run) | +0 °C | +2 °C | +4 °C |
 | --- | --- | --- | --- |
-| Runs with any outage | 12.0% | 38.1% | 79.9% |
-| Thermal failures (core) | 1.01 | 9.65 | 57.80 |
-| Thermal failures + overload trips (full) | 8.51 | 68.70 | 368.01 |
-| Person-hours without power (core) | 34,225 | 319,658 | 1,734,384 |
-| Person-hours without power (full) | 386,255 | 3,167,926 | 16,051,683 |
-| Person-hours without AC due to outages | 31,347 | 292,388 | 1,585,081 |
-| Indoor heat person-hours from outages, all | 3,996 | 67,150 | 567,384 |
-| … aged 65+ | 374 | 6,262 | 53,426 |
-| … below poverty | 727 | 12,185 | 101,641 |
-| Background indoor heat person-hours (homes without AC) | 6,744,854 | 13,013,403 | 18,328,991 |
-| Highest indoor temperature in an AC home during an outage (°C) | 32.5 | 36.3 | 40.7 |
-| Dialysis facility-hours lost (core) | 1.0 | 10.1 | 59.8 |
-| Hospital facility-hours lost (core) | 0.05 | 0.81 | 5.54 |
-| Runs with a TVA shortfall | 0.0% | 8.7% | 60.7% |
-| K8 runs with degraded segments | 11.5% | 36.9% | 78.8% |
-| K8 hospital Δ population mean, min (p99) | 0.003 (0.06) | 0.013 (0.15) | 0.046 (0.28) |
-| K8 hospital largest cell increase p95, min | 0.4 | 1.2 | 2.0 |
-| K8 dialysis Δ population mean, min (p99) | 0.029 (1.57) | 0.151 (1.80) | 0.463 (5.28) |
-| K8 runs with no dialysis centre available | 0.0% | 1.1% | 9.3% |
-| K8 EMS Δ population mean, min (p99) | 0.002 (0.04) | 0.007 (0.06) | 0.023 (0.10) |
+| Runs with any outage | 12.0% | 33.5% | 61.2% |
+| Thermal failures (core) | 1.01 | 9.82 | 61.22 |
+| Thermal failures + overload trips (full) | 6.85 | 63.84 | 339.12 |
+| Person-hours without power (core) | 15,475 | 147,468 | 806,100 |
+| Person-hours without power (full) | 142,118 | 1,350,404 | 6,629,059 |
+| Person-hours without AC due to outages | 14,574 | 138,741 | 757,955 |
+| Indoor heat person-hours from outages, all | 1,022 | 14,770 | 135,747 |
+| … aged 65+ | 97 | 1,388 | 12,817 |
+| … below poverty | 180 | 2,703 | 24,511 |
+| Background indoor heat person-hours (homes without AC) | 5,750,791 | 10,000,535 | 13,223,521 |
+| Highest indoor temperature in an AC home during an outage (°C) | 32.7 | 35.6 | 38.7 |
+| Dialysis facility-hours lost (core) | 0.5 | 4.5 | 27.6 |
+| Hospital facility-hours lost (core) | 0.02 | 0.38 | 2.27 |
+| Runs with a TVA shortfall | 0.0% | 0.0% | 4.2% |
+| K8 runs with degraded segments | 11.5% | 33.0% | 60.2% |
+| K8 hospital Δ population mean, min (p99) | 0.004 (0.07) | 0.015 (0.21) | 0.041 (0.30) |
+| K8 hospital largest cell increase p95, min | 0.6 | 1.4 | 2.2 |
+| K8 dialysis Δ population mean, min (p99) | 0.030 (1.58) | 0.136 (1.79) | 0.313 (5.29) |
+| K8 runs with no dialysis centre available | 0.0% | 0.8% | 8.8% |
+| K8 EMS Δ population mean, min (p99) | 0.002 (0.04) | 0.008 (0.08) | 0.021 (0.13) |
 
-Validation: ρ(model, EAGLE-I) all hours 0.05 [-0.06, 0.17] (n = 2,208 h, 92 days); non-storm 0.04 [-0.07, 0.13] (n = 1,994 h, 92 days).
+Validation: ρ(model, EAGLE-I) all hours 0.04 [-0.03, 0.12] (n = 2,208 h, 92 days); non-storm 0.02 [-0.04, 0.08] (n = 1,994 h, 92 days).
 
 | Parameter | Basis | ρ with person-hours without power | ρ with indoor heat person-hours from outages |
 | --- | --- | --- | --- |
-| `C-P1.Kd` K_design | assumption | 0.414 | 0.237 |
-| `C-P3.sigma` sigma | assumption | 0.277 | 0.16 |
-| `C-P3` theta_50 | assumption | -0.213 | -0.109 |
-| `C-P2.dTOR` dTheta_TO_R | standard | 0.11 | 0.034 |
-| `C-P2.dHR` dTheta_H_R | standard | 0.097 | 0.088 |
-| `C-P1.Td` T_design | assumption | -0.061 | -0.035 |
-| `C-P2.tau` tau_TO | standard | -0.042 | -0.034 |
-| `C-P6` repair_hours | assumption | 0.039 | 0.082 |
+| `C-P1.Kd` K_design | assumption | 0.414 | 0.157 |
+| `C-P3.sigma` sigma | assumption | 0.277 | 0.121 |
+| `C-P3` theta_50 | assumption | -0.213 | -0.089 |
+| `C-P2.dTOR` dTheta_TO_R | standard | 0.11 | 0.032 |
+| `C-P2.dHR` dTheta_H_R | standard | 0.097 | 0.029 |
+| `C-P1.Td` T_design | assumption | -0.061 | -0.023 |
+| `C-P2.tau` tau_TO | standard | -0.042 | -0.025 |
+| `C-P6` repair_hours | internal | 0.041 | 0.103 |
 
