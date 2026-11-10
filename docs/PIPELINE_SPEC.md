@@ -754,6 +754,18 @@ E_{st}=\sum_{s}\sum_t B_s(t)\,\frac{H_s(t)}{2}\,\mathbf 1\big[WBGT(x_s,t)\ge W_{
 
 输入 TRN-19 🟡, TRN-20 🔒, CLM-13 · 关系 R-T6
 
+#### M-45 高温车辙与铺装成本 Heat rutting and resurfacing cost
+
+**中文：** 沥青在高温下变软，重轴载反复作用形成永久变形（车辙）。车辙达到触发阈值后需要铣刨加罩面。M-45 分三步：（1）路面温度：先用路段夏季 LST，之后换成 M-10 的 20 mm 路面温度；（2）车辙增长：$`\ln RD_i = \beta_{rut} T_i + \gamma \ln \mathrm{AADT}^{tr}_i + \delta \ln \mathrm{AADT}_i + \alpha_{class} + \varepsilon_i`$，再以年龄为时间尺度换算成每年增长率；（3）成本：情景升温使车辙更早达到阈值 $`RD^*`$，提前的年数乘以单价 $`c_{rs}`$ 并折现，得到每年的额外铺装成本。成本进入经济损失结局（骨架 D9），与停电损失分开报告。
+
+**English:** Asphalt softens at high temperature and repeated heavy axles leave permanent deformation (rutting); once ruts reach a trigger depth the section needs mill-and-overlay. M-45 has three steps: (1) pavement temperature, first the segment summer LST and later the M-10 temperature at 20 mm; (2) rut growth, $`\ln RD_i = \beta_{rut} T_i + \gamma \ln \mathrm{AADT}^{tr}_i + \delta \ln \mathrm{AADT}_i + \alpha_{class} + \varepsilon_i`$, converted to an annual growth rate using pavement age; (3) cost, where scenario warming brings the trigger depth $`RD^*`$ forward and the years gained times the unit cost $`c_{rs}`$, discounted, give the added annual resurfacing cost. The cost feeds the economic-loss endpoint (core D9) and is reported separately from outage cost.
+
+**中文：** 首次检验（`scripts/rutting_lst.py`，HPMS 2024，4,269 个路段）：控制道路等级、AADT 和货车 AADT 后，夏季 LST 每高 1 °C，车辙深约 1.8%（标准误 0.35%）；LST 从 5% 到 95% 分位（37.7 → 47.3 °C）对应车辙深约 18%；R² 0.09。这是单年横截面结果，未控制路面年龄、沥青等级和结构，且路段间空间相关，只说明存在信号。
+
+**English:** First test (`scripts/rutting_lst.py`, HPMS 2024, 4,269 sections): holding road class, AADT and truck AADT fixed, rut depth is about 1.8% deeper per °C of summer LST (SE 0.35%); the 5th to 95th percentile of LST (37.7 → 47.3 °C) corresponds to about 18% deeper ruts; R² 0.09. It is a single-year cross-section without pavement age, binder grade or structure, and sections are spatially correlated, so it shows a signal only.
+
+参数 C-T8 (planned) $`\beta_{rut}`$、C-T9 (planned) $`c_{rs}, RD^*`$（FHWA：好 < 0.20 in，差 > 0.40 in）· 输入 LST-05 ✅, TRN-25 ✅, TRN-26 ✅, TRN-27 ✅, TRN-29 ⬜ · 关系 R-T7 3 级 · 文献 [fhwa_hpms2024]、[fhwa_pm2_2017]、[underwood2017]、[chinowsky2013]
+
 ### 5.6 健康 Health (L5–L6)
 
 #### M-31 医疗设施功能组合 Facility functional composition
@@ -899,6 +911,14 @@ E^{w}=\sum_z HVI_z\,E_z
 ```math
 E^c_g=\sum_t\sum_z\mathrm{pop}_{z,g}\,o_z(t)\,\mathbf 1\big[HI(x_z,t)\ge HI_{thr}\big]
 ```
+
+#### M-46 经济损失 Economic loss
+
+**中文：** 经济损失是健康之外的第二个结局（骨架 D9），由两部分组成，分开报告、不相加：（1）停电损失 $`C_{out}=\sum_z\sum_{k}\sum_{e} n_{z,k}\,\mathrm{VOS}_k(d_e)`$，$`n_{z,k}`$ 为分区 $`z`$ 中类别 $`k`$（住宅、小型工商业、大型工商业）的用户数，$`\mathrm{VOS}_k(d)`$ 为时长 $`d`$ 的一次停电的单位损失（LBNL ICE 计算器，[sullivan2015]），停电事件 $`e`$ 来自每次运行的分区停电序列；（2）健康损失 $`C_{health}=AN\cdot \mathrm{VSL}+\sum_j V_j c_j`$，$`AN`$ 为 M-34 的归因死亡，$`V_j`$、$`c_j`$ 为急诊和住院人次与单位费用。车辙铺装成本（M-45）作为第三项单独列出。
+
+**English:** Economic loss is the second endpoint besides health (core D9), reported as separate parts that are not summed: (1) outage cost $`C_{out}=\sum_z\sum_{k}\sum_{e} n_{z,k}\,\mathrm{VOS}_k(d_e)`$, with $`n_{z,k}`$ customers of class $`k`$ (residential, small and large commercial–industrial) in zone $`z`$ and $`\mathrm{VOS}_k(d)`$ the cost of one interruption of duration $`d`$ (LBNL ICE Calculator, [sullivan2015]), using each run's zone outage events $`e`$; (2) health cost $`C_{health}=AN\cdot \mathrm{VSL}+\sum_j V_j c_j`$ with attributable deaths $`AN`$ from M-34 and ED and inpatient counts $`V_j`$ at unit cost $`c_j`$. Rutting resurfacing cost (M-45) is listed as a third, separate item.
+
+参数 C-E1 (planned) VOS、C-E2 (planned) VSL、C-E3 (planned) 单位医疗费用 · 输入 ECO-01 🔒, ECO-02 🟡, ECO-03 🟡, ECO-04 🟡, POP-07 ✅ · 文献 [sullivan2015]、[usdot_vsl]
 
 ### 5.8 不确定性、敏感性与校准 Uncertainty, sensitivity and calibration (L7)
 

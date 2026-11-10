@@ -1,6 +1,6 @@
 {
- "built_at": "2026-11-04T18:24+00:00",
- "run_id": "20261104T182412Z-20960c7c",
+ "built_at": "2026-11-10T18:58+00:00",
+ "run_id": "20261110T185812Z-a7027d86",
  "sources": [
   {
    "source_id": "s2_rgb",
@@ -503,9 +503,9 @@
    "target_tables": "couplings",
    "file": null,
    "n_files": 1,
-   "retrieved_date": "2026-11-04",
+   "retrieved_date": "2026-11-10",
    "status": "built",
-   "built_at": "2026-11-04T13:23:58",
+   "built_at": "2026-11-10T13:57:58",
    "provider": "compiled for this project; see twin/references.yaml",
    "license": "CC BY 4.0",
    "version": null,

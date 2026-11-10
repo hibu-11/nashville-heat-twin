@@ -53,11 +53,21 @@ def adequacy_shed(river, Ta, th, dT):
     return shed
 
 
-def access_runs(ctx, net, sim, th, hours, tz):
+# 【中文】研究区内某类设施全部不可达时，对受影响人口计的就医时间增量（假设；研究区外的设施不在路网里）
+# Added minutes counted for cells that lose every facility of a type inside the area (assumption: facilities outside
+# the area are not on the network).
+LOST_PENALTY_MIN = 30.0
+
+
+def access_runs(ctx, net, sim, th, hours, tz, off=frozenset()):
     """【中文】K8：每次运行在其降级路段最多的小时，按该次运行实际熄灭的信号灯（通行能力 × φ_dark）和实际停电的
     医院 / 透析中心，计算各人口格到最近可用设施的时间，与同一小时的正常情况相减。从未降级的运行变化为 0。
     K8: per run, at its hour with the most degraded segments, travel time with that run's dark signals and
-    facility outages minus the normal time at the same hour. Runs that never degrade contribute zero."""
+    facility outages minus the normal time at the same hour. Runs that never degrade contribute zero.
+    off: "R14" (or R15 / R16) ignores dark-signal capacity loss; "R17" ignores facility closures.
+    care_time_loss = sum over hospital, dialysis and EMS of the population-mean added minutes, with cells that lose
+    every facility of a type counted at LOST_PENALTY_MIN."""
+    no_phi = bool(off & {"R14", "R15", "R16"})
     edges, pop = ctx["edges"], ctx["pop"]
     ridx = {r: i for i, r in enumerate(net.roads)}
     e_road = np.array([ridx.get(r, -1) for r in edges["road_id"]])
@@ -66,7 +76,7 @@ def access_runs(ctx, net, sim, th, hours, tz):
     N = len(w["hour"])
     keys = list(ctx["dest"])
     m = {k: {"delta": np.zeros(N), "affected_pop": np.zeros(N), "cell_max": np.zeros(N), "over_thr": np.zeros(N),
-             "lost": np.zeros(N, bool)} for k in keys}
+             "lost": np.zeros(N, bool), "pen": np.zeros(N)} for k in keys}
     local = hours.tz_convert(tz).hour
     base = {}
     for r in np.where(w["hour"] >= 0)[0]:
@@ -74,8 +84,10 @@ def access_runs(ctx, net, sim, th, hours, tz):
         if lh not in base:
             base[lh] = access.evaluate(ctx, lh, summary=False)[1]
         phi = np.ones(len(edges))
-        phi[ctl] = np.where(w["roads"][r, e_road[ctl]], th["C-T5"][r], 1.0)
-        down = {i: 1.0 for i, d in zip(net.hosp, w["hosp"][r]) if d} | {i: 1.0 for i, d in zip(net.dial, w["dial"][r]) if d}
+        if not no_phi:
+            phi[ctl] = np.where(w["roads"][r, e_road[ctl]], th["C-T5"][r], 1.0)
+        down = {} if "R17" in off else (
+            {i: 1.0 for i, d in zip(net.hosp, w["hosp"][r]) if d} | {i: 1.0 for i, d in zip(net.dial, w["dial"][r]) if d})
         _, t = access.evaluate(ctx, lh, phi, down, summary=False)
         for k in keys:
             t0, t1 = base[lh][k], t[k]
@@ -84,12 +96,15 @@ def access_runs(ctx, net, sim, th, hours, tz):
             m[k]["lost"][r] = bool((ok & ~np.isfinite(t1)).any())
             d = np.nan_to_num(dt_, nan=0.0)
             m[k]["delta"][r] = float((d * pop).sum() / pop.sum())
+            dp = np.where(ok & ~np.isfinite(t1), LOST_PENALTY_MIN, d)
+            m[k]["pen"][r] = float((dp * pop).sum() / pop.sum())
             m[k]["affected_pop"][r] = float(pop[d > 1.0].sum())
             m[k]["cell_max"][r] = float(d.max())
             thr = ctx["dest"][k]["thr"]
             m[k]["over_thr"][r] = float(pop[(t1 > thr) & ~(t0 > thr)].sum())
     q = lambda a: {p_: round(float(np.percentile(a, p_)), 3) for p_ in (50, 95, 99)} | {"mean": round(float(np.mean(a)), 3), "max": round(float(np.max(a)), 3)}  # noqa: E731
-    out = {"runs_with_degraded_segments": round(float((w["hour"] >= 0).mean()), 4)}
+    out = {"runs_with_degraded_segments": round(float((w["hour"] >= 0).mean()), 4),
+           "care_time_loss_min": q(sum(m[k]["pen"] for k in keys)), "lost_penalty_min": LOST_PENALTY_MIN}
     for k in keys:
         x = m[k]
         out[k] = {"threshold_min": ctx["dest"][k]["thr"], "delta_pop_mean_min": q(x["delta"]),

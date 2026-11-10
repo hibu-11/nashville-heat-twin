@@ -21,6 +21,7 @@ selection_rule:
 
 links:
   - id: K1
+    upstream: []
     name_en: Urban air-temperature field
     name_zh: 城市气温场
     methods: [M-6]
@@ -30,6 +31,7 @@ links:
     evidence_en: Traverse-based air-temperature models resolve intra-urban differences of several kelvin; every later link is driven by local air temperature.
     evidence_zh: 基于走航测温的气温模型能分辨城市内部数开尔文的差异；后面每一环都由本地气温驱动。
   - id: K2
+    upstream: [K1]
     name_en: Air temperature → electric load
     name_zh: 气温 → 用电负荷
     methods: []
@@ -39,6 +41,7 @@ links:
     evidence_en: Peak demand rises with temperature (cooling load); this is the first step of every heat–grid pathway.
     evidence_zh: 峰值负荷随气温上升（制冷负荷），是所有"高温 → 电网"路径的第一步。
   - id: K3
+    upstream: [K1, K2]
     name_en: Load and air temperature → transformer hot spot → thermal failure
     name_zh: 负荷与气温 → 变压器热点温度 → 热失效
     methods: []
@@ -48,6 +51,7 @@ links:
     evidence_en: Heat reduces substation capacity while load rises; the IEEE C57.91 thermal model is the standard way to turn both into insulation stress.
     evidence_zh: 高温降低变电设备容量、同时推高负荷；IEEE C57.91 热模型是把两者转换为绝缘热应力的标准方法。
   - id: K4
+    upstream: [K1, K2]
     name_en: System supply shortfall → rotating outages (demand side)
     name_zh: 系统供需缺口 → 轮流停电（负荷侧）
     methods: [M-18]
@@ -57,6 +61,7 @@ links:
     evidence_en: Rising peak demand erodes reserve margins. Only the demand side is kept; in the full model this produced all TVA shortfalls at +2 and +4 °C.
     evidence_zh: 峰值负荷上升会吃掉备用容量。只保留负荷侧；完整模型中 +2、+4 °C 情景下 TVA 的缺口全部来自负荷侧。
   - id: K5
+    upstream: [K3, K4]
     name_en: Supply dependency along the grid topology; fixed restoration time
     name_zh: 沿电网拓扑的供电依赖；固定修复时长
     methods: []
@@ -66,6 +71,7 @@ links:
     evidence_en: A station without any energised upstream source loses power (functional dependency); this turns station failures into customer outages.
     evidence_zh: 上游电源全部失电的变电站随之失电（功能依赖）；这一步把设备失效变成用户停电。
   - id: K6
+    upstream: [K5]
     name_en: Zone outage → water plants (backup) → storage exhausted → water loss
     name_zh: 分区停电 → 水厂（备用电源）→ 储水耗尽 → 断水
     methods: []
@@ -75,6 +81,7 @@ links:
     evidence_en: Water treatment and pumping depend on electric power; storage gives hours of buffer. This is the water system's main dependency on power.
     evidence_zh: 制水和加压依赖电力，储水提供数小时缓冲；这是供水系统对电力的主要依赖。
   - id: K7
+    upstream: [K5, K6]
     name_en: Zone outage → hospitals and nursing homes (backup power); dialysis (power or water)
     name_zh: 分区停电 → 医院与养老院（备用电源）；透析中心（电或水）
     methods: []
@@ -84,6 +91,7 @@ links:
     evidence_en: Backup power is required but can fail; dialysis interruptions after Hurricane Sandy were associated with excess deaths.
     evidence_zh: 法规要求备用电源但它可能失效；飓风桑迪后透析中断与超额死亡相关。
   - id: K8
+    upstream: [K5, K7]
     name_en: Zone outage → dark traffic signals → link capacity → travel time to hospitals, dialysis and EMS
     name_zh: 分区停电 → 信号灯熄灭 → 路段通行能力下降 → 到医院、透析中心和急救站的行程时间
     methods: [M-28, M-29]
@@ -100,6 +108,7 @@ links:
       通行能力下降（HCM）；透析中心停电时患者必须去另一家（Kelman 等 2015）。按每次运行在其最坏小时的实际状态
       （该次运行熄灭的信号灯和停电的设施）计算，保留尾部情形，而不是像完整模型那样按期望值平均掉。
   - id: K9
+    upstream: [K1, K5]
     name_en: Outage → loss of air conditioning → indoor temperature → indoor heat exposure
     name_zh: 停电 → 失去空调 → 室内温度 → 室内高温暴露
     methods: [M-32, M-33]
@@ -119,12 +128,12 @@ deferred:
     reason_en: >-
       Topological load redistribution can misrepresent power-system vulnerability (Hines et al. 2010); real cascades
       follow power flow (Dobson et al. 2007). In the full model, with an assumed tolerance α, overload trips were
-      2.9 times the thermal failures and made up about 91% of person-hours without power at +0 °C (386k vs 34k in
-      the core). Return as a DC power-flow tier (R-P5 tier 2–3) when ratings are available.
+      3.1 times the thermal failures and made up about 89% of person-hours without power at +0 °C (142k vs 15k in
+      the core; parameters of 2026-11-04). Return as a DC power-flow tier (R-P5 tier 2–3) when ratings are available.
     reason_zh: >-
       纯拓扑的负荷重分配可能误判电网脆弱性（Hines 等 2010）；真实的连锁停电服从潮流（Dobson 等 2007）。
-      完整模型中，在假设的容忍度 α 下，过载跳闸次数是热失效的 2.9 倍，+0 °C 时约 91% 的停电人·小时来自这一机制
-      （完整模型 386k，骨架 34k）。有额定值后以直流潮流（R-P5 2–3 级）的形式加回。
+      完整模型中，在假设的容忍度 α 下，过载跳闸次数是热失效的 3.1 倍，+0 °C 时约 89% 的停电人·小时来自这一机制
+      （完整模型 142k，骨架 15k；2026-11-04 参数）。有额定值后以直流潮流（R-P5 2–3 级）的形式加回。
   - id: D2
     name_en: River temperature → thermal plant derating (supply side of K4)
     name_zh: 河水温度 → 火电降额（K4 的供给侧）
@@ -134,13 +143,23 @@ deferred:
     reason_en: Documented for drought–heat years, but the modelled Cumberland temperature stayed below the derating threshold in 2014–2025 (max 27.3 °C) and derating was identical across scenarios.
     reason_zh: 文献记录了干旱高温年份的降额，但 2014–2025 年模拟的坎伯兰河水温始终低于降额阈值（最高 27.3 °C），各情景降额相同。
   - id: D3
-    name_en: Pavement heat distress
-    name_zh: 路面高温病害
-    relations: ["R-T7:1"]
+    paused: true   # 2026-11-10: economic outcomes paused by the user
+    name_en: Pavement heat → rutting → resurfacing cost
+    name_zh: 路面高温 → 车辙 → 铺装维修成本
+    relations: ["R-T7:1", "R-T7:3"]
     couplings: [C-T1, C-T1.sigma]
-    citations: [underwood2017, chinowsky2013]
-    reason_en: A long-run maintenance-cost pathway rather than an acute cascade; our LST-based score did not beat segment length as a predictor of 311 requests.
-    reason_zh: 属于长期养护成本路径，而不是急性级联；基于 LST 的指标预测 311 报修并不优于路段长度。
+    citations: [underwood2017, chinowsky2013, fhwa_hpms2024, fhwa_pm2_2017]
+    reason_en: >-
+      A long-run economic pathway (annual resurfacing cost), not part of the acute outage cascade, so it feeds the
+      economic endpoint D9. HPMS 2024 shows a signal: rut depth is about 1.8% deeper per °C of summer LST after road
+      class and traffic (4,269 sections, R² 0.09; scripts/rutting_lst.py), but the test is cross-sectional without
+      pavement age or binder grade. Earlier, the LST exceedance score did not beat segment length for 311 requests,
+      which are not a rutting measure. Needs unit costs (C-T9) and a panel of rut surveys before it can be costed.
+    reason_zh: >-
+      属于长期经济路径（每年的铺装成本），不属于急性停电级联，因此接到经济损失结局 D9。HPMS 2024 显示存在信号：
+      控制道路等级和交通量后，夏季 LST 每高 1 °C 车辙深约 1.8%（4,269 个路段，R² 0.09；scripts/rutting_lst.py），
+      但这是横截面检验，没有路面年龄和沥青等级。此前用 311 报修验证时 LST 指标不如路段长度，而 311 并不是车辙的度量。
+      要计算成本还需要单价（C-T9）和多年车辙测量。
   - id: D5
     name_en: Outdoor compound heat–outage threshold
     name_zh: 室外复合暴露阈值
@@ -166,10 +185,58 @@ deferred:
     reason_en: Fixed repair time is kept until NES restoration records are available.
     reason_zh: 在拿到 NES 修复记录之前保留固定修复时长。
   - id: D8
-    name_en: Distribution transformers, line ampacity, water hydraulics, electricity-dependent residents, dialysis relocation, cooling centres
-    name_zh: 配电变压器、线路载流量、供水水力、依赖电力设备的居民、透析转诊、避暑中心
+    name_en: Distribution transformers, line ampacity, water hydraulics and hospital / nursing-home water, electricity-dependent residents, dialysis relocation, cooling centres
+    name_zh: 配电变压器、线路载流量、供水水力及医院 / 养老院用水、依赖电力设备的居民、透析转诊、避暑中心
     relations: ["R-P6:1", "R-P5:2", "R-W1:2s", "R-H6:2", "R-H2:2", "R-H4:1"]
     couplings: []
     citations: [bartos2016, ieee738_2012, klise2017, molinari2017, kelman2015]
-    reason_en: Each refines a core link but needs data we do not hold (NES assets, Metro Water model, emPOWER, patient counts).
-    reason_zh: 每一项都是对某个主线环节的细化，但需要尚未获得的数据（NES 资产、Metro Water 模型、emPOWER、患者数）。
+    reason_en: >-
+      Each refines a core link but needs data we do not hold (NES assets, Metro Water model, emPOWER, patient counts).
+      Hospitals and nursing homes also depend on water (chiller cooling towers, sterilisation, sanitation); the
+      dependency graph links them (R-W1, R-W2) but the core applies water loss to dialysis only, because hospitals have
+      on-site storage and priority supply and no core run lost water.
+    reason_zh: >-
+      每一项都是对某个主线环节的细化，但需要尚未获得的数据（NES 资产、Metro Water 模型、emPOWER、患者数）。
+      医院和养老院同样依赖供水（冷水机组冷却塔、消毒灭菌、卫生）；依赖图中已连接（R-W1、R-W2），但骨架只对透析中心
+      使用断水，因为医院有自备储水和优先供水，而且骨架运行中没有出现断水。
+  - id: D9
+    paused: true   # 2026-11-10: economic outcomes paused by the user
+    name_en: Economic loss (customer interruption costs; monetised health outcomes)
+    name_zh: 经济损失（用户停电损失；健康结局货币化）
+    relations: []
+    couplings: []
+    citations: [sullivan2015, usdot_vsl]
+    reason_en: >-
+      The second endpoint besides health. Outage cost = customer-hours without power by class × value of service
+      reliability (LBNL ICE Calculator, Sullivan et al. 2015); health cost = attributable deaths × VSL plus care costs,
+      which waits for D6. Reported separately, not summed. Needs NES customers by class per zone.
+    reason_zh: >-
+      健康之外的第二个结局。停电损失 = 各类用户停电的用户·小时 × 供电可靠性价值（LBNL ICE 计算器，Sullivan 等 2015）；
+      健康损失 = 归因死亡 × 统计生命价值加医疗费用，需等 D6。两者分开报告，不相加。需要 NES 按分区、用户类别的户数。
+
+# 【中文】待建环节：结构已确定、尚未在模型中模拟（2026-11-10 结构调整，B 线）。
+# Planned links: agreed in the structure, not yet simulated (line B of the 2026-11-10 revision).
+planned:
+  - id: B1
+    name_en: Heat exposure → heat-related illness and care demand → time to care (line B)
+    name_zh: 高温暴露 → 热相关病症与就医需求 → 就医时间（B 线）
+    upstream: [K1, K9]
+    relations: []
+    couplings: []
+    citations: [gasparrini2015, anderson2012, stone2023, lin2011, sun2020]
+    reason_en: >-
+      Line B of the 2026-11-10 structure. Daily heat-illness care demand follows an exposure–response relation above
+      Nashville's minimum-mortality temperature (25.0 °C daily mean, Gasparrini et al. 2015), amplified during outage
+      exposure; demand over the capacity of open facilities adds waiting to travel time, so both lines end in time to
+      care. Public data: yearly heat-illness ED visits for Davidson (Tennessee Department of Health, 141–320 a year in
+      2012–2023) and CMS facility capacity; daily ED counts need a data request.
+      Two further inputs (added 2026-11-10): nursing-home residents exposed when cooling is not kept during an outage
+      (about 2,090 residents a day in 20 homes, CMS), and electricity-dependent residents whose devices stop
+      (4,163 Medicare beneficiaries, HHS emPOWER; respiratory admissions rose in the 2003 New York blackout, Lin et al. 2011).
+    reason_zh: >-
+      2026-11-10 结构中的 B 线。每日热病症就医需求在 Nashville 最低死亡温度（日均 25.0 °C，Gasparrini 等 2015）以上
+      按暴露–反应关系上升，停电暴露时放大；需求超过开放设施的容量时产生等待，加到路程时间上，两条线都落到就医时间。
+      公开数据：Davidson 每年的高温病症急诊人次（田纳西卫生厅，2012–2023 年每年 141–320 人次）和 CMS 设施容量；
+      每日急诊数需要申请。
+      另有两项输入（2026-11-10 补充）：停电期间制冷没有维持的养老院住户（20 家，每天约 2,090 人，CMS），以及医疗设备
+      因停电停止的依赖电力设备居民（4,163 名医保用户，HHS emPOWER；2003 年纽约大停电期间呼吸系统住院增加，Lin 等 2011）。

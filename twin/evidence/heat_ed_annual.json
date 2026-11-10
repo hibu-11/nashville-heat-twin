@@ -1,0 +1,140 @@
+{
+  "source": "Tennessee Department of Health heat-related illness ED visits by county and year (healthdata.tn.gov ayhy-c48z); BNA ASOS hourly air temperature",
+  "method": "May\u2013September heat metrics from BNA daily max / mean (local time, days with \u2265 18 hourly reports); Spearman correlation with annual visits; log-linear fit of Davidson visits on degree-days of daily mean above 25 \u00b0C (Nashville minimum-mortality temperature, Gasparrini et al. 2015).",
+  "caveat": "Ten overlapping years (2014\u20132023); annual totals only; 2020 is low, probably because of COVID-19 care avoidance. Evidence of a signal, not a daily exposure\u2013response curve.",
+  "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "table": [
+    {
+      "year": 2014,
+      "days_ge35": 2,
+      "days_ge33": 20,
+      "degree_days_over25": 110.35,
+      "mean_tmax": 29.56,
+      "davidson": 188.0,
+      "five_county": 364.0
+    },
+    {
+      "year": 2015,
+      "days_ge35": 4,
+      "days_ge33": 29,
+      "degree_days_over25": 145.65,
+      "mean_tmax": 29.91,
+      "davidson": 207.0,
+      "five_county": 458.0
+    },
+    {
+      "year": 2016,
+      "days_ge35": 14,
+      "days_ge33": 50,
+      "degree_days_over25": 213.42,
+      "mean_tmax": 30.65,
+      "davidson": 320.0,
+      "five_county": 652.0
+    },
+    {
+      "year": 2017,
+      "days_ge35": 7,
+      "days_ge33": 21,
+      "degree_days_over25": 116.11,
+      "mean_tmax": 29.33,
+      "davidson": 214.0,
+      "five_county": 437.0
+    },
+    {
+      "year": 2018,
+      "days_ge35": 10,
+      "days_ge33": 48,
+      "degree_days_over25": 216.11,
+      "mean_tmax": 31.14,
+      "davidson": 308.0,
+      "five_county": 561.0
+    },
+    {
+      "year": 2019,
+      "days_ge35": 18,
+      "days_ge33": 48,
+      "degree_days_over25": 209.43,
+      "mean_tmax": 31.25,
+      "davidson": 281.0,
+      "five_county": 587.0
+    },
+    {
+      "year": 2020,
+      "days_ge35": 7,
+      "days_ge33": 31,
+      "degree_days_over25": 156.91,
+      "mean_tmax": 29.56,
+      "davidson": 160.0,
+      "five_county": 347.0
+    },
+    {
+      "year": 2021,
+      "days_ge35": 10,
+      "days_ge33": 30,
+      "degree_days_over25": 144.66,
+      "mean_tmax": 29.35,
+      "davidson": 194.0,
+      "five_county": 389.0
+    },
+    {
+      "year": 2022,
+      "days_ge35": 20,
+      "days_ge33": 47,
+      "degree_days_over25": 229.89,
+      "mean_tmax": 30.96,
+      "davidson": 300.0,
+      "five_county": 613.0
+    },
+    {
+      "year": 2023,
+      "days_ge35": 9,
+      "days_ge33": 21,
+      "degree_days_over25": 133.45,
+      "mean_tmax": 29.8,
+      "davidson": 223.0,
+      "five_county": 435.0
+    }
+  ],
+  "spearman": {
+    "days_ge35": {
+      "davidson_rho": 0.726,
+      "davidson_p": 0.018,
+      "five_county_rho": 0.726,
+      "five_county_p": 0.018
+    },
+    "days_ge33": {
+      "davidson_rho": 0.683,
+      "davidson_p": 0.03,
+      "five_county_rho": 0.701,
+      "five_county_p": 0.024
+    },
+    "degree_days_over25": {
+      "davidson_rho": 0.673,
+      "davidson_p": 0.033,
+      "five_county_rho": 0.709,
+      "five_county_p": 0.022
+    },
+    "mean_tmax": {
+      "davidson_rho": 0.697,
+      "davidson_p": 0.025,
+      "five_county_rho": 0.721,
+      "five_county_p": 0.019
+    }
+  },
+  "log_visits_per_degree_day_over25": {
+    "slope": 0.00441,
+    "se": 0.00107,
+    "n": 10
+  }
+}

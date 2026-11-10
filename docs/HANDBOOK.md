@@ -318,7 +318,7 @@ The basis column takes one of four values:
 | C-H5 | heat + blackout amplification | ≥ 2 | — | literature (context) | [stone2023] |
 | C-W1 | redundant production | 1 | — | literature | [rinaldi2001], [klise2017] |
 | C-W2 | plant backup fails | 0.02 / 0.05 / 0.15 | — | literature | [metrowater2024], [marqusee2020] |
-| C-W3 | storage | 6 / 12 / 24 | h | internal | storage ÷ demand from [metrowater2024] |
+| C-W3 | storage | 5 / 10 / 18 | h | internal | storage ÷ demand from [metrowater2024] (51.7 MG in service; range revised 2026-11-10) |
 | C-T1 | pavement fragility median | 60 / 64 / 70 | °C | standard | [aashto_m320], [underwood2017] |
 | C-T1.sigma | pavement dispersion | 3 / 5 / 8 | K | assumption | [shinozuka2000] |
 | C-T2 | signals without battery | 0.75 / 0.90 / 1.00 | — | literature (news) | [wsmv2025], [nysdot2009] |
@@ -348,6 +348,8 @@ Rows C-P6, C-H1, C-H2, C-W2, C-W3 and C-T2 were updated with public data on 2026
 | V3 | EAGLE-I vs air temperature, non-storm hours (no model) | — | A data-only test of whether heat and outages co-vary in Nashville. |
 | V4 | 311 pavement requests matched to segments (LST period) | $`p_i`$ and $`T7_i`$ (Eq. 15) | Do hotter segments receive more pavement requests? |
 | V5 | V4 with a segment-length baseline and length-stratified AUC | — | Long segments are both hotter on average and more likely to receive a request; the length baseline separates the two. |
+
+Note (2026-11-06): 311 requests are not a rutting measure. HPMS 2024 rut depth gives a more direct test: about 1.8% deeper ruts per °C of summer LST after road class and traffic (4,269 sections, R² 0.09, cross-sectional; `scripts/rutting_lst.py`, PIPELINE_SPEC M-45). Rutting is now carried as the deferred cost pathway D3 → D9 in the core model.
 
 EAGLE-I covers the whole county while the model covers the downtown AOI, so V1 and V2 compare rankings (Spearman), not magnitudes.
 

@@ -448,3 +448,38 @@ wsmv2025:
   url: https://www.wsmv.com/2025/12/12/nashville-unveils-new-smart-signals-36-intersections-along-lebanon-pike/
   year: 2025
   verified: 'News reports, not an official inventory; the two articles give 2-3 h and up to 8 h of battery backup. Second article: https://www.wsmv.com/2026/01/12/one-nashvilles-busiest-corridors-has-new-smart-traffic-signals-aimed-easing-your-commute/'
+sullivan2015:
+  apa: 'Sullivan, M. J., Schellenberg, J., & Blundell, M. (2015). Updated value of service reliability estimates for electric utility customers in the United States (LBNL-6941E). Lawrence Berkeley National Laboratory. https://doi.org/10.2172/1172643'
+  doi: 10.2172/1172643
+  year: 2015
+  verified: Crossref metadata checked 2026-11-06. Basis of the LBNL Interruption Cost Estimate (ICE) Calculator.
+usdot_vsl:
+  apa: U.S. Department of Transportation, Office of the Secretary. Departmental guidance on valuation of a statistical life in economic analysis (updated annually).
+  url: https://www.transportation.gov/office-policy/transportation-policy/revised-departmental-guidance-on-valuation-of-a-statistical-life-in-economic-analysis
+  year: null
+  verified: Not yet opened; the year and value must be fixed when D9 is implemented.
+fhwa_hpms2024:
+  apa: Federal Highway Administration (2025). Highway Performance Monitoring System (HPMS) public release, data year 2024, Tennessee (via NTAD).
+  url: https://www.fhwa.dot.gov/policyinformation/hpms.cfm
+  year: 2025
+  verified: Data read 2026-11-06 (raw/traffic/hpms_2024_davidson.parquet; rutting on 4,269 Davidson sections)
+fhwa_pm2_2017:
+  apa: 'Federal Highway Administration (2017). National performance management measures; assessing pavement condition for the National Highway Performance Program and bridge condition (Final rule, 23 CFR 490). Federal Register, 82(11), 5886–5970.'
+  url: https://www.federalregister.gov/documents/2017/01/18/2017-00550
+  year: 2017
+  verified: 'Opened 2026-11-10: §490.313(c)(3)(i), FR page 5966: rutting good < 0.20 in, fair 0.20–0.40 in, poor > 0.40 in.'
+tdh_hri_ed:
+  apa: Tennessee Department of Health. Heat-related illness emergency department visits by county and year, 2012–2023 [Data set ayhy-c48z]. healthdata.tn.gov.
+  url: https://healthdata.tn.gov/
+  year: 2024
+  verified: Data set downloaded 2026-11-10 (raw/health/tn_hri_annual_ed.json); county by year only, small counts suppressed.
+cms_dfc2026:
+  apa: Centers for Medicare & Medicaid Services. Dialysis Facility – Listing by Facility (DFC_FACILITY.csv) and Nursing Home Provider Information, Provider Data Catalog, October 2026 releases.
+  url: https://data.cms.gov/provider-data/
+  year: 2026
+  verified: Files downloaded 2026-11-10 by the data search (scratchpad/search2/health); not yet ingested.
+lin2011:
+  apa: 'Lin, S., Fletcher, B. A., Luo, M., Chinery, R., & Hwang, S.-A. (2011). Health impact in New York City during the Northeastern blackout of 2003. Public Health Reports, 126(3), 384-393. https://doi.org/10.1177/003335491112600312'
+  doi: 10.1177/003335491112600312
+  year: 2011
+  verified: Crossref metadata checked 2026-11-10

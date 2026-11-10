@@ -27,6 +27,24 @@ from scipy.special import ndtr
 
 from .cascade import Network, c_to_f
 
+# 【中文】敲除实验（因果贡献）可关掉的关系，编号同关系图集 R01–R19 / relations that can be switched off
+# for the knockout (causal contribution) analysis; ids follow the relation atlas.
+KNOCKOUTS = {
+    "R02": "load does not respond to temperature (m = 1)",
+    "R03a": "hot spot sees each station's period-mean ambient instead of the hourly value",
+    "R03b": "hot spot sees each run's period-mean load instead of the hourly load",
+    "R04": "no thermal failures (p = 0)",
+    "R07": "a failed station returns after one hour",
+    "R08": "no upstream propagation: a station is out only if it failed or was shed itself",
+    "R09": "water plants never lose power",
+    "R10": "no storage buffer: water is lost as soon as every plant stops",
+    "R11": "facilities never lose function from a zone outage",
+    "R12": "dialysis ignores water loss",
+    "R13": "signals never go dark",
+    "R18": "homes with AC keep their set point during outages",
+    "R19": "indoor equilibrium is not driven by outdoor temperature (held at the AC set point)",
+}
+
 # 【中文】骨架模型用到的参数（敏感性分析只看这些）/ parameters used by the core model
 CORE_PARAMS = ["C-P1", "C-P1.T0", "C-P1.Kd", "C-P1.Td", "C-P2.dTOR", "C-P2.dHR", "C-P2.R", "C-P2.n", "C-P2.m",
                "C-P2.tau", "C-P3", "C-P3.sigma", "C-P6", "C-P9.avail", "C-P9.imp", "C-H1", "C-H2", "C-W2", "C-W3",
@@ -35,11 +53,12 @@ CORE_PARAMS = ["C-P1", "C-P1.T0", "C-P1.Kd", "C-P1.Td", "C-P2.dTOR", "C-P2.dHR",
 
 def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Generator, day_mask: np.ndarray,
                   Ta_sub: np.ndarray | None = None, Ta_zone: np.ndarray | None = None,
-                  shed: np.ndarray | None = None) -> dict:
+                  shed: np.ndarray | None = None, off: frozenset = frozenset()) -> dict:
     """【中文】主循环。Ta_c (H,)：BNA 逐小时气温；Ta_sub (H, S) / Ta_zone (H, Z)：本地气温（K1），不给时用 Ta_c；
     day_mask (H,)：当地 08:00–20:00 为 True（K9 白天得热）；shed (N, H)：系统缺口造成的轮流停电比例（K4）。
 
-    Main loop. day_mask marks local 08:00–20:00 (daytime gains in K9); shed is the rotating-outage share (K4)."""
+    Main loop. day_mask marks local 08:00–20:00 (daytime gains in K9); shed is the rotating-outage share (K4).
+    off: relation ids from KNOCKOUTS to switch off (R01, R05, R06, R14–R17 are switched in pipeline.core)."""
     N, S, H, Z = len(th["C-P1"]), len(net.sid), len(Ta_c), len(net.zone_id)
     col = lambda k: th[k][:, None]  # noqa: E731
     Ta_sub = np.repeat(np.asarray(Ta_c, float)[:, None], S, axis=1) if Ta_sub is None else np.asarray(Ta_sub, float)
@@ -51,10 +70,15 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
     beta, T0, Kd, Td = col("C-P1"), col("C-P1.T0"), col("C-P1.Kd"), col("C-P1.Td")
     dTOR, dHR, R, n_, m_, tau = (col(k) for k in ("C-P2.dTOR", "C-P2.dHR", "C-P2.R", "C-P2.n", "C-P2.m", "C-P2.tau"))
     th50, sig = col("C-P3"), col("C-P3.sigma")
-    rep = np.round(th["C-P6"]).astype(int)[:, None]
+    rep = np.ones((N, 1), int) if "R07" in off else np.round(th["C-P6"]).astype(int)[:, None]
     mTd = 1 + beta * np.maximum(0, Td - T0)
     repair = np.zeros((N, S), dtype=int)
     dTO = None
+    # 【中文】R03a / R03b 敲除：用整段时期的平均环境气温或平均负荷倍数 / period means for R03a / R03b
+    Ta_mean = Ta_sub.mean(0)[None, :]
+    m_mean = None
+    if "R03b" in off:
+        m_mean = 1 + beta * np.stack([np.maximum(0, TF[:, s_] - T0).mean(1) for s_ in range(S)], axis=1)
 
     # K6–K8 下游资产 / downstream assets
     hs, ns, ds = net.sub_of(net.hosp), net.sub_of(net.nurs), net.sub_of(net.dial)
@@ -92,13 +116,13 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
 
     for h in range(H):
         # K2：负荷倍数与标幺负荷（无负荷转移）/ load multiplier and per-unit load (no transfer)
-        m = 1 + beta * np.maximum(0, TF[h] - T0)
-        K = Kd * m / mTd
+        m = np.ones_like(beta) if "R02" in off else 1 + beta * np.maximum(0, TF[h] - T0)
+        K = Kd * (m_mean if "R03b" in off else m) / mTd
         # K3：顶油温升一阶滞后 + 热点温度 → 热失效 / top-oil lag, hot spot and thermal failure
         dTOU = dTOR * ((K ** 2 * R + 1) / (R + 1)) ** n_
         dTO = dTOU if dTO is None else dTO + (dTOU - dTO) * (1 - np.exp(-1.0 / tau))
-        thetaH = Ta_sub[h][None, :] + dTO + dHR * K ** (2 * m_)
-        p = ndtr((thetaH - th50) / sig)
+        thetaH = (Ta_mean if "R03a" in off else Ta_sub[h][None, :]) + dTO + dHR * K ** (2 * m_)
+        p = np.zeros_like(thetaH) if "R04" in off else ndtr((thetaH - th50) / sig)
         failed = repair > 0
         new_t = ~failed & (rng.random((N, S)) < p)
         repair = np.where(new_t, rep, repair)
@@ -106,13 +130,13 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
         tot["thermal"] += new_t.sum(1)
 
         # K4：系统缺口 → 按比例轮流切除供电站 / rotating outages from a system shortfall
-        shed_now = np.zeros((N, S), bool)
-        if shed is not None and np.any(shed[:, h] > 0):
-            shed_now = (rng.random((N, S)) < shed[:, h][:, None]) & serving[None, :]
+        # 【中文】每小时都抽一次随机数，保证敲除实验之间的公共随机数对齐 / always drawn, so knockouts share random numbers
+        u_shed = rng.random((N, S))
+        shed_now = (u_shed < shed[:, h][:, None]) & serving[None, :] if shed is not None else np.zeros((N, S), bool)
 
         # K5：供电依赖，自上而下传播到不动点 / supply dependency to a fixed point
         up = ~failed & ~shed_now
-        for _ in range(S):
+        for _ in range(0 if "R08" in off else S):
             nxt = up & (~net.has_supply[None, :] | ((up.astype(float) @ net.U) > 0))
             if (nxt == up).all():
                 break
@@ -137,15 +161,16 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
             B = np.where(start, rng.random(B.shape) < pb, B)
             return src_down & B, B, src_down
 
-        hl, B_h, prev_h = backed(down[:, hs], B_h, prev_h, p_bh)
-        nl, B_n, prev_n = backed(down[:, ns], B_n, prev_n, p_bn)
-        wl, B_w, prev_w = backed(down[:, ps], B_w, prev_w, p_bw)
+        fac_down = np.zeros_like(down) if "R11" in off else down
+        hl, B_h, prev_h = backed(fac_down[:, hs], B_h, prev_h, p_bh)
+        nl, B_n, prev_n = backed(fac_down[:, ns], B_n, prev_n, p_bn)
+        wl, B_w, prev_w = backed((np.zeros_like(down) if "R09" in off else down)[:, ps], B_w, prev_w, p_bw)
         prod_lost = wl.all(1, keepdims=True) if len(ps) else np.zeros((N, 1), bool)
         storage_left = np.where(prod_lost, storage_left - 1, col("C-W3"))
-        water_out = prod_lost & (storage_left < 0) if net.has_storage else prod_lost
-        dl = down[:, ds] | water_out
+        water_out = prod_lost & (storage_left < 0) if (net.has_storage and "R10" not in off) else prod_lost
+        dl = fac_down[:, ds] | (False if "R12" in off else water_out)
         # K8：信号灯熄灭 → 所控路段降级（供 pipeline.access 使用）/ dark signals → degraded segments
-        dark = down[:, gs] & no_batt
+        dark = down[:, gs] & no_batt & ("R13" not in off)
         deg = (dark.astype(float) @ net.M_sig_road) > 0
 
         out["hosp"][h] = hl.mean(0); out["nurs"][h] = nl.mean(0); out["dial"][h] = dl.mean(0)
@@ -153,16 +178,18 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
         out["roads_degraded"][h] = deg.sum(1).mean(); out["roads_p"][h] = deg.mean(0)
         tot["hospital_hours"] += hl.sum(1); tot["nursing_hours"] += nl.sum(1); tot["dialysis_hours"] += dl.sum(1)
         tot["water_out_hours"] += water_out[:, 0]; tot["signal_dark_hours"] += dark.sum(1)
-        nd = deg.sum(1)
+        # 【中文】最坏小时：降级路段数 + 关闭的医院与透析中心（每家记 500，使有设施关闭的小时优先）
+        # worst hour: degraded segments plus closed hospitals and dialysis centres (500 each, so closures come first)
+        nd = deg.sum(1) + 500 * (hl.sum(1) + dl.sum(1))
         better = nd > worst_n
         if better.any():
             worst_h[better], worst_n[better] = h, nd[better]
             snap_deg[better], snap_h[better], snap_d[better] = deg[better], hl[better], dl[better]
 
         # K9：室内温度 T_in = T_eq + (T_in − T_eq)·e^(−1/τ_b)，T_eq = θ_A + 得热温升 / indoor RC step
-        Teq = Ta_zone[h][None, :] + np.where(day_mask[h], gain, 1.0)
+        Teq = np.repeat(T_set, Z, axis=1) if "R19" in off else Ta_zone[h][None, :] + np.where(day_mask[h], gain, 1.0)
         Tin_no = Teq if Tin_no is None else Teq + (Tin_no - Teq) * decay
-        Tin_ac = np.where(zdown, Teq + (Tin_ac - Teq) * decay, T_set)
+        Tin_ac = np.where(zdown & ("R18" not in off), Teq + (Tin_ac - Teq) * decay, T_set)
         hot_ac = zdown & (Tin_ac >= T_thr)                 # 【中文】有空调住户只在停电时可能超阈值
         hot_no = Tin_no >= T_thr
         e_out = f_ac * hot_ac

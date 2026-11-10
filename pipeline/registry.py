@@ -24,10 +24,29 @@ STATUS = ["in_model", "ingested", "derived", "on_drive", "public", "restricted",
 KINDS = {"driver", "attribute", "state", "parameter", "observation", "output", "control"}
 # 【中文】有数据的状态：变量的数据来源必须登记在 datasets.yaml / statuses that need a registered dataset
 HAS_DATA = {"in_model", "ingested"}
-SYSTEMS = ["climate", "lst", "built_environment", "power", "water", "transportation", "health", "population", "model"]
+# 【中文】可信度分级：T1 本地真实可下载数据集；T2 权威来源直接可用，或对本地 T1 数据的可复现分析；
+# T3 换算、推断、外地迁移、图中读数、新闻、二手、合成数据或来源矛盾；T4 占位。inherit = 模型状态 / 输出（取最弱输入）；- = 模型控制。
+# Confidence tiers (see docs/DATA_CATALOG.md §1.1). Higher number = weaker.
+TIERS = ["T1", "T2", "T3", "T4"]
+TIER_TOKENS = set(TIERS) | {"inherit", "-"}
+TIER_TEXT = [
+    ("T1", "本地、真实、可下载、来源完整的数据集；只做格式转换、空间匹配、汇总仍算 T1。合成数据或质量标记不合格的部分不算。",
+     "Local, real, downloadable dataset with full provenance; format conversion, spatial joins and aggregation keep T1. Synthetic or quality-flagged data excluded."),
+    ("T2", "权威文献、标准或官方统计，可直接使用；或对本地 T1 数据做的可复现、带不确定性的分析。",
+     "Authoritative paper, standard or official statistic used directly; or a reproducible analysis of local T1 data with stated uncertainty."),
+    ("T3", "由我们换算或推断；从其他地区迁移；从图中读数；新闻或二手引用；合成数据；来源相互矛盾时降一档。",
+     "Derived or inferred by us, transferred from elsewhere, read off a figure, news or secondhand, synthetic; conflicting sources drop one tier."),
+    ("T4", "占位或假设，没有依据。", "Placeholder or assumption with no source."),
+]
+
+
+def weakest(ts) -> str:
+    ts = [t for t in ts if t in TIERS]
+    return max(ts, key=TIERS.index) if ts else ""
+SYSTEMS = ["climate", "lst", "built_environment", "power", "water", "transportation", "health", "population", "economy", "model"]
 SYSTEM_LABEL = {"climate": "Climate 气象气候", "lst": "Land surface temperature 地表温度",
                 "built_environment": "Built environment 建成环境", "power": "Power 电力", "water": "Water 供水",
-                "transportation": "Transportation 交通", "health": "Health 健康", "population": "Population 人口",
+                "transportation": "Transportation 交通", "health": "Health 健康", "population": "Population 人口", "economy": "Economy 经济",
                 "model": "Model controls 模型控制"}
 MARK = {"in_model": "✅", "ingested": "✅", "derived": "✅", "on_drive": "🟡", "public": "🟡",
         "restricted": "🔒", "placeholder": "⬜", "planned": "⬜"}
@@ -52,6 +71,7 @@ def load():
         "basis": dict(zip(read("twin/couplings.csv")["coupling_id"], read("twin/couplings.csv")["basis"])),
         "cite": dict(zip(read("twin/couplings.csv")["coupling_id"], read("twin/couplings.csv")["citation"])),
         "placeholder": dict(zip(read("twin/couplings.csv")["coupling_id"], read("twin/couplings.csv")["placeholder"])),
+        "conf": dict(zip(read("twin/couplings.csv")["coupling_id"], read("twin/couplings.csv").get("confidence", ""))),
         "datasets": {d["id"] for d in cfg["datasets"]},
         "refs": set(yaml.safe_load((ROOT / "twin/references.yaml").read_text(encoding="utf-8"))),
         # 【中文】规范中定义的方法：以 "#### M-n" 或 "### G-n" 开头的标题 / methods defined as headings
@@ -84,6 +104,14 @@ def check(R: dict) -> list[dict]:
                 add("error", vid, f"source_dataset '{ds}' not in datasets.yaml")
         if row["status"] in HAS_DATA and row["kind"] != "control" and not tokens(row["source_dataset"]):
             add("error", vid, f"status {row['status']} but no source_dataset")
+        conf = row.get("confidence", "")
+        if "confidence" in v and conf not in TIER_TOKENS:
+            add("error", vid, f"confidence '{conf}' should be T1–T4, inherit or -")
+        cw = weakest(R["conf"].get(c, "") for c in tokens(row["coupling_id"]))
+        if conf in TIERS and cw and TIERS.index(conf) < TIERS.index(cw):
+            add("warn", vid, f"confidence {conf} is stronger than its weakest parameter ({cw})")
+        if conf == "T1" and row["status"] not in ("in_model", "ingested", "derived", "on_drive"):
+            add("warn", vid, f"confidence T1 but status {row['status']} (no data in hand)")
         for c in tokens(row["coupling_id"]):
             if c not in R["couplings"]:
                 lvl = "error" if row["status"] in HAS_DATA else "info"
@@ -95,6 +123,9 @@ def check(R: dict) -> list[dict]:
         if pd.notna(lo) and pd.notna(hi) and lo > hi:
             add("error", vid, "valid_min > valid_max")
 
+    for c, t in R["conf"].items():
+        if t not in TIERS:
+            add("error", c, f"coupling confidence '{t}' should be T1–T4")
     for rid, g in r.groupby("relation_id"):
         n_cur = (g["current"] == "yes").sum()
         if n_cur != 1:
@@ -130,7 +161,7 @@ def check_core(R: dict) -> list[dict]:
     if not core:
         return issues
     # 【中文】变量表的 core 列只能写 core.yaml 中的编号、val、all 或 - / the variables "core" column
-    ids = {i["id"] for i in core.get("links", []) + core.get("deferred", [])} | {"val", "all"}
+    ids = {i["id"] for i in core.get("links", []) + core.get("deferred", []) + core.get("planned", [])} | {"val", "all"}
     if "core" in R["vars"]:
         for _, row in R["vars"].iterrows():
             for t in tokens(row["core"]):
@@ -143,7 +174,7 @@ def check_core(R: dict) -> list[dict]:
             if i["id"] not in used:
                 issues.append({"level": "warn", "where": f"core {i['id']}", "message": "no variable in variables.csv is tagged with this link"})
     tiers = set(zip(R["rels"]["relation_id"], R["rels"]["tier"]))
-    for item in core.get("links", []) + core.get("deferred", []):
+    for item in core.get("links", []) + core.get("deferred", []) + core.get("planned", []):
         where = f"core {item['id']}"
         for rt in item.get("relations", []):
             rid, _, tier = rt.partition(":")
@@ -218,6 +249,44 @@ def core_need(x, basis: dict, ph: dict | None = None) -> str:
             "placeholder": "⬜ placeholder 占位", "planned": "⬜ planned 计划"}[x["status"]]
 
 
+def confidence_section(R: dict, w) -> None:
+    """【中文】1.1 可信度分级：定义与按系统统计。Section 1.1: confidence tiers."""
+    v = R["vars"]
+    w("### 1.1 可信度分级 Confidence tiers\n")
+    w("【中文】可信度与可得性分开：状态一栏说明数据能否拿到，可信度一栏说明模型现在用的数值有多可靠。参数表 `twin/couplings.csv` 与变量表都有 "
+      "`confidence` 和 `confidence_note` 两栏。模型状态和输出标为 inherit，可信度取其输入中最弱的一档（短板原则）；只看到转引、未打开原文的来源最多算 T3。\n")
+    w("English: confidence is separate from availability. Status says whether data can be obtained; confidence says how reliable the value the "
+      "model uses now is. Both `twin/couplings.csv` and the variable table carry `confidence` and `confidence_note`. Model states and outputs are "
+      "marked inherit and take the weakest tier of their inputs; sources seen only secondhand are capped at T3.\n")
+    w("| 档 Tier | 定义 | Definition |\n| --- | --- | --- |")
+    for t, zh, en in TIER_TEXT:
+        w(f"| **{t}** | {zh} | {en} |")
+    w("")
+    order = TIERS + ["inherit", "-"]
+    t = pd.crosstab(v["system"], v["confidence"]).reindex(index=SYSTEMS, columns=order, fill_value=0)
+    w("| 系统 System | " + " | ".join(order) + " | total |\n| --- |" + " ---: |" * (len(order) + 1))
+    for sysname, row in t.iterrows():
+        w(f"| {SYSTEM_LABEL[sysname]} | " + " | ".join(str(row[o]) if row[o] else "·" for o in order) + f" | {row.sum()} |")
+    tot = t.sum()
+    w("| **变量合计 Variables** | " + " | ".join(f"**{tot[o]}**" for o in order) + f" | **{tot.sum()}** |")
+    ct = pd.Series(list(R["conf"].values())).value_counts()
+    w("| **参数 Couplings** | " + " | ".join(str(ct.get(o, 0)) if o in TIERS else "·" for o in order) + f" | {len(R['conf'])} |\n")
+
+
+def link_tiers(R: dict) -> dict:
+    """【中文】每个主线环节：自身输入的最弱档，以及连同上游环节继承的最弱档（短板原则）。
+    Per core link: weakest tier of its own inputs, and the weakest including upstream links."""
+    v, core = R["vars"], R["core"]
+    own = {}
+    for link in core["links"]:
+        sub = v[v["core"].map(lambda c: link["id"] in tokens(c))]
+        own[link["id"]] = weakest(list(sub["confidence"]) + [R["conf"].get(c, "") for c in link.get("couplings", [])])
+    up = {l["id"]: l.get("upstream", []) for l in core["links"]}
+    def chain(k, seen=()):
+        return weakest([own[k]] + [chain(u, seen + (k,)) for u in up[k] if u not in seen])
+    return {k: (own[k], chain(k)) for k in own}
+
+
 def core_section(R: dict, w) -> None:
     """【中文】2. 骨架模型所需变量：按主线环节 K1–K9 列出变量与数据需求。
     Section 2: variables needed by the core skeleton, grouped by link."""
@@ -236,10 +305,14 @@ def core_section(R: dict, w) -> None:
     cnt = need[tagged.index].map(lambda s: s.split(" ")[0]).value_counts()
     w("| 合计 Summary | ✅ have 已有 | ⬜ assumed / placeholder 假设或占位 | 🟡 obtainable 可获取 | 🔒 partner 需合作 |\n| --- | ---: | ---: | ---: | ---: |")
     w(f"| {len(tagged)} variables | {cnt.get('✅', 0)} | {cnt.get('⬜', 0)} | {cnt.get('🟡', 0)} | {cnt.get('🔒', 0)} |\n")
+    lt = link_tiers(R) if "confidence" in v else {}
     for link in core["links"]:
         sub = v[v["core"].map(lambda c: link["id"] in tokens(c))]
         w(f"### {link['id']} {link['name_en']} / {link['name_zh']}\n")
-        w("| Id | 变量 Variable | 类型 Kind | 状态 Status | 来源 Source | 骨架需求 Need | 目标来源 Target |\n| --- | --- | --- | --- | --- | --- | --- |")
+        if "confidence" in v:
+            o, c = lt[link["id"]]
+            w(f"可信度 Confidence：本环节输入最弱 weakest own input **{o}** · 连同上游 including upstream **{c}**\n")
+        w("| Id | 变量 Variable | 类型 Kind | 状态 Status | 可信度 Tier | 来源 Source | 骨架需求 Need | 目标来源 Target |\n| --- | --- | --- | --- | --- | --- | --- | --- |")
         for i, x in sub.iterrows():
             src = x["source_dataset"] if tokens(x["source_dataset"]) else (x["fallback"] if tokens(x["fallback"]) else "")
             # 【中文】参数类变量：显示耦合参数的文献出处 / for coupling parameters, show the cited sources
@@ -247,7 +320,7 @@ def core_section(R: dict, w) -> None:
             if src == "twin_couplings" and refs:
                 src = "couplings: " + ", ".join(refs)
             w(f"| {x['var_id']} | {md_cell(x['name_en'])}<br>{md_cell(x['name_zh'])} | {x['kind']} | {MARK[x['status']]} {x['status']} | "
-              f"{md_cell(src)} | {need[i]} | {md_cell(x['target_source'])} |")
+              f"{md_cell(x.get('confidence', ''))} | {md_cell(src)} | {need[i]} | {md_cell(x['target_source'])} |")
         w("")
     gaps = v.loc[tagged.index][need[tagged.index].str.startswith(("⬜", "🟡", "🔒"))]
     if len(gaps):
@@ -284,6 +357,8 @@ def write_catalog(R: dict, issues: list[dict], path: Path) -> None:
         w(f"| {SYSTEM_LABEL[sysname]} | " + " | ".join(str(row[s]) if row[s] else "·" for s in STATUS) + f" | {row['total']} |")
     tot = cov.sum()
     w("| **合计 Total** | " + " | ".join(f"**{tot[s]}**" for s in STATUS) + f" | **{tot['total']}** |\n")
+    if "confidence" in v:
+        confidence_section(R, w)
 
     core_section(R, w)
 
@@ -295,14 +370,14 @@ def write_catalog(R: dict, issues: list[dict], path: Path) -> None:
         if not len(sub):
             continue
         w(f"### {SYSTEM_LABEL[sysname]}\n")
-        w("| Id | 变量 Variable | 符号 Symbol | 单位 Units | 分辨率 Resolution | 状态 Status | 来源 / 占位 Source / fallback | 目标来源 Target | 用于 Used in | 骨架 Core | 优先级 Priority |")
-        w("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |")
+        w("| Id | 变量 Variable | 符号 Symbol | 单位 Units | 分辨率 Resolution | 状态 Status | 可信度 Tier | 来源 / 占位 Source / fallback | 目标来源 Target | 用于 Used in | 骨架 Core | 优先级 Priority |")
+        w("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |")
         for _, x in sub.iterrows():
             src = x["source_dataset"] if tokens(x["source_dataset"]) else ""
             fb = x["fallback"] if tokens(x["fallback"]) else ""
             source = " · ".join(s for s in (f"`{src}`" if src else "", f"fallback: {fb}" if fb else "") if s)
             w(f"| {x['var_id']} | {md_cell(x['name_en'])}<br>{md_cell(x['name_zh'])} | `{md_cell(x['symbol'])}` | {md_cell(x['units'])} | "
-              f"{md_cell(x['spatial_res'])}; {md_cell(x['temporal_res'])} | {MARK[x['status']]} {x['status']} | {md_cell(source)} | "
+              f"{md_cell(x['spatial_res'])}; {md_cell(x['temporal_res'])} | {MARK[x['status']]} {x['status']} | {md_cell(x.get('confidence', ''))} | {md_cell(source)} | "
               f"{md_cell(x['target_source'])} | {md_cell(x['used_in'])} | {md_cell(x.get('core', ''))} | {x['priority']} |")
         notes = sub[(sub["note_en"] != "") | (sub["note_zh"] != "")]
         if len(notes):

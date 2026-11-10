@@ -1,0 +1,50 @@
+{
+  "source": "HPMS 2024 Davidson (rutting, AADT, truck AADT, f_system) joined to summer road LST (nashville_roads_lst_full)",
+  "method": "section midpoint to nearest LST road within 30 m; OLS log(rut + 0.01 in) ~ LST + log truck AADT + log AADT + f_system, HC1 SE",
+  "caveat": "Cross-sectional single year; spatial autocorrelation not modelled, so p-values are optimistic; no pavement age, binder grade or structure. Evidence of a signal, not a causal estimate.",
+  "n_sections_with_rutting": 4269,
+  "n_matched": 4269,
+  "spearman_all": {
+    "rho": 0.185,
+    "p": 4.7e-34
+  },
+  "spearman_by_f_system": {
+    "1": {
+      "n": 1254,
+      "rho": 0.159,
+      "p": 1.5e-08
+    },
+    "2": {
+      "n": 459,
+      "rho": -0.144,
+      "p": 0.0019
+    },
+    "3": {
+      "n": 2556,
+      "rho": 0.136,
+      "p": 5.7e-12
+    }
+  },
+  "ols": {
+    "n": 4269,
+    "r2": 0.087,
+    "lst_per_degC": 0.0176,
+    "lst_se": 0.0035,
+    "log_truck": 0.0561,
+    "log_truck_se": 0.0174,
+    "log_aadt": 0.1124,
+    "log_aadt_se": 0.0244
+  },
+  "lst_p5_p50_p95_degC": [
+    37.7,
+    42.8,
+    47.3
+  ],
+  "rut_ratio_p95_vs_p5_lst": 1.184,
+  "rut_in_p50_p90": [
+    0.09,
+    0.18
+  ],
+  "share_ge_0.20in_fair_or_worse": 0.078,
+  "share_gt_0.40in_poor": 0.008
+}

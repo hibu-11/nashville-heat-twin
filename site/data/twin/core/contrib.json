@@ -1,0 +1,891 @@
+{
+ "created": "2026-11-10T19:30:31+00:00",
+ "runs": 1000,
+ "seed": 20261027,
+ "scenarios_delta_c": [
+  2.0,
+  4.0
+ ],
+ "method": "Knockout (do-intervention) with common random numbers: contribution = (base \u2212 knockout) / base. Positive: the relation adds to the outcome; negative: it buffers. Relations in series share the downstream effect, so contributions do not add up. care_time_loss_min = population-mean added minutes to hospital + dialysis + EMS at each run's worst hour, cells that lose every facility of a type inside the area counted at 30 min (assumption).",
+ "outcomes": {
+  "2.0": {
+   "base": {
+    "care_time_loss_min": 0.802,
+    "dialysis_none_available": 0.019,
+    "pop_hours": 161232.7,
+    "indoor_outage_pop_hours": 18208.1,
+    "indoor_pop_hours": 10169537.9
+   },
+   "R01": {
+    "care_time_loss_min": 1.108,
+    "dialysis_none_available": 0.028,
+    "pop_hours": 165671.1,
+    "indoor_outage_pop_hours": 19295.5,
+    "indoor_pop_hours": 11296246.9
+   },
+   "R05": {
+    "care_time_loss_min": 0.802,
+    "dialysis_none_available": 0.019,
+    "pop_hours": 161232.7,
+    "indoor_outage_pop_hours": 18208.1,
+    "indoor_pop_hours": 10169537.9
+   },
+   "R06": {
+    "care_time_loss_min": 0.802,
+    "dialysis_none_available": 0.019,
+    "pop_hours": 161232.7,
+    "indoor_outage_pop_hours": 18208.1,
+    "indoor_pop_hours": 10169537.9
+   },
+   "R14": {
+    "care_time_loss_min": 0.775,
+    "dialysis_none_available": 0.019,
+    "pop_hours": 161232.7,
+    "indoor_outage_pop_hours": 18208.1,
+    "indoor_pop_hours": 10169537.9
+   },
+   "R17": {
+    "care_time_loss_min": 0.026,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 161232.7,
+    "indoor_outage_pop_hours": 18208.1,
+    "indoor_pop_hours": 10169537.9
+   },
+   "R02": {
+    "care_time_loss_min": 0.0,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 0.0,
+    "indoor_outage_pop_hours": 0.0,
+    "indoor_pop_hours": 10151329.8
+   },
+   "R03a": {
+    "care_time_loss_min": 0.064,
+    "dialysis_none_available": 0.001,
+    "pop_hours": 13784.1,
+    "indoor_outage_pop_hours": 1002.0,
+    "indoor_pop_hours": 10152331.7
+   },
+   "R03b": {
+    "care_time_loss_min": 0.001,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 84.6,
+    "indoor_outage_pop_hours": 0.0,
+    "indoor_pop_hours": 10151329.8
+   },
+   "R04": {
+    "care_time_loss_min": 0.0,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 0.0,
+    "indoor_outage_pop_hours": 0.0,
+    "indoor_pop_hours": 10151329.8
+   },
+   "R07": {
+    "care_time_loss_min": 0.537,
+    "dialysis_none_available": 0.011,
+    "pop_hours": 36121.4,
+    "indoor_outage_pop_hours": 58.6,
+    "indoor_pop_hours": 10151388.3
+   },
+   "R08": {
+    "care_time_loss_min": 0.381,
+    "dialysis_none_available": 0.006,
+    "pop_hours": 104076.8,
+    "indoor_outage_pop_hours": 10571.3,
+    "indoor_pop_hours": 10161901.1
+   },
+   "R09": {
+    "care_time_loss_min": 0.802,
+    "dialysis_none_available": 0.019,
+    "pop_hours": 161232.7,
+    "indoor_outage_pop_hours": 18208.1,
+    "indoor_pop_hours": 10169537.9
+   },
+   "R10": {
+    "care_time_loss_min": 0.802,
+    "dialysis_none_available": 0.019,
+    "pop_hours": 161232.7,
+    "indoor_outage_pop_hours": 18208.1,
+    "indoor_pop_hours": 10169537.9
+   },
+   "R11": {
+    "care_time_loss_min": 0.029,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 161232.7,
+    "indoor_outage_pop_hours": 18208.1,
+    "indoor_pop_hours": 10169537.9
+   },
+   "R12": {
+    "care_time_loss_min": 0.802,
+    "dialysis_none_available": 0.019,
+    "pop_hours": 161232.7,
+    "indoor_outage_pop_hours": 18208.1,
+    "indoor_pop_hours": 10169537.9
+   },
+   "R13": {
+    "care_time_loss_min": 0.725,
+    "dialysis_none_available": 0.017,
+    "pop_hours": 161232.7,
+    "indoor_outage_pop_hours": 18208.1,
+    "indoor_pop_hours": 10169537.9
+   },
+   "R18": {
+    "care_time_loss_min": 0.802,
+    "dialysis_none_available": 0.019,
+    "pop_hours": 161232.7,
+    "indoor_outage_pop_hours": 0.0,
+    "indoor_pop_hours": 10151329.8
+   },
+   "R19": {
+    "care_time_loss_min": 0.802,
+    "dialysis_none_available": 0.019,
+    "pop_hours": 161232.7,
+    "indoor_outage_pop_hours": 0.0,
+    "indoor_pop_hours": 0.0
+   }
+  },
+  "4.0": {
+   "base": {
+    "care_time_loss_min": 3.895,
+    "dialysis_none_available": 0.11,
+    "pop_hours": 851417.7,
+    "indoor_outage_pop_hours": 147349.1,
+    "indoor_pop_hours": 13446233.5
+   },
+   "R01": {
+    "care_time_loss_min": 4.615,
+    "dialysis_none_available": 0.134,
+    "pop_hours": 864854.5,
+    "indoor_outage_pop_hours": 159980.1,
+    "indoor_pop_hours": 14095454.7
+   },
+   "R05": {
+    "care_time_loss_min": 3.88,
+    "dialysis_none_available": 0.11,
+    "pop_hours": 850897.3,
+    "indoor_outage_pop_hours": 147338.3,
+    "indoor_pop_hours": 13446222.7
+   },
+   "R06": {
+    "care_time_loss_min": 3.88,
+    "dialysis_none_available": 0.11,
+    "pop_hours": 850897.3,
+    "indoor_outage_pop_hours": 147338.3,
+    "indoor_pop_hours": 13446222.7
+   },
+   "R14": {
+    "care_time_loss_min": 3.825,
+    "dialysis_none_available": 0.11,
+    "pop_hours": 851417.7,
+    "indoor_outage_pop_hours": 147349.1,
+    "indoor_pop_hours": 13446233.5
+   },
+   "R17": {
+    "care_time_loss_min": 0.069,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 851417.7,
+    "indoor_outage_pop_hours": 147349.1,
+    "indoor_pop_hours": 13446233.5
+   },
+   "R02": {
+    "care_time_loss_min": 0.016,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 530.6,
+    "indoor_outage_pop_hours": 0.0,
+    "indoor_pop_hours": 13298884.4
+   },
+   "R03a": {
+    "care_time_loss_min": 0.614,
+    "dialysis_none_available": 0.015,
+    "pop_hours": 136250.4,
+    "indoor_outage_pop_hours": 16506.3,
+    "indoor_pop_hours": 13315390.7
+   },
+   "R03b": {
+    "care_time_loss_min": 0.02,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 1735.0,
+    "indoor_outage_pop_hours": 134.3,
+    "indoor_pop_hours": 13299018.7
+   },
+   "R04": {
+    "care_time_loss_min": 0.016,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 530.6,
+    "indoor_outage_pop_hours": 0.0,
+    "indoor_pop_hours": 13298884.4
+   },
+   "R07": {
+    "care_time_loss_min": 2.644,
+    "dialysis_none_available": 0.067,
+    "pop_hours": 229447.7,
+    "indoor_outage_pop_hours": 5540.6,
+    "indoor_pop_hours": 13304425.0
+   },
+   "R08": {
+    "care_time_loss_min": 2.229,
+    "dialysis_none_available": 0.054,
+    "pop_hours": 565742.1,
+    "indoor_outage_pop_hours": 82949.7,
+    "indoor_pop_hours": 13381834.1
+   },
+   "R09": {
+    "care_time_loss_min": 3.895,
+    "dialysis_none_available": 0.11,
+    "pop_hours": 851417.7,
+    "indoor_outage_pop_hours": 147349.1,
+    "indoor_pop_hours": 13446233.5
+   },
+   "R10": {
+    "care_time_loss_min": 3.895,
+    "dialysis_none_available": 0.11,
+    "pop_hours": 851417.7,
+    "indoor_outage_pop_hours": 147349.1,
+    "indoor_pop_hours": 13446233.5
+   },
+   "R11": {
+    "care_time_loss_min": 0.074,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 851417.7,
+    "indoor_outage_pop_hours": 147349.1,
+    "indoor_pop_hours": 13446233.5
+   },
+   "R12": {
+    "care_time_loss_min": 3.895,
+    "dialysis_none_available": 0.11,
+    "pop_hours": 851417.7,
+    "indoor_outage_pop_hours": 147349.1,
+    "indoor_pop_hours": 13446233.5
+   },
+   "R13": {
+    "care_time_loss_min": 3.764,
+    "dialysis_none_available": 0.108,
+    "pop_hours": 851417.7,
+    "indoor_outage_pop_hours": 147349.1,
+    "indoor_pop_hours": 13446233.5
+   },
+   "R18": {
+    "care_time_loss_min": 3.895,
+    "dialysis_none_available": 0.11,
+    "pop_hours": 851417.7,
+    "indoor_outage_pop_hours": 0.0,
+    "indoor_pop_hours": 13298884.4
+   },
+   "R19": {
+    "care_time_loss_min": 3.895,
+    "dialysis_none_available": 0.11,
+    "pop_hours": 851417.7,
+    "indoor_outage_pop_hours": 0.0,
+    "indoor_pop_hours": 0.0
+   }
+  }
+ },
+ "relations": {
+  "R01": {
+   "what_is_switched_off": "local temperature = background (airport) series everywhere (no urban field)",
+   "edges": [
+    [
+     "bg",
+     "urban"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": -0.3815,
+     "pop_hours": -0.0275,
+     "indoor_pop_hours": -0.1108,
+     "indoor_outage_pop_hours": -0.0597
+    },
+    "+4": {
+     "care_time_loss_min": -0.1849,
+     "pop_hours": -0.0158,
+     "indoor_pop_hours": -0.0483,
+     "indoor_outage_pop_hours": -0.0857
+    }
+   }
+  },
+  "R05": {
+   "what_is_switched_off": "TVA load is not scaled by scenario warming",
+   "edges": [
+    [
+     "load",
+     "margin"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.0039,
+     "pop_hours": 0.0006,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0001
+    }
+   }
+  },
+  "R06": {
+   "what_is_switched_off": "no rotating outages from a system shortfall",
+   "edges": [
+    [
+     "margin",
+     "shed"
+    ],
+    [
+     "shed",
+     "topo"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.0039,
+     "pop_hours": 0.0006,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0001
+    }
+   }
+  },
+  "R14": {
+   "what_is_switched_off": "dark signals keep full capacity (R14\u2013R16 are in series, so one knockout covers all three)",
+   "edges": [
+    [
+     "signals",
+     "capacity"
+    ],
+    [
+     "capacity",
+     "travel"
+    ],
+    [
+     "travel",
+     "access"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.0337,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.018,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    }
+   }
+  },
+  "R17": {
+   "what_is_switched_off": "closed facilities stay on the destination list",
+   "edges": [
+    [
+     "facility",
+     "access"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.9676,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.9823,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    }
+   }
+  },
+  "R02": {
+   "what_is_switched_off": "load does not respond to temperature (m = 1)",
+   "edges": [
+    [
+     "urban",
+     "load"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 1.0,
+     "pop_hours": 1.0,
+     "indoor_pop_hours": 0.0018,
+     "indoor_outage_pop_hours": 1.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.9959,
+     "pop_hours": 0.9994,
+     "indoor_pop_hours": 0.011,
+     "indoor_outage_pop_hours": 1.0
+    }
+   }
+  },
+  "R03a": {
+   "what_is_switched_off": "hot spot sees each station's period-mean ambient instead of the hourly value",
+   "edges": [
+    [
+     "urban",
+     "hotspot"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.9202,
+     "pop_hours": 0.9145,
+     "indoor_pop_hours": 0.0017,
+     "indoor_outage_pop_hours": 0.945
+    },
+    "+4": {
+     "care_time_loss_min": 0.8424,
+     "pop_hours": 0.84,
+     "indoor_pop_hours": 0.0097,
+     "indoor_outage_pop_hours": 0.888
+    }
+   }
+  },
+  "R03b": {
+   "what_is_switched_off": "hot spot sees each run's period-mean load instead of the hourly load",
+   "edges": [
+    [
+     "load",
+     "hotspot"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.9988,
+     "pop_hours": 0.9995,
+     "indoor_pop_hours": 0.0018,
+     "indoor_outage_pop_hours": 1.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.9949,
+     "pop_hours": 0.998,
+     "indoor_pop_hours": 0.0109,
+     "indoor_outage_pop_hours": 0.9991
+    }
+   }
+  },
+  "R04": {
+   "what_is_switched_off": "no thermal failures (p = 0)",
+   "edges": [
+    [
+     "hotspot",
+     "failure"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 1.0,
+     "pop_hours": 1.0,
+     "indoor_pop_hours": 0.0018,
+     "indoor_outage_pop_hours": 1.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.9959,
+     "pop_hours": 0.9994,
+     "indoor_pop_hours": 0.011,
+     "indoor_outage_pop_hours": 1.0
+    }
+   }
+  },
+  "R07": {
+   "what_is_switched_off": "a failed station returns after one hour",
+   "edges": [
+    [
+     "failure",
+     "topo"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.3304,
+     "pop_hours": 0.776,
+     "indoor_pop_hours": 0.0018,
+     "indoor_outage_pop_hours": 0.9968
+    },
+    "+4": {
+     "care_time_loss_min": 0.3212,
+     "pop_hours": 0.7305,
+     "indoor_pop_hours": 0.0105,
+     "indoor_outage_pop_hours": 0.9624
+    }
+   }
+  },
+  "R08": {
+   "what_is_switched_off": "no upstream propagation: a station is out only if it failed or was shed itself",
+   "edges": [
+    [
+     "topo",
+     "zone"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.5249,
+     "pop_hours": 0.3545,
+     "indoor_pop_hours": 0.0008,
+     "indoor_outage_pop_hours": 0.4194
+    },
+    "+4": {
+     "care_time_loss_min": 0.4277,
+     "pop_hours": 0.3355,
+     "indoor_pop_hours": 0.0048,
+     "indoor_outage_pop_hours": 0.4371
+    }
+   }
+  },
+  "R09": {
+   "what_is_switched_off": "water plants never lose power",
+   "edges": [
+    [
+     "zone",
+     "plant"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    }
+   }
+  },
+  "R10": {
+   "what_is_switched_off": "no storage buffer: water is lost as soon as every plant stops",
+   "edges": [
+    [
+     "plant",
+     "storage"
+    ],
+    [
+     "storage",
+     "wservice"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    }
+   }
+  },
+  "R11": {
+   "what_is_switched_off": "facilities never lose function from a zone outage",
+   "edges": [
+    [
+     "zone",
+     "facility"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.9638,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.981,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    }
+   }
+  },
+  "R12": {
+   "what_is_switched_off": "dialysis ignores water loss",
+   "edges": [
+    [
+     "wservice",
+     "facility"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    }
+   }
+  },
+  "R13": {
+   "what_is_switched_off": "signals never go dark",
+   "edges": [
+    [
+     "zone",
+     "signals"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.096,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.0336,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    }
+   }
+  },
+  "R18": {
+   "what_is_switched_off": "homes with AC keep their set point during outages",
+   "edges": [
+    [
+     "zone",
+     "indoor"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0018,
+     "indoor_outage_pop_hours": 1.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.011,
+     "indoor_outage_pop_hours": 1.0
+    }
+   }
+  },
+  "R19": {
+   "what_is_switched_off": "indoor equilibrium is not driven by outdoor temperature (held at the AC set point)",
+   "edges": [
+    [
+     "urban",
+     "indoor"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 1.0,
+     "indoor_outage_pop_hours": 1.0
+    },
+    "+4": {
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 1.0,
+     "indoor_outage_pop_hours": 1.0
+    }
+   }
+  }
+ },
+ "nodes": {
+  "bg": {
+   "tier": "T1",
+   "weakest_inputs": [
+    "CLM-01 Air temperature (2 m)"
+   ],
+   "inherited": "T1"
+  },
+  "urban": {
+   "tier": "T2",
+   "weakest_inputs": [
+    "CLM-19 Urban air temperature field"
+   ],
+   "inherited": "T2"
+  },
+  "load": {
+   "tier": "T4",
+   "weakest_inputs": [
+    "PWR-03 Transformer rated capacity",
+    "C-P1.Kd K_design",
+    "C-P1.Td T_design"
+   ],
+   "inherited": "T4"
+  },
+  "hotspot": {
+   "tier": "T2",
+   "weakest_inputs": [
+    "PWR-11 Transformer thermal constants"
+   ],
+   "inherited": "T4"
+  },
+  "failure": {
+   "tier": "T4",
+   "weakest_inputs": [
+    "PWR-15 Hot-spot fragility median and dispersion"
+   ],
+   "inherited": "T4"
+  },
+  "topo": {
+   "tier": "T4",
+   "weakest_inputs": [
+    "PWR-24 Switch states and normally-open ties"
+   ],
+   "inherited": "T4"
+  },
+  "zone": {
+   "tier": "T4",
+   "weakest_inputs": [
+    "PWR-20 Feeder / service territory polygons"
+   ],
+   "inherited": "T4"
+  },
+  "margin": {
+   "tier": "T2",
+   "weakest_inputs": [
+    "PWR-32 Available share of TVA summer capacity",
+    "PWR-33 Net import capability at peak"
+   ],
+   "inherited": "T4"
+  },
+  "shed": {
+   "tier": "T2",
+   "weakest_inputs": [
+    "C-P9.avail a",
+    "C-P9.imp P_imp"
+   ],
+   "inherited": "T4"
+  },
+  "river": {
+   "tier": "T4",
+   "weakest_inputs": [
+    "C-P9.span span",
+    "C-P9.flow f_low"
+   ],
+   "inherited": "T4"
+  },
+  "overload": {
+   "tier": "T4",
+   "weakest_inputs": [
+    "C-P4 alpha"
+   ],
+   "inherited": "T4"
+  },
+  "signals": {
+   "tier": "T3",
+   "weakest_inputs": [
+    "TRN-07 Signal battery backup (share without battery; battery hours)"
+   ],
+   "inherited": "T4"
+  },
+  "capacity": {
+   "tier": "T3",
+   "weakest_inputs": [
+    "TRN-12 Link capacity and lanes"
+   ],
+   "inherited": "T4"
+  },
+  "travel": {
+   "tier": "T2",
+   "weakest_inputs": [
+    "TRN-13 Free-flow travel time",
+    "TRN-14 BPR volume-delay parameters"
+   ],
+   "inherited": "T4"
+  },
+  "plant": {
+   "tier": "T3",
+   "weakest_inputs": [
+    "WAT-09 Plant backup power failure on demand"
+   ],
+   "inherited": "T4"
+  },
+  "storage": {
+   "tier": "T3",
+   "weakest_inputs": [
+    "WAT-04 Storage volume"
+   ],
+   "inherited": "T4"
+  },
+  "wservice": {
+   "tier": "T3",
+   "weakest_inputs": [
+    "C-W1 p_propagate"
+   ],
+   "inherited": "T4"
+  },
+  "facility": {
+   "tier": "T3",
+   "weakest_inputs": [
+    "HLT-08 Nursing-home backup power failure"
+   ],
+   "inherited": "T4"
+  },
+  "access": {
+   "tier": "T1",
+   "weakest_inputs": [
+    "TRN-21 Fire / EMS stations (OSM)",
+    "POP-01 Total population"
+   ],
+   "inherited": "T4"
+  },
+  "indoor": {
+   "tier": "T3",
+   "weakest_inputs": [
+    "BLD-08 Building thermal time constant",
+    "BLD-09 Internal + solar gain temperature lift",
+    "HLT-24 Indoor equilibrium temperature"
+   ],
+   "inherited": "T4"
+  },
+  "pop": {
+   "tier": "T1",
+   "weakest_inputs": [
+    "POP-01 Total population",
+    "POP-02 Population aged 65+",
+    "POP-03 Population below poverty"
+   ],
+   "inherited": "T1"
+  },
+  "exposure": {
+   "tier": "T2",
+   "weakest_inputs": [
+    "HLT-23 Indoor heat threshold",
+    "BLD-04 Share of homes with air conditioning"
+   ],
+   "inherited": "T4"
+  },
+  "illness": {
+   "tier": "T4",
+   "weakest_inputs": [
+    "HLT-12 Heat-related emergency department visits",
+    "HLT-14 Temperature\u2013mortality curve (minimum mortality temperature and slope)",
+    "HLT-17 Electricity-dependent Medicare beneficiaries"
+   ],
+   "inherited": "T4"
+  }
+ }
+}

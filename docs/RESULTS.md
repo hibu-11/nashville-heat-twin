@@ -1,6 +1,6 @@
 # Results — heat-cascade model v0
 
-Generated from cascade run `cascade-20261104T183107Z-e8e2407fbb` (build `20261104T182412Z-20960c7c`, code `git:d73a39d-dirty`, seed 20261027, 2,000 Monte Carlo runs per scenario plus 500 runs at mid parameters). Period 2023-06-01 – 2023-08-31, 2,208 hours. Methods: [HANDBOOK.md](HANDBOOK.md).
+Generated from cascade run `cascade-20261110T191034Z-0ed4b5b116` (build `20261110T185812Z-a7027d86`, code `git:7098ed6-dirty`, seed 20261027, 2,000 Monte Carlo runs per scenario plus 500 runs at mid parameters). Period 2023-06-01 – 2023-08-31, 2,208 hours. Methods: [HANDBOOK.md](HANDBOOK.md).
 
 > These are preliminary results from a model with placeholder links and parameters (HANDBOOK §3.4). They show how the coupled system responds under stated assumptions; they are not estimates of actual outages.
 
@@ -245,41 +245,41 @@ By-year Spearman ρ: 2015 -0.04, 2016 0.00, 2017 0.14, 2019 -0.27, 2020 0.04, 20
 
 ## 11. Core skeleton model
 
-Run `core-20261104T184037Z-e8e2407fbb`: 2,000 Monte Carlo runs per scenario, links K1, K2, K3, K4, K5, K6, K7, K8, K9; deferred D1, D2, D3, D5, D6, D7, D8. Selection and equations: [CORE_MODEL.md](CORE_MODEL.md). Population in zones 115,203 (65+ 10,873, below poverty 19,853).
+Run `core-20261110T191340Z-0ed4b5b116`: 2,000 Monte Carlo runs per scenario, links K1, K2, K3, K4, K5, K6, K7, K8, K9; deferred D1, D2, D3, D5, D6, D7, D8, D9. Selection and equations: [CORE_MODEL.md](CORE_MODEL.md). Population in zones 115,203 (65+ 10,873, below poverty 19,853).
 
 | Output (mean per run) | +0 °C | +2 °C | +4 °C |
 | --- | --- | --- | --- |
-| Runs with any outage | 12.0% | 33.5% | 61.2% |
-| Thermal failures (core) | 1.01 | 9.82 | 61.22 |
+| Runs with any outage | 12.1% | 33.7% | 61.8% |
+| Thermal failures (core) | 0.99 | 9.77 | 61.21 |
 | Thermal failures + overload trips (full) | 6.85 | 63.84 | 339.12 |
-| Person-hours without power (core) | 15,475 | 147,468 | 806,100 |
+| Person-hours without power (core) | 15,365 | 142,933 | 819,145 |
 | Person-hours without power (full) | 142,118 | 1,350,404 | 6,629,059 |
-| Person-hours without AC due to outages | 14,574 | 138,741 | 757,955 |
-| Indoor heat person-hours from outages, all | 1,022 | 14,770 | 135,747 |
-| … aged 65+ | 97 | 1,388 | 12,817 |
-| … below poverty | 180 | 2,703 | 24,511 |
+| Person-hours without AC due to outages | 14,471 | 134,493 | 770,141 |
+| Indoor heat person-hours from outages, all | 934 | 14,215 | 139,686 |
+| … aged 65+ | 86 | 1,335 | 13,178 |
+| … below poverty | 169 | 2,618 | 25,218 |
 | Background indoor heat person-hours (homes without AC) | 5,750,791 | 10,000,535 | 13,223,521 |
-| Highest indoor temperature in an AC home during an outage (°C) | 32.7 | 35.6 | 38.7 |
-| Dialysis facility-hours lost (core) | 0.5 | 4.5 | 27.6 |
-| Hospital facility-hours lost (core) | 0.02 | 0.38 | 2.27 |
+| Highest indoor temperature in an AC home during an outage (°C) | 33.4 | 35.7 | 38.5 |
+| Dialysis facility-hours lost (core) | 0.5 | 4.5 | 28.0 |
+| Hospital facility-hours lost (core) | 0.05 | 0.43 | 2.45 |
 | Runs with a TVA shortfall | 0.0% | 0.0% | 4.2% |
-| K8 runs with degraded segments | 11.5% | 33.0% | 60.2% |
-| K8 hospital Δ population mean, min (p99) | 0.004 (0.07) | 0.015 (0.21) | 0.041 (0.30) |
-| K8 hospital largest cell increase p95, min | 0.6 | 1.4 | 2.2 |
-| K8 dialysis Δ population mean, min (p99) | 0.030 (1.58) | 0.136 (1.79) | 0.313 (5.29) |
-| K8 runs with no dialysis centre available | 0.0% | 0.8% | 8.8% |
-| K8 EMS Δ population mean, min (p99) | 0.002 (0.04) | 0.008 (0.08) | 0.021 (0.13) |
+| K8 runs with degraded segments | 11.7% | 33.1% | 61.0% |
+| K8 hospital Δ population mean, min (p99) | 0.004 (0.08) | 0.016 (0.23) | 0.048 (0.41) |
+| K8 hospital largest cell increase p95, min | 0.6 | 1.6 | 3.3 |
+| K8 dialysis Δ population mean, min (p99) | 0.042 (1.65) | 0.223 (5.20) | 0.495 (5.28) |
+| K8 runs with no dialysis centre available | 0.1% | 1.6% | 11.1% |
+| K8 EMS Δ population mean, min (p99) | 0.002 (0.04) | 0.007 (0.08) | 0.018 (0.12) |
 
-Validation: ρ(model, EAGLE-I) all hours 0.04 [-0.03, 0.12] (n = 2,208 h, 92 days); non-storm 0.02 [-0.04, 0.08] (n = 1,994 h, 92 days).
+Validation: ρ(model, EAGLE-I) all hours 0.04 [-0.04, 0.11] (n = 2,208 h, 92 days); non-storm 0.01 [-0.06, 0.07] (n = 1,994 h, 92 days).
 
 | Parameter | Basis | ρ with person-hours without power | ρ with indoor heat person-hours from outages |
 | --- | --- | --- | --- |
-| `C-P1.Kd` K_design | assumption | 0.414 | 0.157 |
-| `C-P3.sigma` sigma | assumption | 0.277 | 0.121 |
-| `C-P3` theta_50 | assumption | -0.213 | -0.089 |
-| `C-P2.dTOR` dTheta_TO_R | standard | 0.11 | 0.032 |
-| `C-P2.dHR` dTheta_H_R | standard | 0.097 | 0.029 |
-| `C-P1.Td` T_design | assumption | -0.061 | -0.023 |
-| `C-P2.tau` tau_TO | standard | -0.042 | -0.025 |
-| `C-P6` repair_hours | internal | 0.041 | 0.103 |
+| `C-P1.Kd` K_design | assumption | 0.395 | 0.147 |
+| `C-P3.sigma` sigma | assumption | 0.283 | 0.127 |
+| `C-P3` theta_50 | assumption | -0.244 | -0.11 |
+| `C-P2.dTOR` dTheta_TO_R | standard | 0.113 | 0.049 |
+| `C-P2.dHR` dTheta_H_R | standard | 0.081 | 0.045 |
+| `C-P2.tau` tau_TO | standard | -0.064 | -0.045 |
+| `C-P6` repair_hours | internal | 0.054 | 0.121 |
+| `C-P1.Td` T_design | assumption | -0.053 | -0.029 |
 

@@ -1,6 +1,6 @@
 {
- "built_at": "2026-11-04T18:24:12+00:00",
- "code_version": "git:d73a39d-dirty",
+ "built_at": "2026-11-10T18:58:12+00:00",
+ "code_version": "git:7098ed6-dirty",
  "config_sha256": "f88479bb02d368a6",
  "python": "3.14.4",
  "packages": {
@@ -121,7 +121,7 @@
   },
   "twin_couplings": {
    "status": "built",
-   "fingerprint": "03937d95f6cacd06"
+   "fingerprint": "0ed87e8e7db53a91"
   },
   "twin_dependencies": {
    "status": "cached",
@@ -158,5 +158,5 @@
   ]
  },
  "chain_check": true,
- "run_id": "20261104T182412Z-20960c7c"
+ "run_id": "20261110T185812Z-a7027d86"
 }
