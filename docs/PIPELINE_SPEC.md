@@ -920,6 +920,14 @@ E^c_g=\sum_t\sum_z\mathrm{pop}_{z,g}\,o_z(t)\,\mathbf 1\big[HI(x_z,t)\ge HI_{thr
 
 参数 C-E1 (planned) VOS、C-E2 (planned) VSL、C-E3 (planned) 单位医疗费用 · 输入 ECO-01 🔒, ECO-02 🟡, ECO-03 🟡, ECO-04 🟡, POP-07 ✅ · 文献 [sullivan2015]、[usdot_vsl]
 
+#### M-47 B 线第一版：热病症与就医需求 → 等待 → 就医时间 Line B v1
+
+**中文：** （1）热病症超额就诊：每小时 $`v(t)=a+k\,E(t)`$，$`E(t)`$ 为当小时室内高温暴露人·小时（无空调住户、停电失去空调的住户、失去制冷的养老院住户），$`k`$ 与 $`a`$ 由 `python -m pipeline.lineb calibrate` 对 Davidson 2014–2023 年每年的高温病症急诊人次与模拟暴露回归得到（C-H11、C-H11.a）。（2）养老院：失去制冷后住户温度按 K9 的热响应上升，≥ 26 °C 的住户·小时计入 $`E`$（C-H17）。（3）依赖电力设备的居民：HHS emPOWER 人数按 ZCTA 面积分到分区；分区停电持续到电池时长 $`h_b`$ 时，每人以概率 $`q`$ 就医（C-H12、C-H13）。（4）等待：取每次运行新增就诊最多的一天 $`\Delta D`$，$`\rho=\rho_0(1+\Delta D/D_0)/s_{open}`$（$`s_{open}`$ 为当天医院按停电小时折算的平均可用比例，上限 0.95），$`\Delta W=W_0[\rho/(1-\rho)-\rho_0/(1-\rho_0)]`$（C-H14–C-H16）。就医时间（综合）= A 线路程增量 + $`\Delta W`$。
+
+**English:** (1) Excess heat-illness visits per hour $`v(t)=a+k\,E(t)`$, where $`E(t)`$ is indoor heat person-hours that hour (homes without AC, homes that lose AC in outages, nursing-home residents who lose cooling); $`k`$ and $`a`$ come from regressing Davidson's annual heat-illness ED visits 2014–2023 on simulated exposure (`python -m pipeline.lineb calibrate`). (2) Nursing homes: residents warm with the K9 thermal response once cooling is lost; resident-hours ≥ 26 °C count in $`E`$. (3) Electricity-dependent residents: HHS emPOWER counts allocated to zones through ZCTA areas; when a zone outage outlasts the battery time $`h_b`$, each person seeks care with probability $`q`$. (4) Waiting: the run's peak day of extra visits $`\Delta D`$ gives $`\rho=\rho_0(1+\Delta D/D_0)/s_{open}`$ (open share of hospitals that day from closed hours, capped at 0.95) and $`\Delta W=W_0[\rho/(1-\rho)-\rho_0/(1-\rho_0)]`$. Time to care (composite) = line A travel increase + $`\Delta W`$.
+
+参数 C-H11, C-H11.a (T2) · C-H12 (T3) · C-H13, C-H14, C-H15, C-H16 (T4) · C-H17 (T2) · 输入 HLT-12 ✅, HLT-17 ✅, HLT-07 ✅ · 文献 [tdh_hri_ed]、[lin2011]、[falaize2014]、[hhs_empower]、[meade2024]
+
 ### 5.8 不确定性、敏感性与校准 Uncertainty, sensitivity and calibration (L7)
 
 #### M-42 Sobol 总效应指数 Sobol total-effect index

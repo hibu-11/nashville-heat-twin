@@ -118,6 +118,24 @@ links:
     evidence_en: Stone et al. (2023) found that a multiday blackout during a heat wave more than doubles heat-related mortality, through indoor temperature once cooling is lost. This is the link from infrastructure to health.
     evidence_zh: Stone 等（2023）发现热浪期间的多日停电使高温死亡率增加一倍以上，机制是失去制冷后的室内温度。这是从基础设施到健康的关键一环。
 
+  - id: K10
+    upstream: [K1, K5, K7, K9]
+    name_en: Line B v1 — heat exposure, nursing-home residents and device users → care demand → ED waiting → time to care
+    name_zh: B 线第一版：高温暴露、养老院住户、依赖电力设备的居民 → 就医需求 → 急诊等待 → 就医时间
+    methods: [M-47]
+    relations: []
+    couplings: [C-H11, C-H11.a, C-H12, C-H13, C-H14, C-H15, C-H16, C-H17]
+    citations: [tdh_hri_ed, gasparrini2015, lin2011, falaize2014, hhs_empower, meade2024, sun2020]
+    evidence_en: >-
+      Heat-illness visits = a + k · indoor heat person-hours, with k calibrated on Davidson's annual heat-illness ED
+      visits 2014–2023 against simulated exposure (R² 0.75, ρ 0.70); nursing-home residents exposed when cooling is not
+      kept; electricity-dependent residents (HHS emPOWER) seek care once device batteries run out. Peak-day extra
+      visits raise ED waiting through W = W0·ρ/(1−ρ). The waiting step rests on T4 assumptions (ρ0, D0, W0, q).
+    evidence_zh: >-
+      热病症就诊 = a + k × 室内高温暴露人·小时，k 用 Davidson 2014–2023 年度急诊人次对模拟暴露校准（R² 0.75，ρ 0.70）；
+      养老院失去制冷时住户暴露；依赖电力设备的居民（HHS emPOWER）在设备电池耗尽后就医。高峰日新增就诊按 W = W0·ρ/(1−ρ)
+      增加急诊等待。等待这一步依赖 T4 假设（ρ0、D0、W0、q）。
+
 deferred:
   - id: D1
     name_en: Peer load transfer and overload trips (Motter–Lai)
@@ -213,30 +231,3 @@ deferred:
     reason_zh: >-
       健康之外的第二个结局。停电损失 = 各类用户停电的用户·小时 × 供电可靠性价值（LBNL ICE 计算器，Sullivan 等 2015）；
       健康损失 = 归因死亡 × 统计生命价值加医疗费用，需等 D6。两者分开报告，不相加。需要 NES 按分区、用户类别的户数。
-
-# 【中文】待建环节：结构已确定、尚未在模型中模拟（2026-11-10 结构调整，B 线）。
-# Planned links: agreed in the structure, not yet simulated (line B of the 2026-11-10 revision).
-planned:
-  - id: B1
-    name_en: Heat exposure → heat-related illness and care demand → time to care (line B)
-    name_zh: 高温暴露 → 热相关病症与就医需求 → 就医时间（B 线）
-    upstream: [K1, K9]
-    relations: []
-    couplings: []
-    citations: [gasparrini2015, anderson2012, stone2023, lin2011, sun2020]
-    reason_en: >-
-      Line B of the 2026-11-10 structure. Daily heat-illness care demand follows an exposure–response relation above
-      Nashville's minimum-mortality temperature (25.0 °C daily mean, Gasparrini et al. 2015), amplified during outage
-      exposure; demand over the capacity of open facilities adds waiting to travel time, so both lines end in time to
-      care. Public data: yearly heat-illness ED visits for Davidson (Tennessee Department of Health, 141–320 a year in
-      2012–2023) and CMS facility capacity; daily ED counts need a data request.
-      Two further inputs (added 2026-11-10): nursing-home residents exposed when cooling is not kept during an outage
-      (about 2,090 residents a day in 20 homes, CMS), and electricity-dependent residents whose devices stop
-      (4,163 Medicare beneficiaries, HHS emPOWER; respiratory admissions rose in the 2003 New York blackout, Lin et al. 2011).
-    reason_zh: >-
-      2026-11-10 结构中的 B 线。每日热病症就医需求在 Nashville 最低死亡温度（日均 25.0 °C，Gasparrini 等 2015）以上
-      按暴露–反应关系上升，停电暴露时放大；需求超过开放设施的容量时产生等待，加到路程时间上，两条线都落到就医时间。
-      公开数据：Davidson 每年的高温病症急诊人次（田纳西卫生厅，2012–2023 年每年 141–320 人次）和 CMS 设施容量；
-      每日急诊数需要申请。
-      另有两项输入（2026-11-10 补充）：停电期间制冷没有维持的养老院住户（20 家，每天约 2,090 人，CMS），以及医疗设备
-      因停电停止的依赖电力设备居民（4,163 名医保用户，HHS emPOWER；2003 年纽约大停电期间呼吸系统住院增加，Lin 等 2011）。

@@ -1,7 +1,7 @@
 {
- "built_at": "2026-11-10T18:58:12+00:00",
- "code_version": "git:7098ed6-dirty",
- "config_sha256": "f88479bb02d368a6",
+ "built_at": "2026-11-10T20:59:08+00:00",
+ "code_version": "git:6e01edb-dirty",
+ "config_sha256": "7583c94952aed607",
  "python": "3.14.4",
  "packages": {
   "numpy": "2.5.4",
@@ -16,131 +16,138 @@
  },
  "datasets": {
   "s2_rgb": {
-   "status": "failed",
-   "fingerprint": null
+   "status": "cached",
+   "fingerprint": "38caba506ef2f494"
   },
   "lst_hourly_2023": {
    "status": "cached",
-   "fingerprint": "e7b89bb6a9a119c2"
+   "fingerprint": "c99b3fa07529536f"
   },
   "lst_10m_final": {
-   "status": "failed",
-   "fingerprint": null
+   "status": "cached",
+   "fingerprint": "c39b39f3f8b795a5"
   },
   "lst_jja2023_mean": {
    "status": "cached",
-   "fingerprint": "fb776bd052ac8027"
+   "fingerprint": "89f5e56ec52b4fa8"
   },
   "lst_20240731_utc22": {
    "status": "cached",
-   "fingerprint": "bd7785890be12c73"
+   "fingerprint": "71da14e16f8a752e"
   },
   "lst_amp_2023": {
    "status": "cached",
-   "fingerprint": "3f70f89811ceee1d"
+   "fingerprint": "6b973cae0bc68d81"
   },
   "roads_lst": {
    "status": "cached",
-   "fingerprint": "ff44153b6bab7755"
+   "fingerprint": "56f900825d8f0a53"
   },
   "surface_parking": {
    "status": "cached",
-   "fingerprint": "7b5064db88fa940b"
+   "fingerprint": "8e27fd21762dabef"
   },
   "hub311_2023": {
    "status": "cached",
-   "fingerprint": "6972c617edb79b9d"
+   "fingerprint": "d49906a09bc384a6"
   },
   "osm_substations": {
    "status": "cached",
-   "fingerprint": "29d681982720130c"
+   "fingerprint": "f5ac17b1ff7af809"
   },
   "osm_power_lines": {
    "status": "cached",
-   "fingerprint": "6aa023445499f6ee"
+   "fingerprint": "04327bc3a36284fc"
   },
   "osm_water": {
    "status": "cached",
-   "fingerprint": "273033994e6921fa"
+   "fingerprint": "a07924c8d8c27454"
   },
   "osm_traffic_signals": {
    "status": "cached",
-   "fingerprint": "2f2bf10c44b7d3ed"
+   "fingerprint": "f70fc0afc3f900da"
   },
   "tdot_bridges": {
    "status": "cached",
-   "fingerprint": "e9791920d5c9fcd4"
+   "fingerprint": "e8271f663551df1d"
   },
   "hpms_2024": {
    "status": "cached",
-   "fingerprint": "b7f1757dbe579550"
+   "fingerprint": "41beb1a85fd4f99d"
   },
   "tmas_2023": {
    "status": "cached",
-   "fingerprint": "5e3e8ee52264f6cc"
+   "fingerprint": "1794619f15b7ad61"
   },
   "hospitals": {
    "status": "cached",
-   "fingerprint": "64f13fa6a581a284"
+   "fingerprint": "720c193d9b676c7a"
   },
   "dialysis": {
    "status": "cached",
-   "fingerprint": "8355bdae231c6567"
+   "fingerprint": "6ba97bcb9622f828"
   },
   "nursing_homes": {
    "status": "cached",
-   "fingerprint": "66a7d2368321d94b"
+   "fingerprint": "a71937457651a096"
   },
   "osm_fire_stations": {
    "status": "cached",
-   "fingerprint": "ab3c53d7efc921ee"
+   "fingerprint": "21f2f5c701b123e7"
   },
   "zcta_population": {
    "status": "cached",
-   "fingerprint": "fc11704d7c0f50aa"
+   "fingerprint": "dbd2c0e812e2e317"
   },
   "buildings_aoi": {
    "status": "cached",
-   "fingerprint": "8874b736ee218534"
+   "fingerprint": "03d3ddd4c44b20c8"
   },
   "asos_bna": {
    "status": "cached",
-   "fingerprint": "a8547701858399f5"
+   "fingerprint": "c2db562090db6e05"
   },
   "air_field_2022": {
    "status": "cached",
-   "fingerprint": "98aeb2f578ef6bc3"
+   "fingerprint": "54485e5890b282d9"
   },
   "eaglei_davidson": {
    "status": "cached",
-   "fingerprint": "49edccffba6a96a9"
+   "fingerprint": "741a0593e044d055"
   },
   "cumberland_thermal": {
    "status": "cached",
-   "fingerprint": "c6a222c6616b42f4"
+   "fingerprint": "b013cffe263c6356"
   },
   "twin_couplings": {
    "status": "built",
-   "fingerprint": "0ed87e8e7db53a91"
+   "fingerprint": "3af709b1ad9b4006"
   },
   "twin_dependencies": {
    "status": "cached",
-   "fingerprint": "94ec86ae6d80a9da"
+   "fingerprint": "cc11b8532c502fa3"
   }
  },
  "tables": {
-  "assets": 75570,
-  "dependencies": 3188,
-  "couplings": 48,
-  "exposures": 850587,
-  "events": 91626,
+  "assets": 396727,
+  "dependencies": 11579,
+  "couplings": 56,
+  "exposures": 2971780,
+  "events": 96683,
   "drivers": 537337,
   "sources": 28
  },
  "validation": {
   "errors": 0,
-  "warnings": 2,
+  "warnings": 3,
   "issues": [
+   {
+    "table": "assets",
+    "level": "warn",
+    "check": "geometry",
+    "message": "invalid geometry",
+    "n": 3
+   },
    {
     "table": "events",
     "level": "warn",
@@ -158,5 +165,5 @@
   ]
  },
  "chain_check": true,
- "run_id": "20261110T185812Z-a7027d86"
+ "run_id": "20261110T205908Z-b0b31216"
 }

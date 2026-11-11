@@ -1,281 +1,429 @@
 {
- "created": "2026-11-10T19:30:31+00:00",
- "runs": 1000,
+ "created": "2026-11-10T22:26:49+00:00",
+ "runs": 500,
  "seed": 20261027,
  "scenarios_delta_c": [
   2.0,
   4.0
  ],
- "method": "Knockout (do-intervention) with common random numbers: contribution = (base \u2212 knockout) / base. Positive: the relation adds to the outcome; negative: it buffers. Relations in series share the downstream effect, so contributions do not add up. care_time_loss_min = population-mean added minutes to hospital + dialysis + EMS at each run's worst hour, cells that lose every facility of a type inside the area counted at 30 min (assumption).",
+ "method": "Knockout (do-intervention) with common random numbers: contribution = (base \u2212 knockout) / base. Positive: the relation adds to the outcome; negative: it buffers. Relations in series share the downstream effect, so contributions do not add up. time_to_care_min = care_time_loss_min (line A) + wait_increase_min (line B, peak-day ED waiting). care_time_loss_min = population-mean added minutes to hospital + dialysis + EMS at each run's worst hour, cells that lose every facility of a type inside the area counted at 30 min (assumption).",
  "outcomes": {
   "2.0": {
    "base": {
-    "care_time_loss_min": 0.802,
-    "dialysis_none_available": 0.019,
-    "pop_hours": 161232.7,
-    "indoor_outage_pop_hours": 18208.1,
-    "indoor_pop_hours": 10169537.9
+    "time_to_care_min": 10.7212,
+    "wait_increase_min": 10.2695,
+    "care_time_loss_min": 0.452,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
    },
    "R01": {
-    "care_time_loss_min": 1.108,
-    "dialysis_none_available": 0.028,
-    "pop_hours": 165671.1,
-    "indoor_outage_pop_hours": 19295.5,
-    "indoor_pop_hours": 11296246.9
+    "time_to_care_min": 12.1775,
+    "wait_increase_min": 11.6247,
+    "care_time_loss_min": 0.553,
+    "dialysis_none_available": 0.002,
+    "pop_hours": 779224.9,
+    "indoor_outage_pop_hours": 83769.7,
+    "indoor_pop_hours": 67899493.7
    },
    "R05": {
-    "care_time_loss_min": 0.802,
-    "dialysis_none_available": 0.019,
-    "pop_hours": 161232.7,
-    "indoor_outage_pop_hours": 18208.1,
-    "indoor_pop_hours": 10169537.9
+    "time_to_care_min": 10.7212,
+    "wait_increase_min": 10.2695,
+    "care_time_loss_min": 0.452,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
    },
    "R06": {
-    "care_time_loss_min": 0.802,
-    "dialysis_none_available": 0.019,
-    "pop_hours": 161232.7,
-    "indoor_outage_pop_hours": 18208.1,
-    "indoor_pop_hours": 10169537.9
+    "time_to_care_min": 10.7212,
+    "wait_increase_min": 10.2695,
+    "care_time_loss_min": 0.452,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
    },
    "R14": {
-    "care_time_loss_min": 0.775,
-    "dialysis_none_available": 0.019,
-    "pop_hours": 161232.7,
-    "indoor_outage_pop_hours": 18208.1,
-    "indoor_pop_hours": 10169537.9
+    "time_to_care_min": 10.6025,
+    "wait_increase_min": 10.2695,
+    "care_time_loss_min": 0.333,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
    },
    "R17": {
-    "care_time_loss_min": 0.026,
+    "time_to_care_min": 10.3638,
+    "wait_increase_min": 10.2695,
+    "care_time_loss_min": 0.094,
     "dialysis_none_available": 0.0,
-    "pop_hours": 161232.7,
-    "indoor_outage_pop_hours": 18208.1,
-    "indoor_pop_hours": 10169537.9
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
+   },
+   "R22": {
+    "time_to_care_min": 0.4517,
+    "wait_increase_min": 0.0,
+    "care_time_loss_min": 0.452,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
    },
    "R02": {
+    "time_to_care_min": 1.54,
+    "wait_increase_min": 1.54,
     "care_time_loss_min": 0.0,
     "dialysis_none_available": 0.0,
     "pop_hours": 0.0,
     "indoor_outage_pop_hours": 0.0,
-    "indoor_pop_hours": 10151329.8
+    "indoor_pop_hours": 53517943.6
    },
    "R03a": {
-    "care_time_loss_min": 0.064,
-    "dialysis_none_available": 0.001,
-    "pop_hours": 13784.1,
-    "indoor_outage_pop_hours": 1002.0,
-    "indoor_pop_hours": 10152331.7
+    "time_to_care_min": 2.3151,
+    "wait_increase_min": 2.2709,
+    "care_time_loss_min": 0.044,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 39879.9,
+    "indoor_outage_pop_hours": 1994.8,
+    "indoor_pop_hours": 53519938.4
    },
    "R03b": {
+    "time_to_care_min": 1.545,
+    "wait_increase_min": 1.544,
     "care_time_loss_min": 0.001,
     "dialysis_none_available": 0.0,
-    "pop_hours": 84.6,
-    "indoor_outage_pop_hours": 0.0,
-    "indoor_pop_hours": 10151329.8
+    "pop_hours": 881.5,
+    "indoor_outage_pop_hours": 324.9,
+    "indoor_pop_hours": 53518268.5
    },
    "R04": {
+    "time_to_care_min": 1.54,
+    "wait_increase_min": 1.54,
     "care_time_loss_min": 0.0,
     "dialysis_none_available": 0.0,
     "pop_hours": 0.0,
     "indoor_outage_pop_hours": 0.0,
-    "indoor_pop_hours": 10151329.8
+    "indoor_pop_hours": 53517943.6
    },
    "R07": {
-    "care_time_loss_min": 0.537,
-    "dialysis_none_available": 0.011,
-    "pop_hours": 36121.4,
-    "indoor_outage_pop_hours": 58.6,
-    "indoor_pop_hours": 10151388.3
+    "time_to_care_min": 2.5473,
+    "wait_increase_min": 2.2811,
+    "care_time_loss_min": 0.266,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 155022.5,
+    "indoor_outage_pop_hours": 541.2,
+    "indoor_pop_hours": 53518484.8
    },
    "R08": {
-    "care_time_loss_min": 0.381,
-    "dialysis_none_available": 0.006,
-    "pop_hours": 104076.8,
-    "indoor_outage_pop_hours": 10571.3,
-    "indoor_pop_hours": 10161901.1
+    "time_to_care_min": 5.5688,
+    "wait_increase_min": 5.3669,
+    "care_time_loss_min": 0.202,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 333165.5,
+    "indoor_outage_pop_hours": 22571.0,
+    "indoor_pop_hours": 53540514.6
    },
    "R09": {
-    "care_time_loss_min": 0.802,
-    "dialysis_none_available": 0.019,
-    "pop_hours": 161232.7,
-    "indoor_outage_pop_hours": 18208.1,
-    "indoor_pop_hours": 10169537.9
+    "time_to_care_min": 10.7212,
+    "wait_increase_min": 10.2695,
+    "care_time_loss_min": 0.452,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
    },
    "R10": {
-    "care_time_loss_min": 0.802,
-    "dialysis_none_available": 0.019,
-    "pop_hours": 161232.7,
-    "indoor_outage_pop_hours": 18208.1,
-    "indoor_pop_hours": 10169537.9
+    "time_to_care_min": 10.7212,
+    "wait_increase_min": 10.2695,
+    "care_time_loss_min": 0.452,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
    },
    "R11": {
-    "care_time_loss_min": 0.029,
+    "time_to_care_min": 9.7605,
+    "wait_increase_min": 9.6567,
+    "care_time_loss_min": 0.104,
     "dialysis_none_available": 0.0,
-    "pop_hours": 161232.7,
-    "indoor_outage_pop_hours": 18208.1,
-    "indoor_pop_hours": 10169537.9
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
    },
    "R12": {
-    "care_time_loss_min": 0.802,
-    "dialysis_none_available": 0.019,
-    "pop_hours": 161232.7,
-    "indoor_outage_pop_hours": 18208.1,
-    "indoor_pop_hours": 10169537.9
+    "time_to_care_min": 10.7212,
+    "wait_increase_min": 10.2695,
+    "care_time_loss_min": 0.452,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
    },
    "R13": {
-    "care_time_loss_min": 0.725,
-    "dialysis_none_available": 0.017,
-    "pop_hours": 161232.7,
-    "indoor_outage_pop_hours": 18208.1,
-    "indoor_pop_hours": 10169537.9
+    "time_to_care_min": 10.6065,
+    "wait_increase_min": 10.2695,
+    "care_time_loss_min": 0.337,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
    },
    "R18": {
-    "care_time_loss_min": 0.802,
-    "dialysis_none_available": 0.019,
-    "pop_hours": 161232.7,
+    "time_to_care_min": 10.6874,
+    "wait_increase_min": 10.2357,
+    "care_time_loss_min": 0.452,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
     "indoor_outage_pop_hours": 0.0,
-    "indoor_pop_hours": 10151329.8
+    "indoor_pop_hours": 53517943.6
    },
    "R19": {
-    "care_time_loss_min": 0.802,
-    "dialysis_none_available": 0.019,
-    "pop_hours": 161232.7,
+    "time_to_care_min": 8.9587,
+    "wait_increase_min": 8.507,
+    "care_time_loss_min": 0.452,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
     "indoor_outage_pop_hours": 0.0,
     "indoor_pop_hours": 0.0
+   },
+   "R21": {
+    "time_to_care_min": 8.9586,
+    "wait_increase_min": 8.5069,
+    "care_time_loss_min": 0.452,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
+   },
+   "R23": {
+    "time_to_care_min": 10.7211,
+    "wait_increase_min": 10.2693,
+    "care_time_loss_min": 0.452,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
+   },
+   "R24": {
+    "time_to_care_min": 2.2507,
+    "wait_increase_min": 1.799,
+    "care_time_loss_min": 0.452,
+    "dialysis_none_available": 0.0,
+    "pop_hours": 603730.7,
+    "indoor_outage_pop_hours": 46736.4,
+    "indoor_pop_hours": 53564680.0
    }
   },
   "4.0": {
    "base": {
-    "care_time_loss_min": 3.895,
-    "dialysis_none_available": 0.11,
-    "pop_hours": 851417.7,
-    "indoor_outage_pop_hours": 147349.1,
-    "indoor_pop_hours": 13446233.5
+    "time_to_care_min": 36.5742,
+    "wait_increase_min": 34.4849,
+    "care_time_loss_min": 2.089,
+    "dialysis_none_available": 0.018,
+    "pop_hours": 3511109.6,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
    },
    "R01": {
-    "care_time_loss_min": 4.615,
-    "dialysis_none_available": 0.134,
-    "pop_hours": 864854.5,
-    "indoor_outage_pop_hours": 159980.1,
-    "indoor_pop_hours": 14095454.7
+    "time_to_care_min": 42.2504,
+    "wait_increase_min": 39.7562,
+    "care_time_loss_min": 2.494,
+    "dialysis_none_available": 0.022,
+    "pop_hours": 4469350.2,
+    "indoor_outage_pop_hours": 722496.6,
+    "indoor_pop_hours": 85120453.2
    },
    "R05": {
-    "care_time_loss_min": 3.88,
-    "dialysis_none_available": 0.11,
-    "pop_hours": 850897.3,
-    "indoor_outage_pop_hours": 147338.3,
-    "indoor_pop_hours": 13446222.7
+    "time_to_care_min": 36.5382,
+    "wait_increase_min": 34.4547,
+    "care_time_loss_min": 2.083,
+    "dialysis_none_available": 0.018,
+    "pop_hours": 3507862.4,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
    },
    "R06": {
-    "care_time_loss_min": 3.88,
-    "dialysis_none_available": 0.11,
-    "pop_hours": 850897.3,
-    "indoor_outage_pop_hours": 147338.3,
-    "indoor_pop_hours": 13446222.7
+    "time_to_care_min": 36.5382,
+    "wait_increase_min": 34.4547,
+    "care_time_loss_min": 2.083,
+    "dialysis_none_available": 0.018,
+    "pop_hours": 3507862.4,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
    },
    "R14": {
-    "care_time_loss_min": 3.825,
-    "dialysis_none_available": 0.11,
-    "pop_hours": 851417.7,
-    "indoor_outage_pop_hours": 147349.1,
-    "indoor_pop_hours": 13446233.5
+    "time_to_care_min": 36.2338,
+    "wait_increase_min": 34.4849,
+    "care_time_loss_min": 1.749,
+    "dialysis_none_available": 0.018,
+    "pop_hours": 3511109.6,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
    },
    "R17": {
-    "care_time_loss_min": 0.069,
+    "time_to_care_min": 34.7637,
+    "wait_increase_min": 34.4849,
+    "care_time_loss_min": 0.279,
     "dialysis_none_available": 0.0,
-    "pop_hours": 851417.7,
-    "indoor_outage_pop_hours": 147349.1,
-    "indoor_pop_hours": 13446233.5
+    "pop_hours": 3511109.6,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
+   },
+   "R22": {
+    "time_to_care_min": 2.0892,
+    "wait_increase_min": 0.0,
+    "care_time_loss_min": 2.089,
+    "dialysis_none_available": 0.018,
+    "pop_hours": 3511109.6,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
    },
    "R02": {
-    "care_time_loss_min": 0.016,
+    "time_to_care_min": 1.5808,
+    "wait_increase_min": 1.5701,
+    "care_time_loss_min": 0.011,
     "dialysis_none_available": 0.0,
-    "pop_hours": 530.6,
+    "pop_hours": 3271.4,
     "indoor_outage_pop_hours": 0.0,
-    "indoor_pop_hours": 13298884.4
+    "indoor_pop_hours": 75880927.9
    },
    "R03a": {
-    "care_time_loss_min": 0.614,
-    "dialysis_none_available": 0.015,
-    "pop_hours": 136250.4,
-    "indoor_outage_pop_hours": 16506.3,
-    "indoor_pop_hours": 13315390.7
+    "time_to_care_min": 7.951,
+    "wait_increase_min": 7.6327,
+    "care_time_loss_min": 0.318,
+    "dialysis_none_available": 0.002,
+    "pop_hours": 487079.9,
+    "indoor_outage_pop_hours": 49261.7,
+    "indoor_pop_hours": 75930189.6
    },
    "R03b": {
-    "care_time_loss_min": 0.02,
+    "time_to_care_min": 1.7773,
+    "wait_increase_min": 1.7558,
+    "care_time_loss_min": 0.022,
     "dialysis_none_available": 0.0,
-    "pop_hours": 1735.0,
-    "indoor_outage_pop_hours": 134.3,
-    "indoor_pop_hours": 13299018.7
+    "pop_hours": 7748.5,
+    "indoor_outage_pop_hours": 697.5,
+    "indoor_pop_hours": 75881625.5
    },
    "R04": {
-    "care_time_loss_min": 0.016,
+    "time_to_care_min": 1.5808,
+    "wait_increase_min": 1.5701,
+    "care_time_loss_min": 0.011,
     "dialysis_none_available": 0.0,
-    "pop_hours": 530.6,
+    "pop_hours": 3271.4,
     "indoor_outage_pop_hours": 0.0,
-    "indoor_pop_hours": 13298884.4
+    "indoor_pop_hours": 75880927.9
    },
    "R07": {
-    "care_time_loss_min": 2.644,
-    "dialysis_none_available": 0.067,
-    "pop_hours": 229447.7,
-    "indoor_outage_pop_hours": 5540.6,
-    "indoor_pop_hours": 13304425.0
+    "time_to_care_min": 11.1304,
+    "wait_increase_min": 10.0287,
+    "care_time_loss_min": 1.102,
+    "dialysis_none_available": 0.004,
+    "pop_hours": 970413.6,
+    "indoor_outage_pop_hours": 16289.6,
+    "indoor_pop_hours": 75897217.5
    },
    "R08": {
-    "care_time_loss_min": 2.229,
-    "dialysis_none_available": 0.054,
-    "pop_hours": 565742.1,
-    "indoor_outage_pop_hours": 82949.7,
-    "indoor_pop_hours": 13381834.1
+    "time_to_care_min": 19.7549,
+    "wait_increase_min": 18.8334,
+    "care_time_loss_min": 0.921,
+    "dialysis_none_available": 0.002,
+    "pop_hours": 1994870.7,
+    "indoor_outage_pop_hours": 222118.0,
+    "indoor_pop_hours": 76103045.9
    },
    "R09": {
-    "care_time_loss_min": 3.895,
-    "dialysis_none_available": 0.11,
-    "pop_hours": 851417.7,
-    "indoor_outage_pop_hours": 147349.1,
-    "indoor_pop_hours": 13446233.5
+    "time_to_care_min": 36.5742,
+    "wait_increase_min": 34.4849,
+    "care_time_loss_min": 2.089,
+    "dialysis_none_available": 0.018,
+    "pop_hours": 3511109.6,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
    },
    "R10": {
-    "care_time_loss_min": 3.895,
-    "dialysis_none_available": 0.11,
-    "pop_hours": 851417.7,
-    "indoor_outage_pop_hours": 147349.1,
-    "indoor_pop_hours": 13446233.5
+    "time_to_care_min": 36.5742,
+    "wait_increase_min": 34.4849,
+    "care_time_loss_min": 2.089,
+    "dialysis_none_available": 0.018,
+    "pop_hours": 3511109.6,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
    },
    "R11": {
-    "care_time_loss_min": 0.074,
+    "time_to_care_min": 30.9625,
+    "wait_increase_min": 30.6623,
+    "care_time_loss_min": 0.3,
     "dialysis_none_available": 0.0,
-    "pop_hours": 851417.7,
-    "indoor_outage_pop_hours": 147349.1,
-    "indoor_pop_hours": 13446233.5
+    "pop_hours": 3511109.6,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
    },
    "R12": {
-    "care_time_loss_min": 3.895,
-    "dialysis_none_available": 0.11,
-    "pop_hours": 851417.7,
-    "indoor_outage_pop_hours": 147349.1,
-    "indoor_pop_hours": 13446233.5
+    "time_to_care_min": 36.5742,
+    "wait_increase_min": 34.4849,
+    "care_time_loss_min": 2.089,
+    "dialysis_none_available": 0.018,
+    "pop_hours": 3511109.6,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
    },
    "R13": {
-    "care_time_loss_min": 3.764,
-    "dialysis_none_available": 0.108,
-    "pop_hours": 851417.7,
-    "indoor_outage_pop_hours": 147349.1,
-    "indoor_pop_hours": 13446233.5
+    "time_to_care_min": 36.2153,
+    "wait_increase_min": 34.4849,
+    "care_time_loss_min": 1.73,
+    "dialysis_none_available": 0.016,
+    "pop_hours": 3511109.6,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
    },
    "R18": {
-    "care_time_loss_min": 3.895,
-    "dialysis_none_available": 0.11,
-    "pop_hours": 851417.7,
+    "time_to_care_min": 36.2051,
+    "wait_increase_min": 34.1159,
+    "care_time_loss_min": 2.089,
+    "dialysis_none_available": 0.018,
+    "pop_hours": 3511109.6,
     "indoor_outage_pop_hours": 0.0,
-    "indoor_pop_hours": 13298884.4
+    "indoor_pop_hours": 75880927.9
    },
    "R19": {
-    "care_time_loss_min": 3.895,
-    "dialysis_none_available": 0.11,
-    "pop_hours": 851417.7,
+    "time_to_care_min": 33.8884,
+    "wait_increase_min": 31.7992,
+    "care_time_loss_min": 2.089,
+    "dialysis_none_available": 0.018,
+    "pop_hours": 3511109.6,
     "indoor_outage_pop_hours": 0.0,
     "indoor_pop_hours": 0.0
+   },
+   "R21": {
+    "time_to_care_min": 33.8874,
+    "wait_increase_min": 31.7981,
+    "care_time_loss_min": 2.089,
+    "dialysis_none_available": 0.018,
+    "pop_hours": 3511109.6,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
+   },
+   "R23": {
+    "time_to_care_min": 36.5731,
+    "wait_increase_min": 34.4838,
+    "care_time_loss_min": 2.089,
+    "dialysis_none_available": 0.018,
+    "pop_hours": 3511109.6,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
+   },
+   "R24": {
+    "time_to_care_min": 4.7561,
+    "wait_increase_min": 2.6669,
+    "care_time_loss_min": 2.089,
+    "dialysis_none_available": 0.018,
+    "pop_hours": 3511109.6,
+    "indoor_outage_pop_hours": 482067.5,
+    "indoor_pop_hours": 76362995.4
    }
   }
  },
@@ -290,16 +438,20 @@
    ],
    "contribution": {
     "+2": {
-     "care_time_loss_min": -0.3815,
-     "pop_hours": -0.0275,
-     "indoor_pop_hours": -0.1108,
-     "indoor_outage_pop_hours": -0.0597
+     "time_to_care_min": -0.1358,
+     "wait_increase_min": -0.132,
+     "care_time_loss_min": -0.2235,
+     "pop_hours": -0.2907,
+     "indoor_pop_hours": -0.2676,
+     "indoor_outage_pop_hours": -0.7924
     },
     "+4": {
-     "care_time_loss_min": -0.1849,
-     "pop_hours": -0.0158,
-     "indoor_pop_hours": -0.0483,
-     "indoor_outage_pop_hours": -0.0857
+     "time_to_care_min": -0.1552,
+     "wait_increase_min": -0.1529,
+     "care_time_loss_min": -0.1939,
+     "pop_hours": -0.2729,
+     "indoor_pop_hours": -0.1147,
+     "indoor_outage_pop_hours": -0.4987
     }
    }
   },
@@ -313,16 +465,20 @@
    ],
    "contribution": {
     "+2": {
+     "time_to_care_min": 0.0,
+     "wait_increase_min": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "care_time_loss_min": 0.0039,
-     "pop_hours": 0.0006,
+     "time_to_care_min": 0.001,
+     "wait_increase_min": 0.0009,
+     "care_time_loss_min": 0.0029,
+     "pop_hours": 0.0009,
      "indoor_pop_hours": 0.0,
-     "indoor_outage_pop_hours": 0.0001
+     "indoor_outage_pop_hours": 0.0
     }
    }
   },
@@ -340,16 +496,20 @@
    ],
    "contribution": {
     "+2": {
+     "time_to_care_min": 0.0,
+     "wait_increase_min": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "care_time_loss_min": 0.0039,
-     "pop_hours": 0.0006,
+     "time_to_care_min": 0.001,
+     "wait_increase_min": 0.0009,
+     "care_time_loss_min": 0.0029,
+     "pop_hours": 0.0009,
      "indoor_pop_hours": 0.0,
-     "indoor_outage_pop_hours": 0.0001
+     "indoor_outage_pop_hours": 0.0
     }
    }
   },
@@ -371,13 +531,17 @@
    ],
    "contribution": {
     "+2": {
-     "care_time_loss_min": 0.0337,
+     "time_to_care_min": 0.0111,
+     "wait_increase_min": 0.0,
+     "care_time_loss_min": 0.2633,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "care_time_loss_min": 0.018,
+     "time_to_care_min": 0.0093,
+     "wait_increase_min": 0.0,
+     "care_time_loss_min": 0.1628,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
@@ -394,13 +558,44 @@
    ],
    "contribution": {
     "+2": {
-     "care_time_loss_min": 0.9676,
+     "time_to_care_min": 0.0333,
+     "wait_increase_min": 0.0,
+     "care_time_loss_min": 0.792,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "care_time_loss_min": 0.9823,
+     "time_to_care_min": 0.0495,
+     "wait_increase_min": 0.0,
+     "care_time_loss_min": 0.8664,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    }
+   }
+  },
+  "R22": {
+   "what_is_switched_off": "extra care demand does not lengthen waiting",
+   "edges": [
+    [
+     "illness",
+     "access"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "time_to_care_min": 0.9579,
+     "wait_increase_min": 1.0,
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "time_to_care_min": 0.9429,
+     "wait_increase_min": 1.0,
+     "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
@@ -417,15 +612,19 @@
    ],
    "contribution": {
     "+2": {
+     "time_to_care_min": 0.8564,
+     "wait_increase_min": 0.85,
      "care_time_loss_min": 1.0,
      "pop_hours": 1.0,
-     "indoor_pop_hours": 0.0018,
+     "indoor_pop_hours": 0.0009,
      "indoor_outage_pop_hours": 1.0
     },
     "+4": {
-     "care_time_loss_min": 0.9959,
-     "pop_hours": 0.9994,
-     "indoor_pop_hours": 0.011,
+     "time_to_care_min": 0.9568,
+     "wait_increase_min": 0.9545,
+     "care_time_loss_min": 0.9947,
+     "pop_hours": 0.9991,
+     "indoor_pop_hours": 0.0063,
      "indoor_outage_pop_hours": 1.0
     }
    }
@@ -440,16 +639,20 @@
    ],
    "contribution": {
     "+2": {
-     "care_time_loss_min": 0.9202,
-     "pop_hours": 0.9145,
-     "indoor_pop_hours": 0.0017,
-     "indoor_outage_pop_hours": 0.945
+     "time_to_care_min": 0.7841,
+     "wait_increase_min": 0.7789,
+     "care_time_loss_min": 0.9027,
+     "pop_hours": 0.9339,
+     "indoor_pop_hours": 0.0008,
+     "indoor_outage_pop_hours": 0.9573
     },
     "+4": {
-     "care_time_loss_min": 0.8424,
-     "pop_hours": 0.84,
-     "indoor_pop_hours": 0.0097,
-     "indoor_outage_pop_hours": 0.888
+     "time_to_care_min": 0.7826,
+     "wait_increase_min": 0.7787,
+     "care_time_loss_min": 0.8478,
+     "pop_hours": 0.8613,
+     "indoor_pop_hours": 0.0057,
+     "indoor_outage_pop_hours": 0.8978
     }
    }
   },
@@ -463,16 +666,20 @@
    ],
    "contribution": {
     "+2": {
-     "care_time_loss_min": 0.9988,
-     "pop_hours": 0.9995,
-     "indoor_pop_hours": 0.0018,
-     "indoor_outage_pop_hours": 1.0
+     "time_to_care_min": 0.8559,
+     "wait_increase_min": 0.8497,
+     "care_time_loss_min": 0.9978,
+     "pop_hours": 0.9985,
+     "indoor_pop_hours": 0.0009,
+     "indoor_outage_pop_hours": 0.993
     },
     "+4": {
-     "care_time_loss_min": 0.9949,
-     "pop_hours": 0.998,
-     "indoor_pop_hours": 0.0109,
-     "indoor_outage_pop_hours": 0.9991
+     "time_to_care_min": 0.9514,
+     "wait_increase_min": 0.9491,
+     "care_time_loss_min": 0.9895,
+     "pop_hours": 0.9978,
+     "indoor_pop_hours": 0.0063,
+     "indoor_outage_pop_hours": 0.9986
     }
    }
   },
@@ -486,15 +693,19 @@
    ],
    "contribution": {
     "+2": {
+     "time_to_care_min": 0.8564,
+     "wait_increase_min": 0.85,
      "care_time_loss_min": 1.0,
      "pop_hours": 1.0,
-     "indoor_pop_hours": 0.0018,
+     "indoor_pop_hours": 0.0009,
      "indoor_outage_pop_hours": 1.0
     },
     "+4": {
-     "care_time_loss_min": 0.9959,
-     "pop_hours": 0.9994,
-     "indoor_pop_hours": 0.011,
+     "time_to_care_min": 0.9568,
+     "wait_increase_min": 0.9545,
+     "care_time_loss_min": 0.9947,
+     "pop_hours": 0.9991,
+     "indoor_pop_hours": 0.0063,
      "indoor_outage_pop_hours": 1.0
     }
    }
@@ -509,16 +720,20 @@
    ],
    "contribution": {
     "+2": {
-     "care_time_loss_min": 0.3304,
-     "pop_hours": 0.776,
-     "indoor_pop_hours": 0.0018,
-     "indoor_outage_pop_hours": 0.9968
+     "time_to_care_min": 0.7624,
+     "wait_increase_min": 0.7779,
+     "care_time_loss_min": 0.4115,
+     "pop_hours": 0.7432,
+     "indoor_pop_hours": 0.0009,
+     "indoor_outage_pop_hours": 0.9884
     },
     "+4": {
-     "care_time_loss_min": 0.3212,
-     "pop_hours": 0.7305,
-     "indoor_pop_hours": 0.0105,
-     "indoor_outage_pop_hours": 0.9624
+     "time_to_care_min": 0.6957,
+     "wait_increase_min": 0.7092,
+     "care_time_loss_min": 0.4725,
+     "pop_hours": 0.7236,
+     "indoor_pop_hours": 0.0061,
+     "indoor_outage_pop_hours": 0.9662
     }
    }
   },
@@ -532,16 +747,20 @@
    ],
    "contribution": {
     "+2": {
-     "care_time_loss_min": 0.5249,
-     "pop_hours": 0.3545,
-     "indoor_pop_hours": 0.0008,
-     "indoor_outage_pop_hours": 0.4194
+     "time_to_care_min": 0.4806,
+     "wait_increase_min": 0.4774,
+     "care_time_loss_min": 0.5531,
+     "pop_hours": 0.4482,
+     "indoor_pop_hours": 0.0005,
+     "indoor_outage_pop_hours": 0.5171
     },
     "+4": {
-     "care_time_loss_min": 0.4277,
-     "pop_hours": 0.3355,
-     "indoor_pop_hours": 0.0048,
-     "indoor_outage_pop_hours": 0.4371
+     "time_to_care_min": 0.4599,
+     "wait_increase_min": 0.4539,
+     "care_time_loss_min": 0.5591,
+     "pop_hours": 0.4318,
+     "indoor_pop_hours": 0.0034,
+     "indoor_outage_pop_hours": 0.5392
     }
    }
   },
@@ -555,12 +774,16 @@
    ],
    "contribution": {
     "+2": {
+     "time_to_care_min": 0.0,
+     "wait_increase_min": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
+     "time_to_care_min": 0.0,
+     "wait_increase_min": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -582,12 +805,16 @@
    ],
    "contribution": {
     "+2": {
+     "time_to_care_min": 0.0,
+     "wait_increase_min": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
+     "time_to_care_min": 0.0,
+     "wait_increase_min": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -605,13 +832,17 @@
    ],
    "contribution": {
     "+2": {
-     "care_time_loss_min": 0.9638,
+     "time_to_care_min": 0.0896,
+     "wait_increase_min": 0.0597,
+     "care_time_loss_min": 0.7699,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "care_time_loss_min": 0.981,
+     "time_to_care_min": 0.1534,
+     "wait_increase_min": 0.1108,
+     "care_time_loss_min": 0.8564,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
@@ -628,12 +859,16 @@
    ],
    "contribution": {
     "+2": {
+     "time_to_care_min": 0.0,
+     "wait_increase_min": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
+     "time_to_care_min": 0.0,
+     "wait_increase_min": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -651,13 +886,17 @@
    ],
    "contribution": {
     "+2": {
-     "care_time_loss_min": 0.096,
+     "time_to_care_min": 0.0107,
+     "wait_increase_min": 0.0,
+     "care_time_loss_min": 0.2544,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "care_time_loss_min": 0.0336,
+     "time_to_care_min": 0.0098,
+     "wait_increase_min": 0.0,
+     "care_time_loss_min": 0.1719,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
@@ -674,15 +913,19 @@
    ],
    "contribution": {
     "+2": {
+     "time_to_care_min": 0.0032,
+     "wait_increase_min": 0.0033,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
-     "indoor_pop_hours": 0.0018,
+     "indoor_pop_hours": 0.0009,
      "indoor_outage_pop_hours": 1.0
     },
     "+4": {
+     "time_to_care_min": 0.0101,
+     "wait_increase_min": 0.0107,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
-     "indoor_pop_hours": 0.011,
+     "indoor_pop_hours": 0.0063,
      "indoor_outage_pop_hours": 1.0
     }
    }
@@ -697,16 +940,101 @@
    ],
    "contribution": {
     "+2": {
+     "time_to_care_min": 0.1644,
+     "wait_increase_min": 0.1716,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 1.0,
      "indoor_outage_pop_hours": 1.0
     },
     "+4": {
+     "time_to_care_min": 0.0734,
+     "wait_increase_min": 0.0779,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 1.0,
      "indoor_outage_pop_hours": 1.0
+    }
+   }
+  },
+  "R21": {
+   "what_is_switched_off": "heat exposure does not raise heat-illness visits (k = 0)",
+   "edges": [
+    [
+     "exposure",
+     "illness"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "time_to_care_min": 0.1644,
+     "wait_increase_min": 0.1716,
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "time_to_care_min": 0.0735,
+     "wait_increase_min": 0.0779,
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    }
+   }
+  },
+  "R23": {
+   "what_is_switched_off": "nursing-home residents are not exposed when cooling is lost",
+   "edges": [
+    [
+     "facility",
+     "exposure"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "time_to_care_min": 0.0,
+     "wait_increase_min": 0.0,
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "time_to_care_min": 0.0,
+     "wait_increase_min": 0.0,
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    }
+   }
+  },
+  "R24": {
+   "what_is_switched_off": "electricity-dependent residents make no visits during outages",
+   "edges": [
+    [
+     "zone",
+     "illness"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "time_to_care_min": 0.7901,
+     "wait_increase_min": 0.8248,
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "time_to_care_min": 0.87,
+     "wait_increase_min": 0.9227,
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
     }
    }
   }
@@ -845,10 +1173,11 @@
    "inherited": "T4"
   },
   "access": {
-   "tier": "T1",
+   "tier": "T4",
    "weakest_inputs": [
-    "TRN-21 Fire / EMS stations (OSM)",
-    "POP-01 Total population"
+    "C-H14 rho0",
+    "C-H15 D0",
+    "C-H16 W0"
    ],
    "inherited": "T4"
   },
@@ -881,9 +1210,7 @@
   "illness": {
    "tier": "T4",
    "weakest_inputs": [
-    "HLT-12 Heat-related emergency department visits",
-    "HLT-14 Temperature\u2013mortality curve (minimum mortality temperature and slope)",
-    "HLT-17 Electricity-dependent Medicare beneficiaries"
+    "C-H13 q"
    ],
    "inherited": "T4"
   }

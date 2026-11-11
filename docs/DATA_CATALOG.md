@@ -14,15 +14,15 @@
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Climate 气象气候 | 3 | 4 | 2 | 2 | 9 | · | · | 5 | 25 |
 | Land surface temperature 地表温度 | 1 | 3 | 4 | · | 2 | · | 1 | 1 | 12 |
-| Built environment 建成环境 | 8 | 1 | · | 1 | 2 | · | · | · | 12 |
+| Built environment 建成环境 | 9 | 1 | · | · | 2 | · | · | · | 12 |
 | Power 电力 | 13 | 1 | 7 | 2 | · | 6 | 3 | 2 | 34 |
 | Water 供水 | 4 | 1 | 3 | 2 | 2 | 5 | 2 | 1 | 20 |
 | Transportation 交通 | 11 | 4 | 7 | 3 | · | 1 | 2 | 1 | 29 |
-| Health 健康 | 8 | · | 5 | · | 7 | 2 | 4 | · | 26 |
+| Health 健康 | 8 | · | 5 | 2 | 6 | 1 | 4 | · | 26 |
 | Population 人口 | 4 | 2 | 5 | 1 | 6 | 1 | · | · | 19 |
 | Economy 经济 | · | · | · | · | 3 | 1 | · | · | 4 |
 | Model controls 模型控制 | 4 | · | · | · | · | · | · | · | 4 |
-| **合计 Total** | **56** | **16** | **33** | **11** | **31** | **16** | **12** | **10** | **185** |
+| **合计 Total** | **57** | **16** | **33** | **12** | **30** | **15** | **12** | **10** | **185** |
 
 ### 1.1 可信度分级 Confidence tiers
 
@@ -45,12 +45,12 @@ English: confidence is separate from availability. Status says whether data can 
 | Power 电力 | 7 | 4 | 5 | 12 | 6 | · | 34 |
 | Water 供水 | 5 | 1 | 3 | 8 | 3 | · | 20 |
 | Transportation 交通 | 14 | 5 | 3 | 3 | 4 | · | 29 |
-| Health 健康 | 3 | 6 | 2 | 13 | 2 | · | 26 |
+| Health 健康 | 5 | 6 | 2 | 11 | 2 | · | 26 |
 | Population 人口 | 6 | 1 | · | 8 | 4 | · | 19 |
 | Economy 经济 | · | · | · | 4 | · | · | 4 |
 | Model controls 模型控制 | · | · | · | · | · | 4 | 4 |
-| **变量合计 Variables** | **54** | **20** | **15** | **68** | **24** | **4** | **185** |
-| **参数 Couplings** | 0 | 22 | 15 | 11 | · | · | 48 |
+| **变量合计 Variables** | **56** | **20** | **15** | **66** | **24** | **4** | **185** |
+| **参数 Couplings** | 0 | 25 | 16 | 15 | · | · | 56 |
 
 ## 2. 骨架模型所需变量 Core skeleton variables
 
@@ -60,7 +60,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 
 | 合计 Summary | ✅ have 已有 | ⬜ assumed / placeholder 假设或占位 | 🟡 obtainable 可获取 | 🔒 partner 需合作 |
 | --- | ---: | ---: | ---: | ---: |
-| 69 variables | 58 | 7 | 1 | 3 |
+| 77 variables | 59 | 9 | 6 | 3 |
 
 ### K1 Urban air-temperature field / 城市气温场
 
@@ -83,6 +83,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | CLM-19 | Urban air temperature field<br>城市气温场（空间化气温） | state | ✅ derived | T2 | air_field_2022 | ✅ have 已有 | M-6 calibrated on CLM-20 |
 | BLD-01 | Building footprint area<br>建筑占地面积 | attribute | ✅ in_model | T1 | buildings_aoi | ✅ have 已有 | Metro footprints + parcels |
+| BLD-10 | County-wide building footprints (Metro Nashville)<br>全县建筑轮廓（Metro Nashville） | attribute | ✅ in_model | T1 | buildings_aoi | ✅ have 已有 | Metro Nashville building footprints (cascading-heat 09_buildings) |
 | PWR-03 | Transformer rated capacity<br>变压器额定容量 | attribute | 🔒 restricted | T4 | L^r = L^d / K_d (C-P1.Kd) | 🔒 needs partner 需合作 | NES / TVA nameplate data |
 | PWR-04 | Design (peak) load of a substation<br>变电站设计（峰值）负荷 | attribute | ⬜ placeholder | T3 | buildings_aoi | ⬜ placeholder 占位 | NES SCADA peak loads |
 | PWR-05 | Load–temperature slope<br>负荷–气温斜率 | parameter | ✅ in_model | T3 | couplings: auffhammer2017, bartos2016, cascadingheat2026 | ✅ have 已有 | Hourly refit on EIA-930 TVA demand (M-11) |
@@ -167,6 +168,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | Id | 变量 Variable | 类型 Kind | 状态 Status | 可信度 Tier | 来源 Source | 骨架需求 Need | 目标来源 Target |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | BLD-01 | Building footprint area<br>建筑占地面积 | attribute | ✅ in_model | T1 | buildings_aoi | ✅ have 已有 | Metro footprints + parcels |
+| BLD-10 | County-wide building footprints (Metro Nashville)<br>全县建筑轮廓（Metro Nashville） | attribute | ✅ in_model | T1 | buildings_aoi | ✅ have 已有 | Metro Nashville building footprints (cascading-heat 09_buildings) |
 | PWR-28 | Zone outage state and outage duration so far<br>分区停电状态与已停电时长 | state | ✅ derived | inherit | — | ✅ have 已有 | - |
 | TRN-01 | Road segments and class<br>路段及道路等级 | attribute | ✅ in_model | T1 | roads_lst | ✅ have 已有 | TIGER/Line + OSM |
 | TRN-02 | Segment length<br>路段长度 | attribute | ✅ derived | T2 | roads_lst | ✅ have 已有 | - |
@@ -211,6 +213,22 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | POP-06 | Zone population (areal weighting)<br>分区人口（面积加权） | state | ✅ derived | inherit | zcta_population | ✅ have 已有 | M-39 dasymetric |
 | POP-18 | Person-hours without AC because of outages<br>因停电失去空调的人·小时 | output | ✅ derived | T2 | zcta_population | ✅ have 已有 | - |
 
+### K10 Line B v1 — heat exposure, nursing-home residents and device users → care demand → ED waiting → time to care / B 线第一版：高温暴露、养老院住户、依赖电力设备的居民 → 就医需求 → 急诊等待 → 就医时间
+
+可信度 Confidence：本环节输入最弱 weakest own input **T4** · 连同上游 including upstream **T4**
+
+| Id | 变量 Variable | 类型 Kind | 状态 Status | 可信度 Tier | 来源 Source | 骨架需求 Need | 目标来源 Target |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| HLT-02 | Hospital beds and ED capacity<br>医院床位与急诊容量 | attribute | 🟡 public | T4 | Equal weight per hospital | 🟡 public 可公开获取 | CMS Hospital Cost Reports / AHA (restricted) |
+| HLT-06 | Dialysis patients per facility<br>每个透析中心的患者数 | attribute | 🟡 public | T4 | Stations × 6 (two shifts × three-times-weekly cycle; placeholder) | 🟡 public 可公开获取 | CMS Dialysis Facility Reports |
+| HLT-07 | Nursing homes and certified beds<br>养老院与认证床位 | attribute | ✅ in_model | T1 | nursing_homes | ✅ have 已有 | CMS Nursing Homes |
+| HLT-08 | Nursing-home backup power failure<br>养老院备用电源失效概率 | parameter | ✅ in_model | T3 | couplings: cms2016, hhs_oig_nh2026, tn_0720_18 | ⬜ literature-informed placeholder 文献推断占位 | Facility surveys |
+| HLT-12 | Heat-related emergency department visits<br>高温相关急诊就诊 | observation | 🟡 on_drive | T1 | — | 🟡 on Drive 在手 | Tennessee Department of Health ESSENCE |
+| HLT-13 | Baseline daily mortality<br>基线日死亡数 | driver | 🟡 public | T4 | Annual county deaths / 365 (placeholder) | 🟡 public 可公开获取 | CDC WONDER (monthly public; daily restricted NCHS) |
+| HLT-14 | Temperature–mortality curve (minimum mortality temperature and slope)<br>温度–死亡曲线（最低死亡温度与斜率） | parameter | ⬜ placeholder | T4 | MMT = 80th percentile of Tmean; RR = 1.03 per K above (placeholder) | ⬜ placeholder 占位 | DLNM fit for Nashville (Gasparrini et al. 2010; 2015) |
+| HLT-17 | Electricity-dependent Medicare beneficiaries<br>依赖电力医疗设备的 Medicare 受益人 | attribute | 🟡 on_drive | T1 | — | 🟡 on Drive 在手 | HHS emPOWER Map |
+| HLT-18 | Home medical device battery duration<br>家用医疗设备电池续航 | parameter | ⬜ placeholder | T4 | Tri(2, 4, 8) h (placeholder) | ⬜ placeholder 占位 | Device specifications |
+
 ### 下一步要获取的数据 Data to obtain next
 
 骨架模型中仍为假设、占位或缺失的变量，按优先级排序。Core variables still assumed, placeholder or missing, by priority.
@@ -218,13 +236,20 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | 优先级 Priority | Id | 变量 Variable | 环节 Links | 需求 Need | 目标来源 Target |
 | ---: | --- | --- | --- | --- | --- |
 | 1 | BLD-08 | Building thermal time constant<br>建筑热时间常数 | K9 | ⬜ literature-informed placeholder 文献推断占位 | EnergyPlus / ResStock archetypes for Nashville housing; indoor sensor records |
+| 1 | HLT-12 | Heat-related emergency department visits<br>高温相关急诊就诊 | K10 | 🟡 on Drive 在手 | Tennessee Department of Health ESSENCE |
+| 1 | HLT-14 | Temperature–mortality curve (minimum mortality temperature and slope)<br>温度–死亡曲线（最低死亡温度与斜率） | K10 | ⬜ placeholder 占位 | DLNM fit for Nashville (Gasparrini et al. 2010; 2015) |
+| 1 | HLT-17 | Electricity-dependent Medicare beneficiaries<br>依赖电力医疗设备的 Medicare 受益人 | K10 | 🟡 on Drive 在手 | HHS emPOWER Map |
 | 1 | PWR-03 | Transformer rated capacity<br>变压器额定容量 | K2 | 🔒 needs partner 需合作 | NES / TVA nameplate data |
 | 1 | PWR-04 | Design (peak) load of a substation<br>变电站设计（峰值）负荷 | K2 | ⬜ placeholder 占位 | NES SCADA peak loads |
 | 1 | PWR-15 | Hot-spot fragility median and dispersion<br>热点温度易损性中位数与离散度 | K3 | ⬜ assumed value 假设值 | Fit to failure records (M-17) |
 | 1 | PWR-20 | Feeder / service territory polygons<br>馈线 / 供电区域多边形 | K5 | 🔒 needs partner 需合作 | NES feeder GIS |
 | 1 | WAT-04 | Storage volume<br>储水容量 | K6 | 🟡 public 可公开获取 | Metro Water |
 | 2 | BLD-09 | Internal + solar gain temperature lift<br>内部与太阳得热造成的温升 | K9 | ⬜ literature-informed placeholder 文献推断占位 | EnergyPlus archetypes |
-| 2 | HLT-08 | Nursing-home backup power failure<br>养老院备用电源失效概率 | K7 | ⬜ literature-informed placeholder 文献推断占位 | Facility surveys |
+| 2 | HLT-02 | Hospital beds and ED capacity<br>医院床位与急诊容量 | K10 | 🟡 public 可公开获取 | CMS Hospital Cost Reports / AHA (restricted) |
+| 2 | HLT-06 | Dialysis patients per facility<br>每个透析中心的患者数 | K10 | 🟡 public 可公开获取 | CMS Dialysis Facility Reports |
+| 2 | HLT-08 | Nursing-home backup power failure<br>养老院备用电源失效概率 | K7;K10 | ⬜ literature-informed placeholder 文献推断占位 | Facility surveys |
+| 2 | HLT-13 | Baseline daily mortality<br>基线日死亡数 | K10 | 🟡 public 可公开获取 | CDC WONDER (monthly public; daily restricted NCHS) |
+| 2 | HLT-18 | Home medical device battery duration<br>家用医疗设备电池续航 | K10 | ⬜ placeholder 占位 | Device specifications |
 | 2 | PWR-24 | Switch states and normally-open ties<br>开关状态与常开联络开关 | K5 | 🔒 needs partner 需合作 | NES distribution GIS |
 | 2 | TRN-07 | Signal battery backup (share without battery; battery hours)<br>信号灯备用电池（无电池比例；电池时长） | K8 | ⬜ literature-informed placeholder 文献推断占位 | Metro Public Works UPS inventory |
 | 2 | TRN-12 | Link capacity and lanes<br>路段通行能力与车道数 | K8 | ⬜ assumed value 假设值 | HPMS through lanes |
@@ -336,7 +361,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | BLD-07 | Surface parking polygons<br>地面停车场多边形 | `-` | polygon | polygon; static | ✅ ingested | T1 | `surface_parking` | - | Eq.1 | - | 3 |
 | BLD-08 | Building thermal time constant<br>建筑热时间常数 | `tau_b` | h | building class; static | ✅ in_model | T3 | `twin_couplings` · fallback: Tri(5, 12, 40) h (literature-informed placeholder) [wijesuriya2024; sun2020; leigh2014] | EnergyPlus / ResStock archetypes for Nashville housing; indoor sensor records | M-32 | K9 | 1 |
 | BLD-09 | Internal + solar gain temperature lift<br>内部与太阳得热造成的温升 | `G_b/UA` | K | building class; hourly profile | ✅ in_model | T3 | `twin_couplings` · fallback: Tri(2, 4, 7) K daytime; 1 K night (literature-informed placeholder) [sun2020; leigh2014] | EnergyPlus archetypes | M-32 | K9 | 2 |
-| BLD-10 | County-wide building footprints (Microsoft)<br>全县建筑轮廓（Microsoft） | `-` | polygon | building; static | 🟡 on_drive | T1 | fallback: Metro footprints inside AOI | Microsoft US Building Footprints (link in cascading-heat 09_buildings) | M-12;M-39 | - | 3 |
+| BLD-10 | County-wide building footprints (Metro Nashville)<br>全县建筑轮廓（Metro Nashville） | `-` | polygon | building; static | ✅ in_model | T1 | `buildings_aoi` · fallback: Metro footprints inside AOI | Metro Nashville building footprints (cascading-heat 09_buildings) | M-12;M-39 | K2;K8 | 3 |
 | BLD-11 | Elevation and topographic position (3DEP)<br>高程与地形位置（3DEP） | `z_elev` | m | 30 m; static | ✅ in_model | T1 | `air_field_2022` | USGS 3DEP | M-6 | K1 | 2 |
 | BLD-12 | Air-conditioning set point<br>空调设定温度 | `T_set` | degC | system; static | ✅ in_model | T2 | `twin_couplings` · fallback: Tri(21, 22.5, 24.5) degC [eia_recs2020 HC7.8] | Residential energy surveys (RECS) | M-32 | K9 | 2 |
 
@@ -514,23 +539,23 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | Id | 变量 Variable | 符号 Symbol | 单位 Units | 分辨率 Resolution | 状态 Status | 可信度 Tier | 来源 / 占位 Source / fallback | 目标来源 Target | 用于 Used in | 骨架 Core | 优先级 Priority |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
 | HLT-01 | Hospitals (type; emergency services)<br>医院（类型；急诊） | `f_H` | point | facility; snapshot | ✅ in_model | T1 | `hospitals` | CMS Provider Data | R-P4;R-W1;Eq.11 | K7;K8 | 1 |
-| HLT-02 | Hospital beds and ED capacity<br>医院床位与急诊容量 | `beds_f;ED_f` | beds; visits/day | facility; annual | 🟡 public | T4 | fallback: Equal weight per hospital | CMS Hospital Cost Reports / AHA (restricted) | M-37 | B1 | 2 |
+| HLT-02 | Hospital beds and ED capacity<br>医院床位与急诊容量 | `beds_f;ED_f` | beds; visits/day | facility; annual | 🟡 public | T4 | fallback: Equal weight per hospital | CMS Hospital Cost Reports / AHA (restricted) | M-37 | K10 | 2 |
 | HLT-03 | Hospital backup power failure on demand<br>医院备用电源失效概率 | `p_bf_H` | probability | facility; per outage episode | ✅ in_model | T2 | `twin_couplings` · fallback: Tri(0.01, 0.05, 0.15) [marqusee2020; irvinbarnwell2020; klinger2014] | Facility generator test logs | Eq.11;M-31 | K7 | 2 |
 | HLT-04 | Generator fuel autonomy<br>发电机燃料续航时间 | `h_fuel` | h | facility; static | ⬜ placeholder | T4 | fallback: Unlimited (implicit in Eq.11) | Facility emergency plans (CMS rule requires a plan, not a fixed duration) | M-31 | - | 2 |
 | HLT-05 | Dialysis facilities and stations<br>透析中心与透析位 | `f_D;st_f` | point; stations | facility; snapshot | ✅ in_model | T1 | `dialysis` | CMS Dialysis Facilities | R-P4;R-W1;Eq.11;M-35 | K7;K8 | 1 |
-| HLT-06 | Dialysis patients per facility<br>每个透析中心的患者数 | `P_f` | patients | facility; annual | 🟡 public | T4 | fallback: Stations × 6 (two shifts × three-times-weekly cycle; placeholder) | CMS Dialysis Facility Reports | M-35 | D8;B1 | 2 |
-| HLT-07 | Nursing homes and certified beds<br>养老院与认证床位 | `f_N;beds_N` | point; beds | facility; snapshot | ✅ in_model | T1 | `nursing_homes` | CMS Nursing Homes | R-P4;Eq.11;M-32;M-33 | K7;B1 | 1 |
-| HLT-08 | Nursing-home backup power failure<br>养老院备用电源失效概率 | `p_bf_N` | probability | facility; per outage episode | ✅ in_model | T3 | `twin_couplings` · fallback: Tri(0.10, 0.30, 0.50), defined as cooling not maintained [hhs_oig_nh2026; tn_0720_18] | Facility surveys | Eq.11;M-31 | K7;B1 | 2 |
+| HLT-06 | Dialysis patients per facility<br>每个透析中心的患者数 | `P_f` | patients | facility; annual | 🟡 public | T4 | fallback: Stations × 6 (two shifts × three-times-weekly cycle; placeholder) | CMS Dialysis Facility Reports | M-35 | D8;K10 | 2 |
+| HLT-07 | Nursing homes and certified beds<br>养老院与认证床位 | `f_N;beds_N` | point; beds | facility; snapshot | ✅ in_model | T1 | `nursing_homes` | CMS Nursing Homes | R-P4;Eq.11;M-32;M-33 | K7;K10 | 1 |
+| HLT-08 | Nursing-home backup power failure<br>养老院备用电源失效概率 | `p_bf_N` | probability | facility; per outage episode | ✅ in_model | T3 | `twin_couplings` · fallback: Tri(0.10, 0.30, 0.50), defined as cooling not maintained [hhs_oig_nh2026; tn_0720_18] | Facility surveys | Eq.11;M-31 | K7;K10 | 2 |
 | HLT-09 | On-site water storage of a facility<br>设施自备储水时长 | `h_wst` | h | facility; static | ⬜ placeholder | T4 | fallback: Zero (dialysis fails with water) | Facility surveys | M-31 | - | 2 |
 | HLT-10 | Cooling centres (location; hours; capacity)<br>避暑中心（位置；开放时间；容量） | `cc;cap_cc` | point; persons | site; seasonal | 🟡 public | T4 | — | Metro Nashville Office of Emergency Management / Social Services seasonal list | R-H4;M-38 | D8 | 2 |
 | HLT-11 | EMS calls<br>急救呼叫 | `EMS(t)` | calls | address; event | 🔒 restricted | T4 | — | Nashville Fire Department | M-37;M-43 | - | 2 |
-| HLT-12 | Heat-related emergency department visits<br>高温相关急诊就诊 | `ED_heat(t)` | visits | ZIP / county; daily | 🔒 restricted | T4 | — | Tennessee Department of Health ESSENCE | M-34;M-43 | D6;B1 | 1 |
-| HLT-13 | Baseline daily mortality<br>基线日死亡数 | `B_d` | deaths/day | county; daily (monthly published) | 🟡 public | T4 | fallback: Annual county deaths / 365 (placeholder) | CDC WONDER (monthly public; daily restricted NCHS) | M-34 | D6;B1 | 2 |
-| HLT-14 | Temperature–mortality curve (minimum mortality temperature and slope)<br>温度–死亡曲线（最低死亡温度与斜率） | `MMT;beta_h` | degC; per K | city; static | ⬜ placeholder | T4 | fallback: MMT = 80th percentile of Tmean; RR = 1.03 per K above (placeholder) | DLNM fit for Nashville (Gasparrini et al. 2010; 2015) | M-34 | D6;B1 | 1 |
+| HLT-12 | Heat-related emergency department visits<br>高温相关急诊就诊 | `ED_heat(t)` | visits | ZIP / county; daily | 🟡 on_drive | T1 | — | Tennessee Department of Health ESSENCE | M-34;M-43 | D6;K10 | 1 |
+| HLT-13 | Baseline daily mortality<br>基线日死亡数 | `B_d` | deaths/day | county; daily (monthly published) | 🟡 public | T4 | fallback: Annual county deaths / 365 (placeholder) | CDC WONDER (monthly public; daily restricted NCHS) | M-34 | D6;K10 | 2 |
+| HLT-14 | Temperature–mortality curve (minimum mortality temperature and slope)<br>温度–死亡曲线（最低死亡温度与斜率） | `MMT;beta_h` | degC; per K | city; static | ⬜ placeholder | T4 | fallback: MMT = 80th percentile of Tmean; RR = 1.03 per K above (placeholder) | DLNM fit for Nashville (Gasparrini et al. 2010; 2015) | M-34 | D6;K10 | 1 |
 | HLT-15 | Outage mortality relative risk<br>停电死亡相对风险 | `RR_out` | ratio | city; static | ✅ in_model | T2 | `twin_couplings` · fallback: Context only | - | Eq.14;M-34 | D6 | 2 |
 | HLT-16 | Heat + blackout amplification factor<br>热浪叠加停电放大系数 | `A_HW` | ratio | city; static | ✅ in_model | T2 | `twin_couplings` · fallback: Context only | - | Eq.14;M-34 | D6 | 2 |
-| HLT-17 | Electricity-dependent Medicare beneficiaries<br>依赖电力医疗设备的 Medicare 受益人 | `n_ED` | persons | ZIP; monthly | 🟡 public | T4 | — | HHS emPOWER Map | M-36 | D8;B1 | 1 |
-| HLT-18 | Home medical device battery duration<br>家用医疗设备电池续航 | `h_dev` | h | device; static | ⬜ placeholder | T4 | fallback: Tri(2, 4, 8) h (placeholder) | Device specifications | M-36 | D8;B1 | 2 |
+| HLT-17 | Electricity-dependent Medicare beneficiaries<br>依赖电力医疗设备的 Medicare 受益人 | `n_ED` | persons | ZIP; monthly | 🟡 on_drive | T1 | — | HHS emPOWER Map | M-36 | D8;K10 | 1 |
+| HLT-18 | Home medical device battery duration<br>家用医疗设备电池续航 | `h_dev` | h | device; static | ⬜ placeholder | T4 | fallback: Tri(2, 4, 8) h (placeholder) | Device specifications | M-36 | D8;K10 | 2 |
 | HLT-19 | Pharmacies (cold chain)<br>药店（冷链） | `ph` | point | site; snapshot | 🟡 public | T4 | — | OSM / HIFLD | context | - | 3 |
 | HLT-20 | Facility loss of service<br>设施服务中断 | `y_f(t)` | 0/1 | facility; hourly | ✅ derived | inherit | — | - | Eq.11;M-31 | K7;K8 | 1 |
 | HLT-21 | Chronic disease prevalence (CDC PLACES)<br>慢性病患病率（CDC PLACES） | `prev_k` | fraction | tract; annual | 🟡 public | T4 | — | CDC PLACES | M-40 | - | 3 |

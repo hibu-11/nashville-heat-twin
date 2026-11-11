@@ -1,10 +1,10 @@
 {
- "run_id": "core-20261110T191340Z-0ed4b5b116",
+ "run_id": "core-20261110T213942Z-72f1c05324",
  "model": "core skeleton (docs/CORE_MODEL.md)",
- "created": "2026-11-10T19:13:40+00:00",
- "code_version": "git:7098ed6-dirty",
- "inputs_build_run_id": "20261110T185812Z-a7027d86",
- "couplings_sha256": "0ed4b5b116",
+ "created": "2026-11-10T21:39:42+00:00",
+ "code_version": "git:6e01edb-dirty",
+ "inputs_build_run_id": "20261110T205908Z-b0b31216",
+ "couplings_sha256": "72f1c05324",
  "seed": 20261027,
  "runs": 2000,
  "period": [
@@ -21,19 +21,19 @@
   "method": "PIPELINE_SPEC M-6",
   "source": "/Users/taoziyi/Downloads/nashville-heat-twin/data/standard/air_field/air_field_2022.tif",
   "station_offset_c": {
-   "min": -3.03,
-   "mean": -0.61,
-   "max": 0.85
+   "min": -2.81,
+   "mean": -0.68,
+   "max": 0.86
   },
   "zone_offset_c": {
-   "min": -2.54,
-   "mean": -0.67,
-   "max": 0.61
+   "min": -2.59,
+   "mean": -1.02,
+   "max": 0.62
   },
   "cv_rmse_c": {
-   "morning": 0.656,
-   "afternoon": 0.585,
-   "evening": 0.444
+   "morning": 0.627,
+   "afternoon": 0.588,
+   "evening": 0.443
   },
   "dataset": "air_field_2022"
  },
@@ -48,7 +48,8 @@
   "K6",
   "K7",
   "K8",
-  "K9"
+  "K9",
+  "K10"
  ],
  "deferred": [
   "D1",
@@ -61,37 +62,37 @@
   "D9"
  ],
  "network": {
-  "substations": 78,
-  "zones": 40,
-  "supply_edges": 127,
-  "hospitals": 6,
-  "nursing_homes": 4,
-  "dialysis": 5,
-  "water_plants": 3,
-  "signals": 422
+  "substations": 159,
+  "zones": 112,
+  "supply_edges": 234,
+  "hospitals": 12,
+  "nursing_homes": 24,
+  "dialysis": 20,
+  "water_plants": 9,
+  "signals": 1425
  },
- "population_in_zones": 115203,
- "elderly_in_zones": 10873,
- "poverty_in_zones": 19853,
+ "population_in_zones": 702461,
+ "elderly_in_zones": 89379,
+ "poverty_in_zones": 98031,
  "scenarios": {
   "+0": {
    "thermal": {
     "5": 0.0,
     "50": 0.0,
-    "95": 4.0,
-    "mean": 0.99
+    "95": 7.0,
+    "mean": 1.57
    },
    "deenergised_hours": {
     "5": 0.0,
     "50": 0.0,
-    "95": 9.0,
-    "mean": 3.23
+    "95": 12.0,
+    "mean": 5.3
    },
    "pop_hours": {
     "5": 0.0,
     "50": 0.0,
-    "95": 69075.1,
-    "mean": 15365.13
+    "95": 218544.0,
+    "mean": 61915.69
    },
    "shed_station_hours": {
     "5": 0.0,
@@ -103,19 +104,19 @@
     "5": 0.0,
     "50": 0.0,
     "95": 0.0,
-    "mean": 0.05
+    "mean": 0.07
    },
    "nursing_hours": {
     "5": 0.0,
     "50": 0.0,
-    "95": 0.0,
-    "mean": 0.18
+    "95": 2.0,
+    "mean": 0.68
    },
    "dialysis_hours": {
     "5": 0.0,
     "50": 0.0,
-    "95": 0.0,
-    "mean": 0.48
+    "95": 6.0,
+    "mean": 1.6
    },
    "water_out_hours": {
     "5": 0.0,
@@ -126,95 +127,131 @@
    "signal_dark_hours": {
     "5": 0.0,
     "50": 0.0,
-    "95": 287.05,
-    "mean": 57.43
+    "95": 432.4,
+    "mean": 117.67
    },
    "max_subs_down": {
     "5": 0.0,
     "50": 0.0,
-    "95": 4.05,
-    "mean": 0.68
+    "95": 4.0,
+    "mean": 1.07
    },
    "ac_loss_pop_hours": {
     "5": 0.0,
     "50": 0.0,
-    "95": 64408.03,
-    "mean": 14471.11
+    "95": 205227.66,
+    "mean": 58453.39
    },
    "indoor_pop_hours": {
-    "5": 1180342.19,
-    "50": 5373589.63,
-    "95": 11563589.42,
-    "mean": 5751724.86
+    "5": 5154642.39,
+    "50": 25485380.45,
+    "95": 59774548.21,
+    "mean": 28037433.91
    },
    "indoor_outage_pop_hours": {
     "5": 0.0,
     "50": 0.0,
     "95": 0.0,
-    "mean": 934.1
+    "mean": 3038.07
    },
    "indoor_outage_elderly_hours": {
     "5": 0.0,
     "50": 0.0,
     "95": 0.0,
-    "mean": 86.35
+    "mean": 389.43
    },
    "indoor_outage_poverty_hours": {
     "5": 0.0,
     "50": 0.0,
     "95": 0.0,
-    "mean": 169.34
+    "mean": 442.41
    },
    "indoor_no_ac_pop_hours": {
-    "5": 1180342.19,
-    "50": 5373589.63,
-    "95": 11556946.64,
-    "mean": 5750790.76
+    "5": 5154642.39,
+    "50": 25485380.45,
+    "95": 59774548.21,
+    "mean": 28034395.84
    },
-   "share_runs_with_any_failure": 0.147,
-   "share_runs_with_any_outage": 0.121,
+   "nh_exposed_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 0.0,
+    "mean": 24.22
+   },
+   "dep_visits": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 9.26,
+    "mean": 3.55
+   },
+   "heat_visits_excess": {
+    "5": 21.29,
+    "50": 106.36,
+    "95": 269.3,
+    "mean": 121.45
+   },
+   "peak_day_extra_visits": {
+    "5": 2.17,
+    "50": 4.32,
+    "95": 9.97,
+    "mean": 5.93
+   },
+   "peak_day_open_share": {
+    "5": 1.0,
+    "50": 1.0,
+    "95": 1.0,
+    "mean": 1.0
+   },
+   "mean_day_extra_visits": {
+    "5": 0.24,
+    "50": 1.2,
+    "95": 3.0,
+    "mean": 1.36
+   },
+   "share_runs_with_any_failure": 0.184,
+   "share_runs_with_any_outage": 0.161,
    "runs_with_shed": 0.0,
-   "indoor_ac_max_c": 33.4,
+   "indoor_ac_max_c": 33.0,
    "max_air_temp_c": 36.7,
    "access": {
-    "runs_with_degraded_segments": 0.1165,
+    "runs_with_degraded_segments": 0.1625,
     "care_time_loss_min": {
      "50": 0.0,
-     "95": 0.068,
-     "99": 1.8,
+     "95": 0.191,
+     "99": 2.058,
      "mean": 0.062,
-     "max": 30.196
+     "max": 4.953
     },
     "lost_penalty_min": 30.0,
     "hospital": {
      "threshold_min": 15,
      "delta_pop_mean_min": {
       "50": 0.0,
-      "95": 0.021,
-      "99": 0.081,
-      "mean": 0.004,
-      "max": 0.216
+      "95": 0.034,
+      "99": 0.23,
+      "mean": 0.009,
+      "max": 1.336
      },
      "affected_pop_over_1min": {
       "50": 0.0,
-      "95": 0.0,
-      "99": 221.856,
-      "mean": 39.395,
-      "max": 9315.948
+      "95": 1558.412,
+      "99": 53721.832,
+      "mean": 1577.736,
+      "max": 157509.035
      },
      "largest_cell_increase_min": {
       "50": 0.0,
-      "95": 0.571,
-      "99": 1.629,
-      "mean": 0.079,
-      "max": 3.363
+      "95": 1.427,
+      "99": 4.539,
+      "mean": 0.239,
+      "max": 26.712
      },
      "pop_newly_over_threshold": {
       "50": 0.0,
-      "95": 0.0,
-      "99": 0.0,
-      "mean": 0.0,
-      "max": 0.0
+      "95": 602.399,
+      "99": 5925.607,
+      "mean": 244.591,
+      "max": 53878.232
      },
      "runs_with_none_available": 0.0
     },
@@ -222,31 +259,289 @@
      "threshold_min": 15,
      "delta_pop_mean_min": {
       "50": 0.0,
-      "95": 0.018,
-      "99": 1.646,
-      "mean": 0.042,
-      "max": 5.285
+      "95": 0.112,
+      "99": 1.53,
+      "mean": 0.047,
+      "max": 4.075
      },
      "affected_pop_over_1min": {
       "50": 0.0,
-      "95": 0.0,
-      "99": 45926.046,
-      "mean": 1194.886,
-      "max": 89249.207
+      "95": 24476.135,
+      "99": 170900.238,
+      "mean": 5832.301,
+      "max": 396424.399
      },
      "largest_cell_increase_min": {
       "50": 0.0,
-      "95": 0.638,
-      "99": 8.986,
-      "mean": 0.236,
-      "max": 10.015
+      "95": 4.855,
+      "99": 12.841,
+      "mean": 0.636,
+      "max": 20.657
      },
      "pop_newly_over_threshold": {
       "50": 0.0,
-      "95": 0.0,
-      "99": 0.0,
-      "mean": 58.609,
-      "max": 115203.0
+      "95": 137.795,
+      "99": 42803.703,
+      "mean": 1066.611,
+      "max": 143691.702
+     },
+     "runs_with_none_available": 0.0
+    },
+    "ems": {
+     "threshold_min": 8,
+     "delta_pop_mean_min": {
+      "50": 0.0,
+      "95": 0.028,
+      "99": 0.131,
+      "mean": 0.005,
+      "max": 0.382
+     },
+     "affected_pop_over_1min": {
+      "50": 0.0,
+      "95": 236.595,
+      "99": 29662.226,
+      "mean": 889.256,
+      "max": 96047.179
+     },
+     "largest_cell_increase_min": {
+      "50": 0.0,
+      "95": 1.256,
+      "99": 2.983,
+      "mean": 0.176,
+      "max": 9.511
+     },
+     "pop_newly_over_threshold": {
+      "50": 0.0,
+      "95": 1765.626,
+      "99": 13855.967,
+      "mean": 471.811,
+      "max": 33295.035
+     },
+     "runs_with_none_available": 0.0
+    }
+   },
+   "wait_increase_min": {
+    "5": 0.49,
+    "50": 1.4,
+    "95": 5.33,
+    "mean": 2.67
+   },
+   "time_to_care_min": {
+    "5": 0.5,
+    "50": 1.41,
+    "95": 5.43,
+    "mean": 2.73
+   }
+  },
+  "+2": {
+   "thermal": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 88.1,
+    "mean": 16.06
+   },
+   "deenergised_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 348.15,
+    "mean": 57.36
+   },
+   "pop_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 3365016.1,
+    "mean": 655447.72
+   },
+   "shed_station_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 0.0,
+    "mean": 0.0
+   },
+   "hospital_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 5.0,
+    "mean": 0.66
+   },
+   "nursing_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 35.05,
+    "mean": 6.5
+   },
+   "dialysis_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 82.05,
+    "mean": 16.26
+   },
+   "water_out_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 0.0,
+    "mean": 0.0
+   },
+   "signal_dark_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 6501.3,
+    "mean": 1237.94
+   },
+   "max_subs_down": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 41.0,
+    "mean": 6.86
+   },
+   "ac_loss_pop_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 3164635.69,
+    "mean": 616937.67
+   },
+   "indoor_pop_hours": {
+    "5": 17889743.18,
+    "50": 52501791.11,
+    "95": 94344845.51,
+    "mean": 53713949.98
+   },
+   "indoor_outage_pop_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 115014.91,
+    "mean": 56742.86
+   },
+   "indoor_outage_elderly_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 14328.42,
+    "mean": 6811.63
+   },
+   "indoor_outage_poverty_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 18741.79,
+    "mean": 8383.81
+   },
+   "indoor_no_ac_pop_hours": {
+    "5": 17866666.76,
+    "50": 52450637.14,
+    "95": 94344845.51,
+    "mean": 53657207.13
+   },
+   "nh_exposed_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 1521.14,
+    "mean": 298.18
+   },
+   "dep_visits": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 170.33,
+    "mean": 35.7
+   },
+   "heat_visits_excess": {
+    "5": 75.05,
+    "50": 224.7,
+    "95": 432.19,
+    "mean": 232.65
+   },
+   "peak_day_extra_visits": {
+    "5": 2.41,
+    "50": 4.93,
+    "95": 70.17,
+    "mean": 15.33
+   },
+   "peak_day_open_share": {
+    "5": 1.0,
+    "50": 1.0,
+    "95": 1.0,
+    "mean": 1.0
+   },
+   "mean_day_extra_visits": {
+    "5": 0.87,
+    "50": 2.62,
+    "95": 5.65,
+    "mean": 2.92
+   },
+   "share_runs_with_any_failure": 0.407,
+   "share_runs_with_any_outage": 0.384,
+   "runs_with_shed": 0.0,
+   "indoor_ac_max_c": 35.9,
+   "max_air_temp_c": 38.7,
+   "access": {
+    "runs_with_degraded_segments": 0.384,
+    "care_time_loss_min": {
+     "50": 0.0,
+     "95": 2.434,
+     "99": 7.503,
+     "mean": 0.446,
+     "max": 32.014
+    },
+    "lost_penalty_min": 30.0,
+    "hospital": {
+     "threshold_min": 15,
+     "delta_pop_mean_min": {
+      "50": 0.0,
+      "95": 0.275,
+      "99": 1.096,
+      "mean": 0.055,
+      "max": 3.447
+     },
+     "affected_pop_over_1min": {
+      "50": 0.0,
+      "95": 65981.725,
+      "99": 156993.584,
+      "mean": 8747.567,
+      "max": 348617.366
+     },
+     "largest_cell_increase_min": {
+      "50": 0.0,
+      "95": 4.031,
+      "99": 11.405,
+      "mean": 0.842,
+      "max": 26.207
+     },
+     "pop_newly_over_threshold": {
+      "50": 0.0,
+      "95": 7989.576,
+      "99": 35019.401,
+      "mean": 1514.349,
+      "max": 133825.503
+     },
+     "runs_with_none_available": 0.0
+    },
+    "dialysis": {
+     "threshold_min": 15,
+     "delta_pop_mean_min": {
+      "50": 0.0,
+      "95": 1.777,
+      "99": 5.93,
+      "mean": 0.351,
+      "max": 26.063
+     },
+     "affected_pop_over_1min": {
+      "50": 0.0,
+      "95": 197971.372,
+      "99": 488403.257,
+      "mean": 33791.158,
+      "max": 693969.492
+     },
+     "largest_cell_increase_min": {
+      "50": 0.0,
+      "95": 13.703,
+      "99": 24.228,
+      "mean": 2.731,
+      "max": 41.36
+     },
+     "pop_newly_over_threshold": {
+      "50": 0.0,
+      "95": 45214.048,
+      "99": 218905.606,
+      "mean": 9831.115,
+      "max": 670264.812
      },
      "runs_with_none_available": 0.0005
     },
@@ -254,288 +549,90 @@
      "threshold_min": 8,
      "delta_pop_mean_min": {
       "50": 0.0,
-      "95": 0.013,
-      "99": 0.043,
-      "mean": 0.002,
-      "max": 0.088
+      "95": 0.151,
+      "99": 0.338,
+      "mean": 0.025,
+      "max": 0.802
      },
      "affected_pop_over_1min": {
       "50": 0.0,
-      "95": 0.0,
-      "99": 0.0,
-      "mean": 1.246,
-      "max": 377.622
+      "95": 24009.812,
+      "99": 86254.937,
+      "mean": 3865.48,
+      "max": 187181.057
      },
      "largest_cell_increase_min": {
       "50": 0.0,
-      "95": 0.464,
-      "99": 0.973,
-      "mean": 0.056,
-      "max": 2.049
+      "95": 2.645,
+      "99": 4.679,
+      "mean": 0.523,
+      "max": 11.854
      },
      "pop_newly_over_threshold": {
       "50": 0.0,
-      "95": 0.0,
-      "99": 0.0,
-      "mean": 0.0,
-      "max": 0.0
+      "95": 13185.779,
+      "99": 30638.192,
+      "mean": 2084.838,
+      "max": 55562.897
      },
      "runs_with_none_available": 0.0
     }
-   }
-  },
-  "+2": {
-   "thermal": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 55.0,
-    "mean": 9.77
    },
-   "deenergised_hours": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 179.5,
-    "mean": 31.41
+   "wait_increase_min": {
+    "5": 0.57,
+    "50": 1.77,
+    "95": 33.4,
+    "mean": 10.3
    },
-   "pop_hours": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 804396.5,
-    "mean": 142933.04
-   },
-   "shed_station_hours": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 0.0,
-    "mean": 0.0
-   },
-   "hospital_hours": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 0.0,
-    "mean": 0.43
-   },
-   "nursing_hours": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 10.0,
-    "mean": 1.52
-   },
-   "dialysis_hours": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 30.0,
-    "mean": 4.53
-   },
-   "water_out_hours": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 0.0,
-    "mean": 0.0
-   },
-   "signal_dark_hours": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 2970.3,
-    "mean": 504.86
-   },
-   "max_subs_down": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 25.0,
-    "mean": 4.02
-   },
-   "ac_loss_pop_hours": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 762391.37,
-    "mean": 134493.45
-   },
-   "indoor_pop_hours": {
-    "5": 3839188.59,
-    "50": 9823688.4,
-    "95": 16778767.39,
-    "mean": 10014750.2
-   },
-   "indoor_outage_pop_hours": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 39779.78,
-    "mean": 14215.31
-   },
-   "indoor_outage_elderly_hours": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 3413.98,
-    "mean": 1335.3
-   },
-   "indoor_outage_poverty_hours": {
-    "5": 0.0,
-    "50": 0.0,
-    "95": 7337.62,
-    "mean": 2618.05
-   },
-   "indoor_no_ac_pop_hours": {
-    "5": 3839188.59,
-    "50": 9816242.41,
-    "95": 16775873.13,
-    "mean": 10000534.89
-   },
-   "share_runs_with_any_failure": 0.374,
-   "share_runs_with_any_outage": 0.337,
-   "runs_with_shed": 0.0,
-   "indoor_ac_max_c": 35.7,
-   "max_air_temp_c": 38.7,
-   "access": {
-    "runs_with_degraded_segments": 0.3315,
-    "care_time_loss_min": {
-     "50": 0.0,
-     "95": 1.867,
-     "99": 30.159,
-     "mean": 0.726,
-     "max": 30.717
-    },
-    "lost_penalty_min": 30.0,
-    "hospital": {
-     "threshold_min": 15,
-     "delta_pop_mean_min": {
-      "50": 0.0,
-      "95": 0.084,
-      "99": 0.234,
-      "mean": 0.016,
-      "max": 0.886
-     },
-     "affected_pop_over_1min": {
-      "50": 0.0,
-      "95": 251.283,
-      "99": 8695.428,
-      "mean": 246.687,
-      "max": 28841.61
-     },
-     "largest_cell_increase_min": {
-      "50": 0.0,
-      "95": 1.592,
-      "99": 3.292,
-      "mean": 0.276,
-      "max": 7.467
-     },
-     "pop_newly_over_threshold": {
-      "50": 0.0,
-      "95": 0.0,
-      "99": 0.0,
-      "mean": 0.0,
-      "max": 0.0
-     },
-     "runs_with_none_available": 0.0
-    },
-    "dialysis": {
-     "threshold_min": 15,
-     "delta_pop_mean_min": {
-      "50": 0.0,
-      "95": 1.707,
-      "99": 5.2,
-      "mean": 0.223,
-      "max": 5.452
-     },
-     "affected_pop_over_1min": {
-      "50": 0.0,
-      "95": 46727.44,
-      "99": 89249.207,
-      "mean": 5785.412,
-      "max": 90230.479
-     },
-     "largest_cell_increase_min": {
-      "50": 0.0,
-      "95": 9.006,
-      "99": 9.785,
-      "mean": 0.972,
-      "max": 10.257
-     },
-     "pop_newly_over_threshold": {
-      "50": 0.0,
-      "95": 0.0,
-      "99": 115203.0,
-      "mean": 1859.211,
-      "max": 115203.0
-     },
-     "runs_with_none_available": 0.016
-    },
-    "ems": {
-     "threshold_min": 8,
-     "delta_pop_mean_min": {
-      "50": 0.0,
-      "95": 0.04,
-      "99": 0.077,
-      "mean": 0.007,
-      "max": 0.163
-     },
-     "affected_pop_over_1min": {
-      "50": 0.0,
-      "95": 0.0,
-      "99": 331.001,
-      "mean": 9.107,
-      "max": 516.973
-     },
-     "largest_cell_increase_min": {
-      "50": 0.0,
-      "95": 0.916,
-      "99": 1.773,
-      "mean": 0.183,
-      "max": 2.642
-     },
-     "pop_newly_over_threshold": {
-      "50": 0.0,
-      "95": 0.0,
-      "99": 0.0,
-      "mean": 0.01,
-      "max": 3.821
-     },
-     "runs_with_none_available": 0.0
-    }
+   "time_to_care_min": {
+    "5": 0.58,
+    "50": 1.83,
+    "95": 36.07,
+    "mean": 10.75
    }
   },
   "+4": {
    "thermal": {
     "5": 0.0,
-    "50": 3.0,
-    "95": 344.2,
-    "mean": 61.21
+    "50": 6.0,
+    "95": 601.15,
+    "mean": 106.4
    },
    "deenergised_hours": {
     "5": 0.0,
-    "50": 2.0,
-    "95": 982.4,
-    "mean": 170.18
+    "50": 8.0,
+    "95": 1859.2,
+    "mean": 317.04
    },
    "pop_hours": {
     "5": 0.0,
-    "50": 36718.0,
-    "95": 4433736.75,
-    "mean": 819144.72
+    "50": 148962.5,
+    "95": 23463944.9,
+    "mean": 4077135.1
    },
    "shed_station_hours": {
     "5": 0.0,
     "50": 0.0,
     "95": 0.0,
-    "mean": 0.19
+    "mean": 0.35
    },
    "hospital_hours": {
     "5": 0.0,
     "50": 0.0,
-    "95": 14.0,
-    "mean": 2.45
+    "95": 25.05,
+    "mean": 4.42
    },
    "nursing_hours": {
     "5": 0.0,
     "50": 0.0,
-    "95": 48.0,
-    "mean": 8.45
+    "95": 216.05,
+    "mean": 40.11
    },
    "dialysis_hours": {
     "5": 0.0,
-    "50": 0.0,
-    "95": 158.1,
-    "mean": 27.98
+    "50": 2.0,
+    "95": 618.2,
+    "mean": 105.9
    },
    "water_out_hours": {
     "5": 0.0,
@@ -545,178 +642,226 @@
    },
    "signal_dark_hours": {
     "5": 0.0,
-    "50": 131.0,
-    "95": 15525.65,
-    "mean": 2817.34
+    "50": 349.5,
+    "95": 43556.95,
+    "mean": 7486.67
    },
    "max_subs_down": {
     "5": 0.0,
-    "50": 3.0,
-    "95": 70.0,
-    "mean": 14.1
+    "50": 4.0,
+    "95": 126.0,
+    "mean": 25.14
    },
    "ac_loss_pop_hours": {
     "5": 0.0,
-    "50": 33980.98,
-    "95": 4210435.9,
-    "mean": 770141.22
+    "50": 140470.38,
+    "95": 22019346.9,
+    "mean": 3833628.27
    },
    "indoor_pop_hours": {
-    "5": 6771938.24,
-    "50": 13376954.28,
-    "95": 20184492.11,
-    "mean": 13363206.97
+    "5": 36579452.16,
+    "50": 76556893.69,
+    "95": 118497211.27,
+    "mean": 76687464.55
    },
    "indoor_outage_pop_hours": {
     "5": 0.0,
     "50": 0.0,
-    "95": 811972.63,
-    "mean": 139685.68
+    "95": 3376743.76,
+    "mean": 629093.82
    },
    "indoor_outage_elderly_hours": {
     "5": 0.0,
     "50": 0.0,
-    "95": 76489.66,
-    "mean": 13178.19
+    "95": 404777.6,
+    "mean": 76694.22
    },
    "indoor_outage_poverty_hours": {
     "5": 0.0,
     "50": 0.0,
-    "95": 148789.33,
-    "mean": 25217.62
+    "95": 506207.7,
+    "mean": 91550.03
    },
    "indoor_no_ac_pop_hours": {
-    "5": 6732306.27,
-    "50": 13243917.14,
-    "95": 20048264.33,
-    "mean": 13223521.29
+    "5": 36425823.84,
+    "50": 75799656.03,
+    "95": 118079080.26,
+    "mean": 76058370.72
    },
-   "share_runs_with_any_failure": 0.651,
-   "share_runs_with_any_outage": 0.618,
+   "nh_exposed_hours": {
+    "5": 0.0,
+    "50": 0.0,
+    "95": 11934.13,
+    "mean": 2110.52
+   },
+   "dep_visits": {
+    "5": 0.0,
+    "50": 2.22,
+    "95": 1203.09,
+    "mean": 210.65
+   },
+   "heat_visits_excess": {
+    "5": 151.42,
+    "50": 324.49,
+    "95": 551.95,
+    "mean": 332.19
+   },
+   "peak_day_extra_visits": {
+    "5": 2.77,
+    "50": 7.01,
+    "95": 225.89,
+    "mean": 44.68
+   },
+   "peak_day_open_share": {
+    "5": 0.98,
+    "50": 1.0,
+    "95": 1.0,
+    "mean": 1.0
+   },
+   "mean_day_extra_visits": {
+    "5": 1.81,
+    "50": 4.11,
+    "95": 17.04,
+    "mean": 5.9
+   },
+   "share_runs_with_any_failure": 0.683,
+   "share_runs_with_any_outage": 0.676,
    "runs_with_shed": 0.0415,
-   "indoor_ac_max_c": 38.5,
+   "indoor_ac_max_c": 38.9,
    "max_air_temp_c": 40.7,
    "access": {
-    "runs_with_degraded_segments": 0.6095,
+    "runs_with_degraded_segments": 0.677,
     "care_time_loss_min": {
-     "50": 0.046,
-     "95": 30.225,
-     "99": 30.486,
-     "mean": 3.891,
-     "max": 30.935
+     "50": 0.163,
+     "95": 14.57,
+     "99": 31.398,
+     "mean": 2.517,
+     "max": 34.626
     },
     "lost_penalty_min": 30.0,
     "hospital": {
      "threshold_min": 15,
      "delta_pop_mean_min": {
-      "50": 0.012,
-      "95": 0.225,
-      "99": 0.409,
-      "mean": 0.048,
-      "max": 0.903
+      "50": 0.019,
+      "95": 0.996,
+      "99": 2.151,
+      "mean": 0.19,
+      "max": 4.045
      },
      "affected_pop_over_1min": {
       "50": 0.0,
-      "95": 7776.755,
-      "99": 11474.654,
-      "mean": 832.603,
-      "max": 34706.552
+      "95": 187238.092,
+      "99": 290443.69,
+      "mean": 31481.287,
+      "max": 458352.745
      },
      "largest_cell_increase_min": {
-      "50": 0.295,
-      "95": 3.251,
-      "99": 3.429,
-      "mean": 0.667,
-      "max": 7.551
+      "50": 0.738,
+      "95": 9.993,
+      "99": 15.171,
+      "mean": 2.082,
+      "max": 27.161
      },
      "pop_newly_over_threshold": {
-      "50": 0.0,
-      "95": 0.0,
-      "99": 0.0,
-      "mean": 0.0,
-      "max": 0.0
+      "50": 104.88,
+      "95": 30616.934,
+      "99": 80706.337,
+      "mean": 5690.506,
+      "max": 147903.261
      },
      "runs_with_none_available": 0.0
     },
     "dialysis": {
      "threshold_min": 15,
      "delta_pop_mean_min": {
-      "50": 0.0,
-      "95": 1.807,
-      "99": 5.281,
-      "mean": 0.495,
-      "max": 5.582
+      "50": 0.035,
+      "95": 6.318,
+      "99": 22.695,
+      "mean": 1.437,
+      "max": 29.944
      },
      "affected_pop_over_1min": {
-      "50": 0.0,
-      "95": 59658.123,
-      "99": 89249.207,
-      "mean": 13077.675,
-      "max": 90245.674
+      "50": 1192.019,
+      "95": 511454.109,
+      "99": 689239.859,
+      "mean": 104839.971,
+      "max": 694036.766
      },
      "largest_cell_increase_min": {
-      "50": 0.0,
-      "95": 9.247,
-      "99": 9.978,
-      "mean": 2.045,
-      "max": 10.47
+      "50": 1.307,
+      "95": 26.658,
+      "99": 40.65,
+      "mean": 6.944,
+      "max": 50.019
      },
      "pop_newly_over_threshold": {
-      "50": 0.0,
-      "95": 115203.0,
-      "99": 115203.0,
-      "mean": 12824.643,
-      "max": 115203.0
+      "50": 14.128,
+      "95": 448884.007,
+      "99": 670264.812,
+      "mean": 58678.405,
+      "max": 670264.812
      },
-     "runs_with_none_available": 0.111
+     "runs_with_none_available": 0.027
     },
     "ems": {
      "threshold_min": 8,
      "delta_pop_mean_min": {
-      "50": 0.005,
-      "95": 0.074,
-      "99": 0.122,
-      "mean": 0.018,
-      "max": 0.193
+      "50": 0.012,
+      "95": 0.378,
+      "99": 0.654,
+      "mean": 0.079,
+      "max": 1.171
      },
      "affected_pop_over_1min": {
       "50": 0.0,
-      "95": 251.283,
-      "99": 418.157,
-      "mean": 31.321,
-      "max": 773.465
+      "95": 93718.816,
+      "99": 171049.472,
+      "mean": 13490.498,
+      "max": 243741.561
      },
      "largest_cell_increase_min": {
-      "50": 0.217,
-      "95": 1.29,
-      "99": 2.056,
-      "mean": 0.409,
-      "max": 2.916
+      "50": 0.566,
+      "95": 3.724,
+      "99": 6.132,
+      "mean": 1.053,
+      "max": 11.584
      },
      "pop_newly_over_threshold": {
-      "50": 0.0,
-      "95": 0.0,
-      "99": 0.0,
-      "mean": 0.011,
-      "max": 3.821
+      "50": 460.716,
+      "95": 31057.252,
+      "99": 48629.805,
+      "mean": 6383.745,
+      "max": 71846.936
      },
      "runs_with_none_available": 0.0
     }
+   },
+   "wait_increase_min": {
+    "5": 0.64,
+    "50": 2.98,
+    "95": 297.25,
+    "mean": 41.41
+   },
+   "time_to_care_min": {
+    "5": 0.69,
+    "50": 3.36,
+    "95": 308.17,
+    "mean": 43.93
    }
   }
  },
  "validation": {
   "power_all_hours": {
-   "rho": 0.042,
-   "lo": -0.038,
-   "hi": 0.112,
+   "rho": 0.032,
+   "lo": -0.045,
+   "hi": 0.117,
    "n": 2208,
    "n_days": 92
   },
   "power_non_storm_hours": {
-   "rho": 0.006,
-   "lo": -0.058,
-   "hi": 0.069,
+   "rho": -0.006,
+   "lo": -0.076,
+   "hi": 0.057,
    "n": 1994,
    "n_days": 92
   }
@@ -726,216 +871,264 @@
    "param": "C-P1.Kd",
    "name": "K_design",
    "basis": "assumption",
-   "pop_hours": 0.395,
-   "indoor_outage_pop_hours": 0.147,
-   "thermal": 0.427
+   "pop_hours": 0.439,
+   "indoor_outage_pop_hours": 0.144,
+   "thermal": 0.465
   },
   {
    "param": "C-P3.sigma",
    "name": "sigma",
    "basis": "assumption",
-   "pop_hours": 0.283,
-   "indoor_outage_pop_hours": 0.127,
-   "thermal": 0.313
+   "pop_hours": 0.339,
+   "indoor_outage_pop_hours": 0.161,
+   "thermal": 0.364
   },
   {
    "param": "C-P3",
    "name": "theta_50",
    "basis": "assumption",
-   "pop_hours": -0.244,
-   "indoor_outage_pop_hours": -0.11,
-   "thermal": -0.247
+   "pop_hours": -0.24,
+   "indoor_outage_pop_hours": -0.116,
+   "thermal": -0.241
   },
   {
    "param": "C-P2.dTOR",
    "name": "dTheta_TO_R",
    "basis": "standard",
-   "pop_hours": 0.113,
-   "indoor_outage_pop_hours": 0.049,
-   "thermal": 0.117
+   "pop_hours": 0.144,
+   "indoor_outage_pop_hours": 0.071,
+   "thermal": 0.141
   },
   {
    "param": "C-P2.dHR",
    "name": "dTheta_H_R",
    "basis": "standard",
-   "pop_hours": 0.081,
-   "indoor_outage_pop_hours": 0.045,
-   "thermal": 0.073
-  },
-  {
-   "param": "C-P2.tau",
-   "name": "tau_TO",
-   "basis": "standard",
-   "pop_hours": -0.064,
-   "indoor_outage_pop_hours": -0.045,
-   "thermal": -0.067
+   "pop_hours": 0.089,
+   "indoor_outage_pop_hours": 0.043,
+   "thermal": 0.103
   },
   {
    "param": "C-P6",
    "name": "repair_hours",
    "basis": "internal",
-   "pop_hours": 0.054,
-   "indoor_outage_pop_hours": 0.121,
-   "thermal": 0.055
+   "pop_hours": 0.048,
+   "indoor_outage_pop_hours": 0.133,
+   "thermal": 0.042
   },
   {
    "param": "C-P1.Td",
    "name": "T_design",
    "basis": "assumption",
-   "pop_hours": -0.053,
-   "indoor_outage_pop_hours": -0.029,
-   "thermal": -0.065
+   "pop_hours": -0.046,
+   "indoor_outage_pop_hours": -0.03,
+   "thermal": -0.057
   },
   {
-   "param": "C-T2",
-   "name": "p_no_battery",
-   "basis": "literature",
-   "pop_hours": -0.053,
-   "indoor_outage_pop_hours": -0.023,
-   "thermal": -0.027
-  },
-  {
-   "param": "C-P2.R",
-   "name": "R",
+   "param": "C-P2.tau",
+   "name": "tau_TO",
    "basis": "standard",
-   "pop_hours": -0.035,
-   "indoor_outage_pop_hours": 0.008,
-   "thermal": -0.031
-  },
-  {
-   "param": "C-P9.avail",
-   "name": "a",
-   "basis": "literature",
-   "pop_hours": 0.031,
-   "indoor_outage_pop_hours": 0.003,
-   "thermal": 0.041
-  },
-  {
-   "param": "C-H2",
-   "name": "p_backup_fail",
-   "basis": "literature",
-   "pop_hours": -0.023,
-   "indoor_outage_pop_hours": 0.039,
-   "thermal": -0.021
-  },
-  {
-   "param": "C-T5",
-   "name": "phi_dark",
-   "basis": "literature",
-   "pop_hours": 0.023,
-   "indoor_outage_pop_hours": 0.043,
-   "thermal": 0.028
-  },
-  {
-   "param": "C-P1",
-   "name": "beta",
-   "basis": "internal",
-   "pop_hours": 0.017,
-   "indoor_outage_pop_hours": -0.01,
-   "thermal": 0.016
-  },
-  {
-   "param": "C-B4",
-   "name": "f_AC",
-   "basis": "literature",
-   "pop_hours": 0.017,
-   "indoor_outage_pop_hours": 0.024,
-   "thermal": 0.011
-  },
-  {
-   "param": "C-B1",
-   "name": "tau_b",
-   "basis": "literature",
-   "pop_hours": -0.01,
-   "indoor_outage_pop_hours": -0.151,
-   "thermal": -0.021
-  },
-  {
-   "param": "C-H1",
-   "name": "p_backup_fail",
-   "basis": "literature",
-   "pop_hours": -0.009,
-   "indoor_outage_pop_hours": -0.005,
-   "thermal": -0.007
-  },
-  {
-   "param": "C-B3",
-   "name": "T_set",
-   "basis": "literature",
-   "pop_hours": -0.006,
-   "indoor_outage_pop_hours": 0.042,
-   "thermal": -0.006
+   "pop_hours": -0.046,
+   "indoor_outage_pop_hours": -0.012,
+   "thermal": -0.029
   },
   {
    "param": "C-P9.imp",
    "name": "P_imp",
    "basis": "literature",
-   "pop_hours": -0.004,
-   "indoor_outage_pop_hours": -0.015,
-   "thermal": -0.012
+   "pop_hours": -0.039,
+   "indoor_outage_pop_hours": 0.003,
+   "thermal": -0.031
+  },
+  {
+   "param": "C-H2",
+   "name": "p_backup_fail",
+   "basis": "literature",
+   "pop_hours": -0.037,
+   "indoor_outage_pop_hours": 0.036,
+   "thermal": -0.041
+  },
+  {
+   "param": "C-B4",
+   "name": "f_AC",
+   "basis": "literature",
+   "pop_hours": 0.031,
+   "indoor_outage_pop_hours": 0.013,
+   "thermal": 0.021
+  },
+  {
+   "param": "C-T2",
+   "name": "p_no_battery",
+   "basis": "literature",
+   "pop_hours": -0.027,
+   "indoor_outage_pop_hours": -0.007,
+   "thermal": -0.029
+  },
+  {
+   "param": "C-P9.avail",
+   "name": "a",
+   "basis": "literature",
+   "pop_hours": 0.024,
+   "indoor_outage_pop_hours": 0.01,
+   "thermal": 0.023
+  },
+  {
+   "param": "C-T5",
+   "name": "phi_dark",
+   "basis": "literature",
+   "pop_hours": 0.022,
+   "indoor_outage_pop_hours": 0.004,
+   "thermal": 0.022
+  },
+  {
+   "param": "C-P1",
+   "name": "beta",
+   "basis": "internal",
+   "pop_hours": -0.021,
+   "indoor_outage_pop_hours": -0.028,
+   "thermal": -0.03
+  },
+  {
+   "param": "C-H12",
+   "name": "h_b",
+   "basis": "literature",
+   "pop_hours": -0.016,
+   "indoor_outage_pop_hours": -0.005,
+   "thermal": -0.025
   },
   {
    "param": "C-W2",
    "name": "p_backup_fail",
    "basis": "literature",
-   "pop_hours": 0.004,
-   "indoor_outage_pop_hours": 0.014,
-   "thermal": 0.007
-  },
-  {
-   "param": "C-W3",
-   "name": "storage_hours",
-   "basis": "internal",
-   "pop_hours": 0.004,
-   "indoor_outage_pop_hours": 0.018,
-   "thermal": 0.004
+   "pop_hours": 0.015,
+   "indoor_outage_pop_hours": 0.007,
+   "thermal": 0.018
   },
   {
    "param": "C-H10",
    "name": "T_in_thr",
    "basis": "literature",
+   "pop_hours": -0.014,
+   "indoor_outage_pop_hours": -0.116,
+   "thermal": -0.002
+  },
+  {
+   "param": "C-B3",
+   "name": "T_set",
+   "basis": "literature",
+   "pop_hours": 0.013,
+   "indoor_outage_pop_hours": 0.035,
+   "thermal": 0.015
+  },
+  {
+   "param": "C-P2.R",
+   "name": "R",
+   "basis": "standard",
+   "pop_hours": -0.012,
+   "indoor_outage_pop_hours": 0.006,
+   "thermal": -0.015
+  },
+  {
+   "param": "C-B1",
+   "name": "tau_b",
+   "basis": "literature",
+   "pop_hours": -0.011,
+   "indoor_outage_pop_hours": -0.165,
+   "thermal": -0.011
+  },
+  {
+   "param": "C-H15",
+   "name": "D0",
+   "basis": "assumption",
+   "pop_hours": 0.009,
+   "indoor_outage_pop_hours": -0.005,
+   "thermal": 0.014
+  },
+  {
+   "param": "C-H1",
+   "name": "p_backup_fail",
+   "basis": "literature",
+   "pop_hours": 0.006,
+   "indoor_outage_pop_hours": -0.026,
+   "thermal": -0.003
+  },
+  {
+   "param": "C-W3",
+   "name": "storage_hours",
+   "basis": "internal",
+   "pop_hours": 0.005,
+   "indoor_outage_pop_hours": 0.031,
+   "thermal": 0.002
+  },
+  {
+   "param": "C-H14",
+   "name": "rho0",
+   "basis": "assumption",
+   "pop_hours": 0.005,
+   "indoor_outage_pop_hours": -0.005,
+   "thermal": 0.004
+  },
+  {
+   "param": "C-H13",
+   "name": "q",
+   "basis": "assumption",
    "pop_hours": -0.004,
-   "indoor_outage_pop_hours": -0.107,
-   "thermal": -0.007
+   "indoor_outage_pop_hours": -0.016,
+   "thermal": 0.006
   },
   {
    "param": "C-B2",
    "name": "dT_gain",
    "basis": "literature",
-   "pop_hours": -0.001,
-   "indoor_outage_pop_hours": 0.035,
-   "thermal": 0.001
+   "pop_hours": -0.003,
+   "indoor_outage_pop_hours": 0.021,
+   "thermal": -0.005
+  },
+  {
+   "param": "C-H11",
+   "name": "k",
+   "basis": "internal",
+   "pop_hours": 0.002,
+   "indoor_outage_pop_hours": -0.006,
+   "thermal": 0.005
+  },
+  {
+   "param": "C-H16",
+   "name": "W0",
+   "basis": "assumption",
+   "pop_hours": 0.002,
+   "indoor_outage_pop_hours": 0.049,
+   "thermal": 0.004
   }
  ],
  "full_model": {
-  "run_id": "cascade-20261110T191034Z-0ed4b5b116",
+  "run_id": "cascade-20261110T212705Z-72f1c05324",
   "scenarios": {
    "+0": {
-    "thermal": 1.67,
-    "pop_hours": 142118.41,
-    "dialysis_hours": 8.93,
-    "hospital_hours": 0.74,
+    "thermal": 3.61,
+    "pop_hours": 776835.68,
+    "dialysis_hours": 32.99,
+    "hospital_hours": 2.37,
     "water_out_hours": 0.0,
     "shed_station_hours": 0.0,
-    "overload": 5.18
+    "overload": 18.39
    },
    "+2": {
-    "thermal": 14.19,
-    "pop_hours": 1350403.51,
-    "dialysis_hours": 88.0,
-    "hospital_hours": 9.1,
+    "thermal": 29.54,
+    "pop_hours": 6016353.94,
+    "dialysis_hours": 224.45,
+    "hospital_hours": 12.48,
     "water_out_hours": 0.0,
     "shed_station_hours": 0.0,
-    "overload": 49.65
+    "overload": 124.87
    },
    "+4": {
-    "thermal": 74.53,
-    "pop_hours": 6629058.88,
-    "dialysis_hours": 419.25,
-    "hospital_hours": 38.61,
+    "thermal": 156.56,
+    "pop_hours": 29991518.92,
+    "dialysis_hours": 1117.45,
+    "hospital_hours": 56.37,
     "water_out_hours": 0.0,
-    "shed_station_hours": 0.18,
-    "overload": 264.59
+    "shed_station_hours": 0.33,
+    "overload": 616.07
    }
   }
  }

@@ -1,17 +1,17 @@
 {
- "run_id": "cascade-20261110T191034Z-0ed4b5b116",
+ "run_id": "cascade-20261110T212705Z-72f1c05324",
  "method": "PIPELINE_SPEC M-28 / M-29",
  "cell_m": 250.0,
  "network": {
-  "edges": 12526,
-  "nodes": 9332,
-  "components": 67,
-  "largest_component_node_share": 0.978,
-  "hpms_aadt_matched_share": 0.259,
-  "hpms_aadt_matched_length_share": 0.245
+  "edges": 69707,
+  "nodes": 59400,
+  "components": 200,
+  "largest_component_node_share": 0.99,
+  "hpms_aadt_matched_share": 0.206,
+  "hpms_aadt_matched_length_share": 0.156
  },
- "population_in_cells": 115203,
- "cells": 1585,
+ "population_in_cells": 695003,
+ "cells": 14602,
  "hourly_profile_weekday": [
   0.0109,
   0.0083,
@@ -48,144 +48,144 @@
    "loc": 600.0
   }
  },
- "controlled_edge_share": 0.328,
+ "controlled_edge_share": 0.314,
  "conditions": {
   "night": {
    "hour_local": 3,
    "hospital": {
-    "pop_mean_min": 3.96,
-    "pop_p90_min": 7.93,
-    "max_min": 10.8,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 7.72,
+    "pop_p90_min": 14.21,
+    "max_min": 26.98,
+    "pop_share_over_15_min": 0.0831,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 6
+    "facilities_available": 12
    },
    "dialysis": {
-    "pop_mean_min": 3.72,
-    "pop_p90_min": 6.22,
-    "max_min": 10.1,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 6.73,
+    "pop_p90_min": 11.7,
+    "max_min": 26.79,
+    "pop_share_over_15_min": 0.0355,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 5
+    "facilities_available": 17
    },
    "ems": {
-    "pop_mean_min": 2.84,
-    "pop_p90_min": 4.46,
-    "max_min": 7.59,
-    "pop_share_over_8_min": 0.0,
+    "pop_mean_min": 5.21,
+    "pop_p90_min": 9.27,
+    "max_min": 24.46,
+    "pop_share_over_8_min": 0.1643,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 7
+    "facilities_available": 34
    }
   },
   "am_peak": {
    "hour_local": 8,
    "hospital": {
-    "pop_mean_min": 3.98,
-    "pop_p90_min": 7.97,
-    "max_min": 10.93,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 7.77,
+    "pop_p90_min": 14.34,
+    "max_min": 27.17,
+    "pop_share_over_15_min": 0.0874,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 6
+    "facilities_available": 12
    },
    "dialysis": {
-    "pop_mean_min": 3.73,
-    "pop_p90_min": 6.24,
-    "max_min": 10.12,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 6.76,
+    "pop_p90_min": 11.77,
+    "max_min": 27.14,
+    "pop_share_over_15_min": 0.0356,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 5
+    "facilities_available": 17
    },
    "ems": {
-    "pop_mean_min": 2.85,
-    "pop_p90_min": 4.48,
-    "max_min": 7.6,
-    "pop_share_over_8_min": 0.0,
+    "pop_mean_min": 5.24,
+    "pop_p90_min": 9.34,
+    "max_min": 24.81,
+    "pop_share_over_8_min": 0.1679,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 7
+    "facilities_available": 34
    }
   },
   "pm_peak": {
    "hour_local": 17,
    "hospital": {
-    "pop_mean_min": 3.99,
-    "pop_p90_min": 7.99,
-    "max_min": 10.99,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 7.81,
+    "pop_p90_min": 14.44,
+    "max_min": 27.43,
+    "pop_share_over_15_min": 0.0886,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 6
+    "facilities_available": 12
    },
    "dialysis": {
-    "pop_mean_min": 3.74,
-    "pop_p90_min": 6.25,
-    "max_min": 10.13,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 6.78,
+    "pop_p90_min": 11.83,
+    "max_min": 27.43,
+    "pop_share_over_15_min": 0.0359,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 5
+    "facilities_available": 17
    },
    "ems": {
-    "pop_mean_min": 2.86,
-    "pop_p90_min": 4.48,
-    "max_min": 7.61,
-    "pop_share_over_8_min": 0.0,
+    "pop_mean_min": 5.26,
+    "pop_p90_min": 9.39,
+    "max_min": 25.1,
+    "pop_share_over_8_min": 0.1705,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 7
+    "facilities_available": 34
    }
   },
   "all_signals_dark_pm": {
    "hour_local": 17,
    "hospital": {
-    "pop_mean_min": 4.14,
-    "pop_p90_min": 8.31,
-    "max_min": 11.65,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 8.81,
+    "pop_p90_min": 16.87,
+    "max_min": 31.16,
+    "pop_share_over_15_min": 0.1347,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 6
+    "facilities_available": 12
    },
    "dialysis": {
-    "pop_mean_min": 3.81,
-    "pop_p90_min": 6.42,
-    "max_min": 10.49,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 7.37,
+    "pop_p90_min": 13.47,
+    "max_min": 30.69,
+    "pop_share_over_15_min": 0.054,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 5
+    "facilities_available": 17
    },
    "ems": {
-    "pop_mean_min": 2.95,
-    "pop_p90_min": 4.65,
-    "max_min": 7.84,
-    "pop_share_over_8_min": 0.0,
+    "pop_mean_min": 5.8,
+    "pop_p90_min": 10.79,
+    "max_min": 28.35,
+    "pop_share_over_8_min": 0.2294,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 7
+    "facilities_available": 34
    }
   },
   "stress_+0": {
    "hour_local": 18,
    "hospital": {
-    "pop_mean_min": 3.98,
-    "pop_p90_min": 7.97,
-    "max_min": 10.92,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 7.77,
+    "pop_p90_min": 14.33,
+    "max_min": 27.16,
+    "pop_share_over_15_min": 0.0874,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 6
+    "facilities_available": 12
    },
    "dialysis": {
-    "pop_mean_min": 3.73,
-    "pop_p90_min": 6.24,
-    "max_min": 10.12,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 6.76,
+    "pop_p90_min": 11.77,
+    "max_min": 27.12,
+    "pop_share_over_15_min": 0.0356,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 5
+    "facilities_available": 17
    },
    "ems": {
-    "pop_mean_min": 2.85,
-    "pop_p90_min": 4.48,
-    "max_min": 7.6,
-    "pop_share_over_8_min": 0.0,
+    "pop_mean_min": 5.23,
+    "pop_p90_min": 9.33,
+    "max_min": 24.78,
+    "pop_share_over_8_min": 0.1678,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 7
+    "facilities_available": 34
    },
    "hour_local_iso": "2023-08-25T18:00:00-05:00",
-   "roads_degraded_mean": 15.07,
+   "roads_degraded_mean": 37.45,
    "delta_pop_mean_min": {
     "hospital": 0.0,
     "dialysis": 0.0,
@@ -195,69 +195,69 @@
   "stress_+2": {
    "hour_local": 18,
    "hospital": {
-    "pop_mean_min": 3.98,
-    "pop_p90_min": 7.98,
-    "max_min": 10.94,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 7.78,
+    "pop_p90_min": 14.36,
+    "max_min": 27.2,
+    "pop_share_over_15_min": 0.0875,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 6
+    "facilities_available": 12
    },
    "dialysis": {
-    "pop_mean_min": 3.73,
-    "pop_p90_min": 6.25,
-    "max_min": 10.12,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 6.76,
+    "pop_p90_min": 11.78,
+    "max_min": 27.14,
+    "pop_share_over_15_min": 0.0356,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 5
+    "facilities_available": 17
    },
    "ems": {
-    "pop_mean_min": 2.85,
-    "pop_p90_min": 4.48,
-    "max_min": 7.6,
-    "pop_share_over_8_min": 0.0,
+    "pop_mean_min": 5.24,
+    "pop_p90_min": 9.34,
+    "max_min": 24.8,
+    "pop_share_over_8_min": 0.1684,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 7
+    "facilities_available": 34
    },
    "hour_local_iso": "2023-08-25T18:00:00-05:00",
-   "roads_degraded_mean": 72.98,
+   "roads_degraded_mean": 196.79,
    "delta_pop_mean_min": {
-    "hospital": 0.0,
+    "hospital": 0.01,
     "dialysis": 0.0,
-    "ems": 0.0
+    "ems": 0.01
    }
   },
   "stress_+4": {
    "hour_local": 18,
    "hospital": {
-    "pop_mean_min": 3.99,
-    "pop_p90_min": 7.99,
-    "max_min": 10.97,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 7.82,
+    "pop_p90_min": 14.45,
+    "max_min": 27.35,
+    "pop_share_over_15_min": 0.0891,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 6
+    "facilities_available": 12
    },
    "dialysis": {
-    "pop_mean_min": 3.74,
-    "pop_p90_min": 6.26,
-    "max_min": 10.13,
-    "pop_share_over_15_min": 0.0,
+    "pop_mean_min": 6.78,
+    "pop_p90_min": 11.84,
+    "max_min": 27.21,
+    "pop_share_over_15_min": 0.036,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 5
+    "facilities_available": 17
    },
    "ems": {
-    "pop_mean_min": 2.86,
-    "pop_p90_min": 4.49,
-    "max_min": 7.61,
-    "pop_share_over_8_min": 0.0,
+    "pop_mean_min": 5.26,
+    "pop_p90_min": 9.38,
+    "max_min": 24.88,
+    "pop_share_over_8_min": 0.1708,
     "pop_unreachable_share": 0.0,
-    "facilities_available": 7
+    "facilities_available": 34
    },
    "hour_local_iso": "2023-08-25T18:00:00-05:00",
-   "roads_degraded_mean": 197.98,
+   "roads_degraded_mean": 562.8,
    "delta_pop_mean_min": {
-    "hospital": 0.01,
-    "dialysis": 0.01,
-    "ems": 0.01
+    "hospital": 0.05,
+    "dialysis": 0.02,
+    "ems": 0.03
    }
   }
  }

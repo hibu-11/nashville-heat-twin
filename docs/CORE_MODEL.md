@@ -190,6 +190,12 @@ English: still missing are NES transformer ratings and feeder zones (PWR-03, PWR
 - Link capacities and BPR coefficients (C-T6.*) are fixed at mid values, so their uncertainty is not in the sensitivity analysis.
 - Two to-build relations added to line B: nursing-home cooling loss → residents' heat exposure; zone outage → electricity-dependent residents → care demand (core.yaml B1).
 
+### 4.5 研究区扩到全县与 B 线第一版 County extent and line B v1 (2026-11-11)
+
+**中文：** 研究区从市中心方块扩到 Davidson 全县（`datasets.yaml` 的 `aoi` 与 `aoi_polygon`），电力和供水外扩约 4 km；OSM 变电站 / 电力线 / 水务 / 信号灯 / 消防站、3DEP 高程与 NLCD 栅格按全县重新获取；建筑改用 Metro 全县轮廓（328,090 栋）；供电分区按县界裁剪。城市气温场仍由 2022 年走航测温拟合，郊区属于外推。B 线第一版见 PIPELINE_SPEC M-47：热病症就诊按田纳西年度急诊数据校准（`python -m pipeline.lineb calibrate`，R² 0.75），加上养老院住户（CMS）和依赖电力设备的居民（emPOWER），以排队近似换算为急诊等待；就医时间 = A 线路程增量 + B 线等待增量。
+
+**English:** The study area moved from the downtown box to Davidson County (`aoi` and `aoi_polygon` in `datasets.yaml`), with power and water extended about 4 km beyond; OSM power, water, signal and fire-station layers and the 3DEP / NLCD grids were re-fetched for the county; buildings now come from Metro's county-wide footprints (328,090); zones are clipped to the county boundary. The urban air field is still fitted on the 2022 traverse, so rural areas are an extrapolation. Line B v1 follows PIPELINE_SPEC M-47: heat-illness visits calibrated on Tennessee annual ED data (R² 0.75), plus nursing-home residents (CMS) and electricity-dependent residents (emPOWER), converted to ED waiting through a queueing approximation; time to care = line A travel increase + line B waiting increase.
+
 ## 5. 暂缓的细节 Deferred details
 
 | 编号 Id | 细节 Detail | 暂缓理由 Reason | 加回方式 How it returns |
@@ -205,87 +211,90 @@ English: still missing are NES transformer ratings and feeder zones (PWR-03, PWR
 
 ## 6. 结果 Results
 
-运行 Run `core-20261110T191340Z-0ed4b5b116`：2023 年 6–8 月，2,000 次蒙特卡洛，城市气温场开启，参数为 §4.1 加上 2026-11-10 的储水时长（5/10/18 h），K8 按 §4.2 的两处修正计算；与完整模型 `cascade-20261110T191034Z-0ed4b5b116` 使用相同的随机种子和参数表。括号里是 2026-11-04 的上一次运行 `core-20261104T184037Z-e8e2407fbb`。
+运行 Run `core-20261110T213942Z-72f1c05324`：**Davidson 全县**（2026-11-11 起），2023 年 6–8 月，2,000 次蒙特卡洛，参数为 §4.1、2026-11-10 的储水时长和 B 线第一版（§4.5）；完整模型 `cascade-20261110T212705Z-72f1c05324` 使用相同种子和参数表。市中心范围的上一轮结果见 git `6e01edb`。
 
-Run `core-20261110T191340Z-0ed4b5b116`: June–August 2023, 2,000 Monte Carlo runs, urban air field on, parameters of §4.1 plus the 2026-11-10 storage range (5/10/18 h), K8 with the two changes of §4.2; same seed and coupling table as the full-model run `cascade-20261110T191034Z-0ed4b5b116`. Values in brackets are the previous run of 2026-11-04.
+Run `core-20261110T213942Z-72f1c05324`: **Davidson County** (from 2026-11-11), June–August 2023, 2,000 Monte Carlo runs, parameters of §4.1, the 2026-11-10 storage range and line B v1 (§4.5); full model `cascade-20261110T212705Z-72f1c05324` with the same seed and coupling table. The previous downtown results are in git `6e01edb`.
+
+全县网络 County network: 159 substations, 234 supply edges, 112 zones; 702,461 people (89,379 aged 65+, 98,031 below poverty); 12 hospitals, 24 nursing homes (2,334 residents), 20 dialysis centres, 9 water facilities, 1,425 signals; 3,864 electricity-dependent residents (emPOWER).
 
 | 指标 Output（均值 mean） | +0 °C | +2 °C | +4 °C |
 | --- | --- | --- | --- |
-| 有停电的运行比例 runs with any outage | 12.1% (12.0%) | 33.7% (33.5%) | 61.8% (61.2%) |
-| 停电人·小时（骨架）person-hours without power (core) | 15k (15k) | 143k (147k) | 819k (806k) |
-| 停电人·小时（完整模型）(full model) | 142k (142k) | 1.35M (1.35M) | 6.63M (6.63M) |
-| 失去空调人·小时 person-hours without AC due to outages | 14k (15k) | 134k (139k) | 770k (758k) |
-| 其中室内超过阈值 of which indoor ≥ threshold, $`E^{out}`$ | 0.9k (1.0k) | 14k (15k) | 140k (136k) |
-| 65 岁以上 aged 65+ | 86 (97) | 1.3k (1.4k) | 13k (13k) |
-| 贫困人口 below poverty | 169 (181) | 2.6k (2.7k) | 25k (25k) |
-| 背景暴露（无空调住户）background, $`E^{noAC}`$ | 5.8M | 10.0M | 13.2M |
-| TVA 缺口运行比例 runs with a TVA shortfall | 0 | 0 | 4.2% |
+| 有停电的运行比例 runs with any outage | 16.1% | 38.4% | 67.6% |
+| 热失效 thermal failures per run | 1.6 | 16 | 106 |
+| 停电人·小时（骨架）person-hours without power (core) | 62k | 655k | 4.08M |
+| 停电人·小时（完整模型）(full model) | 777k | 6.0M | 30.0M |
+| 停电造成的室内高温暴露 indoor heat person-hours from outages | 3.0k | 57k | 629k |
+| 65 岁以上 aged 65+ | 389 | 6.8k | 77k |
+| 无空调住户的背景暴露 homes without AC | 28M | 54M | 76M |
+| 设施失能小时：医院 / 养老院 / 透析 facility-hours lost | 0.07 / 0.68 / 1.6 | 0.66 / 6.5 / 16 | 4.4 / 40 / 106 |
 | 断水小时 water-out hours | 0 | 0 | 0 |
-| K8：就医时间增量（医院 + 透析 + 急救）time to care, added minutes per person | 0.06 | 0.73 | 3.9 |
-| K8：有路段降级或设施关闭的运行 runs with degraded segments or closures | 11.7% | 33.2% | 61.0% |
-| K8：到医院平均时间增量（p99）hospital Δ, population mean (p99) | 0.004 (0.08) min | 0.016 (0.23) min | 0.048 (0.41) min |
-| K8：到透析中心平均时间增量（p99）dialysis Δ (p99) | 0.04 (1.6) min | 0.22 (5.2) min | 0.50 (5.3) min |
-| K8：研究区内没有可用透析中心的运行 runs with no dialysis centre available | 0.05% (0) | 1.6% (0.8%) | 11.1% (8.9%) |
-| K8：到急救站平均时间增量（p99）EMS Δ (p99) | 0.002 (0.04) min | 0.007 (0.08) min | 0.018 (0.12) min |
-
-In the K8 rows the brackets give the 99th percentile. The K8 figures moved because the worst hour now also counts facility closures (§4.2).
+| TVA 缺口运行比例 runs with a TVA shortfall | 0 | 0 | 4.2% |
+| A 线：路程增量（医院 + 透析 + 急救）travel part of time to care | 0.06 min | 0.45 min | 2.5 min |
+| A 线：到医院平均增量（p99）hospital Δ (p99) | 0.009 (0.23) min | 0.055 (1.1) min | 0.19 (2.2) min |
+| A 线：全县没有可用透析中心的运行 no dialysis centre available | 0 | 0.05% | 2.7% |
+| B 线：热病症超额就诊（每个夏季）excess heat-illness visits per summer | 121 | 233 | 332 |
+| B 线：依赖电力设备居民就诊 device-user visits | 3.6 | 36 | 211 |
+| B 线：养老院住户 ≥ 26 °C 的人·小时 nursing-home resident-hours | 24 | 298 | 2,111 |
+| B 线：高峰日新增就诊 peak-day extra visits | 5.9 | 15 | 45 |
+| B 线：急诊等待增量 均值（中位数 / p95）ED waiting, mean (median / p95) | 2.7 (1.4 / 5) min | 10.3 (1.8 / 33) min | 41 (3.0 / 297) min |
+| **就医时间（综合）time to care, composite** | **2.7 min** | **10.8 min** | **44 min** |
 
 **中文：**
-- **储水时长调整**（6/12/24 → 5/10/18 h）后仍没有一次运行断水；其余变化来自随机数对齐和 K8 最坏小时的新定义，量级很小。
-- **过载转移仍主导完整模型。** 去掉 D1 后，停电人·小时在三个情景下都减少约 88–89%。
-- **室内暴露随升温增加。** 失去空调的人·小时里，室内超过阈值的比例从 +0 °C 的 6.5% 升到 +4 °C 的 18%。$`\tau_b`$ 和 $`\Delta T_{gain}`$ 仍是文献推断的占位值。
-- **级联暴露远小于"没有空调"的背景暴露**（+0 °C 下约 6,200 倍）。
-- **A 线：设施关闭远比堵车重要。** 就医时间增量 +4 °C 时人均 3.9 分钟，其中约 98% 来自设施关闭（§6.1）；+4 °C 时 11.1% 的运行在最坏小时研究区内没有可用的透析中心。BPR 不含路口全向停车延误，拥堵部分是下限。
-- **敏感性**仍由变压器参数主导：C-P1.Kd ρ = 0.40、C-P3.sigma 0.28、C-P3 −0.24。对停电造成的室内暴露，排第一的是建筑热时间常数 C-B1（−0.15），其后是 C-P1.Kd（0.15）、C-P3.sigma（0.13）、修复时长 C-P6（0.12）。
-- **验证：** 模型与 EAGLE-I 逐小时停电的相关 ρ = 0.042 [−0.038, 0.112]，仍没有信号（县级停电由风暴主导）。
+- **扩到全县后 A 线结论变了。** 只算市中心时，+4 °C 有 11% 的运行"研究区内没有可用透析中心"；全县只有 2.7%，原来的结论大部分是边界造成的。路程增量中设施关闭约占 86–87%，信号灯熄灭约占 17%（全县信号灯多，作用比市中心时大）。
+- **就医时间由 B 线的急诊等待主导，但这一步依赖 T4 假设。** +4 °C 时综合增量 44 分钟中，等待约 41 分钟、路程 2.5 分钟。等待的均值被少数接近满负荷的运行拉高（中位数只有 3 分钟，p95 近 300 分钟）。
+- **热病症的校准是可靠的一环**（T2，R² 0.75），+4 °C 时每个夏季超额就诊从 121 增加到 332；但它对等待的贡献只有约 7%。
+- **等待主要来自依赖电力设备的居民**（关掉这条线就医时间下降 87%）。他们的就诊概率 q 没有数据（T4），是 B 线最先要替换的假设；其次是急诊基线接诊量和利用率（T4）。
+- **验证：** 模型与 EAGLE-I（县级）逐小时停电的相关 ρ = 0.032 [−0.045, 0.117]，仍无信号（县级停电由风暴主导）。
+- **敏感性：** 停电人·小时由 C-P1.Kd（0.44）、C-P3.sigma（0.34）、C-P3（−0.24）主导；停电造成的室内暴露由 C-B1（−0.17）、C-P3.sigma（0.16）、C-P1.Kd（0.14）、C-P6（0.13）主导。
 
 **English:**
-- **Storage range** (6/12/24 → 5/10/18 h): still no run loses water; other changes come from random-number alignment and the new K8 worst hour, and are small.
-- **Overload transfer still dominates the full model.** Without D1, person-hours without power fall by about 88–89% in every scenario.
-- **Indoor exposure grows with warming.** The share of AC-loss person-hours with indoor temperature above the threshold rises from 6.5% at +0 °C to 18% at +4 °C. $`\tau_b`$ and $`\Delta T_{gain}`$ are still literature-informed placeholders.
-- **Cascade exposure is small next to the no-AC background** (about 6,200 times at +0 °C).
-- **Line A: facility closures matter far more than congestion.** Time to care rises by 3.9 min per person at +4 °C, about 98% of it from closures (§6.1); 11.1% of +4 °C runs have no dialysis centre open at their worst hour. BPR omits all-way-stop delay, so congestion is a lower bound.
-- **Sensitivity** is led by transformer placeholders (C-P1.Kd ρ = 0.40, C-P3.sigma 0.28, C-P3 −0.24). For indoor exposure from outages, the building time constant C-B1 ranks first (−0.15), then C-P1.Kd (0.15), C-P3.sigma (0.13) and repair time C-P6 (0.12).
-- **Validation:** ρ(model, EAGLE-I hourly) = 0.042 [−0.038, 0.112]; still no signal, because county outages are storm-driven.
+- **Line A changes with the whole county.** Downtown only, 11% of +4 °C runs had no dialysis centre in the area; county-wide it is 2.7%, so most of the earlier result was a boundary artefact. Closures explain 86–87% of the travel increase and dark signals about 17% (more signals county-wide).
+- **Time to care is dominated by line B's ED waiting, which rests on T4 assumptions.** Of the 44 min at +4 °C, waiting is about 41 min and travel 2.5 min. The mean is driven by a few runs near capacity (median 3 min, p95 about 300 min).
+- **The heat-illness calibration is the solid step** (T2, R² 0.75): excess visits per summer rise from 121 to 332 at +4 °C, but they explain only about 7% of waiting.
+- **Waiting comes mainly from electricity-dependent residents** (switching them off lowers time to care by 87%). Their visit probability q has no data (T4) and is the first line B assumption to replace, followed by baseline ED volume and utilisation (T4).
+- **Validation:** ρ(model, EAGLE-I hourly) = 0.032 [−0.045, 0.117]; still no signal (county outages are storm-driven).
+- **Sensitivity:** person-hours without power led by C-P1.Kd (0.44), C-P3.sigma (0.34), C-P3 (−0.24); outage-driven indoor exposure by C-B1 (−0.17), C-P3.sigma (0.16), C-P1.Kd (0.14), C-P6 (0.13).
 
 ### 6.1 因果贡献 Knockout contributions
 
-`python -m pipeline.contrib --runs 1000 --scenarios 2,4`（方法见 §4.2）。贡献 = 只关掉这一条关系时结局下降的比例；负值表示缓冲。串联各环贡献相同，不能相加。Contribution = share of the outcome lost when only that relation is switched off; negative = buffer. Series links share the same value; figures do not add up.
+`python -m pipeline.contrib --runs 500 --scenarios 2,4`（方法见 §4.2）。贡献 = 只关掉这一条关系时就医时间（综合）下降的比例；负值表示缓冲。串联各环贡献相同，不能相加。Contribution = share of composite time to care lost when only that relation is switched off; negative = buffer; series links share values and figures do not add up.
 
-| 关系 Relation | 关掉什么 What is switched off | 就医时间 time to care +2 / +4 °C | 停电人·小时 person-hours without power +4 °C | 室内暴露 indoor exposure +4 °C |
-| --- | --- | ---: | ---: | ---: |
-| R01 背景气候 × 城市基础信息 | 全城用机场气温 / airport series everywhere | −38% / −18% | −1.6% | −4.8% |
-| R02 气温 → 负荷 | 负荷不随气温变化 / no load response | 100% / 100% | 100% | 1.1% |
-| R03a 环境气温 → 热点 | 环境取时期平均 / period-mean ambient | 92% / 84% | 84% | 1.0% |
-| R03b 负荷 → 热点 | 负荷取时期平均 / period-mean load | 100% / 99% | 100% | 1.1% |
-| R04 热点 → 热失效 | 无热失效 / no thermal failure | 100% / 100% | 100% | 1.1% |
-| R05、R06 系统缺口 → 轮流停电 | 无轮流停电 / no rotating outages | 0% / 0.4% | 0.1% | 0% |
-| R07 修复时长 | 失效一小时后恢复 / back after 1 h | 33% / 32% | 73% | 1.1% |
-| R08 供电依赖 | 不向下游传播 / no upstream propagation | 52% / 43% | 34% | 0.5% |
-| R09、R10 水厂与储水 | 水厂不失电；无储水缓冲 / plants always powered; no storage | 0% / 0% | 0% | 0% |
-| R11 分区停电 → 医疗设施 | 设施不因停电关闭 / no facility closures from outages | 96% / 98% | 0% | 0% |
-| R12 供水 → 医疗设施 | 透析不受断水影响 / dialysis ignores water | 0% / 0% | 0% | 0% |
-| R13 分区停电 → 信号灯 | 信号灯不熄灭 / no dark signals | 10% / 3.4% | 0% | 0% |
-| R14–R16 通行能力 → 路程 | 熄灯不降低通行能力 / no capacity loss | 3.4% / 1.8% | 0% | 0% |
-| R17 设施关闭 → 改道 | 关闭的设施仍可到达 / closures ignored | 97% / 98% | 0% | 0% |
-| R18 停电 → 室内温度 | 停电时室内保持设定温度 / set point kept | 0% / 0% | 0% | 1.1% |
-| R19 本地气温 → 室内平衡温度 | 室内不受室外驱动 / indoor not driven by outdoor | 0% / 0% | 0% | 100% |
+| 关系 Relation | 就医时间 time to care +2 / +4 °C | 其中路程 travel part +4 °C | 其中等待 waiting part +4 °C | 停电人·小时 person-hours without power +4 °C |
+| --- | ---: | ---: | ---: | ---: |
+| R01 背景气候 × 城市基础信息 / local temperature | −14% / −16% | −19% | −15% | −27% |
+| R02 气温 → 负荷 / load | 86% / 96% | 99% | 95% | 100% |
+| R03a 环境气温 → 热点 / ambient | 78% / 78% | 85% | 78% | 86% |
+| R03b 负荷 → 热点 / load → hot spot | 86% / 95% | 99% | 95% | 100% |
+| R04 热点 → 热失效 / failure | 86% / 96% | 99% | 95% | 100% |
+| R05 负荷 → TVA 裕度 / TVA load | 0% / 0% | 0% | 0% | 0% |
+| R06 轮流停电 / rotating outages | 0% / 0% | 0% | 0% | 0% |
+| R07 修复时长 / repair | 76% / 70% | 47% | 71% | 72% |
+| R08 供电依赖 / supply dependency | 48% / 46% | 56% | 45% | 43% |
+| R09 分区停电 → 水厂 / plants | 0% / 0% | 0% | 0% | 0% |
+| R10 储水 / storage | 0% / 0% | 0% | 0% | 0% |
+| R11 分区停电 → 医疗设施 / facility closures | 9% / 15% | 86% | 11% | 0% |
+| R12 供水 → 医疗设施 / water → facilities | 0% / 0% | 0% | 0% | 0% |
+| R13 分区停电 → 信号灯 / dark signals | 1% / 1% | 17% | 0% | 0% |
+| R14–R16 通行能力 → 路程 / capacity → travel | 1% / 1% | 16% | 0% | 0% |
+| R17 设施关闭 → 改道 / rerouting | 3% / 5% | 87% | 0% | 0% |
+| R18 停电 → 室内温度 / outage → indoor | 0% / 1% | 0% | 1% | 0% |
+| R19 本地气温 → 室内 / local temp → indoor | 16% / 7% | 0% | 8% | 0% |
+| R21 暴露 → 热病症 / exposure → heat illness | 16% / 7% | 0% | 8% | 0% |
+| R22 需求 → 等待 / demand → waiting | 96% / 94% | 0% | 100% | 0% |
+| R23 养老院 → 暴露 / nursing homes | 0% / 0% | 0% | 0% | 0% |
+| R24 停电 → 设备用户就医 / device users | 79% / 87% | 0% | 92% | 0% |
 
 **中文：**
-- **A 线几乎完全由"变压器过热 → 停电 → 设施关闭"驱动。** 关掉设施关闭（R11）或改道（R17），就医时间增量减少 96–98%；关掉信号灯熄灭只减少 2–10%。
-- **高温通过两个入口进入电网，缺一不可。** 负荷随气温上升（R02）和热点对环境气温的直接响应（R03a）都接近 100%，而这两个环节的数据分级是 T4 和 T2；负荷的设计负荷率 K_design 是纯假设，是最需要 NES 数据的地方。
-- **修复时长贡献 73% 的停电人·小时**（关掉后停电只持续一小时）：它决定的是停电多久，而不是是否停电。
-- **城市气温场是负贡献（−18% 到 −38%）。** Nashville 大部分变电站比机场凉，用机场气温会高估停电。
-- **供水和系统缺口在当前参数下贡献为零**，说明在这些情景里它们不是风险来源，而不是说它们不重要。
-- **停电只贡献室内高温暴露的约 1%；** 其余来自无空调住户。B 线的就医需求因此主要由高温本身驱动，停电是加剧因素。
+- **最大的放大链是"高温 → 负荷 → 热失效 → 停电 → 依赖电力设备的居民 → 急诊等待"。** 负荷（R02）、热失效（R04）接近 96%，设备用户（R24）87%，等待（R22）94%。这条链上 T4 的环节最多（K_design、θ50、q、ρ0、D0、W0），是最需要数据的地方。
+- **设施关闭（R11）对就医时间有 15% 的贡献**，其中既有路程（关闭后改道），也有等待（医院停电降低急诊容量），体现两条线的交互。
+- **城市气温场仍是缓冲（−16%）**：全县大部分地方比机场凉。
+- **供水、系统缺口、养老院对就医时间的贡献接近 0**；养老院的意义在于暴露落在最脆弱的人群，而不是对全市就医时间的影响。
 
 **English:**
-- **Line A is driven almost entirely by transformer overheating → outage → facility closure.** Switching off facility closures (R11) or rerouting (R17) removes 96–98% of the added time to care; switching off dark signals removes 2–10%.
-- **Heat enters the grid through two gates, both indispensable:** load response (R02) and the direct ambient effect on the hot spot (R03a) are each near 100%; the load gate rests on K_design, a T4 assumption and the first item to obtain from NES.
-- **Repair time accounts for 73% of person-hours without power:** it sets how long outages last, not whether they happen.
-- **The urban field contributes negatively (−18% to −38%)**: most substations are cooler than the airport, so the airport series overstates outages.
-- **Water and system shortfall contribute nothing under current parameters,** meaning they are not risk sources in these scenarios, not that they are unimportant.
-- **Outages account for about 1% of indoor heat exposure;** the rest comes from homes without AC, so line B demand will be driven mainly by heat itself, with outages as an aggravating factor.
+- **The strongest amplifying chain is heat → load → thermal failure → outage → electricity-dependent residents → ED waiting.** Load (R02) and failure (R04) are near 96%, device users (R24) 87%, waiting (R22) 94%. This chain carries the most T4 links (K_design, θ50, q, ρ0, D0, W0).
+- **Facility closures (R11) contribute 15% to time to care**, through both travel (rerouting) and waiting (hospital outages reduce ED capacity), the interaction of the two lines.
+- **The urban field remains a buffer (−16%)**: most of the county is cooler than the airport.
+- **Water, system shortfall and nursing homes contribute about 0 to time to care;** nursing homes matter because their exposure falls on the most vulnerable people, not through city-wide time to care.
 
 ## 7. 加回细节的规程 Protocol for adding a detail back
 

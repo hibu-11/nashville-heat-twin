@@ -13,8 +13,10 @@
 
 project:
   name: Nashville Heat Cascade Digital Twin
-  # 【中文】downtown AOI，与 LST v4.1 pipeline 一致 / same AOI as LST v4.1
-  aoi: [-86.837, 36.118, -86.727, 36.208]   # [west, south, east, north], EPSG:4326
+  # 【中文】研究区：Davidson 全县（2026-11-10 起；之前为市中心 [-86.837, 36.118, -86.727, 36.208]，见 git 6e01edb）
+  # AOI: Davidson County from 2026-11-10 (previously the downtown box above, see git 6e01edb)
+  aoi: [-87.055, 35.968, -86.516, 36.405]   # [west, south, east, north], EPSG:4326
+  aoi_polygon: davidson_county.parquet      # 【中文】供电分区与人口按县界裁剪 / zones and population are clipped to the county
   timezone: America/Chicago
   # 【中文】校验用：时间字段超出这个范围会给出警告 / timestamps outside this range are flagged
   time_range: ["2014-01-01", "2025-12-31"]
@@ -249,7 +251,7 @@ datasets:
     title: Substations (OSM)
     group: Power
     file: osm/osm_substations.geojson
-    clip_bbox: [-86.88, 36.08, -86.68, 36.25]
+    clip_bbox: [-87.10, 35.93, -86.47, 36.45]
     system: power
     asset_type: substation
     id_field: osm_id
@@ -270,7 +272,7 @@ datasets:
     title: Power lines (OSM)
     group: Power
     file: osm/osm_power_lines.geojson
-    clip_bbox: [-86.88, 36.08, -86.68, 36.25]
+    clip_bbox: [-87.10, 35.93, -86.47, 36.45]
     system: power
     asset_type_field: power        # 【中文】line / minor_line / cable
     asset_type: line
@@ -289,7 +291,7 @@ datasets:
     title: Water works and storage (OSM)
     group: Water
     file: osm/osm_water.geojson
-    clip_bbox: [-86.88, 36.08, -86.68, 36.25]
+    clip_bbox: [-87.10, 35.93, -86.47, 36.45]
     system: water
     asset_type_field: man_made
     id_field: osm_id
@@ -433,7 +435,7 @@ datasets:
     title: Fire / EMS stations (OSM)
     group: Health
     file: osm/osm_fire_stations.geojson
-    clip_bbox: [-86.88, 36.08, -86.68, 36.25]
+    clip_bbox: [-87.10, 35.93, -86.47, 36.45]
     system: health
     asset_type: ems_station
     id_field: osm_id
@@ -474,14 +476,14 @@ datasets:
 
   - id: buildings_aoi
     kind: vector
-    title: Building footprints
+    title: Building footprints (Davidson County)
     group: Built environment
-    file: buildings_aoi.parquet
+    file: buildings_county.parquet
     system: built_environment
     asset_type: building
     id_field: asset_id
     publish: false              # 【中文】只用于分区负荷权重 / used only as zone load weights
-    provider: Metro Nashville building footprints (via twin_demo)
+    provider: Metro Nashville building footprints, county-wide (cascading-heat 09_buildings)
     license: public
     temporal_res: snapshot
     spatial_res: polygon

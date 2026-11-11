@@ -264,6 +264,10 @@ def build(ctx, cfg: dict) -> tuple[gpd.GeoDataFrame, pd.DataFrame, dict]:
     pop, buildings = load("population"), load("buildings")
     fac = [(ctx.load_assets(f["source"]).to_crs(STORE_CRS), f["coupling"]) for f in cfg.get("facilities", [])]
     aoi_box = box(*gpd.GeoSeries([box(*ctx.aoi)], crs=4326).to_crs(STORE_CRS).total_bounds)
+    # 【中文】配置了县界多边形时，供电分区按县界裁剪 / clip zones to the county polygon when configured
+    poly = ctx.project.get("aoi_polygon")
+    if poly and (ctx.raw_dir / poly).exists():
+        aoi_box = gpd.read_parquet(ctx.raw_dir / poly).to_crs(STORE_CRS).union_all()
 
     edges, stats = power_edges(subs, lines, p)
     zones = service_zones(subs, aoi_box, buildings, pop)

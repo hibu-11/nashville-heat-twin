@@ -72,6 +72,9 @@ def store_window(src, aoi):
         full = Window(0, 0, src.width, src.height)
         win = window_from_bounds(*b, transform=src.transform).round_offsets().round_lengths().intersection(full)
         return win, src.window_transform(win), int(win.width), int(win.height)
+    # 【中文】先与影像自身范围求交，避免研究区很大时生成巨大的空网格 / intersect with the image first
+    s = transform_bounds(src.crs, f"EPSG:{STORE_CRS}", *src.bounds)
+    b = (max(b[0], s[0]), max(b[1], s[1]), min(b[2], s[2]), min(b[3], s[3]))
     transform, width, height = calculate_default_transform(
         src.crs, f"EPSG:{STORE_CRS}", src.width, src.height, *src.bounds, dst_bounds=b)
     return None, transform, width, height

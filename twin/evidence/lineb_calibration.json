@@ -1,0 +1,89 @@
+{
+  "source": "Tennessee Department of Health heat-illness ED visits, Davidson, by year (tdh_hri_ed); simulated indoor heat exposure with mid parameters and no outages (core model, May\u2013September)",
+  "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "table": [
+    {
+      "year": 2014,
+      "hours": 3672,
+      "indoor_pop_hours": 35227647.1,
+      "visits": 188.0
+    },
+    {
+      "year": 2015,
+      "hours": 3672,
+      "indoor_pop_hours": 41260649.8,
+      "visits": 207.0
+    },
+    {
+      "year": 2016,
+      "hours": 3672,
+      "indoor_pop_hours": 61092458.3,
+      "visits": 320.0
+    },
+    {
+      "year": 2017,
+      "hours": 3672,
+      "indoor_pop_hours": 35417357.9,
+      "visits": 214.0
+    },
+    {
+      "year": 2018,
+      "hours": 3672,
+      "indoor_pop_hours": 62010561.4,
+      "visits": 308.0
+    },
+    {
+      "year": 2019,
+      "hours": 3672,
+      "indoor_pop_hours": 60192595.0,
+      "visits": 281.0
+    },
+    {
+      "year": 2020,
+      "hours": 3672,
+      "indoor_pop_hours": 45475665.4,
+      "visits": 160.0
+    },
+    {
+      "year": 2021,
+      "hours": 3672,
+      "indoor_pop_hours": 40705110.1,
+      "visits": 194.0
+    },
+    {
+      "year": 2022,
+      "hours": 3672,
+      "indoor_pop_hours": 59921719.0,
+      "visits": 300.0
+    },
+    {
+      "year": 2023,
+      "hours": 3672,
+      "indoor_pop_hours": 38030100.4,
+      "visits": 223.0
+    }
+  ],
+  "model": "annual visits = a_season + k \u00b7 indoor heat person-hours",
+  "a_season": 31.64,
+  "k_per_person_hour": 4.336e-06,
+  "k_se": 8.78e-07,
+  "a_per_hour": 0.008617,
+  "season_hours": 3672.0,
+  "r2": 0.753,
+  "spearman": {
+    "rho": 0.697,
+    "p": 0.025
+  },
+  "caveat": "Ten annual points; exposure is simulated indoor heat (homes without AC dominate), not observed. 2020 visits are low (COVID-19)."
+}

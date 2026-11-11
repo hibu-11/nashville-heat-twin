@@ -1,13 +1,13 @@
 {
  "project": "Nashville Heat Cascade Digital Twin",
  "aoi": [
-  -86.837,
-  36.118,
-  -86.727,
-  36.208
+  -87.055,
+  35.968,
+  -86.516,
+  36.405
  ],
- "built_at": "2026-11-10T18:58+00:00",
- "run_id": "20261110T185812Z-a7027d86",
+ "built_at": "2026-11-10T20:59+00:00",
+ "run_id": "20261110T205908Z-b0b31216",
  "timezone": "America/Chicago",
  "heatwave": {
   "name": "July 2023 heat window",
@@ -21,6 +21,17 @@
  },
  "layers": [
   {
+   "id": "s2_rgb",
+   "kind": "raster_rgb",
+   "title": "Sentinel-2 true colour",
+   "group": "Basemap",
+   "visible": true,
+   "opacity": 1.0,
+   "source_id": "s2_rgb",
+   "image": "raster/s2_rgb.png",
+   "meta": "raster/s2_rgb.json"
+  },
+  {
    "id": "lst_hourly_2023",
    "kind": "raster_series",
    "title": "Hourly LST, July 2023",
@@ -32,6 +43,18 @@
    "frame_count": 165,
    "time_start": "2023-07-01T14:00Z",
    "time_end": "2023-07-21T15:00Z"
+  },
+  {
+   "id": "lst_10m_final",
+   "kind": "raster",
+   "title": "LST 10 m fusion result",
+   "group": "Land surface temperature",
+   "visible": false,
+   "opacity": 1.0,
+   "source_id": "lst_10m_final",
+   "image": "raster/lst_10m_final.png",
+   "values": "raster/lst_10m_final.bin",
+   "meta": "raster/lst_10m_final.json"
   },
   {
    "id": "lst_jja2023_mean",
@@ -95,12 +118,12 @@
     "lst_std": "Summer LST std (°C)",
     "evi_mean": "EVI mean"
    },
-   "count": 4137,
+   "count": 23065,
    "color": {
     "field": "lst_mean",
     "label": "Summer LST mean",
-    "vmin": 39.46,
-    "vmax": 50.2,
+    "vmin": 33.82,
+    "vmax": 48.96,
     "stops": [
      "#000004",
      "#57106e",
@@ -139,7 +162,7 @@
     "operator": "Operator",
     "surface": "Surface"
    },
-   "count": 993,
+   "count": 2064,
    "fill_color": "#7FA7B8"
   },
   {
@@ -165,13 +188,13 @@
     "per_day_heatwave": "Per day, heat window",
     "per_day_baseline": "Per day, baseline"
    },
-   "count": 263,
+   "count": 1033,
    "count_label": "500 m cells",
    "color": {
     "field": "per_day_heatwave",
     "label": "Events per day (heat window)",
     "vmin": 0,
-    "vmax": 0.62,
+    "vmax": 0.36,
     "stops": [
      "#ffffcc",
      "#fed976",
@@ -206,7 +229,7 @@
     "voltage": "Voltage (V)",
     "operator": "Operator"
    },
-   "count": 78,
+   "count": 159,
    "fill_color": "#2a6f89"
   },
   {
@@ -229,7 +252,7 @@
     "man_made": "Type",
     "operator": "Operator"
    },
-   "count": 10,
+   "count": 55,
    "fill_color": "#3b7fbf"
   },
   {
@@ -247,7 +270,7 @@
     "highway"
    ],
    "field_labels": {},
-   "count": 422,
+   "count": 1425,
    "fill_color": "#5b6a70"
   },
   {
@@ -274,7 +297,7 @@
     "YEAR_BUILT": "Year built",
     "OVERALL_CONDITION": "Overall condition"
    },
-   "count": 184,
+   "count": 828,
    "fill_color": "#8a6d3b"
   },
   {
@@ -297,7 +320,7 @@
     "Hospital Type": "Type",
     "Emergency Services": "Emergency services"
    },
-   "count": 6,
+   "count": 12,
    "fill_color": "#b8432f"
   },
   {
@@ -320,7 +343,7 @@
     "# of Dialysis Stations": "Stations",
     "Profit or Non-Profit": "Ownership"
    },
-   "count": 5,
+   "count": 20,
    "fill_color": "#7a3e9d"
   },
   {
@@ -343,7 +366,7 @@
     "Number of Certified Beds": "Certified beds",
     "Overall Rating": "Overall rating"
    },
-   "count": 4,
+   "count": 24,
    "fill_color": "#c27c0e"
   },
   {
@@ -364,7 +387,7 @@
     "name": "Name",
     "operator": "Operator"
    },
-   "count": 12,
+   "count": 43,
    "fill_color": "#d9480f"
   },
   {
@@ -395,7 +418,7 @@
     "median_income": "Median income",
     "area_share": "Share of ZCTA inside AOI"
    },
-   "count": 20,
+   "count": 44,
    "fill_color": "#9aa6a0"
   },
   {

@@ -483,3 +483,13 @@ lin2011:
   doi: 10.1177/003335491112600312
   year: 2011
   verified: Crossref metadata checked 2026-11-10
+falaize2014:
+  apa: 'Falaize, L., Leroux, K., Prigent, H., Louis, B., Khirani, S., Orlikowski, D., Fauroux, B., & Lofaso, F. (2014). Battery life of portable home ventilators: Effects of ventilator settings. Respiratory Care, 59(7), 1048-1052. https://doi.org/10.4187/respcare.02711'
+  doi: 10.4187/respcare.02711
+  year: 2014
+  verified: Crossref metadata checked 2026-11-10; values (3–9 h internal battery) seen in search results, abstract not re-read.
+hhs_empower:
+  apa: U.S. Department of Health and Human Services, ASPR. HHS emPOWER Program Platform, public REST service (electricity-dependent Medicare beneficiaries by ZIP code), snapshot of 2026-11-09.
+  url: https://empowerprogram.hhs.gov/
+  year: 2026
+  verified: ZIP layer for Davidson downloaded 2026-11-10 (raw/health/empower_zip_davidson.json); claims month not stated.

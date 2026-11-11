@@ -1,28 +1,28 @@
 {
  "stats": {
-  "vertices": 3591,
-  "terminals": 379,
-  "connected_substations": 49,
-  "R-P1_pairs": 106,
-  "R-P1b_feeds": 51,
-  "R-P2_placeholder_feeds": 8,
-  "mv_vertices": 35948,
-  "zones": 40,
-  "edges": 3188,
+  "vertices": 20191,
+  "terminals": 1405,
+  "connected_substations": 111,
+  "R-P1_pairs": 290,
+  "R-P1b_feeds": 80,
+  "R-P2_placeholder_feeds": 12,
+  "mv_vertices": 141235,
+  "zones": 112,
+  "edges": 11579,
   "by_rule": {
-   "R-A1": 15,
-   "R-P1": 144,
-   "R-P1b": 51,
-   "R-P2": 8,
-   "R-P3": 40,
-   "R-P4": 548,
-   "R-P4b": 2,
-   "R-T1": 2076,
-   "R-T2": 184,
-   "R-W1": 45,
-   "R-W2": 75
+   "R-A1": 53,
+   "R-P1": 438,
+   "R-P1b": 80,
+   "R-P2": 12,
+   "R-P3": 112,
+   "R-P4": 1512,
+   "R-P4b": 268,
+   "R-T1": 6148,
+   "R-T2": 828,
+   "R-W1": 504,
+   "R-W2": 1624
   },
-  "placeholder_share": 0.225
+  "placeholder_share": 0.348
  },
  "links": [
   {
@@ -33,7 +33,7 @@
    "coupling_id": "C-H1",
    "gate": "series",
    "placeholder": "yes",
-   "n": 6
+   "n": 11
   },
   {
    "from_system": "power",
@@ -43,7 +43,7 @@
    "coupling_id": "C-H2",
    "gate": "series",
    "placeholder": "yes",
-   "n": 4
+   "n": 19
   },
   {
    "from_system": "power",
@@ -53,7 +53,37 @@
    "coupling_id": "C-H3",
    "gate": "series",
    "placeholder": "yes",
+   "n": 18
+  },
+  {
+   "from_system": "power",
+   "to_system": "health",
+   "dep_type": "power",
+   "rule_id": "R-P4b",
+   "coupling_id": "C-H1",
+   "gate": "series",
+   "placeholder": "yes",
+   "n": 1
+  },
+  {
+   "from_system": "power",
+   "to_system": "health",
+   "dep_type": "power",
+   "rule_id": "R-P4b",
+   "coupling_id": "C-H2",
+   "gate": "series",
+   "placeholder": "yes",
    "n": 5
+  },
+  {
+   "from_system": "power",
+   "to_system": "health",
+   "dep_type": "power",
+   "rule_id": "R-P4b",
+   "coupling_id": "C-H3",
+   "gate": "series",
+   "placeholder": "yes",
+   "n": 2
   },
   {
    "from_system": "power",
@@ -63,7 +93,7 @@
    "coupling_id": "C-POP1",
    "gate": "series",
    "placeholder": "yes",
-   "n": 110
+   "n": 290
   },
   {
    "from_system": "power",
@@ -73,7 +103,7 @@
    "coupling_id": "C-P5",
    "gate": "redundant",
    "placeholder": "no",
-   "n": 68
+   "n": 142
   },
   {
    "from_system": "power",
@@ -83,7 +113,7 @@
    "coupling_id": "C-P5",
    "gate": "redundant",
    "placeholder": "no",
-   "n": 51
+   "n": 80
   },
   {
    "from_system": "power",
@@ -93,7 +123,7 @@
    "coupling_id": "C-P5",
    "gate": "redundant",
    "placeholder": "yes",
-   "n": 8
+   "n": 12
   },
   {
    "from_system": "power",
@@ -103,7 +133,7 @@
    "coupling_id": "C-P5",
    "gate": "series",
    "placeholder": "yes",
-   "n": 40
+   "n": 112
   },
   {
    "from_system": "power",
@@ -113,7 +143,7 @@
    "coupling_id": "C-P4",
    "gate": "redundant",
    "placeholder": "no",
-   "n": 76
+   "n": 296
   },
   {
    "from_system": "power",
@@ -123,7 +153,17 @@
    "coupling_id": "C-T2",
    "gate": "series",
    "placeholder": "yes",
-   "n": 422
+   "n": 1169
+  },
+  {
+   "from_system": "power",
+   "to_system": "transportation",
+   "dep_type": "power",
+   "rule_id": "R-P4b",
+   "coupling_id": "C-T2",
+   "gate": "series",
+   "placeholder": "yes",
+   "n": 256
   },
   {
    "from_system": "power",
@@ -133,7 +173,7 @@
    "coupling_id": "C-W2",
    "gate": "series",
    "placeholder": "yes",
-   "n": 1
+   "n": 5
   },
   {
    "from_system": "power",
@@ -143,7 +183,7 @@
    "coupling_id": "C-W2",
    "gate": "series",
    "placeholder": "yes",
-   "n": 2
+   "n": 4
   },
   {
    "from_system": "transportation",
@@ -153,7 +193,7 @@
    "coupling_id": "C-A1",
    "gate": "series",
    "placeholder": "no",
-   "n": 15
+   "n": 53
   },
   {
    "from_system": "transportation",
@@ -163,7 +203,7 @@
    "coupling_id": "C-T3",
    "gate": "series",
    "placeholder": "no",
-   "n": 2076
+   "n": 6148
   },
   {
    "from_system": "transportation",
@@ -173,7 +213,7 @@
    "coupling_id": "C-T4",
    "gate": "series",
    "placeholder": "no",
-   "n": 184
+   "n": 828
   },
   {
    "from_system": "water",
@@ -183,7 +223,7 @@
    "coupling_id": "C-W1",
    "gate": "redundant",
    "placeholder": "yes",
-   "n": 45
+   "n": 504
   },
   {
    "from_system": "water",
@@ -193,94 +233,99 @@
    "coupling_id": "C-W3",
    "gate": "redundant",
    "placeholder": "yes",
-   "n": 75
+   "n": 1624
   }
  ],
  "asset_counts": [
   {
    "system": "built_environment",
    "asset_type": "building",
-   "n": 60547
+   "n": 328089
   },
   {
    "system": "health",
    "asset_type": "dialysis",
-   "n": 5
+   "n": 20
   },
   {
    "system": "health",
    "asset_type": "hospital",
-   "n": 6
+   "n": 12
   },
   {
    "system": "health",
    "asset_type": "nursing_home",
-   "n": 4
+   "n": 24
   },
   {
    "system": "population",
    "asset_type": "zcta",
-   "n": 20
+   "n": 44
   },
   {
    "system": "power",
    "asset_type": "cable",
-   "n": 20
+   "n": 811
   },
   {
    "system": "power",
    "asset_type": "line",
-   "n": 289
+   "n": 754
   },
   {
    "system": "power",
    "asset_type": "minor_line",
-   "n": 5689
+   "n": 23812
   },
   {
    "system": "power",
    "asset_type": "service_zone",
-   "n": 40
+   "n": 112
   },
   {
    "system": "power",
    "asset_type": "substation",
-   "n": 78
+   "n": 159
   },
   {
    "system": "transportation",
    "asset_type": "bridge",
-   "n": 184
+   "n": 828
   },
   {
    "system": "transportation",
    "asset_type": "road_segment",
-   "n": 4137
+   "n": 23065
   },
   {
    "system": "transportation",
    "asset_type": "traffic_signal",
-   "n": 422
+   "n": 1425
+  },
+  {
+   "system": "water",
+   "asset_type": "pumping_station",
+   "n": 3
   },
   {
    "system": "water",
    "asset_type": "reservoir_covered",
-   "n": 2
+   "n": 5
   },
   {
    "system": "water",
    "asset_type": "wastewater_plant",
-   "n": 2
+   "n": 14
   },
   {
    "system": "water",
    "asset_type": "water_tower",
-   "n": 3
+   "n": 24
   },
   {
    "system": "water",
    "asset_type": "water_works",
-   "n": 3
+   "n": 9
   }
  ]
 }

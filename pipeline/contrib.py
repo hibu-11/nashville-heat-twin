@@ -26,7 +26,7 @@ from . import access
 from .adapters.base import write_json
 from .build import ROOT
 from .cascade import air_field_temperatures, load, river_inputs
-from .core import access_runs, adequacy_shed
+from .core import access_runs, adequacy_shed, lineb_inputs, waiting
 from .twin.cascade import Network
 from .twin.core import KNOCKOUTS, simulate_core
 from .twin.params import Params
@@ -38,6 +38,7 @@ OUTER = {
     "R06": "no rotating outages from a system shortfall",
     "R14": "dark signals keep full capacity (R14–R16 are in series, so one knockout covers all three)",
     "R17": "closed facilities stay on the destination list",
+    "R22": "extra care demand does not lengthen waiting",
 }
 # 【中文】关系 → 结构图上的边 / relation → map edges
 EDGES = {
@@ -47,6 +48,8 @@ EDGES = {
     "R10": [["plant", "storage"], ["storage", "wservice"]], "R11": [["zone", "facility"]], "R12": [["wservice", "facility"]],
     "R13": [["zone", "signals"]], "R14": [["signals", "capacity"], ["capacity", "travel"], ["travel", "access"]],
     "R17": [["facility", "access"]], "R18": [["zone", "indoor"]], "R19": [["urban", "indoor"]],
+    "R21": [["exposure", "illness"]], "R22": [["illness", "access"]], "R23": [["facility", "exposure"]],
+    "R24": [["zone", "illness"]],
 }
 # 【中文】结构图模块 → 输入变量与参数（用于数据分级）/ map module → input variables and couplings
 NODE_INPUTS = {
@@ -56,9 +59,9 @@ NODE_INPUTS = {
     "shed": ["C-P9.avail", "C-P9.imp"], "river": ["C-P9", "C-P9.span", "C-P9.Qmin", "C-P9.flow"], "overload": ["C-P4"],
     "signals": ["TRN-06", "TRN-07"], "capacity": ["TRN-12", "TRN-15"], "travel": ["TRN-01", "TRN-10", "TRN-11", "TRN-13", "TRN-14"],
     "plant": ["WAT-01", "WAT-09"], "storage": ["WAT-04"], "wservice": ["C-W1"],
-    "facility": ["HLT-01", "HLT-03", "HLT-05", "HLT-07", "HLT-08", "C-H3"], "access": ["TRN-21", "POP-01"],
+    "facility": ["HLT-01", "HLT-03", "HLT-05", "HLT-07", "HLT-08", "C-H3"], "access": ["TRN-21", "POP-01", "C-H14", "C-H15", "C-H16"],
     "indoor": ["BLD-08", "BLD-09", "BLD-12", "HLT-24"], "pop": ["POP-01", "POP-02", "POP-03"],
-    "exposure": ["HLT-23", "BLD-04"], "illness": ["HLT-12", "HLT-14", "HLT-17"],
+    "exposure": ["HLT-23", "BLD-04"], "illness": ["HLT-12", "HLT-17", "C-H11", "C-H13"],
 }
 MAP_EDGES = [e for v in EDGES.values() for e in v] + [["indoor", "exposure"], ["pop", "exposure"], ["urban", "exposure"],
                                                       ["exposure", "illness"], ["illness", "access"], ["overload", "failure"],
@@ -120,6 +123,7 @@ def main(argv=None):
     Ta_sub, Ta_zone, _ = air_field_temperatures(cfg, assets, net, Ta, hours, tz, "on")
     river = river_inputs(cfg, hours)
     actx = access.prepare(cfg, std, assets, deps, drivers, params, verbose=False)
+    LB = lineb_inputs(assets, net, hours, tz)
 
     cases = ["base"] + list(OUTER) + list(KNOCKOUTS)
     res = {}
@@ -134,15 +138,18 @@ def main(argv=None):
             sim = simulate_core(net, Ta + dT, th, rng, day_mask,
                                 Ta_sub=Ta_sub + dT if (local and Ta_sub is not None) else None,
                                 Ta_zone=Ta_zone + dT if (local and Ta_zone is not None) else None,
-                                shed=shed, off=frozenset([case]) & set(KNOCKOUTS))
+                                shed=shed, off=frozenset([case]) & set(KNOCKOUTS), lineb=LB)
             acc = access_runs(actx, net, sim, th, hours, tz, off=frozenset([case]) & {"R14", "R17"})
+            wait = waiting(sim, th, off=frozenset([case]) & {"R22"})
+            ttc = acc.pop("_care_runs") + wait
             t = sim["totals"]
-            res[dT][case] = {"care_time_loss_min": acc["care_time_loss_min"]["mean"],
+            res[dT][case] = {"time_to_care_min": round(float(ttc.mean()), 4), "wait_increase_min": round(float(wait.mean()), 4),
+                             "care_time_loss_min": acc["care_time_loss_min"]["mean"],
                              "dialysis_none_available": acc["dialysis"]["runs_with_none_available"],
                              "pop_hours": round(float(t["pop_hours"].mean()), 1),
                              "indoor_outage_pop_hours": round(float(t["indoor_outage_pop_hours"].mean()), 1),
                              "indoor_pop_hours": round(float(t["indoor_pop_hours"].mean()), 1)}
-            print(f"[contrib] {dT:+.0f} °C {case:5s} care {res[dT][case]['care_time_loss_min']:.3f} min · "
+            print(f"[contrib] {dT:+.0f} °C {case:5s} ttc {res[dT][case]['time_to_care_min']:.3f} (wait {res[dT][case]['wait_increase_min']:.3f}) · care {res[dT][case]['care_time_loss_min']:.3f} min · "
                   f"pop-h {res[dT][case]['pop_hours']:.0f} · indoor {res[dT][case]['indoor_pop_hours']:.0f} ({time.time() - t0:.0f} s)")
 
     def share(dT, case, k):
@@ -151,12 +158,13 @@ def main(argv=None):
     rel = {}
     for case in cases[1:]:
         rel[case] = {"what_is_switched_off": OUTER.get(case) or KNOCKOUTS[case], "edges": EDGES[case],
-                     "contribution": {f"{dT:+.0f}": {k: share(dT, case, k) for k in ("care_time_loss_min", "pop_hours", "indoor_pop_hours", "indoor_outage_pop_hours")} for dT in scen}}
+                     "contribution": {f"{dT:+.0f}": {k: share(dT, case, k) for k in ("time_to_care_min", "wait_increase_min", "care_time_loss_min", "pop_hours", "indoor_pop_hours", "indoor_outage_pop_hours")} for dT in scen}}
     out = {"created": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "runs": args.runs, "seed": args.seed,
            "scenarios_delta_c": scen,
            "method": "Knockout (do-intervention) with common random numbers: contribution = (base − knockout) / base. "
                      "Positive: the relation adds to the outcome; negative: it buffers. Relations in series share the "
-                     "downstream effect, so contributions do not add up. care_time_loss_min = population-mean added "
+                     "downstream effect, so contributions do not add up. time_to_care_min = care_time_loss_min (line A) + "
+                     "wait_increase_min (line B, peak-day ED waiting). care_time_loss_min = population-mean added "
                      "minutes to hospital + dialysis + EMS at each run's worst hour, cells that lose every facility of a "
                      "type inside the area counted at 30 min (assumption).",
            "outcomes": res, "relations": rel, "nodes": node_tiers()}

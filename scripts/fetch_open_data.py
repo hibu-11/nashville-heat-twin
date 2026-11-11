@@ -24,10 +24,10 @@ ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "raw"
 UA = "nashville-heat-twin/0.2 (academic research prototype; github.com/hibu-11/nashville-heat-twin)"
 OVERPASS = "https://overpass-api.de/api/interpreter"
-# 【中文】电力与水务取 AOI 外扩约 4 km 的范围，保证 AOI 边缘的供电分区正确；信号灯只取 AOI
-# power/water use the AOI plus ~4 km so service areas near the AOI edge are right
-WIDE = (36.08, -86.88, 36.25, -86.68)      # south, west, north, east
-AOI = (36.118, -86.837, 36.208, -86.727)
+# 【中文】研究区为 Davidson 全县（2026-11-10 起）；电力与水务取县界外扩约 4 km，保证县界附近的供电分区正确
+# AOI = Davidson County (from 2026-11-10); power/water use the county plus ~4 km so zones near the boundary are right
+WIDE = (35.93, -87.10, 36.45, -86.47)      # south, west, north, east
+AOI = (35.968, -87.055, 36.405, -86.516)
 
 QUERIES = {
     "osm_substations": 'nwr["power"="substation"]({b});',
@@ -129,7 +129,7 @@ def fetch_usgs(start: str, end: str, site: str = "03431500"):
 GRIDS = {
     "dem_3dep": ("https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?" +
                  urllib.parse.urlencode({"bbox": f"{WIDE[1]},{WIDE[0]},{WIDE[3]},{WIDE[2]}", "bboxSR": 4326,
-                                         "imageSR": 32616, "size": "600,630", "format": "tiff", "pixelType": "F32",
+                                         "imageSR": 32616, "size": "1890,1925", "format": "tiff", "pixelType": "F32",
                                          "interpolation": "RSP_BilinearInterpolation", "f": "image"})),
     **{name: ("https://www.mrlc.gov/geoserver/mrlc_download/wcs?" + urllib.parse.urlencode(
         [("service", "WCS"), ("version", "2.0.1"), ("request", "GetCoverage"), ("coverageid", cov),
