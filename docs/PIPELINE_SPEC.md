@@ -603,7 +603,7 @@ P_j=1-\big(1-p_j\big)^{\ell_j/\ell_0},\qquad p_j=\Phi\!\left(\frac{x_j-x_{50}}{\
 Sh(t)=\max\Big(0,\;L_{sys}(t)-\sum_g\big(P_g-\Delta P_g(t)\big)-P_{imp}\Big)
 ```
 
-输入 PWR-09 🟡, WAT-13 🟡, WAT-14 🟡, PWR-07 🟡 · 参数 C-P9 (planned) · 关系 R-P0, R-W5
+输入 PWR-09 ✅, WAT-13 ✅, WAT-14 ✅, PWR-07 ✅ · 参数 C-P9, C-P9.span, C-P9.Qmin, C-P9.flow, C-P9.avail, C-P9.imp · 关系 R-P0, R-W5
 
 ### 5.4 供水 Water (L4–L5)
 
@@ -794,7 +794,7 @@ T^{eq}(t)+\big[T_{in}(t-1)-T^{eq}(t)\big]e^{-\Delta t/\tau_b} & \text{otherwise}
 \end{cases}
 ```
 
-参数 C-B1 $`\tau_b`$、C-B2 $`\Delta T_{gain}`$ (planned) · 输入 PWR-28, CLM-19, BLD-03/04 · 输出 HLT-22
+参数 C-B1 $`\tau_b`$、C-B2 $`\Delta T_{gain}`$、C-B3、C-B4 · 输入 PWR-28, CLM-19, BLD-03/04 · 输出 HLT-22
 
 #### M-33 室内高温暴露 Indoor heat exposure
 
@@ -805,7 +805,7 @@ T^{eq}(t)+\big[T_{in}(t-1)-T^{eq}(t)\big]e^{-\Delta t/\tau_b} & \text{otherwise}
 E^{in}_g=\sum_t\sum_z\mathrm{pop}_{z,g}\Big[f_{AC}\,\mathbf 1\big[T^{AC,out}_{in,z}(t)\ge T_{thr,g}\big]\,d_z(t)+(1-f_{AC})\,\mathbf 1\big[T^{noAC}_{in,z}(t)\ge T_{thr,g}\big]\Big]
 ```
 
-参数 C-H10 (planned) · 输入 POP-02/08/17, HLT-17, BLD-04 · 关系 R-H5 tier 1
+参数 C-H10 · 输入 POP-02/08/17, HLT-17, BLD-04 · 关系 R-H5 tier 1（室内暴露）、tier 3（热病症就诊，M-47）
 
 #### M-34 高温与停电的健康结局 Health outcomes of heat and outages
 
@@ -1065,6 +1065,23 @@ PWR-32,power,substation,attribute,L^peak_s,Observed substation peak load,变电�
 
 ## 8. 数据获取优先级 Data acquisition priorities
 
+### 8.0 当前优先级（2026-11-11，按敲除贡献 × 可信度排序）Current priorities
+
+**中文：** 下表按"该环节对就医时间的因果贡献（CORE_MODEL §6.1）× 当前可信度多弱"排序；贡献大而分级为 T4 的排在前面。下面 A–D 小节是 2026-10-30 的原计划，其中 CLM-20/21、PWR-26、PWR-09、TRN-10/11、PWR-07、HLT-17 等已接入。
+
+**English:** Ranked by causal contribution to time to care (CORE_MODEL §6.1) times how weak the current tier is. Sections A–D below are the plan of 2026-10-30; several items there (CLM-20/21, PWR-26, PWR-09, TRN-10/11, PWR-07, HLT-17) are now in the model.
+
+| 序 # | 数据 Data | 替换 Replaces | 贡献 Contribution (+4 °C) | 现档 Tier | 途径 Route |
+| ---: | --- | --- | ---: | --- | --- |
+| 1 | NES 变压器额定值、变电站 / 馈线负荷、故障记录 / NES ratings, loads, failure records | C-P1.Kd, C-P3, C-P3.sigma, PWR-20 | R02 / R04 ≈ 96% | T4 | 公开记录申请（已起草）/ records request (drafted) |
+| 2 | 停电期间依赖电力设备居民的急诊率 / ED visit rate of electricity-dependent residents in outages | C-H13 q | R24 87% | T4 | 文献（emPOWER 相关研究）+ TDH 数据 / literature + TDH |
+| 3 | 急诊日常接诊量、利用率、等待（医院级）/ ED volumes, utilisation, waits | C-H14, C-H15, C-H16 | R22 94% | T4 | CMS 急诊时效指标、医院 / CMS ED timeliness, hospitals |
+| 4 | 逐日高温病症急诊（Davidson）/ daily heat-illness ED visits | C-H11 (annual fit) | R21 7% | T2 | TDH 数据申请（已起草）/ TDH request (drafted) |
+| 5 | 建筑热响应（ResStock 典型住宅模拟）/ building thermal response | C-B1, C-B2 | R18 / R19 | T3 | NREL ResStock（公开）/ public |
+| 6 | 信号灯 UPS 清单 / signal UPS inventory | C-T2 | R13 1–3% | T3 | NDOT 申请（已起草）/ NDOT request (drafted) |
+| 7 | Metro Water 逐日供水、泵站与备用电源 / daily production, pumps, backup | C-W2, C-W3, WAT-03 | 0%（当前情景未触发 / not triggered） | T3 | Metro Water 申请（已起草）/ request (drafted) |
+| 8 | 背景气候数据包（气温、LST、河温）/ background climate package | CLM-01, LST-*, river model | R01 −16%（缓冲 / buffer） | T1–T2 | 待提供 / to be delivered |
+
 **中文：** 按"解锁多少结果 ÷ 获取成本"排序。第一组数据已经在 Drive 上，不花钱、不需要审批，建议先做。
 
 **English:** Ranked by outputs unlocked per unit of effort. Group A is already on Drive and needs no approval.
@@ -1133,9 +1150,13 @@ PWR-32,power,substation,attribute,L^peak_s,Observed substation peak load,变电�
 # 【中文】同时检查标准表里的数值是否在值域内 / also range-check values in the standard tables
 .venv/bin/python -m pipeline.registry --check-data
 
-# 【中文】其余流程同 HANDBOOK §9 / the rest as in HANDBOOK §9
+# 【中文】完整流程（2026-11-11）/ full workflow
 .venv/bin/python -m pipeline.build --strict
+.venv/bin/python -m pipeline.lineb calibrate          # M-47：热病症系数 C-H11
 .venv/bin/python -m pipeline.cascade --runs 2000 --mid-runs 500 --scenarios 0,2,4
+.venv/bin/python -m pipeline.access
+.venv/bin/python -m pipeline.core --runs 2000          # A 线 + B 线，就医时间
+.venv/bin/python -m pipeline.contrib --runs 500 --scenarios 2,4   # 敲除贡献（CORE_MODEL §4.2）
 .venv/bin/python -m pipeline.report
 ```
 
@@ -1146,6 +1167,7 @@ PWR-32,power,substation,attribute,L^peak_s,Observed substation peak load,变电�
 - `used_in` 中的 M-* / G-* 编号在本文件中有定义；
 - 每条关系恰好有一个 `current = yes` 的等级，输入变量都已登记，引用键都在 `references.yaml` 中；
 - 加 `--check-data` 时，`drivers` 和 `exposures` 中的数值不超出 `valid_min` / `valid_max`。
+- 每个变量和参数的可信度为 T1–T4（模型状态 / 输出为 inherit）；参数类变量不能高于其最弱参数；无数据在手的变量不能标 T1（DATA_CATALOG §1.1）。
 
 English:
 - unique ids and valid vocabularies;
@@ -1155,5 +1177,6 @@ English:
 - one current tier per relation;
 - inputs are registered and citations resolve;
 - with `--check-data`, values fall inside the declared ranges.
+- confidence tiers T1–T4 are valid, parameter variables are no stronger than their weakest coupling, and T1 needs data in hand.
 
 **参考文献 / References:** 全部引用键与完整条目见 [`twin/references.yaml`](../twin/references.yaml)。本规范新增的条目（2026-10-30 经 Crossref 核对 DOI）：alduchov1996, baker2015, birchfield2017, cannon2015, dobney2009, flanagan2011, gasparrini2010, haimes2001, ho2014, housepeters2011, kennedy2001, liljegren2008, liu2007, mennis2003, molinari2017, nairn2015, pierce2023, saltelli2010, shandas2019, sun2020, vanvliet2012, wagner1988, wols2014。无 DOI 的标准 / 报告 / 数据集：bpr1964, eia860, eia930, empower, hcm2022, mohseni1998, rothfusz1990。另加 mohseni1998stream（河温模型，DOI 10.1029/98WR01877）。

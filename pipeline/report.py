@@ -190,12 +190,21 @@ def core_section(w, path):
             ("Dialysis facility-hours lost (core)", lambda v, f: n(v["dialysis_hours"]["mean"], 1)),
             ("Hospital facility-hours lost (core)", lambda v, f: n(v["hospital_hours"]["mean"], 2)),
             ("Runs with a TVA shortfall", lambda v, f: "—" if v["runs_with_shed"] is None else f"{v['runs_with_shed']:.1%}"),
-            ("K8 runs with degraded segments", lambda v, f: f"{v['access']['runs_with_degraded_segments']:.1%}"),
+            ("K8 runs with degraded segments or facility closures", lambda v, f: f"{v['access']['runs_with_degraded_segments']:.1%}"),
             ("K8 hospital Δ population mean, min (p99)", lambda v, f: acc(v, "hospital")),
             ("K8 hospital largest cell increase p95, min", lambda v, f: n(v["access"]["hospital"]["largest_cell_increase_min"]["95"], 1)),
             ("K8 dialysis Δ population mean, min (p99)", lambda v, f: acc(v, "dialysis")),
             ("K8 runs with no dialysis centre available", lambda v, f: f"{v['access']['dialysis']['runs_with_none_available']:.1%}"),
-            ("K8 EMS Δ population mean, min (p99)", lambda v, f: acc(v, "ems"))]
+            ("K8 EMS Δ population mean, min (p99)", lambda v, f: acc(v, "ems")),
+            ("Line A: travel part of time to care, min", lambda v, f: n(v["access"].get("care_time_loss_min", {}).get("mean"), 2)),
+            ("K10 excess heat-illness ED visits", lambda v, f: n(v.get("heat_visits_excess", {}).get("mean"), 1)),
+            ("K10 visits by electricity-dependent residents", lambda v, f: n(v.get("dep_visits", {}).get("mean"), 1)),
+            ("K10 nursing-home resident-hours ≥ 26 °C", lambda v, f: n(v.get("nh_exposed_hours", {}).get("mean"))),
+            ("K10 peak-day extra visits", lambda v, f: n(v.get("peak_day_extra_visits", {}).get("mean"), 1)),
+            ("K10 ED waiting increase, min: mean (median)", lambda v, f: "—" if "wait_increase_min" not in v else
+             f"{v['wait_increase_min']['mean']:.1f} ({v['wait_increase_min']['50']:.1f})"),
+            ("**Time to care, composite (travel + waiting), min**", lambda v, f: "—" if "time_to_care_min" not in v else
+             f"**{v['time_to_care_min']['mean']:.1f}**")]
     for label, fn in rows:
         w(f"| {label} | " + " | ".join(fn(sc[k], full.get(k)) for k in keys) + " |")
     v = x["validation"]
@@ -204,6 +213,20 @@ def core_section(w, path):
     for r in x["sensitivity"][:8]:
         w(f"| `{r['param']}` {r['name']} | {r['basis']} | {r['pop_hours']} | {r['indoor_outage_pop_hours']} |")
     w("")
+    c = read(path.parent / "contrib.json")
+    if c:
+        w("### 11.1 Knockout contributions\n")
+        w(f"`python -m pipeline.contrib` ({c['runs']} runs, {c['created'][:10]}): share of composite time to care lost when only that "
+          "relation is switched off (negative = buffer). Series links share values; figures do not add up. Method: CORE_MODEL §4.2.\n")
+        scen = list(next(iter(c["relations"].values()))["contribution"])
+        w("| Relation | Switched off | " + " | ".join(f"time to care {k} °C" for k in scen) + " | travel part (last) | waiting part (last) |")
+        w("| --- | --- |" + " ---: |" * (len(scen) + 2))
+        pc = lambda v: "—" if v is None else f"{v * 100:.0f}%"  # noqa: E731
+        for rid, r in c["relations"].items():
+            last = r["contribution"][scen[-1]]
+            w(f"| {rid} | {r['what_is_switched_off']} | " + " | ".join(pc(r["contribution"][k].get("time_to_care_min")) for k in scen)
+              + f" | {pc(last.get('care_time_loss_min'))} | {pc(last.get('wait_increase_min'))} |")
+        w("")
 
 
 def main(argv=None):

@@ -123,7 +123,7 @@ links:
     name_en: Line B v1 — heat exposure, nursing-home residents and device users → care demand → ED waiting → time to care
     name_zh: B 线第一版：高温暴露、养老院住户、依赖电力设备的居民 → 就医需求 → 急诊等待 → 就医时间
     methods: [M-47]
-    relations: []
+    relations: ["R-H5:3", "R-H6:1", "R-H7:1", "R-H8:0"]
     couplings: [C-H11, C-H11.a, C-H12, C-H13, C-H14, C-H15, C-H16, C-H17]
     citations: [tdh_hri_ed, gasparrini2015, lin2011, falaize2014, hhs_empower, meade2024, sun2020]
     evidence_en: >-
@@ -146,12 +146,12 @@ deferred:
     reason_en: >-
       Topological load redistribution can misrepresent power-system vulnerability (Hines et al. 2010); real cascades
       follow power flow (Dobson et al. 2007). In the full model, with an assumed tolerance α, overload trips were
-      3.1 times the thermal failures and made up about 89% of person-hours without power at +0 °C (142k vs 15k in
-      the core; parameters of 2026-11-04). Return as a DC power-flow tier (R-P5 tier 2–3) when ratings are available.
+      the main source of outages and made up 86–92% of person-hours without power across scenarios (county run of
+      2026-11-11: 777k vs 62k at +0 °C, 30.0M vs 4.08M at +4 °C). Return as a DC power-flow tier (R-P5 tier 2–3) when ratings are available.
     reason_zh: >-
       纯拓扑的负荷重分配可能误判电网脆弱性（Hines 等 2010）；真实的连锁停电服从潮流（Dobson 等 2007）。
-      完整模型中，在假设的容忍度 α 下，过载跳闸次数是热失效的 3.1 倍，+0 °C 时约 89% 的停电人·小时来自这一机制
-      （完整模型 142k，骨架 15k；2026-11-04 参数）。有额定值后以直流潮流（R-P5 2–3 级）的形式加回。
+      完整模型中，在假设的容忍度 α 下，这一机制是停电的主要来源，各情景 86–92% 的停电人·小时来自它
+      （2026-11-11 全县运行：+0 °C 777k 对 62k，+4 °C 30.0M 对 4.08M）。有额定值后以直流潮流（R-P5 2–3 级）的形式加回。
   - id: D2
     name_en: River temperature → thermal plant derating (supply side of K4)
     name_zh: 河水温度 → 火电降额（K4 的供给侧）

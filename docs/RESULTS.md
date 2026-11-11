@@ -263,12 +263,19 @@ Run `core-20261110T213942Z-72f1c05324`: 2,000 Monte Carlo runs per scenario, lin
 | Dialysis facility-hours lost (core) | 1.6 | 16.3 | 105.9 |
 | Hospital facility-hours lost (core) | 0.07 | 0.66 | 4.42 |
 | Runs with a TVA shortfall | 0.0% | 0.0% | 4.2% |
-| K8 runs with degraded segments | 16.2% | 38.4% | 67.7% |
+| K8 runs with degraded segments or facility closures | 16.2% | 38.4% | 67.7% |
 | K8 hospital Δ population mean, min (p99) | 0.009 (0.23) | 0.055 (1.10) | 0.190 (2.15) |
 | K8 hospital largest cell increase p95, min | 1.4 | 4.0 | 10.0 |
 | K8 dialysis Δ population mean, min (p99) | 0.047 (1.53) | 0.351 (5.93) | 1.437 (22.70) |
 | K8 runs with no dialysis centre available | 0.0% | 0.1% | 2.7% |
 | K8 EMS Δ population mean, min (p99) | 0.005 (0.13) | 0.025 (0.34) | 0.079 (0.65) |
+| Line A: travel part of time to care, min | 0.06 | 0.45 | 2.52 |
+| K10 excess heat-illness ED visits | 121.5 | 232.7 | 332.2 |
+| K10 visits by electricity-dependent residents | 3.5 | 35.7 | 210.7 |
+| K10 nursing-home resident-hours ≥ 26 °C | 24 | 298 | 2,111 |
+| K10 peak-day extra visits | 5.9 | 15.3 | 44.7 |
+| K10 ED waiting increase, min: mean (median) | 2.7 (1.4) | 10.3 (1.8) | 41.4 (3.0) |
+| **Time to care, composite (travel + waiting), min** | **2.7** | **10.8** | **43.9** |
 
 Validation: ρ(model, EAGLE-I) all hours 0.03 [-0.04, 0.12] (n = 2,208 h, 92 days); non-storm -0.01 [-0.08, 0.06] (n = 1,994 h, 92 days).
 
@@ -282,4 +289,33 @@ Validation: ρ(model, EAGLE-I) all hours 0.03 [-0.04, 0.12] (n = 2,208 h, 92 day
 | `C-P6` repair_hours | internal | 0.048 | 0.133 |
 | `C-P1.Td` T_design | assumption | -0.046 | -0.03 |
 | `C-P2.tau` tau_TO | standard | -0.046 | -0.012 |
+
+### 11.1 Knockout contributions
+
+`python -m pipeline.contrib` (500 runs, 2026-11-10): share of composite time to care lost when only that relation is switched off (negative = buffer). Series links share values; figures do not add up. Method: CORE_MODEL §4.2.
+
+| Relation | Switched off | time to care +2 °C | time to care +4 °C | travel part (last) | waiting part (last) |
+| --- | --- | ---: | ---: | ---: | ---: |
+| R01 | local temperature = background (airport) series everywhere (no urban field) | -14% | -16% | -19% | -15% |
+| R05 | TVA load is not scaled by scenario warming | 0% | 0% | 0% | 0% |
+| R06 | no rotating outages from a system shortfall | 0% | 0% | 0% | 0% |
+| R14 | dark signals keep full capacity (R14–R16 are in series, so one knockout covers all three) | 1% | 1% | 16% | 0% |
+| R17 | closed facilities stay on the destination list | 3% | 5% | 87% | 0% |
+| R22 | extra care demand does not lengthen waiting | 96% | 94% | 0% | 100% |
+| R02 | load does not respond to temperature (m = 1) | 86% | 96% | 99% | 95% |
+| R03a | hot spot sees each station's period-mean ambient instead of the hourly value | 78% | 78% | 85% | 78% |
+| R03b | hot spot sees each run's period-mean load instead of the hourly load | 86% | 95% | 99% | 95% |
+| R04 | no thermal failures (p = 0) | 86% | 96% | 99% | 95% |
+| R07 | a failed station returns after one hour | 76% | 70% | 47% | 71% |
+| R08 | no upstream propagation: a station is out only if it failed or was shed itself | 48% | 46% | 56% | 45% |
+| R09 | water plants never lose power | 0% | 0% | 0% | 0% |
+| R10 | no storage buffer: water is lost as soon as every plant stops | 0% | 0% | 0% | 0% |
+| R11 | facilities never lose function from a zone outage | 9% | 15% | 86% | 11% |
+| R12 | dialysis ignores water loss | 0% | 0% | 0% | 0% |
+| R13 | signals never go dark | 1% | 1% | 17% | 0% |
+| R18 | homes with AC keep their set point during outages | 0% | 1% | 0% | 1% |
+| R19 | indoor equilibrium is not driven by outdoor temperature (held at the AC set point) | 16% | 7% | 0% | 8% |
+| R21 | heat exposure does not raise heat-illness visits (k = 0) | 16% | 7% | 0% | 8% |
+| R23 | nursing-home residents are not exposed when cooling is lost | 0% | 0% | 0% | 0% |
+| R24 | electricity-dependent residents make no visits during outages | 79% | 87% | 0% | 92% |
 

@@ -2,6 +2,10 @@
 
 **Version:** dependency model v0 · **Date:** 2026-10-27 · **Status:** preliminary. Several links and parameters are placeholders; they are listed in §3.4 and §6 and are marked in every table and on the map.
 
+> **Status note (2026-11-11).** This handbook documents the v0 full model as built for the downtown area on 2026-10-27, and its equations still describe the code. Several facts have changed since: the study area is now the whole of Davidson County (159 substations, 112 zones, 11,579 dependency edges, 35% placeholder edges); the main analysis uses the core skeleton with two lines ending in time to care (line A: power, water and transport → facilities; line B v1: heat illness and care demand → ED waiting); parameters have sourced values and confidence tiers T1–T4. Current descriptions: [`CORE_MODEL.md`](CORE_MODEL.md) (structure, results, knockout contributions), [`PIPELINE_SPEC.md`](PIPELINE_SPEC.md) (methods M-1–M-47), [`DATA_CATALOG.md`](DATA_CATALOG.md) (variables and tiers), `twin/couplings.csv` (parameter values and sources). Counts quoted below for v0 are kept as a record of that version.
+>
+> **状态说明（2026-11-11）。** 本手册记录 2026-10-27 按市中心范围建立的 v0 完整模型，其中的公式仍与代码一致。此后的变化：研究区已扩到 Davidson 全县（159 座变电站、112 个分区、11,579 条依赖边，35% 为占位边）；主要分析使用骨架模型，以就医时间为终点的两条主线（A 线：电、水、交通 → 医疗设施；B 线第一版：热病症与就医需求 → 急诊等待）；参数都有出处和可信度分级 T1–T4。当前说明见 `CORE_MODEL.md`、`PIPELINE_SPEC.md`、`DATA_CATALOG.md` 和 `twin/couplings.csv`。下文中 v0 的数量保留为该版本的记录。
+
 This handbook records the logic, every equation and every parameter source used by the v0 heat-cascade model. Numbers in brackets such as (Eq. 7), (R-P3) and (C-H1) are the identifiers used in the code (`pipeline/twin/`), in the standard tables and on the web viewer (`site/cascade.html`). Results of the current run are generated automatically into [`RESULTS.md`](RESULTS.md).
 
 Contents: [1 Scope](#1-scope) · [2 Data](#2-data) · [3 Logic system](#3-logic-system) · [4 Equations](#4-equations) · [5 Simulation procedure](#5-simulation-procedure) · [6 Parameters](#6-parameters) · [7 Validation design](#7-validation-design) · [8 Limitations](#8-limitations-and-next-steps) · [9 Reproducibility](#9-reproducibility) · [10 References](#10-references)
@@ -101,7 +105,7 @@ Traffic signals ──R-T1──► Road segments ◄──R-T2── Bridges   
 | R-T2 | bridge → road segment | Nearest segment within 30 m. | real proximity, not propagated | 184 | C-T4 |
 | R-A1 | road segment → facility | Nearest segment within 300 m. | real proximity, not propagated | 15 | C-A1 |
 
-In total there are 3,188 edges, of which 22.5% are placeholders. Edge counts are regenerated on every build (`site/data/twin/logic.json`).
+In v0 (downtown) there were 3,188 edges, of which 22.5% were placeholders; the county build of 2026-11-11 has 11,579 edges (35% placeholders). Edge counts are regenerated on every build (`site/data/twin/logic.json`).
 
 ### 3.3 Why R-P1 uses transmission lines only
 
@@ -351,7 +355,7 @@ Rows C-P6, C-H1, C-H2, C-W2, C-W3 and C-T2 were updated with public data on 2026
 
 Note (2026-11-06): 311 requests are not a rutting measure. HPMS 2024 rut depth gives a more direct test: about 1.8% deeper ruts per °C of summer LST after road class and traffic (4,269 sections, R² 0.09, cross-sectional; `scripts/rutting_lst.py`, PIPELINE_SPEC M-45). Rutting is now carried as the deferred cost pathway D3 → D9 in the core model.
 
-EAGLE-I covers the whole county while the model covers the downtown AOI, so V1 and V2 compare rankings (Spearman), not magnitudes.
+In v0 EAGLE-I covered the whole county while the model covered the downtown AOI, so V1 and V2 compare rankings (Spearman), not magnitudes; since 2026-11-11 both cover Davidson County.
 
 ---
 

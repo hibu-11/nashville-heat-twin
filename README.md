@@ -64,15 +64,30 @@ site/                  GitHub Pages 发布的网站
 基于真实资产（OSM 变电站与电力线、CMS 医疗设施、TDOT 桥梁、OSM 信号灯与水务设施、ACS 人口）和占位依赖（Voronoi 供电分区、备用电源、储水时长等），逐小时模拟 2023 年 6–8 月热 → 电 → 水 / 医疗 / 交通 / 人口的连锁反应，并用 EAGLE-I 停电和 311 报修做验证。
 
 ```bash
-.venv/bin/python scripts/fetch_open_data.py                 # 下载 OSM + ASOS 到 raw/
-.venv/bin/python -m pipeline.build                          # 标准表 + 依赖图 + 校验
-.venv/bin/python -m pipeline.core --runs 2000                # 骨架模型 / core skeleton (~3 min)
+.venv/bin/python scripts/fetch_open_data.py                 # 下载 OSM、ASOS、USGS、栅格到 raw/（范围：Davidson 全县 + 4 km）
+.venv/bin/python -m pipeline.build                          # 标准表 + 依赖图 + 校验（研究区改变后用 --force）
+.venv/bin/python -m pipeline.lineb calibrate                # B 线：用年度急诊数据校准热病症系数 → twin/evidence/lineb_calibration.json
 .venv/bin/python -m pipeline.cascade --runs 2000 --mid-runs 500 --scenarios 0,2,4   # 完整模型 / full model
+.venv/bin/python -m pipeline.access                         # 完整模型的可达性
+.venv/bin/python -m pipeline.core --runs 2000                # 骨架模型（A 线 + B 线，就医时间）/ core skeleton
+.venv/bin/python -m pipeline.contrib --runs 500 --scenarios 2,4   # 敲除实验：每条关系的因果贡献
 .venv/bin/python -m pipeline.report                         # 生成 docs/RESULTS.md
+.venv/bin/python -m pipeline.registry                       # 登记表、可信度分级与 core.yaml 检查 → docs/DATA_CATALOG.md
 ```
 
+全县规模下，构建 + 完整模型 + 骨架模型 + 敲除实验合计约 1.5–2 小时。
+
+**证据脚本 / evidence scripts**（结果写入 `twin/evidence/`，只含汇总数字）：
+- `scripts/eaglei_restoration.py`：EAGLE-I 用户恢复供电时长（C-P6）。
+- `scripts/rutting_lst.py`：HPMS 车辙深度与夏季 LST（D3，暂停）。
+- `scripts/heat_ed_annual.py`：年度高温病症急诊与 BNA 高温指标（B 线初步检验）。
+- `scripts/extract_eaglei.py`：从全国 EAGLE-I 文件提取一个县。
+- `scripts/nes_outage_poll.py`：抓取 NES 停电地图公开数据（需负责人同意后运行，目前未运行）。
+
 - **学术手册**：[docs/HANDBOOK.md](docs/HANDBOOK.md)——逻辑体系、规则（R-*）、每一步公式（Eq. 1–18）、参数表（C-*，标明文献 / 标准 / 内部 / 占位假设）、验证设计、局限与参考文献（DOI 已核实）。
-- **骨架模型**：[docs/CORE_MODEL.md](docs/CORE_MODEL.md)——按文献选出的主线环节 K1–K9、暂缓细节 D1–D8 及其理由、与完整模型的对比；组成清单 [twin/core.yaml](twin/core.yaml)。
+- **骨架模型**：[docs/CORE_MODEL.md](docs/CORE_MODEL.md)——两条主线（A 线 K1–K8：电、水、交通 → 医疗设施；B 线 K10：热病症与就医需求 → 急诊等待）都落到就医时间；暂缓细节 D1–D9、结果和敲除贡献；组成清单 [twin/core.yaml](twin/core.yaml)。
+- **数据目录与可信度**：[docs/DATA_CATALOG.md](docs/DATA_CATALOG.md)——190 个变量的状态、来源和 T1–T4 可信度分级（由 `pipeline.registry` 生成）。
+- **关系图集**：`site/architecture/relation-atlas.html`——每条关系的说明、示意图、贡献度和模块数据分级。
 - **结果**：[docs/RESULTS.md](docs/RESULTS.md)，由 `pipeline.report` 从运行结果生成，不手填数字。
 - **可视化**：`site/cascade.html`（网站首页左下角 "Cascade model"）。
 
