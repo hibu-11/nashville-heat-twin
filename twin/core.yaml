@@ -130,11 +130,12 @@ links:
       Heat-illness visits = a + k · indoor heat person-hours, with k calibrated on Davidson's annual heat-illness ED
       visits 2014–2023 against simulated exposure (R² 0.75, ρ 0.70); nursing-home residents exposed when cooling is not
       kept; electricity-dependent residents (HHS emPOWER) seek care once device batteries run out. Peak-day extra
-      visits raise ED waiting through W = W0·ρ/(1−ρ). The waiting step rests on T4 assumptions (ρ0, D0, W0, q).
+      visits raise waiting at per-hospital queues (W = W0·ρ/(1−ρ)); time to care is per ED visit (travel + waiting,
+      pipeline/care.py) and dialysis is counted as sessions affected. The waiting step rests on T4 assumptions (ρ0, D0, W0, q).
     evidence_zh: >-
       热病症就诊 = a + k × 室内高温暴露人·小时，k 用 Davidson 2014–2023 年度急诊人次对模拟暴露校准（R² 0.75，ρ 0.70）；
       养老院失去制冷时住户暴露；依赖电力设备的居民（HHS emPOWER）在设备电池耗尽后就医。高峰日新增就诊按 W = W0·ρ/(1−ρ)
-      增加急诊等待。等待这一步依赖 T4 假设（ρ0、D0、W0、q）。
+      增加各医院的等待；就医时间按急诊就诊人次计算（路程 + 等待，pipeline/care.py），透析计受影响次数。等待这一步依赖 T4 假设（ρ0、D0、W0、q）。
 
 deferred:
   - id: D1

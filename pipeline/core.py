@@ -23,7 +23,7 @@ import pandas as pd
 import yaml
 from scipy.stats import spearmanr
 
-from . import access, lineb
+from . import access, care, lineb
 from .adapters.base import write_json
 from .build import ROOT, code_version
 from .cascade import air_field_temperatures, load, river_inputs
@@ -76,7 +76,7 @@ def access_runs(ctx, net, sim, th, hours, tz, off=frozenset()):
     N = len(w["hour"])
     keys = list(ctx["dest"])
     m = {k: {"delta": np.zeros(N), "affected_pop": np.zeros(N), "cell_max": np.zeros(N), "over_thr": np.zeros(N),
-             "lost": np.zeros(N, bool), "pen": np.zeros(N)} for k in keys}
+             "lost": np.zeros(N, bool), "pen": np.zeros(N), "cong": np.zeros(N)} for k in keys}
     local = hours.tz_convert(tz).hour
     base = {}
     for r in np.where(w["hour"] >= 0)[0]:
@@ -89,7 +89,12 @@ def access_runs(ctx, net, sim, th, hours, tz, off=frozenset()):
         down = {} if "R17" in off else (
             {i: 1.0 for i, d in zip(net.hosp, w["hosp"][r]) if d} | {i: 1.0 for i, d in zip(net.dial, w["dial"][r]) if d})
         _, t = access.evaluate(ctx, lh, phi, down, summary=False)
+        # 【中文】只有信号灯熄灭（不含设施关闭）的路程，用于就医时间中的拥堵部分 / congestion only, no closures
+        _, tc = access.evaluate(ctx, lh, phi, None, summary=False) if (down and not no_phi) else (None, t if not down else base[lh])
         for k in keys:
+            c0, c1 = base[lh][k], tc[k]
+            okc = np.isfinite(c0) & np.isfinite(c1)
+            m[k]["cong"][r] = float((np.where(okc, c1 - c0, 0.0) * pop).sum() / pop.sum())
             t0, t1 = base[lh][k], t[k]
             ok = np.isfinite(t0)
             dt_ = np.where(ok & np.isfinite(t1), t1 - t0, np.nan)
@@ -105,7 +110,9 @@ def access_runs(ctx, net, sim, th, hours, tz, off=frozenset()):
     q = lambda a: {p_: round(float(np.percentile(a, p_)), 3) for p_ in (50, 95, 99)} | {"mean": round(float(np.mean(a)), 3), "max": round(float(np.max(a)), 3)}  # noqa: E731
     care = sum(m[k]["pen"] for k in keys)
     out = {"runs_with_degraded_segments": round(float((w["hour"] >= 0).mean()), 4),
-           "care_time_loss_min": q(care), "lost_penalty_min": LOST_PENALTY_MIN, "_care_runs": care}
+           "care_time_loss_min": q(care), "lost_penalty_min": LOST_PENALTY_MIN, "_care_runs": care,
+           "_congestion_hospital": m["hospital"]["cong"] if "hospital" in m else np.zeros(N),
+           "hospital_congestion_min": q(m["hospital"]["cong"]) if "hospital" in m else None}
     for k in keys:
         x = m[k]
         out[k] = {"threshold_min": ctx["dest"][k]["thr"], "delta_pop_mean_min": q(x["delta"]),
@@ -116,24 +123,23 @@ def access_runs(ctx, net, sim, th, hours, tz, off=frozenset()):
 
 def lineb_inputs(assets, net, hours, tz):
     """【中文】B 线输入：养老院住户、各分区依赖电力设备的人数、每小时所属的日序号 / line B inputs."""
+    zone_of_sub = {s: z for z, s in enumerate(net.zone_sub) if s >= 0}
     return {"nh_res": lineb.nursing_residents(assets, net),
+            "nh_zone": np.array([zone_of_sub.get(s, 0) for s in net.sub_of(net.nurs)], dtype=int),
             "zone_dep": lineb.zone_dependents(assets, net, ROOT / "raw/health/empower_zip_davidson.json",
                                               ROOT / "raw/health/zcta_health.gpkg"),
-            "day": pd.factorize(hours.tz_convert(tz).date)[0]}
+            "day": pd.factorize(hours.tz_convert(tz).date)[0], "hour_local": np.asarray(hours.tz_convert(tz).hour)}
 
 
-def waiting(sim, th, off=frozenset()):
-    """【中文】B 线：取每次运行新增就诊最多的一天，按排队近似 W = W0·ρ/(1−ρ) 换算为急诊等待的增加（分钟）。
-    ρ = ρ0·(1 + 新增 / D0) / 当天医院平均可用比例（按停电小时折算），上限 0.95；A 线的医院关闭因此也会抬高等待。
-    Line B: peak-day extra visits → added ED waiting through W = W0·ρ/(1−ρ), ρ capped at 0.95; hospital-hours
-    closed that day reduce capacity, so line A closures also raise waiting."""
-    N = len(th["C-H14"])
-    if "R22" in off or "peak_day_extra_visits" not in sim["totals"]:
-        return np.zeros(N)
-    rho0, D0, W0 = th["C-H14"], th["C-H15"], th["C-H16"]
-    open_share = sim["totals"]["peak_day_open_share"]
-    rho = np.minimum(0.95, rho0 * (1 + sim["totals"]["peak_day_extra_visits"] / D0) / np.maximum(open_share, 1e-3))
-    return W0 * (rho / (1 - rho) - rho0 / (1 - rho0))
+def time_to_care(cp, sim, th, acc, off=frozenset()):
+    """【中文】就医时间（每次急诊就诊的路程 + 等待增量）与受影响的透析次数；见 pipeline.care。
+    Time to care per ED visit (travel + waiting) and dialysis sessions affected; see pipeline.care."""
+    cong = None if (off & {"R14", "R15", "R16"}) else acc.pop("_congestion_hospital")
+    acc.pop("_congestion_hospital", None)
+    acc.pop("_care_runs", None)
+    ed = care.ed_time(cp, sim["care"], th, congestion=cong, off=off)
+    ed["dialysis_sessions"] = care.dialysis_sessions(cp, sim["care"])
+    return ed
 
 
 def main(argv=None):
@@ -145,6 +151,7 @@ def main(argv=None):
     ap.add_argument("--scenarios", default="0,2,4", help="uniform air-temperature offsets in °C; 0 must be included")
     ap.add_argument("--air-field", choices=["on", "off"], default="on")
     ap.add_argument("--outage-source", default="eaglei_davidson")
+    ap.add_argument("--tag", default="", help="write to site/data/twin/core/<tag>/ (e.g. a heat-wave run) instead of the main core output")
     args = ap.parse_args(argv)
     scen = [float(x) for x in args.scenarios.split(",")]
     if 0.0 not in scen:
@@ -155,7 +162,7 @@ def main(argv=None):
     tz = proj.get("timezone", "UTC")
     std = ROOT / proj.get("standard_dir", "data/standard")
     site_root = ROOT / proj.get("site_data_dir", "site/data") / "twin"
-    site = site_root / "core"
+    site = site_root / "core" / args.tag if args.tag else site_root / "core"
     site.mkdir(parents=True, exist_ok=True)
     dep_cfg = next(d for d in cfg["datasets"] if d["kind"] == "dependency_rules")
     core_spec = yaml.safe_load((ROOT / "twin" / "core.yaml").read_text(encoding="utf-8"))
@@ -184,6 +191,7 @@ def main(argv=None):
     actx = access.prepare(cfg, std, assets, deps, drivers, params, verbose=False)
     print(f"[core] access network: {actx['net']['stats']['edges']} edges, {len(actx['cells'])} population cells")
     LB = lineb_inputs(assets, net, hours, tz)
+    CP = care.prepare(actx, net, assets)
     print(f"[core] line B: {LB['nh_res'].sum():,.0f} nursing-home residents, {LB['zone_dep'].sum():,.0f} electricity-dependent residents")
     sims, th0 = {}, None
     for dT in scen:
@@ -197,9 +205,8 @@ def main(argv=None):
                                  Ta_zone=None if Ta_zone is None else Ta_zone + dT, shed=shed, lineb=LB)
         sims[dT]["runs_with_shed"] = None if shed is None else round(float((shed.max(1) > 0).mean()), 4)
         sims[dT]["access"] = access_runs(actx, net, sims[dT], th, hours, tz)
-        # 【中文】就医时间（综合）= A 线路程增量 + B 线等待增量 / time to care = line A travel + line B waiting
-        sims[dT]["wait"] = waiting(sims[dT], th)
-        sims[dT]["time_to_care"] = sims[dT]["access"].pop("_care_runs") + sims[dT]["wait"]
+        # 【中文】就医时间：每次急诊就诊的路程（含改道与拥堵）+ 分医院的等待增量 / per ED visit travel + waiting
+        sims[dT]["ed"] = time_to_care(CP, sims[dT], th, sims[dT]["access"])
     mc = sims[0.0]
     tot = mc["totals"]
 
@@ -236,7 +243,7 @@ def main(argv=None):
     q = lambda a: {p: round(float(np.percentile(a, p)), 2) for p in (5, 50, 95)} | {"mean": round(float(np.mean(a)), 2)}  # noqa: E731
     stamp = dt.datetime.now(dt.timezone.utc)
     phash = hashlib.sha256(couplings.to_csv(index=False).encode()).hexdigest()[:10]
-    run_id = f"core-{stamp:%Y%m%dT%H%M%SZ}-{phash}"
+    run_id = f"core-{stamp:%Y%m%dT%H%M%SZ}-{phash}" + (f"-{args.tag}" if args.tag else "")
     run = {"run_id": run_id, "model": "core skeleton (docs/CORE_MODEL.md)", "created": stamp.isoformat(timespec="seconds"),
            "code_version": code_version(), "inputs_build_run_id": build.get("run_id"), "couplings_sha256": phash,
            "seed": args.seed, "runs": args.runs, "period": [args.start, args.end], "timezone": tz,
@@ -255,7 +262,9 @@ def main(argv=None):
             "indoor_ac_max_c": None if np.all(np.isnan(r["hourly"]["indoor_ac_max_c"])) else
             round(float(np.nanmax(r["hourly"]["indoor_ac_max_c"])), 1),
             "max_air_temp_c": round(float(np.max(Ta) + dT), 1), "access": r["access"],
-            "wait_increase_min": q(r["wait"]), "time_to_care_min": q(r["time_to_care"])}
+            "time_to_care_min": q(r["ed"]["time"]), "ed_travel_increase_min": q(r["ed"]["travel"]),
+            "ed_congestion_min": q(r["ed"].get("congestion", np.zeros(1))), "wait_increase_min": q(r["ed"]["wait"]),
+            "dialysis_sessions_affected": q(r["ed"]["dialysis_sessions"])}
     summary = run | {"population_in_zones": int(net.zone_pop.sum()), "elderly_in_zones": int(net.zone_eld.sum()),
                      "poverty_in_zones": int(net.zone_pov.sum()), "scenarios": scen_summary,
                      "validation": val, "sensitivity": sens, "full_model": full}
@@ -294,8 +303,9 @@ def main(argv=None):
               f"runs with no dialysis centre available {a_['dialysis']['runs_with_none_available']:.1%}")
         print(f"        line B: excess heat-illness visits {v['heat_visits_excess']['mean']:.1f}, device-user visits "
               f"{v['dep_visits']['mean']:.2f}, nursing-home resident-hours {v['nh_exposed_hours']['mean']:.0f}, "
-              f"peak-day extra visits {v['peak_day_extra_visits']['mean']:.2f}, ED wait +{v['wait_increase_min']['mean']:.2f} min; "
-              f"time to care +{v['time_to_care_min']['mean']:.2f} min")
+              f"peak-day extra visits {v['peak_day_extra_visits']['mean']:.2f}; per ED visit: travel +{v['ed_travel_increase_min']['mean']:.3f}, "
+              f"wait +{v['wait_increase_min']['mean']:.2f} (median {v['wait_increase_min'][50]:.2f}), time to care +{v['time_to_care_min']['mean']:.2f} "
+              f"(median {v['time_to_care_min'][50]:.2f}, p95 {v['time_to_care_min'][95]:.2f}) min; dialysis sessions affected {v['dialysis_sessions_affected']['mean']:.1f}")
     print(f"[core] {run_id}: ρ(model, EAGLE-I) {val['power_all_hours']['rho']}, top sensitivity "
           f"{[(r['param'], r['pop_hours']) for r in sens[:3]]}")
 

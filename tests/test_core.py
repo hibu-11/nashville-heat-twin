@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from pipeline.core import waiting
+from pipeline import care
 from pipeline.twin.core import CORE_PARAMS, KNOCKOUTS, simulate_core
 
 H, N = 72, 40
@@ -122,18 +122,52 @@ def test_every_knockout_is_handled():
         run(off={ko})                            # 【中文】每个开关都能运行 / every switch runs
 
 
-def test_waiting_monotonic_and_zero_at_baseline():
+def toy_care(nH=3, ncell=6):
+    """【中文】6 个网格、3 家医院的小算例 / six cells, three hospitals."""
+    T = np.array([[5, 10, 20], [6, 9, 18], [12, 4, 15], [14, 5, 11], [20, 12, 3], [18, 13, 4]], float)[:ncell, :nH]
+    cp = {"T": T, "order": np.argsort(T, axis=1), "cz": np.array([0, 0, 1, 1, 2, 2])[:ncell],
+          "pop": np.full(ncell, 100.0), "zone_pop": np.array([200.0, 200.0, 200.0]), "patients": np.array([30.0])}
+    return cp
+
+
+def care_state(extra=0.0, closed=None, n=N):
+    return {"extra_zone": np.full((n, 3), extra / 3), "hosp_closed_h": np.zeros((n, 3)) if closed is None else np.tile(closed, (n, 1)),
+            "dial_closed_op_h": np.zeros((n, 1))}
+
+
+def test_time_to_care_zero_at_baseline():
+    out = care.ed_time(toy_care(), care_state(), params())
+    np.testing.assert_allclose(out["time"], 0, atol=1e-9)
+
+
+def test_time_to_care_grows_with_demand():
     th = params()
-    base = {"totals": {"peak_day_extra_visits": np.zeros(N), "peak_day_open_share": np.ones(N)}}
-    np.testing.assert_allclose(waiting(base, th), 0, atol=1e-9)
-    w = [waiting({"totals": {"peak_day_extra_visits": np.full(N, x), "peak_day_open_share": np.ones(N)}}, th).mean()
-         for x in (0, 10, 50, 200)]
-    assert all(b >= a for a, b in zip(w, w[1:]))
-    assert waiting(base, th, off={"R22"}).sum() == 0
+    t = [care.ed_time(toy_care(), care_state(x), th)["time"].mean() for x in (0, 20, 100, 400)]
+    assert all(b >= a for a, b in zip(t, t[1:])) and t[-1] > 0
+
+
+def test_closure_adds_travel():
+    out = care.ed_time(toy_care(), care_state(closed=np.array([24.0, 0, 0])), params())
+    assert out["travel"].mean() > 0
+    off = care.ed_time(toy_care(), care_state(closed=np.array([24.0, 0, 0])), params(), off={"R17"})
+    np.testing.assert_allclose(off["travel"], 0, atol=1e-9)
+
+
+def test_no_waiting_effect_when_switched_off():
+    out = care.ed_time(toy_care(), care_state(400), params(), off={"R22"})
+    np.testing.assert_allclose(out["wait"], 0, atol=1e-9)
+
+
+def test_dialysis_sessions():
+    cp = toy_care()
+    st = care_state()
+    st["dial_closed_op_h"] = np.full((N, 1), 12.0)
+    np.testing.assert_allclose(care.dialysis_sessions(cp, st), 30 * 3 / 7, rtol=1e-9)
 
 
 def test_line_b_outputs_present():
     r = run()
     for k in ("heat_visits_excess", "dep_visits", "nh_exposed_hours", "peak_day_extra_visits", "peak_day_open_share"):
         assert k in r["totals"]
+    assert r["care"]["extra_zone"].shape == (N, 3) and r["care"]["hosp_closed_h"].shape == (N, 2)
     assert (r["totals"]["peak_day_open_share"] <= 1).all() and (r["totals"]["peak_day_open_share"] >= 0).all()

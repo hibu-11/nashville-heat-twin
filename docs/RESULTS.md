@@ -245,9 +245,11 @@ By-year Spearman ρ: 2015 -0.04, 2016 0.00, 2017 0.14, 2019 -0.27, 2020 0.04, 20
 
 ## 11. Core skeleton model
 
-Run `core-20261110T213942Z-72f1c05324`: 2,000 Monte Carlo runs per scenario, links K1, K2, K3, K4, K5, K6, K7, K8, K9, K10; deferred D1, D2, D3, D5, D6, D7, D8, D9. Selection and equations: [CORE_MODEL.md](CORE_MODEL.md). Population in zones 702,461 (65+ 89,379, below poverty 98,031).
+Run `core-20261111T183212Z-65731ebbe3`: 2,000 Monte Carlo runs per scenario, links K1, K2, K3, K4, K5, K6, K7, K8, K9, K10; deferred D1, D2, D3, D5, D6, D7, D8, D9. Selection and equations: [CORE_MODEL.md](CORE_MODEL.md). Population in zones 702,461 (65+ 89,379, below poverty 98,031).
 
-| Output (mean per run) | +0 °C | +2 °C | +4 °C |
+Values are means per run unless marked median (p95; mean). Time to care is computed per ED visit on each run's peak day (pipeline.care): travel to the nearest open hospital plus waiting at per-hospital queues.
+
+| Output | +0 °C | +2 °C | +4 °C |
 | --- | --- | --- | --- |
 | Runs with any outage | 16.1% | 38.4% | 67.6% |
 | Thermal failures (core) | 1.57 | 16.06 | 106.40 |
@@ -269,13 +271,16 @@ Run `core-20261110T213942Z-72f1c05324`: 2,000 Monte Carlo runs per scenario, lin
 | K8 dialysis Δ population mean, min (p99) | 0.047 (1.53) | 0.351 (5.93) | 1.437 (22.70) |
 | K8 runs with no dialysis centre available | 0.0% | 0.1% | 2.7% |
 | K8 EMS Δ population mean, min (p99) | 0.005 (0.13) | 0.025 (0.34) | 0.079 (0.65) |
-| Line A: travel part of time to care, min | 0.06 | 0.45 | 2.52 |
+| Old line A metric: population-mean added travel (hospital + dialysis + EMS), min | 0.06 | 0.45 | 2.52 |
 | K10 excess heat-illness ED visits | 121.5 | 232.7 | 332.2 |
 | K10 visits by electricity-dependent residents | 3.5 | 35.7 | 210.7 |
 | K10 nursing-home resident-hours ≥ 26 °C | 24 | 298 | 2,111 |
 | K10 peak-day extra visits | 5.9 | 15.3 | 44.7 |
-| K10 ED waiting increase, min: mean (median) | 2.7 (1.4) | 10.3 (1.8) | 41.4 (3.0) |
-| **Time to care, composite (travel + waiting), min** | **2.7** | **10.8** | **43.9** |
+| Per ED visit: added travel (rerouting + congestion), min | 0.000 (0.000; mean 0.000) | 0.000 (0.000; mean 0.000) | 0.000 (0.020; mean 0.010) |
+| Per ED visit: added congestion only, min | 0.000 (0.030; mean 0.010) | 0.000 (0.240; mean 0.040) | 0.020 (0.670; mean 0.130) |
+| Per ED visit: added waiting, min | 1.4 (5.8; mean 3.1) | 1.8 (47.3; mean 11.8) | 3.1 (284.6; mean 43.4) |
+| **Time to care per ED visit (travel + waiting), min** | **1.4 (5.8; mean 3.1)** | **1.8 (47.4; mean 11.8)** | **3.1 (284.7; mean 43.5)** |
+| Dialysis sessions affected (cancelled or moved) | 1.0 | 9.6 | 68.9 |
 
 Validation: ρ(model, EAGLE-I) all hours 0.03 [-0.04, 0.12] (n = 2,208 h, 92 days); non-storm -0.01 [-0.08, 0.06] (n = 1,994 h, 92 days).
 
@@ -292,30 +297,58 @@ Validation: ρ(model, EAGLE-I) all hours 0.03 [-0.04, 0.12] (n = 2,208 h, 92 day
 
 ### 11.1 Knockout contributions
 
-`python -m pipeline.contrib` (500 runs, 2026-11-10): share of composite time to care lost when only that relation is switched off (negative = buffer). Series links share values; figures do not add up. Method: CORE_MODEL §4.2.
+`python -m pipeline.contrib` (500 runs, 2026-11-11): share of time to care (mean per ED visit) lost when only that relation is switched off (negative = buffer). Series links share values; figures do not add up. Method: CORE_MODEL §4.2.
 
 | Relation | Switched off | time to care +2 °C | time to care +4 °C | travel part (last) | waiting part (last) |
 | --- | --- | ---: | ---: | ---: | ---: |
-| R01 | local temperature = background (airport) series everywhere (no urban field) | -14% | -16% | -19% | -15% |
-| R05 | TVA load is not scaled by scenario warming | 0% | 0% | 0% | 0% |
-| R06 | no rotating outages from a system shortfall | 0% | 0% | 0% | 0% |
-| R14 | dark signals keep full capacity (R14–R16 are in series, so one knockout covers all three) | 1% | 1% | 16% | 0% |
-| R17 | closed facilities stay on the destination list | 3% | 5% | 87% | 0% |
-| R22 | extra care demand does not lengthen waiting | 96% | 94% | 0% | 100% |
-| R02 | load does not respond to temperature (m = 1) | 86% | 96% | 99% | 95% |
-| R03a | hot spot sees each station's period-mean ambient instead of the hourly value | 78% | 78% | 85% | 78% |
-| R03b | hot spot sees each run's period-mean load instead of the hourly load | 86% | 95% | 99% | 95% |
-| R04 | no thermal failures (p = 0) | 86% | 96% | 99% | 95% |
-| R07 | a failed station returns after one hour | 76% | 70% | 47% | 71% |
-| R08 | no upstream propagation: a station is out only if it failed or was shed itself | 48% | 46% | 56% | 45% |
+| R01 | local temperature = background (airport) series everywhere (no urban field) | -8% | -11% | 43% | -11% |
+| R05 | TVA load is not scaled by scenario warming | 0% | 0% | 1% | 0% |
+| R06 | no rotating outages from a system shortfall | 0% | 0% | 1% | 0% |
+| R14 | dark signals keep full capacity (R14–R16 are in series, so one knockout covers all three) | 0% | 0% | 0% | 0% |
+| R17 | closed facilities stay on the destination list | 5% | 8% | 100% | 8% |
+| R22 | extra care demand does not lengthen waiting | 100% | 100% | 0% | 100% |
+| R02 | load does not respond to temperature (m = 1) | 87% | 96% | 100% | 96% |
+| R03a | hot spot sees each station's period-mean ambient instead of the hourly value | 76% | 77% | 84% | 77% |
+| R03b | hot spot sees each run's period-mean load instead of the hourly load | 87% | 95% | 100% | 95% |
+| R04 | no thermal failures (p = 0) | 87% | 96% | 100% | 96% |
+| R07 | a failed station returns after one hour | 77% | 73% | 78% | 73% |
+| R08 | no upstream propagation: a station is out only if it failed or was shed itself | 50% | 47% | 59% | 47% |
 | R09 | water plants never lose power | 0% | 0% | 0% | 0% |
 | R10 | no storage buffer: water is lost as soon as every plant stops | 0% | 0% | 0% | 0% |
-| R11 | facilities never lose function from a zone outage | 9% | 15% | 86% | 11% |
+| R11 | facilities never lose function from a zone outage | 5% | 8% | 100% | 8% |
 | R12 | dialysis ignores water loss | 0% | 0% | 0% | 0% |
-| R13 | signals never go dark | 1% | 1% | 17% | 0% |
+| R13 | signals never go dark | 0% | 0% | 0% | 0% |
 | R18 | homes with AC keep their set point during outages | 0% | 1% | 0% | 1% |
-| R19 | indoor equilibrium is not driven by outdoor temperature (held at the AC set point) | 16% | 7% | 0% | 8% |
-| R21 | heat exposure does not raise heat-illness visits (k = 0) | 16% | 7% | 0% | 8% |
+| R19 | indoor equilibrium is not driven by outdoor temperature (held at the AC set point) | 15% | 7% | 0% | 7% |
+| R21 | heat exposure does not raise heat-illness visits (k = 0) | 15% | 7% | 0% | 7% |
 | R23 | nursing-home residents are not exposed when cooling is lost | 0% | 0% | 0% | 0% |
-| R24 | electricity-dependent residents make no visits during outages | 79% | 87% | 0% | 92% |
+| R24 | electricity-dependent residents make no visits during outages | 84% | 90% | 22% | 90% |
+
+### 11.2 Line B assumption variants
+
+`python -m pipeline.contrib --variants` (300 runs): only the named T4 parameters are fixed; same random numbers.
+
+| Variant (+4 °C) | Time to care median, min | p95 | mean | Runs over 30 min | Device-user visits |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| base | 3.35 | 277.2 | 45.18 | 23.7% | 224.2 |
+| q = 0 (no device-user visits) | 1.7 | 19.5 | 5.1 | 4.0% | 0.0 |
+| q = 0.01 | 2.29 | 42.2 | 8.63 | 5.7% | 34.3 |
+| q = 0.15 | 4.66 | 449.9 | 90.03 | 36.3% | 514.7 |
+| ED slack (rho0 0.60, D0 1400, W0 20) | 0.5 | 26.3 | 5.51 | 4.7% | 224.2 |
+| ED stretched (rho0 0.85, D0 700, W0 45) | 20.6 | 600.6 | 144.86 | 44.0% | 224.2 |
+
+### 11.3 Observed heat waves
+
+Hottest five days of the summer at BNA, with one day before and after; +0 °C uses observed temperatures.
+
+| Heat wave | Scenario | Runs with outage | Person-hours without power | Excess heat-illness visits | Time to care median (p95), min | Dialysis sessions affected |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| 2022-06-20 – 2022-06-26 | +0 °C | 17.1% | 77,427 | 20.3 | 1.4 (5.9) | 1.3 |
+| 2022-06-20 – 2022-06-26 | +2 °C | 40.6% | 551,339 | 24.4 | 1.7 (66.8) | 9.1 |
+| 2023-08-21 – 2023-08-27 | +0 °C | 14.9% | 62,565 | 23.7 | 1.4 (5.2) | 1.1 |
+| 2023-08-21 – 2023-08-27 | +2 °C | 36.7% | 466,584 | 28.2 | 1.7 (42.0) | 7.9 |
+| 2024-08-25 – 2024-08-31 | +0 °C | 26.2% | 208,382 | 20.9 | 1.4 (18.3) | 3.2 |
+| 2024-08-25 – 2024-08-31 | +2 °C | 53.0% | 1,163,287 | 26.4 | 2.1 (165.2) | 19.7 |
+| 2025-08-14 – 2025-08-20 | +0 °C | 12.0% | 48,201 | 22.9 | 1.3 (4.8) | 0.8 |
+| 2025-08-14 – 2025-08-20 | +2 °C | 33.6% | 417,072 | 27.1 | 1.7 (35.9) | 7.0 |
 

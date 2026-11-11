@@ -187,7 +187,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | HLT-01 | Hospitals (type; emergency services)<br>医院（类型；急诊） | attribute | ✅ in_model | T1 | hospitals | ✅ have 已有 | CMS Provider Data |
 | HLT-05 | Dialysis facilities and stations<br>透析中心与透析位 | attribute | ✅ in_model | T1 | dialysis | ✅ have 已有 | CMS Dialysis Facilities |
 | HLT-20 | Facility loss of service<br>设施服务中断 | state | ✅ derived | inherit | — | ✅ have 已有 | - |
-| HLT-31 | Time to care, composite (travel + waiting)<br>就医时间（综合：路程 + 等待） | output | ✅ derived | inherit | — | ✅ have 已有 | Daily ED visits and waiting times (TDH, CMS) |
+| HLT-31 | Time to care per ED visit (travel + waiting, peak day)<br>就医时间（每次急诊就诊：路程 + 等待，高峰日） | output | ✅ derived | inherit | — | ✅ have 已有 | Daily ED visits and waiting times (TDH, CMS) |
 | POP-01 | Total population<br>总人口 | attribute | ✅ in_model | T1 | zcta_population | ✅ have 已有 | Block-group counts (POP-07) |
 | POP-19 | Population cells for access (building-area allocation)<br>可达性计算用的人口网格（按建筑面积分配） | state | ✅ derived | inherit | buildings_aoi;zcta_population | ✅ have 已有 | Residential floor area (BLD-02, BLD-03) |
 
@@ -233,7 +233,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | HLT-28 | ED visits by electricity-dependent residents during outages<br>停电期间依赖电力设备居民的急诊就诊 | output | ✅ derived | inherit | — | ✅ have 已有 | Daily ED visits and waiting times (TDH, CMS) |
 | HLT-29 | Nursing-home resident-hours above 26 °C<br>养老院住户超过 26 °C 的人·小时 | output | ✅ derived | inherit | — | ✅ have 已有 | Daily ED visits and waiting times (TDH, CMS) |
 | HLT-30 | Increase in ED waiting on the peak day<br>高峰日急诊等待的增加 | output | ✅ derived | inherit | — | ✅ have 已有 | Daily ED visits and waiting times (TDH, CMS) |
-| HLT-31 | Time to care, composite (travel + waiting)<br>就医时间（综合：路程 + 等待） | output | ✅ derived | inherit | — | ✅ have 已有 | Daily ED visits and waiting times (TDH, CMS) |
+| HLT-31 | Time to care per ED visit (travel + waiting, peak day)<br>就医时间（每次急诊就诊：路程 + 等待，高峰日） | output | ✅ derived | inherit | — | ✅ have 已有 | Daily ED visits and waiting times (TDH, CMS) |
 
 ### 下一步要获取的数据 Data to obtain next
 
@@ -574,7 +574,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 | HLT-28 | ED visits by electricity-dependent residents during outages<br>停电期间依赖电力设备居民的急诊就诊 | `V_dep` | visits | Davidson County; per run (Jun–Aug) | ✅ derived | inherit | — | Daily ED visits and waiting times (TDH, CMS) | M-47 | K10 | 1 |
 | HLT-29 | Nursing-home resident-hours above 26 °C<br>养老院住户超过 26 °C 的人·小时 | `E_nh` | person-h | Davidson County; per run (Jun–Aug) | ✅ derived | inherit | — | Daily ED visits and waiting times (TDH, CMS) | M-47 | K10 | 1 |
 | HLT-30 | Increase in ED waiting on the peak day<br>高峰日急诊等待的增加 | `ΔW` | min | Davidson County; per run (Jun–Aug) | ✅ derived | inherit | — | Daily ED visits and waiting times (TDH, CMS) | M-47 | K10 | 1 |
-| HLT-31 | Time to care, composite (travel + waiting)<br>就医时间（综合：路程 + 等待） | `T_care` | min | Davidson County; per run (Jun–Aug) | ✅ derived | inherit | — | Daily ED visits and waiting times (TDH, CMS) | M-47 | K8;K10 | 1 |
+| HLT-31 | Time to care per ED visit (travel + waiting, peak day)<br>就医时间（每次急诊就诊：路程 + 等待，高峰日） | `T_care` | min | Davidson County; per run (Jun–Aug) | ✅ derived | inherit | — | Daily ED visits and waiting times (TDH, CMS) | M-47 | K8;K10 | 1 |
 
 备注 Notes:
 
@@ -592,7 +592,7 @@ English: variables used by the core links K1–K9 of [`twin/core.yaml`](../twin/
 - **HLT-28** — 每个夏季 3.6 / 36 / 211 次；依赖假设的就诊概率 q（T4）。 / 3.6 / 36 / 211 per summer; rests on the assumed visit probability q (T4).
 - **HLT-29** — 每个夏季 24 / 298 / 2,111 人·小时。 / 24 / 298 / 2,111 per summer.
 - **HLT-30** — 均值 +2.7 / +10.3 / +41 分钟（中位数 1.4 / 1.8 / 3.0）；依赖 T4 排队假设。 / Mean +2.7 / +10.3 / +41 min (median 1.4 / 1.8 / 3.0); rests on T4 queueing assumptions.
-- **HLT-31** — A、B 两条线的共同终点：每位就医者增加 2.7 / 10.8 / 44 分钟。 / The common endpoint of lines A and B: +2.7 / +10.8 / +44 min per person seeking care.
+- **HLT-31** — A、B 两条线的共同终点（pipeline.care）：每次急诊就诊增加 中位数（p95；均值）1.4（5.8；3.1）/ 1.8（47；12）/ 3.1（285；43）分钟（+0/+2/+4 °C）。 / Common endpoint of lines A and B (pipeline.care): median (p95; mean) +1.4 (5.8; 3.1) / +1.8 (47; 12) / +3.1 (285; 43) min per ED visit at +0/+2/+4 °C.
 
 ### Population 人口
 

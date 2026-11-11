@@ -174,7 +174,17 @@ def core_section(w, path):
         return f"{d['mean']:.3f} ({d['99']:.2f})"
     sc = x["scenarios"]
     keys = list(sc)
-    w("| Output (mean per run) | " + " | ".join(f"{k} °C" for k in keys) + " |")
+
+    def qs(v, k, d=1, bold=False):
+        """【中文】中位数（p95；均值）/ median (p95; mean)."""
+        if k not in v:
+            return "—"
+        q = v[k]
+        t = f"{q['50']:.{d}f} ({q['95']:.{d}f}; mean {q['mean']:.{d}f})"
+        return f"**{t}**" if bold else t
+    w("Values are means per run unless marked median (p95; mean). Time to care is computed per ED visit on each run's peak "
+      "day (pipeline.care): travel to the nearest open hospital plus waiting at per-hospital queues.\n")
+    w("| Output | " + " | ".join(f"{k} °C" for k in keys) + " |")
     w("| --- |" + " --- |" * len(keys))
     rows = [("Runs with any outage", lambda v, f: f"{v['share_runs_with_any_outage']:.1%}"),
             ("Thermal failures (core)", lambda v, f: n(v["thermal"]["mean"], 2)),
@@ -196,15 +206,16 @@ def core_section(w, path):
             ("K8 dialysis Δ population mean, min (p99)", lambda v, f: acc(v, "dialysis")),
             ("K8 runs with no dialysis centre available", lambda v, f: f"{v['access']['dialysis']['runs_with_none_available']:.1%}"),
             ("K8 EMS Δ population mean, min (p99)", lambda v, f: acc(v, "ems")),
-            ("Line A: travel part of time to care, min", lambda v, f: n(v["access"].get("care_time_loss_min", {}).get("mean"), 2)),
+            ("Old line A metric: population-mean added travel (hospital + dialysis + EMS), min", lambda v, f: n(v["access"].get("care_time_loss_min", {}).get("mean"), 2)),
             ("K10 excess heat-illness ED visits", lambda v, f: n(v.get("heat_visits_excess", {}).get("mean"), 1)),
             ("K10 visits by electricity-dependent residents", lambda v, f: n(v.get("dep_visits", {}).get("mean"), 1)),
             ("K10 nursing-home resident-hours ≥ 26 °C", lambda v, f: n(v.get("nh_exposed_hours", {}).get("mean"))),
             ("K10 peak-day extra visits", lambda v, f: n(v.get("peak_day_extra_visits", {}).get("mean"), 1)),
-            ("K10 ED waiting increase, min: mean (median)", lambda v, f: "—" if "wait_increase_min" not in v else
-             f"{v['wait_increase_min']['mean']:.1f} ({v['wait_increase_min']['50']:.1f})"),
-            ("**Time to care, composite (travel + waiting), min**", lambda v, f: "—" if "time_to_care_min" not in v else
-             f"**{v['time_to_care_min']['mean']:.1f}**")]
+            ("Per ED visit: added travel (rerouting + congestion), min", lambda v, f: qs(v, "ed_travel_increase_min", 3)),
+            ("Per ED visit: added congestion only, min", lambda v, f: qs(v, "ed_congestion_min", 3)),
+            ("Per ED visit: added waiting, min", lambda v, f: qs(v, "wait_increase_min")),
+            ("**Time to care per ED visit (travel + waiting), min**", lambda v, f: qs(v, "time_to_care_min", bold=True)),
+            ("Dialysis sessions affected (cancelled or moved)", lambda v, f: n(v.get("dialysis_sessions_affected", {}).get("mean"), 1))]
     for label, fn in rows:
         w(f"| {label} | " + " | ".join(fn(sc[k], full.get(k)) for k in keys) + " |")
     v = x["validation"]
@@ -216,7 +227,7 @@ def core_section(w, path):
     c = read(path.parent / "contrib.json")
     if c:
         w("### 11.1 Knockout contributions\n")
-        w(f"`python -m pipeline.contrib` ({c['runs']} runs, {c['created'][:10]}): share of composite time to care lost when only that "
+        w(f"`python -m pipeline.contrib` ({c['runs']} runs, {c['created'][:10]}): share of time to care (mean per ED visit) lost when only that "
           "relation is switched off (negative = buffer). Series links share values; figures do not add up. Method: CORE_MODEL §4.2.\n")
         scen = list(next(iter(c["relations"].values()))["contribution"])
         w("| Relation | Switched off | " + " | ".join(f"time to care {k} °C" for k in scen) + " | travel part (last) | waiting part (last) |")
@@ -225,7 +236,30 @@ def core_section(w, path):
         for rid, r in c["relations"].items():
             last = r["contribution"][scen[-1]]
             w(f"| {rid} | {r['what_is_switched_off']} | " + " | ".join(pc(r["contribution"][k].get("time_to_care_min")) for k in scen)
-              + f" | {pc(last.get('care_time_loss_min'))} | {pc(last.get('wait_increase_min'))} |")
+              + f" | {pc(last.get('ed_travel_increase_min', last.get('care_time_loss_min')))} | {pc(last.get('wait_increase_min'))} |")
+        w("")
+    va = read(path.parent / "contrib_variants.json")
+    if va:
+        w("### 11.2 Line B assumption variants\n")
+        w(f"`python -m pipeline.contrib --variants` ({va['runs']} runs): only the named T4 parameters are fixed; same random numbers.\n")
+        for sk, rows in va["results"].items():
+            w(f"| Variant ({sk} °C) | Time to care median, min | p95 | mean | Runs over 30 min | Device-user visits |\n| --- | ---: | ---: | ---: | ---: | ---: |")
+            for name, r in rows.items():
+                w(f"| {name} | {r['time_to_care_median']} | {r['time_to_care_p95']} | {r['time_to_care_mean']} | {r['share_runs_over_30min']:.1%} | {r['device_visits']} |")
+            w("")
+    hw = sorted(path.parent.glob("hw*/summary.json"))
+    if hw:
+        w("### 11.3 Observed heat waves\n")
+        w("Hottest five days of the summer at BNA, with one day before and after; +0 °C uses observed temperatures.\n")
+        w("| Heat wave | Scenario | Runs with outage | Person-hours without power | Excess heat-illness visits | Time to care median (p95), min | Dialysis sessions affected |")
+        w("| --- | --- | ---: | ---: | ---: | ---: | ---: |")
+        for f_ in hw:
+            y = read(f_)
+            for k, v in y["scenarios"].items():
+                t = v.get("time_to_care_min", {})
+                w(f"| {y['period'][0]} – {y['period'][1]} | {k} °C | {v['share_runs_with_any_outage']:.1%} | {n(v['pop_hours']['mean'])} | "
+                  f"{n(v.get('heat_visits_excess', {}).get('mean'), 1)} | {t.get('50', float('nan')):.1f} ({t.get('95', float('nan')):.1f}) | "
+                  f"{n(v.get('dialysis_sessions_affected', {}).get('mean'), 1)} |")
         w("")
 
 

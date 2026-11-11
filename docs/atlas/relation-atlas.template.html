@@ -1,0 +1,1121 @@
+<title>Heat Twin Relation Atlas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+/* Layout: an engineering relation register — one card per relation line (schematic left, bilingual spec right), closing with a swim-lane map */
+:root {
+  color-scheme: light;
+  --paper: #eef1f3;
+  --sheet: #f8fafb;
+  --ink: #17212b;
+  --muted: #56636e;
+  --rule: #c8d0d6;
+  --l-climate: #c0531a;
+  --l-power: #2d4cc0;
+  --l-water: #0c8582;
+  --l-transport: #8f6c00;
+  --l-health: #b52f58;
+  --tint: 0.07;
+  --font-display: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-zh: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #0f151b; --sheet: #141c24; --ink: #e2e8ed; --muted: #93a0ab; --rule: #2a3540;
+    --l-climate: #f0894a; --l-power: #7e97ff; --l-water: #3cc6c0; --l-transport: #e2b53d; --l-health: #f26e94;
+    --tint: 0.1;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0f151b; --sheet: #141c24; --ink: #e2e8ed; --muted: #93a0ab; --rule: #2a3540;
+  --l-climate: #f0894a; --l-power: #7e97ff; --l-water: #3cc6c0; --l-transport: #e2b53d; --l-health: #f26e94;
+  --tint: 0.1;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  background: var(--paper); color: var(--ink); margin: 0;
+  font: 400 15px/1.6 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+}
+.zh { font-family: var(--font-zh); }
+.wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 34px; }
+
+header { display: grid; gap: 10px; border-bottom: 2px solid var(--ink); padding-bottom: 18px; }
+.eyebrow { font: 500 12px/1 var(--font-mono); color: var(--muted); letter-spacing: 0.04em; }
+h1 { margin: 0; font: 700 clamp(30px, 4vw, 46px)/1.02 var(--font-display); letter-spacing: -0.01em; text-wrap: balance; }
+h1 .zh { display: block; font: 500 clamp(18px, 2vw, 24px)/1.3 var(--font-zh); color: var(--muted); margin-top: 6px; letter-spacing: 0.02em; }
+.intro { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 32px; }
+.intro p { margin: 0; max-width: 62ch; }
+.intro .zh { font-size: 14.5px; line-height: 1.8; }
+
+.howto { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.howto div { border-top: 1px solid var(--rule); padding-top: 8px; font-size: 13px; }
+.howto b { display: block; font: 600 12px/1.3 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+.howto .zh { display: block; font-size: 12.5px; color: var(--muted); }
+
+nav.index { display: flex; flex-wrap: wrap; gap: 6px; }
+nav.index a { font: 500 12.5px/1 var(--font-mono); color: var(--ink); text-decoration: none; padding: 7px 9px; border: 1px solid var(--rule); background: var(--sheet); }
+nav.index a .gk { color: var(--lc); margin-right: 6px; }
+nav.index a.def { border-style: dashed; color: var(--muted); }
+nav.index a.map { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+nav.index a:hover { border-color: var(--ink); }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--l-power); outline-offset: 2px; }
+
+.group { display: grid; gap: 14px; scroll-margin-top: 16px; }
+.ghead { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; align-items: baseline; border-top: 2px solid var(--lc); padding-top: 12px; }
+.ghead .gk { grid-row: span 2; font: 700 34px/1 var(--font-display); color: var(--lc); font-variant-numeric: tabular-nums; }
+.ghead h2 { margin: 0; font: 600 22px/1.2 var(--font-display); text-wrap: balance; }
+.ghead h2 .zh { font: 500 17px/1.3 var(--font-zh); color: var(--muted); margin-left: 10px; }
+.ghead p { margin: 0; color: var(--muted); font-size: 14px; max-width: 110ch; }
+.ghead p .zh { display: block; font-size: 13.5px; }
+.group.def .ghead { border-top-style: dashed; }
+.group.def .ghead .gk { color: var(--muted); }
+
+.card { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 0; background: var(--sheet); border: 1px solid var(--rule); scroll-margin-top: 16px; }
+.card.def { border-style: dashed; }
+.card:target { box-shadow: 0 0 0 2px var(--lc); }
+.fig { border-right: 1px solid var(--rule); padding: 14px 14px 12px; display: grid; gap: 8px; align-content: start; }
+.card.def .fig { border-right-style: dashed; }
+.fig svg { width: 100%; height: auto; display: block; color: var(--ink); }
+.fig figcaption { font-size: 12px; color: var(--muted); line-height: 1.45; }
+.fig figcaption .zh { display: block; font-size: 11.5px; }
+.body { padding: 14px 18px 16px; display: grid; gap: 10px; align-content: start; }
+.rid { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.rid .num { font: 600 13px/1 var(--font-mono); color: var(--paper); background: var(--lc); padding: 4px 7px; }
+.card.def .rid .num { background: transparent; color: var(--muted); border: 1px dashed var(--muted); }
+.rid h3 { margin: 0; font: 600 18px/1.25 var(--font-display); }
+.rid h3 .zh { font: 500 14.5px/1.3 var(--font-zh); color: var(--muted); margin-left: 8px; }
+.rid .st { margin-left: auto; font: 500 11px/1 var(--font-mono); color: var(--muted); border: 1px solid var(--rule); padding: 4px 6px; }
+.why { border-left: 3px solid var(--lc); padding: 6px 0 6px 12px; background: color-mix(in srgb, var(--lc) calc(var(--tint) * 100%), transparent); }
+.why b { display: block; font: 600 11px/1.6 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--lc); margin-bottom: 2px; }
+.why b .zh { letter-spacing: 0; text-transform: none; margin-left: 6px; font-weight: 500; }
+.card.def .why { border-left-style: dashed; }
+.changes { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 32px; border: 1px dashed var(--rule); padding: 10px 14px; font-size: 13.5px; }
+.changes b { grid-column: 1 / -1; font: 600 12px/1.3 var(--font-mono); color: var(--muted); }
+.changes p { margin: 0; max-width: 72ch; }
+.changes .zh { font-size: 13px; line-height: 1.75; }
+.text2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.text2 p { margin: 0; font-size: 14px; }
+.text2 .zh { font-size: 13.5px; line-height: 1.8; }
+.eq { font: 400 13px/1.6 var(--font-mono); background: color-mix(in srgb, var(--lc) calc(var(--tint) * 100%), transparent); border-left: 2px solid var(--lc); padding: 7px 10px; overflow-x: auto; white-space: pre-wrap; }
+.meta { display: grid; grid-template-columns: 92px 1fr; gap: 4px 12px; margin: 0; font-size: 13px; }
+.meta dt { font: 600 11px/1.7 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.meta dt .zh { letter-spacing: 0; text-transform: none; font-weight: 500; margin-left: 4px; }
+.meta dd { margin: 0; }
+.meta dd.num { font: 400 12.5px/1.6 var(--font-mono); font-variant-numeric: tabular-nums; }
+.meta dd.res { font-weight: 500; }
+
+/* svg classes */
+.ax { stroke: var(--rule); stroke-width: 1; fill: none; }
+.axt { fill: var(--muted); font: 400 10px var(--font-mono); }
+.axl { fill: var(--muted); font: 500 10.5px var(--font-body); }
+.c1 { stroke: var(--lc); stroke-width: 2.2; fill: none; }
+.c2 { stroke: var(--muted); stroke-width: 1.1; fill: none; stroke-dasharray: 4 3; }
+.c3 { stroke: var(--ink); stroke-width: 1.4; fill: none; }
+.fa { fill: var(--lc); fill-opacity: 0.18; stroke: none; }
+.fs { fill: var(--lc); stroke: none; }
+.fm { fill: var(--muted); fill-opacity: 0.35; stroke: none; }
+.bx { fill: var(--paper); stroke: var(--rule); stroke-width: 1; }
+.bxa { fill: var(--paper); stroke: var(--lc); stroke-width: 1.6; }
+.lb { fill: var(--ink); font: 500 10.5px var(--font-body); }
+.lbm { fill: var(--muted); font: 400 10px var(--font-mono); }
+.lba { fill: var(--lc); font: 600 10.5px var(--font-mono); }
+.ink { fill: var(--ink); }
+
+/* map */
+.mapsec { display: grid; gap: 12px; scroll-margin-top: 16px; }
+.mapsec .ghead { border-top-color: var(--ink); }
+.maptools { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; font-size: 13px; color: var(--muted); }
+.maptools label { display: inline-flex; gap: 8px; align-items: center; color: var(--ink); cursor: pointer; }
+.maptools input { accent-color: var(--ink); }
+.maptools .k { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; }
+.maptools .k i { display: inline-block; width: 24px; border-top: 2px solid var(--ink); }
+.maptools .k i.d { border-top: 2px dashed var(--muted); }
+.maptools .k i.p { border-top: 2px dotted var(--ink); }
+.mapbox { background: var(--sheet); border: 1px solid var(--rule); overflow-x: auto; }
+.mapbox svg { display: block; width: 100%; min-width: 1180px; height: auto; color: var(--ink); }
+.lane { fill-opacity: var(--tint); }
+.lanet { font: 700 12px var(--font-display); letter-spacing: 0.12em; }
+.lanez { font: 500 11px var(--font-zh); }
+.node rect { fill: var(--sheet); stroke-width: 1.6; }
+.node .en { fill: var(--ink); font: 600 12.5px var(--font-display); }
+.node .cn { fill: var(--muted); font: 400 11px var(--font-zh); }
+.node.d rect { stroke-dasharray: 5 3; fill: var(--paper); }
+.node.d .en { fill: var(--muted); font-style: italic; }
+.edge { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+.edge.d { stroke: var(--muted); stroke-dasharray: 5 4; }
+.edge.p { stroke-dasharray: 1.5 3.5; stroke-linecap: round; }
+.node.p rect { stroke-dasharray: 2 3; }
+.node.p .en { font-style: italic; }
+.tag.p circle { stroke-dasharray: 1.5 2; }
+.card.pl, .group.pl .ghead { border-style: dotted; }
+.card.pl .fig { border-right-style: dotted; }
+.card.pl .rid .num { background: transparent; color: var(--lc); border: 1px dotted var(--lc); }
+nav.index a.pl { border-style: dotted; }
+.tag circle { fill: var(--paper); stroke: var(--ink); stroke-width: 1.1; }
+.tag.d circle { stroke: var(--muted); stroke-dasharray: 2 2; }
+.tag text { fill: var(--ink); font: 600 9.5px var(--font-mono); }
+.tag.d text { fill: var(--muted); }
+.tag:hover circle, .tag:focus-visible circle { fill: var(--ink); }
+.tag:hover text, .tag:focus-visible text { fill: var(--paper); }
+.hide-d .d { display: none; }
+figure.mapfig { margin: 0; display: grid; gap: 8px; }
+figure.mapfig figcaption { font-size: 13px; color: var(--muted); max-width: 120ch; }
+figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
+
+/* chain layers: each complete chain is a toggleable layer drawn over the dimmed base map */
+:root { --ch1: #d6336c; --ch2: #6741d9; --ch3: #e67700; --ch4: #c2255c; --ch5: #0b7285; --ch6: #2b8a3e; --ch7: #5c6f7b; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ch1: #ff6b9a; --ch2: #a48bff; --ch3: #ffb340; --ch4: #f783ac; --ch5: #3bc9db; --ch6: #69db7c; --ch7: #a9bac6; } }
+:root[data-theme="dark"] { --ch1: #ff6b9a; --ch2: #a48bff; --ch3: #ffb340; --ch4: #f783ac; --ch5: #3bc9db; --ch6: #69db7c; --ch7: #a9bac6; }
+.chainsets { display: grid; gap: 14px; }
+.chainset { display: grid; gap: 8px; }
+.chainset h3 { margin: 0; font: 600 15px/1.3 var(--font-display); }
+.chainset h3 .zh { font: 500 13px/1.3 var(--font-zh); color: var(--muted); margin-left: 8px; }
+.chains { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.chain { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 6px 1fr; gap: 0 10px; background: var(--sheet); border: 1px solid var(--rule); padding: 9px 12px 10px 0; }
+.chain::before { content: ""; grid-row: 1 / span 4; background: var(--cc); opacity: 0.25; }
+.chain[aria-pressed="true"] { border-color: var(--cc); box-shadow: inset 0 0 0 1px var(--cc); }
+.chain[aria-pressed="true"]::before { opacity: 1; }
+.chain:focus-visible { outline: 2px solid var(--cc); outline-offset: 2px; }
+.chain .cn1 { font: 600 14px/1.3 var(--font-display); color: var(--ink); }
+.chain .cn1 i { font: 500 11px/1 var(--font-mono); font-style: normal; color: var(--cc); margin-right: 6px; }
+.chain .cn2 { font: 500 12.5px/1.5 var(--font-zh); color: var(--muted); }
+.chain .ck { font-size: 12.5px; line-height: 1.45; color: var(--ink); margin-top: 4px; }
+.chain .ck .zh { display: block; color: var(--muted); font-size: 12px; }
+.chain .cr { font: 400 11px/1.4 var(--font-mono); color: var(--muted); margin-top: 4px; }
+.chain.dfr { border-style: dashed; }
+.chainbar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 13px; color: var(--muted); }
+.chainbar button { font: 500 12.5px/1 var(--font-body); color: var(--ink); background: var(--sheet); border: 1px solid var(--rule); padding: 7px 10px; cursor: pointer; }
+.chainbar button:hover { border-color: var(--ink); }
+.focus .edge, .focus .tag, .focus .node { transition: opacity 0.2s; }
+.focus .edge:not(.on) { opacity: 0.14; }
+.focus .tag:not(.on) { opacity: 0.25; }
+.focus .node:not(.on) { opacity: 0.32; }
+.flow { fill: none; stroke-width: 3.4; stroke-linecap: round; stroke-dasharray: 1 11; animation: flow 0.9s linear infinite; }
+.flowbed { fill: none; stroke-width: 6; stroke-opacity: 0.16; }
+@keyframes flow { to { stroke-dashoffset: -12; } }
+@media (prefers-reduced-motion: reduce) { .flow { animation: none; stroke-dasharray: 6 4; } .focus .edge, .focus .tag, .focus .node { transition: none; } }
+/* data tiers (semantic: T1 good → T4 weak) and knockout contributions */
+:root { --t1: #2b8a3e; --t2: #1c7ed6; --t3: #e67700; --t4: #c92a2a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --t1: #69db7c; --t2: #74c0fc; --t3: #ffc078; --t4: #ff8787; } }
+:root[data-theme="dark"] { --t1: #69db7c; --t2: #74c0fc; --t3: #ffc078; --t4: #ff8787; }
+.tier rect { stroke: none; }
+.tier text { font: 600 9px var(--font-mono); fill: var(--paper); }
+.ctb { font: 600 9.5px var(--font-mono); fill: var(--ink); paint-order: stroke; stroke: var(--sheet); stroke-width: 3px; }
+.ctb.neg { fill: var(--l-water); }
+.ctb.zero { fill: var(--muted); font-weight: 400; }
+.hide-ctb .ctb { display: none; }
+.hide-tier .tier { display: none; }
+.maptools .tk { display: inline-flex; gap: 4px; align-items: center; font: 500 11px var(--font-mono); }
+.maptools .tk b { color: var(--paper); padding: 1px 4px; font-weight: 600; }
+.maptools select { font: inherit; color: var(--ink); background: var(--sheet); border: 1px solid var(--rule); padding: 3px 6px; }
+.ctbnote { font-size: 12.5px; color: var(--muted); max-width: 120ch; }
+.ctbnote .zh { display: block; }
+@media (max-width: 900px) { .chains { grid-template-columns: 1fr 1fr; } }
+.extra { display: grid; gap: 18px; }
+.extra h3 { margin: 0; font: 600 16px/1.3 var(--font-display); }
+.extra h3 .zh { font: 500 13.5px/1.3 var(--font-zh); color: var(--muted); margin-left: 8px; }
+.extra p { margin: 0; font-size: 13px; color: var(--muted); max-width: 120ch; }
+.extra p .zh { display: block; }
+.tblwrap { overflow-x: auto; border: 1px solid var(--rule); background: var(--sheet); }
+.extra table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+.extra th, .extra td { padding: 6px 10px; border-bottom: 1px solid var(--rule); text-align: right; white-space: nowrap; }
+.extra th:first-child, .extra td:first-child { text-align: left; white-space: normal; }
+.extra th { font: 600 11.5px/1.3 var(--font-body); color: var(--muted); }
+@media (max-width: 480px) { .chains { grid-template-columns: 1fr; } }
+
+@media (max-width: 900px) {
+  .card { grid-template-columns: 1fr; }
+  .fig { border-right: 0; border-bottom: 1px solid var(--rule); }
+  .card.def .fig { border-bottom-style: dashed; }
+  .fig svg { max-width: 420px; }
+  .intro, .text2, .changes { grid-template-columns: 1fr; }
+  .howto { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .howto { grid-template-columns: 1fr; }
+  .meta { grid-template-columns: 1fr; }
+  .rid .st { margin-left: 0; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Nashville heat-cascade digital twin · core skeleton · 26 relation lines · Davidson County · structure of 2026-11-10</div>
+    <h1>Heat Twin Relation Atlas<span class="zh">热浪孪生关系图解</span></h1>
+    <div class="intro">
+      <p>Every arrow in the twin, one card at a time, organised around two lines that both end in time to care. Line A: power, water and transport failures disrupt medical facilities and the trip to them. Line B: heat raises heat-related illness and the number of people who need care. Each card says why the line matters, what it does, the equation, its parameters, the evidence and the 2,000-run result.</p>
+      <p class="zh">孪生模型中的每一条关系线，逐条说明，并围绕两条最终都落到"就医时间"的主线组织。A 线：电、水、交通的失效影响医疗设施和去医疗设施的路程。B 线：高温使热相关病症和需要就医的人数增加。每张卡片说明为什么重要、它做什么、公式、参数、依据和 2,000 次运行的结果。</p>
+    </div>
+    <div class="howto">
+      <div><b>R01–R26</b>Relation line, numbered along the causal chain.<span class="zh">关系线编号，按因果顺序排列。</span></div>
+      <div><b>K1–K9</b>Line A and the grid, running in the model.<span class="zh">A 线与电网主线，已在模型中运行。</span></div>
+      <div><b>K10</b>Line B v1, simulated with T4 waiting assumptions.<span class="zh">B 线第一版，已模拟；等待部分依赖 T4 假设。</span></div>
+      <div><b>D1–D2</b>Deferred detail, dashed. Code is kept.<span class="zh">暂缓的细节（虚线），代码保留。</span></div>
+    </div>
+    <div class="changes">
+      <b>Revision 2026-11-11</b>
+      <p>The model now covers the whole of Davidson County (702k people, 159 substations, 112 zones, 12 hospitals, 20 dialysis centres) instead of the downtown box, and line B runs as version 1: heat-illness visits calibrated on Tennessee ED data, nursing-home residents and electricity-dependent residents, ending in ED waiting. Time to care = travel (line A) + waiting (line B).</p>
+      <p class="zh">模型范围从市中心扩到 Davidson 全县（70.2 万人、159 座变电站、112 个分区、12 家医院、20 家透析中心）；B 线第一版已运行：热病症就诊按田纳西急诊数据校准，加上养老院住户和依赖电力设备的居民，最终落到急诊等待。就医时间 = 路程（A 线）+ 等待（B 线）。</p>
+    </div>
+    <div class="changes">
+      <b>Revision 2026-11-10</b>
+      <p>The climate layer keeps two nodes: background climate (air temperature, land surface temperature and river temperature; the model uses the current records until the complete historical package arrives) and urban base information. Economic loss and the pavement rutting cost pathway are paused. Hospitals, nursing homes and dialysis centres merge into one medical-facility node. Two lines, A and B, end in time to care per ED visit (added travel plus added waiting on the peak day).</p>
+      <p class="zh">气候层只保留两个节点：背景气候（气温、地表温度、河温；拿到完整历史数据包之前，模型继续用现有记录）和城市基础信息。经济损失和路面车辙成本暂不考虑。医院、养老院、透析中心合并为"医疗设施"。A、B 两条主线都以就医时间为综合评定指标。</p>
+    </div>
+  </header>
+
+  <nav class="index" id="index" aria-label="Sections"></nav>
+
+  <main id="groups" style="display:grid;gap:40px"></main>
+
+  <section class="mapsec" id="map">
+    <div class="ghead">
+      <span class="gk" style="color:var(--ink)">Map</span>
+      <h2>Complete relation map and chain layers<span class="zh">完整关系图与关系链图层</span></h2>
+      <p>The swim lanes hold every relation (climate, power, transportation, water, health outcomes). On top sit the two lines as layers: line A and its power, water and transport branches, and line B with its outdoor and outage-driven branches. Turn layers on to light their paths and watch the flow. Select a number on the map to open its card.<span class="zh">泳道中是全部关系（气候、电力、交通、供水、健康结局）。上面叠加两条主线的图层：A 线及其电、水、交通分支，B 线及其室外高温与停电两条分支。打开图层即点亮路径并显示流向。点击图上编号可跳到对应卡片。</span></p>
+    </div>
+    <div class="chainsets" id="chains" role="group" aria-label="Chain layers"></div>
+    <div class="chainbar">
+      <button type="button" id="ch-all">Show all layers · 全部图层</button>
+      <button type="button" id="ch-none">Clear layers, show every relation · 清除图层</button>
+      <span>Click a layer to toggle it. · 点击图层切换显示。</span>
+    </div>
+    <div class="maptools">
+      <label for="show-d"><input type="checkbox" id="show-d" checked> Show deferred details <span class="zh">显示暂缓细节</span></label>
+      <span class="k"><i></i>core link 主线</span>
+      <span class="k"><i class="p"></i>to build 待建</span>
+      <span class="k"><i class="d"></i>deferred 暂缓</span>
+    </div>
+    <div class="maptools" id="ctbtools">
+      <label for="show-ctb"><input type="checkbox" id="show-ctb" checked> Contribution on lines <span class="zh">线上贡献度</span></label>
+      <label for="ctb-scen">Scenario 情景 <select id="ctb-scen"><option value="+4">+4 °C</option><option value="+2">+2 °C</option></select></label>
+      <label for="show-tier"><input type="checkbox" id="show-tier" checked> Data tier on modules <span class="zh">模块数据分级</span></label>
+      <span class="tk"><b style="background:var(--t1)">T1</b>dataset</span><span class="tk"><b style="background:var(--t2)">T2</b>authoritative</span>
+      <span class="tk"><b style="background:var(--t3)">T3</b>derived</span><span class="tk"><b style="background:var(--t4)">T4</b>placeholder</span>
+    </div>
+    <p class="ctbnote" id="ctbnote"></p>
+    <figure class="mapfig">
+      <div class="mapbox" id="mapbox"></div>
+      <figcaption>Background climate and urban base information set local temperature. Line A: heat overloads the grid, zone outages cut medical facilities directly and through water, and dark signals slow the trip, so time to care rises. Line B: heat exposure outdoors and in homes that lose cooling raises heat-related illness and the number of people seeking care, which also lengthens time to care.
+        <span class="zh">背景气候与城市基础信息决定本地气温。A 线：高温使电网过载，分区停电直接或通过供水影响医疗设施，信号灯熄灭使路程变慢，就医时间增加。B 线：室外高温以及停电后失去制冷的室内高温，使热相关病症和就医人数增加，同样拉长就医时间。</span></figcaption>
+    </figure>
+    <div class="extra" id="extra"></div>
+  </section>
+</div>
+
+<script>
+(function () {
+  // CONTRIB is filled from site/data/twin/core/contrib.json (pipeline.contrib)
+  const CONTRIB = null, CONTRIB_NOTE = "", SUMMARY = null, VARIANTS = null, HEATWAVES = null;   // filled by scripts/build_atlas.py
+  // ---- result helpers: numbers on cards are read from SUMMARY (site/data/twin/core/summary.json) at load time
+  const SC = ["+0", "+2", "+4"];
+  const sv = (s, k, st = "mean") => {
+    const v = SUMMARY && SUMMARY.scenarios[s] ? SUMMARY.scenarios[s][k] : null;
+    return v == null ? null : (typeof v === "object" ? v[st] : v);
+  };
+  const av = (s, path) => path.reduce((o, k) => (o == null ? null : o[k]), SUMMARY && SUMMARY.scenarios[s] ? SUMMARY.scenarios[s].access : null);
+  const fmt = v => {
+    if (v == null || Number.isNaN(v)) return "—";
+    const a = Math.abs(v);
+    if (a >= 1e6) return (v / 1e6).toFixed(a >= 1e7 ? 1 : 2) + "M";
+    if (a >= 1e4) return Math.round(v / 1e3) + "k";
+    if (a >= 1e3) return (v / 1e3).toFixed(1) + "k";
+    if (a >= 10) return String(Math.round(v));
+    if (a >= 1) return v.toFixed(1);
+    return v.toFixed(2);
+  };
+  const pc = v => v == null ? "—" : ((v * 100 < 1 && v > 0) ? (v * 100).toFixed(2) : (v * 100).toFixed(1).replace(/\.0$/, "")) + "%";
+  const tri = (k, st = "mean", f = fmt) => SC.map(s => f(sv(s, k, st))).join(" / ");
+  const sens = (param, col) => { const r = SUMMARY && SUMMARY.sensitivity.find(x => x.param === param); return r ? r[col] : "—"; };
+  const full = s => SUMMARY && SUMMARY.full_model ? SUMMARY.full_model.scenarios[s].pop_hours : null;
+  const resText = v => typeof v === "function" ? (SUMMARY ? v() : "Run scripts/build_atlas.py to fill in results.") : v;
+  const SYS = {
+    climate: { en: "Climate", zh: "气候", lane: "CLIMATE" }, power: { en: "Power", zh: "电力", lane: "POWER" },
+    transport: { en: "Transportation", zh: "交通", lane: "TRANSPORT" }, water: { en: "Water", zh: "供水", lane: "WATER" },
+    health: { en: "Health outcomes", zh: "健康结局", lane: "HEALTH" },
+  };
+  // short bilingual node names, system, map column, map row key, style (1 deferred, 2 to build)
+  const NODE = {
+    bg: ["Background climate", "背景气候", "climate", 0, "cl"], urban: ["Urban base info", "城市基础信息", "climate", 1, "cl"],
+    load: ["Electric load", "用电负荷", "power", 1, "pa"], hotspot: ["Hot spot θH", "变压器热点温度", "power", 2, "pa"],
+    failure: ["Thermal failure", "变电站热失效", "power", 3, "pa"], topo: ["Supply dependency", "供电依赖", "power", 4, "pa"],
+    zone: ["Zone outage", "分区停电", "power", 5, "pa"],
+    river: ["River derate", "河温降额", "power", 0, "pb", 1], margin: ["TVA supply margin", "系统供需裕度", "power", 1, "pb"],
+    shed: ["Rotating outages", "轮流停电", "power", 2, "pb"], overload: ["Peer overload", "过载转移", "power", 3, "pb", 1],
+    signals: ["Traffic signals", "信号灯", "transport", 6, "tr"], capacity: ["Link capacity", "路段通行能力", "transport", 7, "tr"],
+    travel: ["Travel time", "路段行程时间", "transport", 8, "tr"],
+    plant: ["Water plants", "水厂", "water", 6, "wa"], storage: ["Storage", "储水", "water", 7, "wa"],
+    wservice: ["Water service", "供水服务", "water", 8, "wa"],
+    indoor: ["Indoor temp", "室内温度", "health", 1, "ha"], facility: ["Medical facilities", "医疗设施", "health", 8, "ha"],
+    access: ["Time to care", "就医时间", "health", 9, "ha"],
+    pop: ["Population", "分区人口", "health", 0, "hb"], exposure: ["Heat exposure", "高温暴露", "health", 1, "hb"],
+    illness: ["Heat illness · demand", "热病症与就医需求", "health", 2, "hb"],
+  };
+  const GROUPS = [
+    ["K1", "climate", "Background climate + urban base → local temperature", "背景气候 + 城市基础信息 → 本地气温", "Every later link is driven by local temperature, built from the regional record and the city's own heat pattern.", "后面每一环都由本地气温驱动，它由区域气候记录和城市自身的热分布共同决定。"],
+    ["K2", "power", "Local temperature → electric load", "本地气温 → 用电负荷", "Peak demand rises with temperature; this is the first step of every heat–grid pathway.", "峰值负荷随气温上升，是所有高温–电网路径的第一步。"],
+    ["K3", "power", "Hot spot → substation thermal failure", "热点温度 → 变电站热失效", "Heat lowers equipment margin while load rises; IEEE C57.91 turns both into insulation stress.", "高温降低设备裕度、同时推高负荷；IEEE C57.91 把两者转换为绝缘热应力。"],
+    ["K4", "power", "System shortfall → rotating outages", "系统供需缺口 → 轮流停电", "Rising demand erodes the reserve margin; only the demand side is kept in the core.", "负荷上升吃掉备用容量；骨架只保留负荷侧。"],
+    ["K5", "power", "Supply dependency → zone outage", "供电依赖 → 分区停电", "A station with no energised source loses power, which turns equipment failures into customer outages.", "上游电源全部失电的变电站随之失电，这一步把设备失效变成用户停电。"],
+    ["K6", "water", "Plant power → storage → water service", "水厂供电 → 储水 → 供水服务", "Treatment and pumping depend on electricity; storage buys hours.", "制水和加压依赖电力，储水提供数小时缓冲。"],
+    ["K7", "health", "Line A · power and water → medical facilities", "A 线 · 电与水 → 医疗设施", "Hospitals, nursing homes and dialysis centres as one facility layer, each with its own backup rule.", "医院、养老院、透析中心合并为一个设施层，各自保留自己的备用规则。"],
+    ["K8", "transport", "Line A · transport and closures → time to care", "A 线 · 交通与设施关闭 → 就医时间", "Dark signals slow the trip and closed facilities lengthen it; both add to time to care.", "信号灯熄灭使路程变慢，设施关闭使路程变长，两者都增加就医时间。"],
+    ["K9", "health", "Loss of cooling → indoor heat → heat exposure", "失去制冷 → 室内高温 → 高温暴露", "A blackout during a heat wave harms people through indoor temperature once cooling is lost (Stone et al. 2023).", "热浪中的停电通过失去制冷后的室内温度伤害人群（Stone 等 2023）。"],
+    ["K10", "health", "Line B v1 · heat illness and care demand → time to care", "B 线第一版 · 热病症与就医需求 → 就医时间", "Simulated since 2026-11-10: heat illness, nursing-home residents who lose cooling and electricity-dependent residents bring more people to the same emergency departments, which lengthens waiting and so time to care.", "2026-11-10 起已模拟：热病症、失去制冷的养老院住户和依赖电力设备的居民，使更多人去同样的急诊就医，等待变长，就医时间随之增加。"],
+    ["D1", "power", "Peer overload transfer", "过载转移", "Deferred: topological redistribution can misstate grid vulnerability; returns as DC power flow.", "暂缓：纯拓扑的负荷重分配可能误判电网脆弱性；以后以直流潮流形式加回。"],
+    ["D2", "power", "River-temperature derate", "河温降额", "Deferred: the modelled Cumberland never reached the derating threshold in 2014–2025.", "暂缓：2014–2025 年模拟的坎伯兰河水温从未达到降额阈值。"],
+  ];
+
+  // one object per relation line; edges are [from, to] pairs drawn on the map
+  const R = [
+    { id: "R01", g: "K1", edges: [["bg", "urban"]], title: ["Background climate × urban base → local temperature", "背景气候 × 城市基础信息 → 本地气温"], kind: "offset",
+      why: ["Load, hot spot and indoor temperature all scale with local temperature, and zones differ from the airport by −2.8 to +0.9 °C. The regional record sets the timing; the city's own heat pattern sets where it is hottest.", "负荷、变压器热点和室内温度都随本地气温变化，而各分区与机场相差 −2.8 到 +0.9 °C。区域气候记录决定什么时候热，城市自身的热分布决定哪里最热。"],
+      zh: "背景气候提供逐小时序列：目前是 BNA 机场 2014–2025 年气温、2023 年地表温度和模拟河温，拿到完整历史数据包后替换。城市基础信息提供空间分布：2022 年走航测温的岭回归距平（按早、午、晚插值），以后可加入土地覆盖和建筑形态。两者相加得到每个变电站和分区的本地气温。",
+      en: "Background climate gives the hourly series: for now BNA airport air temperature 2014–2025, 2023 land surface temperature and modelled river temperature, to be replaced by the complete historical package. Urban base information gives the spatial pattern: the ridge-regression anomaly from the 2022 traverse (interpolated by morning, afternoon and evening), later with land cover and building form. Their sum is the local temperature at each substation and zone.",
+      eq: "θA(x,t) = θBG(t) + ΔT + A(x,h) − A(xBNA,h)", par: "ΔT ∈ {0, 2, 4} °C · CV RMSE 0.44–0.66 °C · station offsets −2.8 to +0.9 °C",
+      ev: "Shandas et al. 2019; Ho et al. 2014", res: "Full model (2026-10-30): +11% person-hours without power compared with one airport temperature for the whole city.",
+      cap: ["Illustrative diurnal curve of the background series, with the +2 and +4 °C scenarios and a location 3 °C cooler.", "背景序列的示意日变化，以及 +2、+4 °C 情景和一个低 3 °C 的位置。"] },
+    { id: "R02", g: "K2", edges: [["urban", "load"]], title: ["Local temperature → electric load", "本地气温 → 用电负荷"], kind: "linear",
+      why: ["Load is how heat reaches both transformer stress and the system margin. The design loading K_design is the single most influential parameter in the core (ρ = 0.44 with person-hours without power).", "负荷是高温传到变压器应力和系统裕度的共同入口。设计负荷率 K_design 是骨架中影响最大的参数（与停电人·小时的 ρ = 0.44）。"],
+      zh: "气温超过阈值 T0 后，负荷按斜率 β 线性上升。变压器的标幺负荷 K 以设计温度 Td 时等于 K_design 来归一。",
+      en: "Above the threshold T0, load rises linearly with slope β. Per-unit transformer loading K is normalised so that K equals K_design at the design temperature Td.",
+      eq: "m(T) = 1 + β · max(0, T − T0)\nK = K_design · m(T) / m(Td)", par: "β 0.0166 / 0.0238 / 0.0381 per °F · T0 75 °F · Td 93 / 95 / 97 °F · K_design 0.70 / 0.85 / 1.00 (assumption)",
+      ev: "Auffhammer et al. 2017; Bartos et al. 2016; EIA-861M Tennessee fit (cascading-heat)", res: () => `K_design: ρ = ${sens("C-P1.Kd", "pop_hours")} with person-hours without power; still a placeholder pending NES loading data.`,
+      cap: ["Load multiplier m(T) at the low, mid and high slope.", "低、中、高三种斜率下的负荷倍数 m(T)。"] },
+    { id: "R03", g: "K3", edges: [["urban", "hotspot"], ["load", "hotspot"]], title: ["Ambient + load → hot spot", "环境气温 + 负荷 → 热点温度"], kind: "stack",
+      why: ["Heat hits a transformer twice: ambient air adds one for one to the hot spot, and the same heat raises the load that drives the oil and winding rise. Insulation ageing roughly doubles for every 6 K above the 110 °C rating.", "高温对变压器是双重打击：环境气温一比一加到热点上，同时推高负荷，使油温和绕组温升增加。热点超过 110 °C 额定值后，每升高约 6 K 绝缘老化速度约翻一倍。"],
+      zh: "热点温度等于环境气温加顶油温升加绕组热点梯度。顶油温升随标幺负荷非线性增加，并以时间常数 τ_TO 一阶滞后；热点梯度按 K 的 2m 次方增加。",
+      en: "Hot-spot temperature is ambient air plus top-oil rise plus the winding gradient. Top-oil rise grows non-linearly with per-unit load and follows it with a first-order lag τ_TO; the hot-spot gradient grows as K to the power 2m.",
+      eq: "θH = θA + ΔθTO + ΔθH\nΔθTO,U = ΔθTO,R · [(K²R + 1)/(R + 1)]ⁿ,  ΔθTO(t) = ΔθTO(t−1) + (ΔθTO,U − ΔθTO(t−1))(1 − e^(−1/τ))\nΔθH = ΔθH,R · K^(2m)",
+      par: "ΔθTO,R 50 / 55 / 60 K · ΔθH,R 20 / 25 / 30 K · R 3.0 / 4.5 / 6.0 · n = m = 0.8 · τ_TO 2 / 3 / 4 h", ev: "IEEE C57.91-2011; Bartos et al. 2016", res: null,
+      cap: ["Hot-spot build-up at K = 0.85 for ambient 33 °C and 37 °C, against the 140 °C failure median.", "K = 0.85 时，环境 33 °C 与 37 °C 下的热点温度组成，对照 140 °C 的失效中位数。"] },
+    { id: "R04", g: "K3", edges: [["hotspot", "failure"]], kind: "probit",
+      why: ["This is where temperature becomes equipment failure, the main source of outages in the core. Its median θ50 and spread σ are placeholders ranked second and third in sensitivity; no public fragility fitted to U.S. utility data exists.", "温度在这里变成设备失效，是骨架中停电的主要来源。中位数 θ50 和离散度 σ 都是占位值，敏感性排第二、第三；目前没有基于美国电力公司数据拟合的公开易损性曲线。"],
+      zh: "每小时的热失效概率是热点温度的正态累积分布函数（概率单位脆弱性曲线）。",
+      en: "The hourly probability of thermal failure is a normal CDF of hot-spot temperature (probit fragility).",
+      eq: "p(t) = Φ((θH(t) − θ50) / σ)", par: "θ50 130 / 140 / 150 °C · σ 5 / 8 / 12 K (both assumptions)",
+      ev: "Shinozuka et al. 2000; IEEE C57.91-2011", res: () => `Thermal failures per run: ${tri("thermal")} at +0 / +2 / +4 °C.`,
+      cap: ["Hourly failure probability with θ50 = 140 °C (solid) and 130 / 150 °C (dashed).", "θ50 = 140 °C（实线）与 130 / 150 °C（虚线）下的每小时失效概率。"] },
+    { id: "R05", g: "K4", edges: [["load", "margin"]], kind: "scale",
+      why: ["Heat waves are regional: the TVA system peaks in the same hours as Nashville, so local load and the system-wide margin are squeezed together.", "热浪是区域性的：TVA 全系统与 Nashville 在同一时段达到峰值，本地负荷和全系统裕度同时被挤压。"],
+      zh: "情景升温按同一负荷斜率放大 TVA 实测的逐小时负荷（EIA-930）。",
+      en: "Scenario warming scales TVA's observed hourly load (EIA-930) with the same load slope.",
+      eq: "L′(t) = L(t) · m(T + ΔT) / m(T)", par: "β as in R02 · TVA summer peaks 2015–2025: 28,764–32,126 MW",
+      ev: "Auffhammer et al. 2017; EIA-930", res: null,
+      cap: ["Load scaling factor versus observed air temperature for +2 and +4 °C.", "+2 与 +4 °C 情景下，负荷放大倍数随实测气温的变化。"] },
+    { id: "R06", g: "K4", edges: [["margin", "shed"], ["shed", "topo"]], title: ["Shortfall → rotating outages → stations", "供需缺口 → 轮流停电 → 变电站"], kind: "shortfall",
+      why: ["Rotating outages are the system-wide failure mode: TVA ordered rolling blackouts for the first time in December 2022. With sourced imports a summer shortfall appears only in 4% of +4 °C runs, but when it does it cuts many zones at once.", "轮流停电是全系统层面的失效方式：TVA 在 2022 年 12 月首次下令轮流停电。按有出处的进口能力，夏季缺口只出现在 4% 的 +4 °C 运行中，但一旦出现就同时影响很多分区。"],
+      zh: "可用容量等于夏季容量乘以可用率再加进口能力；负荷超过它的部分按比例切除。缺口小时内，每个直接供电的变电站以概率 s(t) 被切除；被切除不算失效，也不进入修复。",
+      en: "Available supply is summer capacity times availability plus imports; load above it is shed pro rata. In a shortfall hour each serving substation is shed with probability s(t); a shed station is not a failure and needs no repair.",
+      eq: "s(t) = max(0, L′(t) − (a · Csys + Pimp)) / L′(t),   Csys = 38,472 MW\nshed_s(t) ~ Bernoulli(s(t)),   serving stations only",
+      par: "a 0.83 / 0.90 / 0.95 · Pimp 1,000 / 4,000 / 6,900 MW", ev: "NERC Summer Reliability Assessments 2022–2026; EIA-930; NERC ITCS 2024; TVA 10-K",
+      res: () => `Runs with a TVA shortfall: ${SC.map(s => pc(sv(s, "runs_with_shed"))).join(" / ")}.`,
+      cap: ["Peak day: the observed 32,126 MW scaled for +4 °C stays below mid supply (38,625 MW) and exceeds only the low case (32,932 MW, shaded).", "峰值日：实测 32,126 MW 按 +4 °C 放大后低于中值可用容量 38,625 MW，只超过低值 32,932 MW（阴影）。"] },
+    { id: "R07", g: "K5", edges: [["failure", "topo"]], title: ["Failure → out for repair", "热失效 → 停运修复"], kind: "repair",
+      why: ["Outage duration, not the number of failures, sets harm. EAGLE-I gives a median of 1.4 h for large non-storm outages, and NES's own CAIDI without major events is 68–86 min (EIA-861, 2015–2024): two independent sources agree.", "决定危害的是停电时长，而不是失效次数。EAGLE-I 显示非风暴大停电的中位时长为 1.4 小时，NES 自己报告的不含重大事件的平均恢复时间（CAIDI）为 68–86 分钟（EIA-861，2015–2024），两个独立来源一致。"],
+      zh: "热失效的变电站停运固定的修复时长 R，期间从电网拓扑中移除。R 取用户恢复供电的时长（包含倒闸转供），不是设备修好的时长。",
+      en: "A thermally failed substation is out for a fixed repair time R and is removed from the topology meanwhile. R is customer restoration time (including switching), not equipment repair time.",
+      eq: "f_s(t) = 1   for t ∈ [t_fail, t_fail + R)", par: "R 1 / 3 / 12 h (EAGLE-I Davidson 2015–2025; NES CAIDI 1.1–1.4 h)",
+      ev: "EAGLE-I (Tansakul et al. 2023); EIA-861 reliability file", res: () => `Sensitivity of indoor exposure from outages to R: ρ = ${sens("C-P6", "indoor_outage_pop_hours")}.`,
+      cap: ["A failure at 05:00 with R = 3 h; the bracket shows the 1–12 h range.", "05:00 失效、R = 3 h；括号表示 1–12 h 的取值范围。"] },
+    { id: "R08", g: "K5", edges: [["topo", "zone"]], kind: "tree",
+      why: ["This step turns equipment state into people without power. One failed transmission station can black out every zone it feeds, which is the grid's own cascade.", "这一步把设备状态变成停电的人。一座输电站失效可以让它供电的所有分区失电，这是电网内部的级联。"],
+      zh: "变电站带电的条件：自身没有失效或被切除，且至少一个上级电源带电（没有上级的站接外部电网）。分区的状态跟随它的供电站。",
+      en: "A substation is energised when it has not failed or been shed and at least one upstream source is energised; stations with no upstream edge are fed by the external grid. A zone follows its serving station.",
+      eq: "e_s = ¬f_s ∧ ¬shed_s ∧ (no upstream ∨ ⋁_{u→s} e_u)\nd_z = ¬e_s(z)", par: "159 substations · 234 supply edges · 112 service zones (Davidson County)",
+      ev: "Buldyrev et al. 2010; Rinaldi et al. 2001", res: () => `Person-hours without power: ${tri("pop_hours")} (full model ${SC.map(s => fmt(full(s))).join(" / ")}).`,
+      cap: ["One failed transmission station de-energises the two stations it feeds; a station with a second energised source stays up.", "一座输电站失效使它供电的两座站失电；有另一路带电电源的站保持带电。"] },
+    { id: "R09", g: "K6", edges: [["zone", "plant"]], kind: "and:Zone out|Backup fails · p 0.05",
+      why: ["Treatment and high-service pumping are the water system's main dependency on power. Both Metro plants have four standby generators, so this line rarely fires, and that is itself a finding.", "制水和高压泵送是供水系统对电力的主要依赖。Metro 两座水厂各有 4 台备用发电机，所以这条线很少触发，这本身就是一个结论。"],
+      zh: "水厂由所在分区供电；分区停电时，备用电源在每次停电开始时以概率 p 失效。",
+      en: "A water plant is powered by its zone; when the zone goes out, standby power fails with probability p, drawn at the start of each outage.",
+      eq: "plant_out = d_z ∧ B,   B ~ Bernoulli(p) per outage episode", par: "p 0.02 / 0.05 / 0.15",
+      ev: "Metro Water Services FY2024 disclosure; Marqusee & Jenket 2020", res: null,
+      cap: ["AND gate: the plant stops only if both inputs are true.", "与门：两个条件同时成立时水厂才停产。"] },
+    { id: "R10", g: "K6", edges: [["plant", "storage"], ["storage", "wservice"]], title: ["Plants out → storage → water service", "水厂停产 → 储水 → 供水服务"], kind: "storage",
+      why: ["Storage decides how long the city rides through a plant outage. The FY2024 in-service storage is 51.7 MG, about 9–11 h of demand (the 98.3 MG figure was a drafting error); no run lost water.", "储水决定城市在水厂停产后能撑多久。FY2024 在用储水为 51.7 MG，约合 9–11 小时用水量（98.3 MG 是年报的笔误）；没有一次运行出现断水。"],
+      zh: "所有水厂都停产后，水塔和有盖水库按小时消耗储水；只有所有水厂停产且储水耗尽时才断水。",
+      en: "Once every plant has stopped, towers and covered reservoirs drain hour by hour; water service is lost only when every plant is out and storage is exhausted.",
+      eq: "S(t) = S(t−1) − 1 h while all plants are out;   S = h_s otherwise\nw_out = (⋀_k plant_out_k) ∧ (S < 0)", par: "h_s 5 / 10 / 18 h (revised 2026-11-10 from 6 / 12 / 24 h)",
+      ev: "Metro Water Services FY2024 disclosure; MWS commercial-paper memorandum Dec 2025; Klise et al. 2017", res: () => `Water-out hours per run: ${tri("water_out_hours")}.`,
+      cap: ["All plants stop at hour 2; 12 h of storage runs out at hour 14.", "第 2 小时所有水厂停产；12 h 的储水在第 14 小时耗尽。"] },
+    { id: "R11", g: "K7", edges: [["zone", "facility"]], title: ["Zone outage → medical facilities", "分区停电 → 医疗设施"], kind: "and:Zone out|Backup fails",
+      why: ["Facilities are where both lines meet. Hospitals treat heat illness; nursing homes house the residents least able to cope with heat (20 homes, 2,396 beds in Davidson); dialysis patients cannot skip treatment (19 centres, 360 stations). Each type keeps its own backup rule inside one layer.", "医疗设施是两条主线的交汇点。医院救治热病症；养老院住着最难应对高温的人（Davidson 有 20 家、2,396 张床）；透析病人不能停治疗（19 家中心、360 个透析位）。三类设施合为一层，但各自保留自己的备用规则。"],
+      zh: "设施在分区停电且备用失效时失去功能：医院按备用发电机失效概率；养老院按无法维持制冷的概率；透析中心没有备用，分区停电即停诊。",
+      en: "A facility loses function when its zone is out and backup fails: hospitals by generator failure probability, nursing homes by the probability that cooling is not maintained, dialysis centres with no backup, closing whenever the zone is out.",
+      eq: "y_f = d_z ∧ B_f,   B_f ~ Bernoulli(p_type)   (p_dialysis = 1)", par: "Hospitals 0.01 / 0.05 / 0.15 · nursing homes (cooling) 0.10 / 0.30 / 0.50 · dialysis 1",
+      ev: "CMS 2016; Marqusee & Jenket 2020; Irvin-Barnwell et al. 2020; HHS OIG 2026; Kelman et al. 2015; CMS provider data 2026", res: () => `Facility-hours lost per run: hospitals ${tri("hospital_hours")}; nursing homes ${tri("nursing_hours")}; dialysis ${tri("dialysis_hours")}.`,
+      cap: ["AND gate: a facility fails only if its zone is out and its backup does not hold.", "与门：分区停电且备用失效时，设施才失去功能。"] },
+    { id: "R12", g: "K7", edges: [["wservice", "facility"]], title: ["Water service → medical facilities", "供水服务 → 医疗设施"], kind: "and:Water out|On-site supply empty",
+      why: ["Dialysis uses about 120 L of treated water per session and stops at once; hospitals use about 300 gal per bed per day and need water for chillers and sterilisation, but hold on-site supply for days. In Texas 2021, water loss stopped hospital chillers and dialysis and moved 300 patients.", "透析每次用约 120 升处理过的水，断水即停；医院每床每天用水约 300 加仑，冷水机组和灭菌都离不开水，但有可撑数天的自备水。2021 年德州断水使医院冷水机组和透析停运，转移了约 300 名病人。"],
+      zh: "断水时透析中心立即停诊（串联依赖）；医院和养老院在自备供水用完后才受影响，目前不模拟，因为没有一次运行出现断水。",
+      en: "A water outage closes dialysis centres at once (series dependency); hospitals and nursing homes are affected only after their on-site supply runs out, which is not simulated because no run lost water.",
+      eq: "y_dialysis = d_z ∨ w_out\ny_hospital,water = w_out ∧ (on-site supply exhausted)   (not simulated)", par: "Dialysis: series · hospitals: ~300 gal/bed/day, on-site supply days (EPA; CDC/AWWA EWSP)",
+      ev: "Kelman et al. 2015; EPA WaterSense at Work 2024; CDC/EPA/AWWA EWSP guide 2019; ASPR TRACIE 2021", res: "Water never ran out, so this line added no closures.",
+      cap: ["AND gate for hospitals; dialysis closes on water loss alone.", "医院为与门；透析中心断水即停。"] },
+    { id: "R13", g: "K8", edges: [["zone", "signals"]], kind: "and:Zone out|No battery · p 0.90",
+      why: ["Signals are the transport system's direct dependency on the grid. Metro lists 592 signals; battery cabinets are confirmed only on the Lebanon Pike corridor, so a zone outage darkens nearly every intersection in it.", "信号灯是交通系统对电网的直接依赖。Metro 登记了 592 个信号灯，只有 Lebanon Pike 沿线确认装了电池柜，所以分区停电几乎会让区内所有路口熄灯。"],
+      zh: "信号灯所在分区停电、且没有可用电池备用时熄灭；是否有电池在每次运行开始时抽一次。",
+      en: "A signal goes dark when its zone is out and it has no working battery, drawn once per run.",
+      eq: "dark_g = d_z ∧ NB_g,   NB_g ~ Bernoulli(p_nb)", par: "p_nb 0.75 / 0.90 / 1.00 · battery runtime 2–8 h not modelled",
+      ev: "Metro open data (592 signals); WSMV news 2025–2026; NYSDOT C-06-08 (2009)", res: () => `Runs with degraded segments or facility closures: ${SC.map(s => pc(av(s, ["runs_with_degraded_segments"]))).join(" / ")}.`,
+      cap: ["AND gate with the mid share of signals without a working battery.", "与门，无可用电池的比例取中值。"] },
+    { id: "R14", g: "K8", edges: [["signals", "capacity"]], kind: "capacity",
+      why: ["A dark intersection runs as an all-way stop with roughly half the capacity. This is the mechanism by which a power outage reaches road travel.", "熄灯的路口按全向停车运行，通行能力约减半。停电正是通过这一步影响道路出行。"],
+      zh: "熄灭的信号灯按全向停车控制处理：30 m 内受控路段的通行能力乘以 φ_dark。",
+      en: "A dark signal operates as an all-way stop: segments within 30 m have their capacity multiplied by φ_dark.",
+      eq: "c′ = φ_dark · c,   c = lanes · c_lane(class)", par: "φ_dark 0.35 / 0.50 / 0.65 · c_lane 2,000 / 900 / 600 veh/h (freeway / arterial / local)",
+      ev: "French 1956; Kyte et al. 1994; Al-Kaisy & Doruk 2023; HCM 7th ed. 2022", res: null,
+      cap: ["Arterial lane capacity, signal working and dark (whisker: φ 0.35–0.65).", "干道单车道通行能力：信号正常与熄灭（误差线：φ 0.35–0.65）。"] },
+    { id: "R15", g: "K8", edges: [["capacity", "travel"]], kind: "bpr",
+      why: ["Delay grows with the fourth power of volume over capacity, so the same dark signal costs far more at the 17:00 peak than at night. That is why each run is evaluated at its worst hour.", "延误随流量与通行能力之比的四次方增长，同一个熄灯路口在 17:00 高峰的代价远大于夜间。所以每次运行取其最坏小时计算。"],
+      zh: "路段行程时间按 BPR 函数随流量与通行能力之比上升；流量等于 HPMS 年均日交通量乘以 TMAS 工作日小时比例。",
+      en: "Link travel time rises with the volume-to-capacity ratio through the BPR function; volume is HPMS AADT times the TMAS weekday hourly share.",
+      eq: "t = t0 · [1 + a · (v / (φ · c))^b],   v = AADT · η(h)", par: "a 0.15, b 4 · 22,328 road segments (69,707 directed edges) · AADT matched on 20.6%",
+      ev: "BPR 1964; HCM 7th ed. 2022", res: "Link delay only; all-way-stop delay at dark intersections is not included, so congestion is a lower bound.",
+      cap: ["Travel-time ratio t / t0 with normal capacity and with φ = 0.5.", "正常通行能力与 φ = 0.5 时的行程时间比 t / t0。"] },
+    { id: "R16", g: "K8", edges: [["travel", "access"]], title: ["Travel time → time to care", "路段行程时间 → 就医时间"], kind: "path",
+      why: ["Time to care is the shared endpoint of both lines, counted per ED visit on each run's peak day: added travel (rerouting from hospitals without power, congestion from dark signals) plus added waiting at per-hospital queues. Dialysis is reported separately as sessions affected.", "就医时间是两条主线的共同终点，按每次急诊就诊在高峰日计算：增加的路程（停电医院的病人改道、信号灯熄灭的拥堵）加上各医院排队增加的等待。透析单独报告受影响的次数。"],
+      zh: "从 14,602 个人口网格出发，用多源 Dijkstra 求到最近可用设施的时间；每次运行取其降级路段最多的小时，与同一小时的正常情况相减。",
+      en: "From 14,602 population cells, multi-source Dijkstra gives the time to the nearest open facility. Each run is evaluated at its hour with the most degraded segments and compared with the normal time at that hour.",
+      eq: "τ(c,k) = min over open f in F_k of SP(c, f)\nΔτ = τ(degraded) − τ(normal, same hour)", par: "Thresholds: hospital 15 min · dialysis 15 min · EMS 8 min",
+      ev: "Ouyang 2014", res: () => `Added travel per ED visit (rerouting and congestion): ${tri("ed_travel_increase_min")} min; congestion alone ${tri("ed_congestion_min")} min.`,
+      cap: ["A cell reaches the nearer of two facilities; a degraded link (dashed) lengthens one route.", "人口网格到较近的设施；降级路段（虚线）使其中一条路线变长。"] },
+    { id: "R17", g: "K8", edges: [["facility", "access"]], title: ["Closed facilities → rerouting", "设施关闭 → 改道"], kind: "reroute",
+      why: ["Closed facilities send patients to the next open one, the rerouting half of line A. With the whole county in the model, losing every dialysis centre at once is rare; it was common when the area was downtown only, which showed how much the boundary mattered.", "关闭的设施会让病人转去下一家开放的设施，这是 A 线的改道部分。研究区扩到全县后，透析中心同时全部关闭的情况很少见；只算市中心时这种情况很常见，说明研究区边界的影响很大。"],
+      zh: "失去功能的设施不再作为目的地，患者改去下一家可用设施；研究区内全部透析中心停诊时，记为无可用透析中心。",
+      en: "A facility that has lost function is removed as a destination and patients go to the next open one. When every dialysis centre in the area is closed, the run counts as no dialysis available.",
+      eq: "F_k(open) = F_k \\ { f : y_f = 1 }", par: "Davidson County: 12 hospitals, 20 dialysis centres (CMS: 19 centres, 360 stations)",
+      ev: "Kelman et al. 2015; CMS 2016; Ouyang 2014", res: () => `No dialysis centre available at the worst hour: ${SC.map(s => pc(av(s, ["dialysis", "runs_with_none_available"]))).join(" / ")} of runs; dialysis sessions affected per summer: ${tri("dialysis_sessions_affected")}.`,
+      cap: ["The nearest facility is closed, so the route diverts to the next one.", "最近的设施关闭，路线改到下一家。"] },
+    { id: "R18", g: "K9", edges: [["zone", "indoor"]], kind: "rc",
+      why: ["This is how an outage feeds line B: a home that loses cooling warms over hours. Stone et al. (2023) found a multiday blackout during a heat wave more than doubles heat deaths through this pathway. The building time constant τ_b ranks first in sensitivity for indoor exposure from outages.", "停电正是通过这一步进入 B 线：失去制冷的住户在几个小时内升温。Stone 等（2023）发现热浪中的多日停电通过这一途径使高温死亡增加一倍以上。建筑热时间常数 τ_b 对停电造成的室内暴露敏感性排第一。"],
+      zh: "有空调的住户在有电时保持设定温度；停电后，室内温度以热时间常数 τ_b 趋向平衡温度。",
+      en: "A home with AC holds its set point while powered; after power loss the indoor temperature relaxes toward the equilibrium with time constant τ_b.",
+      eq: "T_in(t) = T_eq(t) + [T_in(t−1) − T_eq(t)] · e^(−1/τ_b)   during an outage\nT_in(t) = T_set   otherwise",
+      par: "τ_b 5 / 12 / 40 h (literature-informed) · T_set 21 / 22.5 / 24.5 °C (RECS) · AC share 0.90 / 0.94 / 0.98 (RECS, LACE)",
+      ev: "Stone et al. 2023; Wijesuriya et al. 2024; Sun et al. 2020; EIA RECS 2020; NREL ResStock (Davidson housing stock)", res: () => `Highest indoor temperature in an AC home during an outage: ${SC.map(s => fmt(sv(s, "indoor_ac_max_c"))).join(" / ")} °C.`,
+      cap: ["Indoor temperature after power loss at hour 0, with T_eq = 36 °C and τ_b = 5, 12, 40 h.", "第 0 小时停电后的室内温度，T_eq = 36 °C，τ_b = 5、12、40 h。"] },
+    { id: "R19", g: "K9", edges: [["urban", "indoor"]], title: ["Local temperature → indoor equilibrium", "本地气温 → 室内平衡温度"], kind: "teq",
+      why: ["The indoor target follows local outdoor heat plus sun and internal gains, so homes in hotter neighbourhoods heat faster. The same line drives the 6% of homes without AC, which are exposed even with power.", "室内趋向的温度跟随本地室外气温，再加上日照和室内得热，所以较热街区的住户升温更快。同一条线也驱动 6% 没有空调的住户，他们即使有电也会暴露。"],
+      zh: "平衡温度等于分区本地气温加得热温升：白天（08:00–20:00）为 ΔT_gain，夜间为 1 K。无空调住户始终向它自由升降温。",
+      en: "The equilibrium is the zone's local air temperature plus a gain lift: ΔT_gain by day (08:00–20:00) and 1 K at night. Homes without AC always free-run toward it.",
+      eq: "T_eq(t) = θA(z,t) + ΔT_gain   08:00–20:00\nT_eq(t) = θA(z,t) + 1 K   otherwise", par: "ΔT_gain 2 / 4 / 7 K (read from simulation figures) · night 1 K fixed, likely low (5–7 K closed-window)",
+      ev: "Sun et al. 2020; Leigh et al. 2014", res: null,
+      cap: ["Illustrative outdoor day and the equilibrium it sets with ΔT_gain = 4 K.", "示意室外日变化，以及 ΔT_gain = 4 K 时对应的平衡温度。"] },
+    { id: "R20", g: "K9", edges: [["indoor", "exposure"], ["pop", "exposure"], ["urban", "exposure"]], title: ["Indoor and outdoor heat × population → heat exposure", "室内外高温 × 人口 → 高温暴露"], kind: "threshold",
+      why: ["Exposure is the input to line B. It counts person-hours above a heat threshold indoors (homes that lose cooling, homes without AC) and, to be added, outdoors, split by age and poverty. The 26 °C low threshold comes from a trial in adults aged 66–78.", "高温暴露是 B 线的输入。它统计超过高温阈值的人·小时：室内（停电失去制冷的住户、没有空调的住户），以及待加入的室外部分，并按年龄和贫困分组。26 °C 的低阈值来自 66–78 岁老人的对照试验。"],
+      zh: "室内温度达到阈值的小时计为室内高温暴露；有空调住户只在停电时可能达到。分区人口按面积从 ZCTA 分配。室外暴露（户外工作者、无家可归者）待加入。",
+      en: "An hour with indoor temperature at or above the threshold counts as indoor heat exposure; homes with AC can reach it only during outages. Zone population is allocated from ZCTAs by area. Outdoor exposure (outdoor workers, unsheltered people) is to be added.",
+      eq: "E_g = Σ_t Σ_z pop(z,g) · [f_AC · 1(d_z ∧ T_in ≥ T_thr) + (1 − f_AC) · 1(T_in,noAC ≥ T_thr)]", par: "T_thr 26 / 28 / 32 °C · 702,461 people · 89,379 aged 65+ · 98,031 below poverty (Davidson County)",
+      ev: "Meade et al. 2024; Huizenga et al. 2024; Stone et al. 2023; ACS 2020–2022", res: () => `From outages: ${tri("indoor_outage_pop_hours")} person-hours (aged 65+: ${tri("indoor_outage_elderly_hours")}); homes without AC: ${tri("indoor_no_ac_pop_hours")}.`,
+      cap: ["With τ_b = 12 h a home at 22.5 °C crosses 28 °C about 6 h after power loss; shaded hours count as exposure.", "τ_b = 12 h 时，22.5 °C 的住户停电约 6 小时后超过 28 °C；阴影部分计为暴露。"] },
+    { id: "R21", g: "K10", edges: [["exposure", "illness"]], title: ["Heat exposure → heat illness and care demand", "高温暴露 → 热病症与就医需求"], kind: "rr",
+      why: ["Line B starts here: hotter days bring more heat illness and more people to emergency departments, whether or not the power fails. Davidson County recorded 141–320 heat-illness ED visits a year in 2012–2023; outages during heat add to the risk (Anderson & Bell 2012; Stone et al. 2023).", "B 线从这里开始：无论是否停电，越热的日子热病症越多，去急诊的人越多。Davidson 县 2012–2023 年每年有 141–320 人次高温病症急诊；热浪中的停电会进一步增加风险（Anderson & Bell 2012；Stone 等 2023）。"],
+      zh: "第一版已模拟。每小时超额热病症就诊 = a + k × 当小时室内高温暴露人·小时（无空调住户、停电失去空调的住户、失去制冷的养老院住户）。k 和 a 用 Davidson 2014–2023 年每年的高温病症急诊人次，对同期模拟暴露（无停电）回归得到：R² 0.75，ρ 0.70。只有 10 个年度点，逐日关系仍需逐日急诊数据。",
+      en: "Simulated (v1). Excess heat-illness visits per hour = a + k × indoor heat person-hours that hour (homes without AC, homes that lose AC in outages, nursing-home residents who lose cooling). k and a come from regressing Davidson's annual heat-illness ED visits 2014–2023 on simulated exposure without outages: R² 0.75, ρ 0.70. Ten annual points; the daily relation still needs daily ED counts.",
+      eq: "v(t) = a + k · E(t)\nk = 4.3 × 10⁻⁶ visits per person-hour (SE 0.9 × 10⁻⁶),  a = 0.0086 per hour", par: "k 2.6 / 4.3 / 6.1 × 10⁻⁶ (C-H11, T2) · a 0.0086 per hour (C-H11.a, T2)",
+      ev: "Tennessee Dept. of Health heat-illness ED visits 2012–2023; pipeline.lineb calibrate; Gasparrini et al. 2015", res: () => `Excess heat-illness visits per summer (Jun–Aug): ${tri("heat_visits_excess")} at +0 / +2 / +4 °C.`,
+      cap: ["Placeholder relative risk without outage and with outage exposure (A = 2).", "占位相对风险：无停电，以及有停电暴露（A = 2）。"] },
+    { id: "R22", g: "K10", edges: [["illness", "access"]], title: ["Care demand → time to care", "就医需求 → 就医时间"], kind: "queue",
+      why: ["More patients at the same facilities mean longer waits, the part of time to care that line A cannot see. It also reacts to line A: closures raise the load on the facilities that stay open. Joining both lines in one measure lets their effects be compared and added.", "同样的医疗设施来了更多病人，等待就会变长，这是 A 线看不到的那部分就医时间。它也和 A 线相互作用：设施关闭会让仍在运营的设施负荷更高。两条线落到同一个指标上，作用才能比较和相加。"],
+      zh: "已模拟（2026-11-11 版）。取每次运行新增就诊最多的一天，按医院分别排队：每家医院的负荷 = 日常就诊 + 新增就诊（停电医院的病人按停电小时比例改去下一家），容量按开放比例折算，ρ_h 上限 0.95，等待 W_h = W0·ρ_h/(1−ρ_h)。每位就诊者与自己的正常路程和等待比较。ρ0、D0、W0 都是 T4 假设。",
+      en: "Simulated (2026-11-11 version). On each run's peak day of extra visits, queues are per hospital: load = normal visits + extra visits, with patients of hospitals without power moving to the next one in proportion to closed hours; capacity scales with the open share, ρ_h is capped at 0.95 and waiting W_h = W0·ρ_h/(1−ρ_h). Each visitor is compared with their own normal trip and wait. ρ0, D0 and W0 are T4 assumptions.",
+      eq: "ρ = ρ0 · (1 + ΔD / D0) / s_open,   ΔW = W0 · [ρ/(1 − ρ) − ρ0/(1 − ρ0)]\nT_care = Δτ_travel (line A) + ΔW", par: "ρ0 0.60 / 0.75 / 0.85 · D0 700 / 1,000 / 1,400 visits per day · W0 20 / 30 / 45 min (all T4)",
+      ev: "Queueing approximation; CMS provider data; assumptions to replace with hospital ED volumes and CMS ED timeliness measures", res: () => `Peak-day extra visits ${tri("peak_day_extra_visits")}. Added waiting per ED visit: median ${tri("wait_increase_min", "50")} min, p95 ${tri("wait_increase_min", "95")} min (mean ${tri("wait_increase_min")}).`,
+      cap: ["Illustrative: waiting time grows sharply as utilisation approaches 1; a heat day moves a facility from 0.75 to 0.85.", "示意：利用率接近 1 时等待时间急剧上升；高温日使设施从 0.75 升到 0.85。"] },
+    { id: "R23", g: "K10", edges: [["facility", "exposure"]], title: ["Nursing-home cooling loss → residents' heat exposure", "养老院失去制冷 → 住户高温暴露"], kind: "and:Zone out|Cooling not kept · p 0.30",
+      why: ["Nursing homes hold the residents least able to cope with heat: about 2,090 people a day in Davidson's 20 homes (CMS). When cooling is not kept during an outage, their exposure is the most dangerous in the city; in 2017 twelve residents of a Florida home died after cooling failed in Hurricane Irma. Today this loss reaches no outcome in the model.", "养老院住着最难应对高温的人：Davidson 20 家养老院每天约 2,090 名住户（CMS）。停电期间如果制冷没有维持，他们的暴露是全市最危险的；2017 年飓风 Irma 期间，佛罗里达一家养老院空调停运后有 12 名住户死亡。目前模型中这一损失没有传到任何结局。"],
+      zh: "第一版已模拟。养老院失去制冷后，住户温度按 K9 的建筑热响应趋向本地平衡温度；超过 26 °C 的住户·小时计入高温暴露，进而计入热病症就诊。住户数取 CMS 每日平均住户。",
+      en: "Simulated (v1). When a nursing home loses cooling, its residents' temperature relaxes toward the local equilibrium with the K9 thermal response; resident-hours above 26 °C count as heat exposure and feed heat-illness visits. Resident counts are CMS average daily residents.",
+      eq: "T_nh(t) = T_eq + (T_nh(t−1) − T_eq) · e^(−1/τ_b)   while cooling is lost\nE_nh = Σ_t Σ_f residents_f · 1[cooling lost ∧ T_nh ≥ 26 °C]", par: "24 homes · 2,334 residents (CMS) · p_cooling_lost 0.10 / 0.30 / 0.50 (C-H2) · threshold 26 °C (C-H17)",
+      ev: "CMS provider data 2026; HHS OIG 2026; Sun et al. 2020; Meade et al. 2024", res: () => `Resident-hours above 26 °C per summer: ${tri("nh_exposed_hours")}. Each hour falls on the most vulnerable residents.`,
+      cap: ["AND gate: residents are exposed when the zone is out and cooling is not kept.", "与门：分区停电且制冷没有维持时，住户暴露在高温中。"] },
+    { id: "R24", g: "K10", edges: [["zone", "illness"]], title: ["Zone outage → electricity-dependent residents → care demand", "分区停电 → 依赖电力设备的居民 → 就医需求"], kind: "and:Zone out|Device battery empty",
+      why: ["An outage sends people to emergency care even without heat: home oxygen concentrators have no battery and ventilators last 3–9 h. Davidson has 4,163 Medicare beneficiaries who rely on electricity-dependent equipment (HHS emPOWER). Respiratory hospital admissions rose sharply during the 2003 New York blackout (Lin et al. 2011).", "即使不热，停电也会把人推向急诊：家用制氧机没有电池，呼吸机只能撑 3–9 小时。Davidson 有 4,163 名医保用户依赖电力医疗设备（HHS emPOWER）。2003 年纽约大停电期间呼吸系统住院明显增加（Lin 等 2011）。"],
+      zh: "第一版已模拟。emPOWER 依赖电力设备的居民按 ZCTA 面积分到各分区（3,864 人）；分区停电持续到电池时长 h_b 时，每人以概率 q 就医（每次停电一次），计入就医需求。q 没有数据，是 T4 假设。",
+      en: "Simulated (v1). emPOWER electricity-dependent residents are allocated to zones through ZCTA areas (3,864 people); when a zone outage outlasts the battery time h_b, each person seeks care with probability q (once per outage), adding to care demand. q has no data and is a T4 assumption.",
+      eq: "visits_dep = Σ_z n_dep,z · 1[outage age reaches h_b] · q", par: "3,864 residents (emPOWER) · h_b 0 / 2 / 8 h (C-H12, T3) · q 0.01 / 0.05 / 0.15 (C-H13, T4)",
+      ev: "HHS emPOWER 2026; Lin et al. 2011; Falaize et al. 2014", res: () => `Device-user visits per summer: ${tri("dep_visits")}. These rest on the assumed visit probability q (T4); see the assumption variants below the map.`,
+      cap: ["AND gate: the device stops when the zone is out and its battery is empty.", "与门：分区停电且电池耗尽时设备停止。"] },
+    { id: "R25", g: "D1", edges: [["overload", "failure"]], kind: "overload",
+      why: ["Deferred because it decided the full model's result: with an assumed tolerance α it accounts for about 89% of person-hours without power. Topological load sharing can misstate grid vulnerability; it returns as a power-flow model once NES ratings exist.", "暂缓，因为它决定了完整模型的结果：在假设的容忍度 α 下，它贡献了约 89% 的停电人·小时。纯拓扑的负荷分摊可能误判电网脆弱性；有 NES 额定值后以潮流模型加回。"],
+      zh: "失效站的负荷平均转给同电压等级的在运邻站；邻站负荷超过 (1+α)·L_d 即过载跳闸。",
+      en: "Load from a failed station is shared among its energised equal-voltage peers; a peer trips when its load exceeds (1 + α)·L_d.",
+      eq: "ΔL_j = Σ_i L_i / n_up(i)   over failed peers i of j\ntrip if L_j + ΔL_j > (1 + α) · L_d,j", par: "α 0.15 / 0.35 / 1.45",
+      ev: "Motter & Lai 2002; Hines et al. 2010; Dobson et al. 2007", res: () => `Full model at +0 °C: ${fmt(full("+0"))} person-hours without power, against ${fmt(sv("+0", "pop_hours"))} in the core.`,
+      cap: ["One of three peers fails; each survivor takes half its load and exceeds 1.35 × design load.", "三座对等站中一座失效；其余两座各接一半负荷，超过 1.35 倍设计负荷。"] },
+    { id: "R26", g: "D2", edges: [["bg", "river"], ["river", "margin"]], title: ["River temperature → plant derate → supply margin", "河温 → 电厂降额 → 供需裕度"], kind: "derate",
+      why: ["River temperature is part of the background climate package. It matters in drought heat waves, when once-through cooled plants (Cumberland, Gallatin; 4,026 MW) must cut output; the modelled river stayed below the threshold in 2014–2025, so it changes nothing now.", "河温属于背景气候数据包。它在干旱热浪中有意义：直流冷却电厂（Cumberland、Gallatin，共 4,026 MW）需要降出力；2014–2025 年模拟河温都低于阈值，所以目前不改变结果。"],
+      zh: "直流冷却电厂按河水温度线性降额，低流量时另有出力限制。河温现在来自模型，拿到背景气候数据包后换成实测。",
+      en: "Once-through cooled plants derate linearly with river temperature, with a further limit at low flow. River temperature is modelled now and will come from the background climate package.",
+      eq: "derate = C_p · max(clip((T_w − T_lim) / span, 0, 1), f_low · 1[Q < Q_min])", par: "T_lim 29 / 31 / 33 °C · span 3 / 5 / 8 K · Q_min 3,000 / 4,000 / 5,000 cfs · C_p 4,026 MW",
+      ev: "van Vliet et al. 2012; Mohseni et al. 1998", res: "Only the 2023 low flow (4,420 cfs) triggered a derate, identical in every scenario.",
+      cap: ["Derated share of plant capacity versus river temperature (T_lim 29 °C, span 5 K) with the modelled maximum.", "降额比例随河水温度的变化（T_lim 29 °C、span 5 K），并标出模拟的最高河温。"] },
+  ];
+
+  // ------------------------------------------------------------------ schematic helpers
+  const W = 300, H = 170, mL = 44, mR = 12, mT = 12, mB = 34;
+  const f = (v, d = 0) => Number(v).toFixed(d);
+  function frame(xmin, xmax, ymin, ymax, xt, yt, xl, yl) {
+    const sx = v => mL + (v - xmin) / (xmax - xmin) * (W - mL - mR);
+    const sy = v => H - mB - (v - ymin) / (ymax - ymin) * (H - mT - mB);
+    let s = `<line class="ax" x1="${mL}" y1="${H - mB}" x2="${W - mR}" y2="${H - mB}"/><line class="ax" x1="${mL}" y1="${mT}" x2="${mL}" y2="${H - mB}"/>`;
+    xt.forEach(v => { s += `<line class="ax" x1="${f(sx(v), 1)}" y1="${H - mB}" x2="${f(sx(v), 1)}" y2="${H - mB + 3}"/><text class="axt" x="${f(sx(v), 1)}" y="${H - mB + 13}" text-anchor="middle">${v}</text>`; });
+    yt.forEach(v => { s += `<line class="ax" x1="${mL - 3}" y1="${f(sy(v), 1)}" x2="${mL}" y2="${f(sy(v), 1)}"/><text class="axt" x="${mL - 5}" y="${f(sy(v) + 3, 1)}" text-anchor="end">${v}</text>`; });
+    s += `<text class="axl" x="${(mL + W - mR) / 2}" y="${H - 4}" text-anchor="middle">${xl}</text>`;
+    s += `<text class="axl" transform="translate(11 ${(mT + H - mB) / 2}) rotate(-90)" text-anchor="middle">${yl}</text>`;
+    return { sx, sy, s };
+  }
+  const line = (fr, fn, a, b, cls, n = 80) => {
+    let d = "";
+    for (let i = 0; i <= n; i++) { const x = a + (b - a) * i / n; d += (i ? "L" : "M") + f(fr.sx(x), 1) + " " + f(fr.sy(fn(x)), 1); }
+    return `<path class="${cls}" d="${d}"/>`;
+  };
+  const erf = x => { const t = 1 / (1 + 0.3275911 * Math.abs(x)); const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x); return x >= 0 ? y : -y; };
+  const Phi = z => 0.5 * (1 + erf(z / Math.SQRT2));
+  const svg = (inner, label) => `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${label}">${inner}</svg>`;
+  const txt = (x, y, t, cls = "lb", anchor = "start") => `<text class="${cls}" x="${f(x, 1)}" y="${f(y, 1)}" text-anchor="${anchor}">${t}</text>`;
+  const arrowDefs = id => `<defs><marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>`;
+
+  function gate(kind, spec, id) {
+    const [a, b, hi] = spec.split("|");
+    const mk = arrowDefs("ar" + id);
+    const ina = hi === "1" ? "c3" : (hi === "0" ? "c1" : "c1"), inb = hi === "0" ? "c3" : "c1";
+    let g = mk;
+    g += `<rect class="bx" x="8" y="26" width="104" height="30"/>${txt(60, 45, a, "lb", "middle")}`;
+    g += `<rect class="bx" x="8" y="104" width="104" height="30"/>${txt(60, 123, b, "lb", "middle")}`;
+    g += `<path class="${ina}" d="M112 41H140V66H150" marker-end="url(#ar${id})"/>`;
+    g += `<path class="${inb}" d="M112 119H140V94H150" marker-end="url(#ar${id})"/>`;
+    if (kind === "and") {
+      g += `<path class="bxa" d="M152 56H178A24 24 0 0 1 178 104H152Z"/>${txt(170, 84, "AND", "lba", "middle")}`;
+      g += `<path class="c1" d="M202 80H226" marker-end="url(#ar${id})"/>`;
+    } else {
+      g += `<path class="bxa" d="M150 56Q166 80 150 104Q186 104 206 80Q186 56 150 56Z"/>${txt(175, 84, "OR", "lba", "middle")}`;
+      g += `<path class="c1" d="M206 80H226" marker-end="url(#ar${id})"/>`;
+    }
+    g += `<rect class="bxa" x="228" y="64" width="66" height="32"/>${txt(261, 84, "Out", "lb", "middle")}`;
+    return g;
+  }
+
+  function schematic(kind, id) {
+    const ar = arrowDefs("a" + id);
+    if (kind.startsWith("and:") || kind.startsWith("or:")) {
+      const [k, spec] = kind.split(/:(.*)/s);
+      return gate(k, spec, id);
+    }
+    switch (kind) {
+      case "offset": {
+        const fr = frame(0, 24, 18, 42, [0, 6, 12, 18, 24], [18, 24, 30, 36, 42], "local hour", "°C");
+        const bna = h => 29 + 5.5 * Math.sin((h - 9) / 24 * 2 * Math.PI);
+        return fr.s + line(fr, bna, 0, 24, "c1") + line(fr, h => bna(h) + 2, 0, 24, "c2") + line(fr, h => bna(h) + 4, 0, 24, "c2") +
+          line(fr, h => bna(h) - 3, 0, 24, "c3") + txt(fr.sx(15.2), fr.sy(bna(15) + 4) - 4, "+4 °C", "lbm") +
+          txt(fr.sx(19.5), fr.sy(bna(19.5)) - 6, "BNA", "lba") + txt(fr.sx(4), fr.sy(bna(4) - 3) + 12, "station −3 °C", "lbm");
+      }
+      case "linear": {
+        const fr = frame(60, 105, 1, 1.9, [60, 75, 90, 105], [1, 1.3, 1.6, 1.9], "air temperature (°F)", "load multiplier m");
+        const m = b => T => 1 + b * Math.max(0, T - 75);
+        return fr.s + line(fr, m(0.0166), 60, 105, "c2") + line(fr, m(0.0381), 60, 105, "c2") + line(fr, m(0.0238), 60, 105, "c1") +
+          `<line class="ax" x1="${f(fr.sx(95), 1)}" y1="${mT}" x2="${f(fr.sx(95), 1)}" y2="${H - mB}" stroke-dasharray="3 3"/>` +
+          txt(fr.sx(95) + 3, mT + 10, "Td 95", "lbm") + txt(fr.sx(76), fr.sy(1) - 6, "T0 75", "lbm") +
+          txt(fr.sx(100), fr.sy(m(0.0238)(100)) + 14, "β mid", "lba", "end");
+      }
+      case "stack": {
+        const K = 0.85, to = 55 * Math.pow((K * K * 4.5 + 1) / 5.5, 0.8), hs = 25 * Math.pow(K, 1.6);
+        const fr = frame(0, 2, 0, 160, [], [0, 40, 80, 120, 160], "", "°C");
+        let s = fr.s;
+        [[33, 0.35], [37, 1.15]].forEach(([amb, x0]) => {
+          const x = fr.sx(x0), w = fr.sx(x0 + 0.5) - x;
+          const y = v => fr.sy(v);
+          s += `<rect class="fm" x="${f(x, 1)}" y="${f(y(amb), 1)}" width="${f(w, 1)}" height="${f(y(0) - y(amb), 1)}"/>`;
+          s += `<rect class="fa" x="${f(x, 1)}" y="${f(y(amb + to), 1)}" width="${f(w, 1)}" height="${f(y(amb) - y(amb + to), 1)}"/>`;
+          s += `<rect class="fs" x="${f(x, 1)}" y="${f(y(amb + to + hs), 1)}" width="${f(w, 1)}" height="${f(y(amb + to) - y(amb + to + hs), 1)}"/>`;
+          s += txt(x + w / 2, y(amb + to + hs) - 4, f(amb + to + hs) + " °C", "lb", "middle") + txt(x + w / 2, H - mB + 13, "θA " + amb, "axt", "middle");
+        });
+        s += `<line class="c3" x1="${mL}" y1="${f(fr.sy(140), 1)}" x2="${W - mR}" y2="${f(fr.sy(140), 1)}" stroke-dasharray="4 3"/>` + txt(W - mR, fr.sy(140) - 4, "θ50 140", "lbm", "end");
+        s += txt(fr.sx(1.68), fr.sy(18), "ambient", "lbm") + txt(fr.sx(1.68), fr.sy(70), "top oil", "lbm") + txt(fr.sx(1.68), fr.sy(108), "hot spot", "lbm");
+        return s;
+      }
+      case "loadcurve": {
+        const fr = frame(0.4, 1.4, 0, 140, [0.4, 0.6, 0.8, 1.0, 1.2, 1.4], [0, 35, 70, 105, 140], "per-unit load K", "rise above ambient (K)");
+        const to = K => 55 * Math.pow((K * K * 4.5 + 1) / 5.5, 0.8), hs = K => 25 * Math.pow(K, 1.6);
+        return fr.s + line(fr, to, 0.4, 1.4, "c2") + line(fr, K => to(K) + hs(K), 0.4, 1.4, "c1") +
+          `<line class="ax" x1="${f(fr.sx(0.85), 1)}" y1="${mT}" x2="${f(fr.sx(0.85), 1)}" y2="${H - mB}" stroke-dasharray="3 3"/>` +
+          txt(fr.sx(0.86) + 2, mT + 10, "K_design", "lbm") + txt(fr.sx(1.36), fr.sy(to(1.36) + hs(1.36)) + 14, "total", "lba", "end") +
+          txt(fr.sx(1.36), fr.sy(to(1.36)) + 14, "top oil", "lbm", "end");
+      }
+      case "probit": case "probit64": {
+        const P = kind === "probit" ? { a: 110, b: 170, m: 140, s: 8, lo: 130, hi: 150, xt: [110, 125, 140, 155, 170], xl: "hot-spot θH (°C)", tag: "θ50 140" }
+          : { a: 45, b: 85, m: 64, s: 5, lo: 60, hi: 70, xt: [45, 55, 64, 75, 85], xl: "7-day max LST (°C)", tag: "PG 64" };
+        const fr = frame(P.a, P.b, 0, 1, P.xt, [0, 0.5, 1], P.xl, "P(failure)");
+        return fr.s + line(fr, x => Phi((x - P.lo) / P.s), P.a, P.b, "c2") + line(fr, x => Phi((x - P.hi) / P.s), P.a, P.b, "c2") +
+          line(fr, x => Phi((x - P.m) / P.s), P.a, P.b, "c1") + `<circle class="fs" cx="${f(fr.sx(P.m), 1)}" cy="${f(fr.sy(0.5), 1)}" r="3.2"/>` +
+          txt(fr.sx(P.m) + 6, fr.sy(0.5) + 4, P.tag, "lba");
+      }
+      case "scale": {
+        const m = T => 1 + 0.0238 * Math.max(0, T * 1.8 + 32 - 75);
+        const sc = d => T => (1 + 0.0238 * Math.max(0, (T + d) * 1.8 + 32 - 75)) / m(T);
+        const fr = frame(20, 38, 1, 1.25, [20, 24, 28, 32, 36], [1, 1.05, 1.1, 1.15, 1.2, 1.25], "observed air temperature (°C)", "load factor");
+        return fr.s + line(fr, sc(2), 20, 38, "c2") + line(fr, sc(4), 20, 38, "c1") + txt(fr.sx(21.5), fr.sy(sc(4)(21.5)) - 6, "+4 °C", "lba") +
+          txt(fr.sx(34), fr.sy(sc(2)(34)) + 13, "+2 °C", "lbm", "middle");
+      }
+      case "shortfall": {
+        const base = h => 24500 + 7626 * Math.pow(Math.max(0, Math.sin((h - 5) / 24 * 2 * Math.PI) * 0.5 + 0.5), 1.6);
+        const fac = 1.11, sup = 32932, mid = 38625;
+        const fr = frame(0, 24, 20000, 40000, [0, 6, 12, 18, 24], [20000, 25000, 30000, 35000, 40000], "local hour", "MW");
+        // shortfall polygon
+        let d = "", up = [];
+        for (let i = 0; i <= 96; i++) { const h = 24 * i / 96, L = base(h) * fac; if (L > sup) up.push([h, L]); }
+        if (up.length) {
+          d = `M${f(fr.sx(up[0][0]), 1)} ${f(fr.sy(sup), 1)}` + up.map(([h, L]) => `L${f(fr.sx(h), 1)} ${f(fr.sy(L), 1)}`).join("") + `L${f(fr.sx(up[up.length - 1][0]), 1)} ${f(fr.sy(sup), 1)}Z`;
+        }
+        let s = fr.s.replace(/>(20000|25000|30000|35000|40000)</g, (m0, v) => ">" + (v / 1000) + "k<");
+        return s + `<path class="fa" d="${d}"/>` + line(fr, base, 0, 24, "c2") + line(fr, h => base(h) * fac, 0, 24, "c1") +
+          `<line class="c3" x1="${mL}" y1="${f(fr.sy(sup), 1)}" x2="${W - mR}" y2="${f(fr.sy(sup), 1)}" stroke-dasharray="5 3"/>` +
+          txt(W - mR, fr.sy(sup) + 12, "low supply 32,932", "lbm", "end") +
+          `<line class="c3" x1="${mL}" y1="${f(fr.sy(mid), 1)}" x2="${W - mR}" y2="${f(fr.sy(mid), 1)}"/>` + txt(W - mR, fr.sy(mid) - 4, "mid supply 38,625", "lbm", "end") + txt(fr.sx(1), fr.sy(base(1) * fac) - 6, "+4 °C load", "lba") +
+          txt(fr.sx(1), fr.sy(base(1)) + 13, "observed", "lbm");
+      }
+      case "bernoulli": {
+        let s = "", n = 0;
+        const out = new Set([4, 17, 26]);
+        for (let r = 0; r < 3; r++) for (let c = 0; c < 10; c++, n++) {
+          const x = 18 + c * 27, y = 30 + r * 34;
+          s += out.has(n) ? `<rect class="fs" x="${x}" y="${y}" width="20" height="20"/>` : `<rect class="bx" x="${x}" y="${y}" width="20" height="20"/>`;
+        }
+        return s + txt(18, 152, "■ shed this hour", "lba") + txt(150, 152, "□ energised", "lbm");
+      }
+      case "repair": {
+        const fr = frame(0, 30, 0, 1, [0, 6, 12, 18, 24, 30], [], "hour", "");
+        const y = fr.sy(0.55);
+        return fr.s + `<rect class="fs" x="${f(fr.sx(5), 1)}" y="${f(y - 12, 1)}" width="${f(fr.sx(8) - fr.sx(5), 1)}" height="24"/>` +
+          `<path class="c3" d="M${f(fr.sx(6), 1)} ${f(y + 22, 1)}V${f(y + 28, 1)}H${f(fr.sx(17), 1)}V${f(y + 22, 1)}"/>` +
+          txt(fr.sx(6), y + 40, "R 1", "lbm", "middle") + txt(fr.sx(17), y + 40, "R 12", "lbm", "middle") +
+          txt(fr.sx(5), y - 18, "failure 05:00", "lbm") + txt(fr.sx(8) + 4, y + 4, "back 08:00 (R = 3 h)", "lb");
+      }
+      case "tree": {
+        const nd = (x, y, t, state) => {
+          const cls = state === "fail" ? "fs" : (state === "off" ? "fm" : "bxa");
+          return `<circle class="${cls}" cx="${x}" cy="${y}" r="13"/>` + txt(x, y + 4, t, state === "fail" ? "ink" : "lb", "middle") +
+            (state === "fail" ? `<path class="c3" d="M${x - 7} ${y - 7}L${x + 7} ${y + 7}M${x + 7} ${y - 7}L${x - 7} ${y + 7}"/>` : "");
+        };
+        let s = ar;
+        s += `<rect class="bx" x="112" y="6" width="76" height="22"/>` + txt(150, 21, "external grid", "lbm", "middle");
+        const L = (x1, y1, x2, y2, c = "c3") => `<path class="${c}" d="M${x1} ${y1}L${x2} ${y2}" marker-end="url(#a${id})"/>`;
+        s += L(135, 28, 92, 52) + L(165, 28, 208, 52);
+        s += L(80, 74, 52, 110, "c2") + L(92, 76, 112, 110, "c2") + L(208, 76, 208, 110) + L(98, 68, 196, 112, "c2");
+        s += nd(86, 62, "T1", "fail") + nd(214, 62, "T2", "on") + nd(48, 124, "D1", "off") + nd(118, 124, "D2", "off") + nd(208, 124, "D3", "on");
+        return s + txt(20, 160, "failed", "lbm") + `<circle class="fm" cx="74" cy="156" r="5"/>` + txt(84, 160, "de-energised", "lbm") +
+          `<circle class="bxa" cx="170" cy="156" r="5"/>` + txt(180, 160, "energised", "lbm");
+      }
+      case "storage": {
+        const fr = frame(0, 20, 0, 12, [0, 2, 6, 10, 14, 18], [0, 4, 8, 12], "hour", "storage left (h)");
+        const S = t => t < 2 ? 12 : Math.max(0, 12 - (t - 2));
+        return fr.s + `<rect class="fa" x="${f(fr.sx(14), 1)}" y="${mT}" width="${f(fr.sx(20) - fr.sx(14), 1)}" height="${H - mT - mB}"/>` +
+          line(fr, S, 0, 20, "c1", 200) + txt(fr.sx(14.4), mT + 12, "water out", "lba") + txt(fr.sx(2.4), fr.sy(12) + 14, "plants stop", "lbm");
+      }
+      case "capacity": {
+        const fr = frame(0, 2, 0, 1000, [], [0, 250, 500, 750, 1000], "", "veh/h per lane");
+        const bar = (x0, v, cls, t) => { const x = fr.sx(x0), w = fr.sx(x0 + 0.55) - x; return `<rect class="${cls}" x="${f(x, 1)}" y="${f(fr.sy(v), 1)}" width="${f(w, 1)}" height="${f(fr.sy(0) - fr.sy(v), 1)}"/>` + txt(x + w / 2, fr.sy(v) - 5, v, "lb", "middle") + txt(x + w / 2, H - mB + 13, t, "axt", "middle"); };
+        const xm = fr.sx(1.15 + 0.275);
+        return fr.s + bar(0.3, 900, "fm", "signal on") + bar(1.15, 450, "fs", "dark") +
+          `<path class="c3" d="M${f(xm, 1)} ${f(fr.sy(315), 1)}V${f(fr.sy(585), 1)}M${f(xm - 5, 1)} ${f(fr.sy(315), 1)}H${f(xm + 5, 1)}M${f(xm - 5, 1)} ${f(fr.sy(585), 1)}H${f(xm + 5, 1)}"/>`;
+      }
+      case "bpr": {
+        const fr = frame(0, 1.2, 1, 9, [0, 0.3, 0.6, 0.9, 1.2], [1, 3, 5, 7, 9], "volume / normal capacity", "t / t0");
+        return fr.s + line(fr, x => 1 + 0.15 * Math.pow(x, 4), 0, 1.2, "c2") + line(fr, x => Math.min(9.5, 1 + 0.15 * Math.pow(x / 0.5, 4)), 0, 1.2, "c1") +
+          txt(fr.sx(0.62), fr.sy(6.5), "φ = 0.5", "lba") + txt(fr.sx(1.18), fr.sy(1 + 0.15 * Math.pow(1.18, 4)) - 6, "normal", "lbm", "end");
+      }
+      case "path": case "reroute": {
+        let s = ar;
+        const P = { c: [40, 90], a: [150, 40], b: [250, 120], m1: [100, 55], m2: [150, 110], m3: [205, 125] };
+        const ln = (p, q, cls) => `<path class="${cls}" d="M${p[0]} ${p[1]}L${q[0]} ${q[1]}"/>`;
+        s += ln(P.c, P.m1, "ax") + ln(P.m1, P.a, "ax") + ln(P.c, P.m2, "ax") + ln(P.m2, P.m3, "ax") + ln(P.m3, P.b, "ax") + ln(P.m1, P.m2, "ax") + ln(P.a, P.m3, "ax");
+        if (kind === "path") {
+          s += `<path class="c1" d="M40 90L100 55L150 40"/>` + `<path class="c2" d="M100 55L150 40" stroke-width="3"/>`;
+          s += `<path class="c3" d="M40 90L150 110L205 125L250 120"/>`;
+          s += txt(110, 30, "degraded link", "lbm");
+        } else {
+          s += `<path class="c1" d="M40 90L150 110L205 125L250 120"/>`;
+          s += `<path class="c3" d="M${P.a[0] - 9} ${P.a[1] - 9}L${P.a[0] + 9} ${P.a[1] + 9}M${P.a[0] + 9} ${P.a[1] - 9}L${P.a[0] - 9} ${P.a[1] + 9}"/>`;
+          s += txt(150, 22, "closed", "lbm", "middle");
+        }
+        s += `<circle class="bxa" cx="40" cy="90" r="9"/>` + txt(40, 114, "cell", "lbm", "middle");
+        s += `<rect class="bxa" x="${P.a[0] - 8}" y="${P.a[1] - 8}" width="16" height="16"/>` + txt(P.a[0] + 14, P.a[1] + 4, "A", "lb");
+        s += `<rect class="bxa" x="${P.b[0] - 8}" y="${P.b[1] - 8}" width="16" height="16"/>` + txt(P.b[0] + 14, P.b[1] + 4, "B", "lb");
+        [P.m1, P.m2, P.m3].forEach(p => { s += `<circle class="bx" cx="${p[0]}" cy="${p[1]}" r="4"/>`; });
+        return s + txt(20, 160, kind === "path" ? "nearest open facility = shortest time" : "nearest facility closed → route to B", "lbm");
+      }
+      case "rc": {
+        const fr = frame(0, 48, 20, 38, [0, 12, 24, 36, 48], [20, 26, 32, 38], "hours since power loss", "indoor °C");
+        const T = tau => t => 36 + (22.5 - 36) * Math.exp(-t / tau);
+        return fr.s + `<line class="c3" x1="${mL}" y1="${f(fr.sy(36), 1)}" x2="${W - mR}" y2="${f(fr.sy(36), 1)}" stroke-dasharray="4 3"/>` +
+          txt(W - mR, fr.sy(36) - 4, "T_eq 36", "lbm", "end") + line(fr, T(5), 0, 48, "c2") + line(fr, T(40), 0, 48, "c2") + line(fr, T(12), 0, 48, "c1") +
+          txt(fr.sx(5), fr.sy(T(5)(5)) - 4, "5 h", "lbm") + txt(fr.sx(30), fr.sy(T(12)(30)) + 13, "τ_b 12 h", "lba") + txt(fr.sx(40), fr.sy(T(40)(40)) + 13, "40 h", "lbm");
+      }
+      case "teq": {
+        const fr = frame(0, 24, 20, 42, [0, 8, 12, 20, 24], [20, 26, 32, 38], "local hour", "°C");
+        const out = h => 29 + 5.5 * Math.sin((h - 9) / 24 * 2 * Math.PI);
+        const eq = h => out(h) + (h >= 8 && h < 20 ? 4 : 1);
+        return fr.s + `<rect class="fa" x="${f(fr.sx(8), 1)}" y="${mT}" width="${f(fr.sx(20) - fr.sx(8), 1)}" height="${H - mT - mB}"/>` +
+          line(fr, out, 0, 24, "c2") + line(fr, eq, 0, 24, "c1", 240) + txt(fr.sx(14), mT + 11, "day gain +4 K", "lba", "middle") +
+          txt(fr.sx(2), fr.sy(out(2)) + 13, "outdoor", "lbm") + txt(fr.sx(21), fr.sy(eq(21)) - 6, "T_eq", "lba");
+      }
+      case "threshold": {
+        const fr = frame(0, 24, 20, 36, [0, 6, 12, 18, 24], [20, 24, 28, 32, 36], "hours since power loss", "indoor °C");
+        const T = t => 36 - 13.5 * Math.exp(-t / 12);
+        const t0 = 12 * Math.log(13.5 / 8);
+        let d = `M${f(fr.sx(t0), 1)} ${f(fr.sy(28), 1)}`;
+        for (let i = 0; i <= 60; i++) { const t = t0 + (24 - t0) * i / 60; d += `L${f(fr.sx(t), 1)} ${f(fr.sy(T(t)), 1)}`; }
+        d += `L${f(fr.sx(24), 1)} ${f(fr.sy(28), 1)}Z`;
+        return fr.s + `<path class="fa" d="${d}"/>` + `<line class="c3" x1="${mL}" y1="${f(fr.sy(28), 1)}" x2="${W - mR}" y2="${f(fr.sy(28), 1)}" stroke-dasharray="4 3"/>` +
+          line(fr, T, 0, 24, "c1") + txt(fr.sx(0.5), fr.sy(28) - 4, "T_thr 28", "lbm") + txt(fr.sx(t0), fr.sy(28) + 13, f(t0, 1) + " h", "lba", "middle");
+      }
+      case "pop": {
+        const data = [["all", 115203], ["aged 65+", 10873], ["below poverty", 19853]];
+        const fr = frame(0, 120000, 0, 3, [0, 40000, 80000, 120000], [], "people", "");
+        let s = fr.s.replace(/>(40000|80000|120000)</g, (m0, v) => ">" + (v / 1000) + "k<");
+        data.forEach(([k, v], i) => {
+          const y = mT + 8 + i * 38;
+          s += `<rect class="${i ? "fa" : "fs"}" x="${mL}" y="${y}" width="${f(fr.sx(v) - mL, 1)}" height="22"/>` +
+            txt(mL + 4, y - 3, k, "lbm") + txt(Math.min(fr.sx(v) + 4, W - mR - 46), y + 15, v.toLocaleString("en-US"), "lb");
+        });
+        return s;
+      }
+      case "overload": {
+        const fr = frame(0, 3, 0, 1.8, [], [0, 0.6, 1.2, 1.8], "", "load / design load");
+        let s = fr.s;
+        const bars = [["peer A", 1.5, "fs"], ["failed", 0, "fm"], ["peer B", 1.5, "fs"]];
+        bars.forEach(([t, v, cls], i) => {
+          const x = fr.sx(0.25 + i), w = fr.sx(0.85 + i) - x;
+          if (v) {
+            s += `<rect class="fm" x="${f(x, 1)}" y="${f(fr.sy(1), 1)}" width="${f(w, 1)}" height="${f(fr.sy(0) - fr.sy(1), 1)}"/>` +
+              `<rect class="${cls}" x="${f(x, 1)}" y="${f(fr.sy(v), 1)}" width="${f(w, 1)}" height="${f(fr.sy(1) - fr.sy(v), 1)}"/>` + txt(x + w / 2, fr.sy(v) - 4, "+0.5", "lba", "middle");
+          } else {
+            s += `<rect class="bx" x="${f(x, 1)}" y="${f(fr.sy(1), 1)}" width="${f(w, 1)}" height="${f(fr.sy(0) - fr.sy(1), 1)}" stroke-dasharray="3 2"/>` + txt(x + w / 2, fr.sy(0.5), "✕", "lb", "middle");
+          }
+          s += txt(x + w / 2, H - mB + 13, t, "axt", "middle");
+        });
+        return s + `<line class="c3" x1="${mL}" y1="${f(fr.sy(1.35), 1)}" x2="${W - mR}" y2="${f(fr.sy(1.35), 1)}" stroke-dasharray="4 3"/>` + txt(W - mR, fr.sy(1.35) + 12, "trip 1 + α = 1.35", "lbm", "end");
+      }
+      case "derate": {
+        const fr = frame(20, 36, 0, 1, [20, 24, 27.3, 29, 34], [0, 0.5, 1], "river temperature (°C)", "derated share");
+        return fr.s + line(fr, t => Math.min(1, Math.max(0, (t - 29) / 5)), 20, 36, "c1", 160) +
+          `<line class="c3" x1="${f(fr.sx(27.3), 1)}" y1="${mT}" x2="${f(fr.sx(27.3), 1)}" y2="${H - mB}" stroke-dasharray="4 3"/>` +
+          txt(fr.sx(27.3) - 4, mT + 10, "modelled max", "lbm", "end") + txt(fr.sx(29) + 4, fr.sy(0) - 6, "T_lim", "lba");
+      }
+      case "rr": {
+        const fr = frame(0, 10, 1, 1.7, [0, 2, 4, 6, 8, 10], [1, 1.2, 1.4, 1.6], "K above MMT", "relative risk");
+        const rr = x => Math.pow(1.03, x);
+        return fr.s + line(fr, rr, 0, 10, "c2") + line(fr, x => 1 + (rr(x) - 1) * 2, 0, 10, "c1") +
+          txt(fr.sx(9.8), fr.sy(1 + (rr(9.8) - 1) * 2) + 14, "outage ×2", "lba", "end") + txt(fr.sx(9.8), fr.sy(rr(9.8)) + 14, "no outage", "lbm", "end");
+      }
+      case "sum": {
+        let g = arrowDefs("as" + id);
+        g += `<rect class="bx" x="8" y="22" width="132" height="34"/>${txt(74, 37, "customer-hours out", "lb", "middle")}${txt(74, 50, "× cost per event", "lbm", "middle")}`;
+        g += `<rect class="bx" x="8" y="104" width="132" height="34"/>${txt(74, 119, "attributable deaths", "lb", "middle")}${txt(74, 132, "× VSL + care costs", "lbm", "middle")}`;
+        g += `<path class="c1" d="M140 39H196" marker-end="url(#as${id})"/><path class="c1" d="M140 121H196" marker-end="url(#as${id})"/>`;
+        g += `<rect class="bxa" x="198" y="22" width="96" height="34"/>${txt(246, 43, "outage cost", "lb", "middle")}`;
+        g += `<rect class="bxa" x="198" y="104" width="96" height="34"/>${txt(246, 125, "health cost", "lb", "middle")}`;
+        return g + txt(150, 162, "reported separately, not summed", "lbm", "middle");
+      }
+      case "rut": {
+        const b = 0.0176, se = 0.0035, m = 42.8;
+        const fr = frame(36, 49, 0.85, 1.2, [37, 40, 43, 46, 49], [0.9, 1, 1.1, 1.2], "summer LST (°C)", "rut depth ratio");
+        let d = "";
+        for (let i = 0; i <= 40; i++) { const x = 36 + 13 * i / 40; d += (i ? "L" : "M") + f(fr.sx(x), 1) + " " + f(fr.sy(Math.exp((b + 1.96 * se * Math.sign(x - m)) * (x - m))), 1); }
+        for (let i = 40; i >= 0; i--) { const x = 36 + 13 * i / 40; d += "L" + f(fr.sx(x), 1) + " " + f(fr.sy(Math.exp((b - 1.96 * se * Math.sign(x - m)) * (x - m))), 1); }
+        return fr.s + `<path class="fa" d="${d}Z"/>` + line(fr, x => Math.exp(b * (x - m)), 36, 49, "c1") +
+          `<line class="ax" x1="${f(fr.sx(37.7), 1)}" y1="${mT}" x2="${f(fr.sx(37.7), 1)}" y2="${H - mB}" stroke-dasharray="3 3"/><line class="ax" x1="${f(fr.sx(47.3), 1)}" y1="${mT}" x2="${f(fr.sx(47.3), 1)}" y2="${H - mB}" stroke-dasharray="3 3"/>` +
+          txt(fr.sx(37.7) + 3, mT + 10, "p5", "lbm") + txt(fr.sx(47.3) - 3, mT + 10, "p95", "lbm", "end") + txt(fr.sx(47.3) - 3, fr.sy(1.184) - 6, "×1.18", "lba", "end");
+      }
+      case "rutgrowth": {
+        const fr = frame(0, 20, 0, 0.6, [0, 5, 10, 15, 20], [0, 0.2, 0.4, 0.6], "years since resurfacing", "rut depth (in)");
+        const g = 0.025, t0 = 0.4 / g, t1 = 0.4 / (g * 1.184);
+        return fr.s + `<line class="c3" x1="${mL}" y1="${f(fr.sy(0.4), 1)}" x2="${W - mR}" y2="${f(fr.sy(0.4), 1)}" stroke-dasharray="4 3"/>` +
+          txt(mL + 4, fr.sy(0.4) - 4, "RD* 0.40 in (poor)", "lbm") + line(fr, t => g * t, 0, 20, "c2") + line(fr, t => g * 1.184 * t, 0, 20, "c1") +
+          `<path class="c3" d="M${f(fr.sx(t1), 1)} ${f(fr.sy(0.4) + 10, 1)}H${f(fr.sx(t0), 1)}"/>` +
+          txt((fr.sx(t1) + fr.sx(t0)) / 2, fr.sy(0.4) + 22, "≈ 2.4 yr earlier", "lba", "middle") + txt(fr.sx(19), fr.sy(g * 19) + 13, "baseline", "lbm", "end");
+      }
+      case "queue": {
+        const fr = frame(0, 1, 0, 8, [0, 0.25, 0.5, 0.75, 1], [0, 2, 4, 6, 8], "utilisation ρ = demand / capacity", "wait / W0");
+        const w = r => Math.min(9, r / (1 - r));
+        return fr.s + line(fr, w, 0, 0.9, "c1", 120) +
+          `<line class="ax" x1="${f(fr.sx(0.75), 1)}" y1="${mT}" x2="${f(fr.sx(0.75), 1)}" y2="${H - mB}" stroke-dasharray="3 3"/><line class="ax" x1="${f(fr.sx(0.85), 1)}" y1="${mT}" x2="${f(fr.sx(0.85), 1)}" y2="${H - mB}" stroke-dasharray="3 3"/>` +
+          `<circle class="fs" cx="${f(fr.sx(0.75), 1)}" cy="${f(fr.sy(w(0.75)), 1)}" r="3"/><circle class="fs" cx="${f(fr.sx(0.85), 1)}" cy="${f(fr.sy(w(0.85)), 1)}" r="3"/>` +
+          txt(fr.sx(0.75) - 4, fr.sy(w(0.75)) - 6, "normal 3×", "lbm", "end") + txt(fr.sx(0.85) - 4, fr.sy(w(0.85)) - 4, "heat day 5.7×", "lba", "end");
+      }
+      case "pdd": {
+        const fr = frame(0, 30, 0, 1, [0, 10, 20, 30], [0, 0.5, 1], "pressure (m)", "demand met");
+        return fr.s + line(fr, p => Math.min(1, Math.sqrt(Math.max(0, p / 20))), 0, 30, "c1", 120) +
+          `<line class="c3" x1="${f(fr.sx(20), 1)}" y1="${mT}" x2="${f(fr.sx(20), 1)}" y2="${H - mB}" stroke-dasharray="4 3"/>` + txt(fr.sx(20) + 4, mT + 10, "P_req", "lbm");
+      }
+    }
+    return "";
+  }
+
+
+  // ------------------------------------------------------------------ cards
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const sysOf = id => NODE[id][2];
+  const kindOf = g => g.startsWith("D") ? "d" : (g.startsWith("B") ? "p" : "");
+  const titleOf = r => r.title || [NODE[r.edges[0][0]][0] + " → " + NODE[r.edges[0][1]][0], NODE[r.edges[0][0]][1] + " → " + NODE[r.edges[0][1]][1]];
+  const gmain = document.getElementById("groups"), nav = document.getElementById("index");
+  const CARDCLS = { d: " def", p: " pl", "": "" };
+  const STATUS = { d: g => `Deferred ${g} · 暂缓`, p: g => `To build ${g} · 待建`, "": g => `Core ${g} · 主线` };
+  const WHY = { d: ["Why it is deferred", "暂缓原因"], p: ["Why it matters", "为什么重要"], "": ["Why it matters", "为什么重要"] };
+  // 【中文】卡片上的因果贡献：R03 拆成 a / b 两条边；R15、R16 与 R14 串联，共用一个敲除结果
+  const CARD_KO = { R03: ["R03a", "R03b"], R15: ["R14"], R16: ["R14"] };
+  function cardContrib(id) {
+    if (!CONTRIB) return "";
+    const ks = (CARD_KO[id] || [id]).filter(k => CONTRIB.relations[k]);
+    if (!ks.length) return "";
+    const txt = ks.map(k => {
+      const c = CONTRIB.relations[k].contribution, m = "time_to_care_min";
+      const f2 = v => v === null ? "—" : (v < 0 ? "−" : "+") + Math.abs(v * 100).toFixed(Math.abs(v) < 0.1 ? 1 : 0) + "%";
+      return (ks.length > 1 ? k + ": " : "") + `time to care ${f2(c["+4"][m])} at +4 °C, ${f2(c["+2"][m])} at +2 °C` +
+        ` (travel part ${f2(c["+4"].care_time_loss_min)}, waiting part ${f2(c["+4"].wait_increase_min)})` +
+        `; person-hours without power ${f2(c["+4"].pop_hours)}; indoor heat exposure ${f2(c["+4"].indoor_pop_hours)}`;
+    }).join(" · ");
+    const series = (id === "R15" || id === "R16") ? " (in series with R14: same knockout)" : "";
+    return `<dt>Contribution<span class="zh">因果贡献</span></dt><dd class="num">${esc(txt + series)}</dd>`;
+  }
+  GROUPS.forEach(([g, sys, en, zh, gen, gzh]) => {
+    const k = kindOf(g);
+    const rows = R.filter(r => r.g === g);
+    nav.insertAdjacentHTML("beforeend", `<a href="#${g}" class="${k === "d" ? "def" : (k === "p" ? "pl" : "")}" style="--lc:var(--l-${sys})"><span class="gk">${g}</span>${esc(en)}</a>`);
+    const cards = rows.map(r => {
+      const [ten, tzh] = titleOf(r);
+      return `<article class="card${CARDCLS[k]}" id="${r.id}" style="--lc:var(--l-${sysOf(r.edges[0][1])})">
+        <figure class="fig">${svg(schematic(r.kind, r.id), esc(r.cap[0]))}<figcaption>${esc(r.cap[0])}<span class="zh">${esc(r.cap[1])}</span></figcaption></figure>
+        <div class="body">
+          <div class="rid"><span class="num">${r.id}</span><h3>${esc(ten)}<span class="zh">${esc(tzh)}</span></h3><span class="st">${STATUS[k](g)}</span></div>
+          <div class="why"><b>${WHY[k][0]}<span class="zh">${WHY[k][1]}</span></b><div class="text2"><p class="zh">${esc(r.why[1])}</p><p>${esc(r.why[0])}</p></div></div>
+          <div class="text2"><p class="zh">${esc(r.zh)}</p><p>${esc(r.en)}</p></div>
+          <div class="eq">${esc(r.eq)}</div>
+          <dl class="meta">
+            <dt>Parameters<span class="zh">参数</span></dt><dd class="num">${esc(r.par)}</dd>
+            <dt>Evidence<span class="zh">依据</span></dt><dd>${esc(r.ev)}</dd>
+            ${r.res ? `<dt>Result<span class="zh">结果</span></dt><dd class="res">${esc(resText(r.res))}</dd>` : ""}
+            ${cardContrib(r.id)}
+          </dl>
+        </div>
+      </article>`;
+    }).join("");
+    gmain.insertAdjacentHTML("beforeend", `<section class="group${CARDCLS[k]}" id="${g}" style="--lc:var(--l-${sys})">
+      <div class="ghead"><span class="gk">${g}</span><h2>${esc(en)}<span class="zh">${esc(zh)}</span></h2>
+      <p>${esc(gen)}<span class="zh">${esc(gzh)}</span></p></div>${cards}</section>`);
+  });
+  nav.insertAdjacentHTML("beforeend", `<a href="#map" class="map">Complete map · 完整关系图</a>`);
+
+  // ------------------------------------------------------------------ complete map
+  // grid: 10 columns, lanes climate / power (2 rows) / transport / water / health (2 rows)
+  const BW = 110, BH = 42, hw = BW / 2, hh = BH / 2, GUT = 104;
+  const X = c => 172 + 142 * c;
+  const ROW = { cl: 41, pa: 115, pb: 195, tr: 268, wa: 338, ha: 413, hb: 485 };
+  const LANES = [["climate", 12, 70], ["power", 80, 228], ["transport", 238, 298], ["water", 308, 368], ["health", 378, 518]];
+  const MW = X(9) + hw + 14, MH = 528;
+  const P = id => ({ x: X(NODE[id][3]), y: ROW[NODE[id][4]] });
+  const L = id => [P(id).x - hw, P(id).y], Rt = id => [P(id).x + hw, P(id).y], T = id => [P(id).x, P(id).y - hh], B = id => [P(id).x, P(id).y + hh];
+  const BUSX = X(5), BUSY = B("zone")[1];
+  // each edge: [path, tag x, tag y]; adjacent nodes in a row are joined by a straight line with the tag in the gap
+  function edgePath(a, b) {
+    const k = a + ">" + b, pa = P(a), pb = P(b);
+    const bus = (y, toRight, xEnd) => [`M${BUSX} ${BUSY}V${y}H${xEnd}`, toRight ? xEnd - 22 : xEnd + 22, y];
+    switch (k) {
+      case "urban>load": case "load>margin": case "indoor>exposure": case "wservice>facility": case "bg>river": {
+        const s = B(a), e = T(b); return [`M${s[0]} ${s[1]}V${e[1]}`, s[0], (s[1] + e[1]) / 2, 1];
+      }
+      case "urban>hotspot": { const s = [pa.x + 30, pa.y + hh], e = T(b), y = 76; return [`M${s[0]} ${s[1]}V${y}H${e[0]}V${e[1]}`, (s[0] + e[0]) / 2, y]; }
+      case "shed>topo": { const s = T(a), x = pb.x - 30, y = 150; return [`M${s[0]} ${s[1]}V${y}H${x}V${pb.y + hh}`, s[0] + 46, y]; }
+      case "overload>failure": { const x = pb.x + 30; return [`M${x} ${pa.y - hh}V${pb.y + hh}`, x, 163, 1]; }
+      case "zone>signals": case "zone>plant": case "zone>facility": return bus(pb.y, true, L(b)[0]);
+      case "zone>indoor": return bus(pb.y, false, Rt(b)[0]);
+      case "travel>access": { const s = Rt(a), e = T(b); return [`M${s[0]} ${s[1]}H${e[0]}V${e[1]}`, e[0], 303, 1]; }
+      case "facility>exposure": { const s = B(a), y = 441, x = pb.x + 30; return [`M${s[0]} ${s[1]}V${y}H${x}V${pb.y - hh}`, X(7), y]; }
+      case "zone>illness": { const x = pb.x + 30, y = 457; return [`M${BUSX} ${BUSY}V${y}H${x}V${pb.y - hh}`, X(4), y]; }
+      case "illness>access": { const s = Rt(a), e = B(b); return [`M${s[0]} ${s[1]}H${e[0]}V${e[1]}`, X(6), s[1]]; }
+      case "urban>indoor": { const s = [pa.x - 30, pa.y - hh], e = L(b); return [`M${s[0]} ${s[1]}V6H${GUT}V${e[1]}H${e[0]}`, GUT, 300, 1]; }
+      case "urban>exposure": { const s = [pa.x - 30, pa.y - hh], x = pb.x - 30, y = 449; return [`M${s[0]} ${s[1]}V6H${GUT}V${y}H${x}V${pb.y - hh}`, (GUT + x) / 2, y]; }
+    }
+    // same row, left to right
+    const s = Rt(a), e = L(b);
+    return [`M${s[0]} ${s[1]}H${e[0]}`, (s[0] + e[0]) / 2, s[1]];
+  }
+
+  // ------------------------------------------------------------------ chain layers
+  const PRE = [["bg", "urban"], ["urban", "load"], ["urban", "hotspot"], ["load", "hotspot"], ["hotspot", "failure"], ["failure", "topo"], ["topo", "zone"]];
+  const WATER = [["zone", "plant"], ["plant", "storage"], ["storage", "wservice"], ["wservice", "facility"]];
+  const ROAD = [["zone", "signals"], ["signals", "capacity"], ["capacity", "travel"], ["travel", "access"]];
+  const HEAT = [["urban", "exposure"], ["urban", "indoor"], ["indoor", "exposure"], ["pop", "exposure"], ["exposure", "illness"], ["illness", "access"]];
+  const SETS = [
+    { en: "Line A · power, water and transport disrupt medical facilities → time to care", zh: "A 线 · 电、水、交通影响医疗设施 → 就医时间", chains: [
+      { id: "A", cc: "--ch1", en: "Line A, all branches", zh: "A 线全部分支", edges: [...PRE, ["zone", "facility"], ...WATER, ...ROAD, ["facility", "access"]],
+        key: () => [`Simulated. Added travel per ED visit ${tri("ed_travel_increase_min")} min; dialysis sessions affected per summer ${tri("dialysis_sessions_affected")}.`, `已模拟。每次急诊就诊增加路程 ${tri("ed_travel_increase_min")} 分钟；每个夏季受影响透析 ${tri("dialysis_sessions_affected")} 次。`] },
+      { id: "A1", cc: "--ch3", en: "Power → facilities → time to care", zh: "电力 → 医疗设施 → 就医时间", edges: [...PRE, ["zone", "facility"], ["facility", "access"]],
+        key: () => [`Facility-hours lost per run at +4 °C: dialysis ${fmt(sv("+4", "dialysis_hours"))}, nursing homes ${fmt(sv("+4", "nursing_hours"))}, hospitals ${fmt(sv("+4", "hospital_hours"))}.`, `+4 °C 时每次运行的设施失能小时：透析 ${fmt(sv("+4", "dialysis_hours"))}、养老院 ${fmt(sv("+4", "nursing_hours"))}、医院 ${fmt(sv("+4", "hospital_hours"))}。`] },
+      { id: "A2", cc: "--ch5", en: "Water → facilities → time to care", zh: "供水 → 医疗设施 → 就医时间", edges: [...PRE, ...WATER, ["facility", "access"]],
+        key: () => [`Water-out hours per run: ${tri("water_out_hours")}; four generators per plant and 5–18 h of storage.`, `每次运行断水小时：${tri("water_out_hours")}；每座水厂 4 台发电机，储水 5–18 小时。`] },
+      { id: "A3", cc: "--ch2", en: "Dark signals → travel time → time to care", zh: "信号灯熄灭 → 路程 → 就医时间", edges: [...PRE, ...ROAD],
+        key: () => [`Congestion from dark signals adds ${tri("ed_congestion_min")} min per ED visit; a lower bound without intersection delay.`, `信号灯熄灭造成的拥堵使每次急诊就诊增加 ${tri("ed_congestion_min")} 分钟；未计路口延误，是下限。`] },
+    ] },
+    { en: "Line B · heat illness raises care demand → time to care", zh: "B 线 · 热病症增加就医需求 → 就医时间", chains: [
+      { id: "B", cc: "--ch6", en: "Line B, all branches", zh: "B 线全部分支", edges: [...PRE, ["zone", "indoor"], ...HEAT, ["zone", "facility"], ["facility", "exposure"], ["zone", "illness"]],
+        key: () => [`Time to care per ED visit at +4 °C: median +${fmt(sv("+4", "time_to_care_min", "50"))} min, p95 +${fmt(sv("+4", "time_to_care_min", "95"))} min; the tail comes from emergency departments near capacity and rests on T4 assumptions.`, `+4 °C 时每次急诊就诊的就医时间：中位数 +${fmt(sv("+4", "time_to_care_min", "50"))} 分钟，p95 +${fmt(sv("+4", "time_to_care_min", "95"))} 分钟；长尾来自接近满负荷的急诊，依赖 T4 假设。`] },
+      { id: "B1", cc: "--ch7", en: "Heat without outages → illness → time to care", zh: "无停电的高温 → 病症 → 就医时间", edges: [["bg", "urban"], ...HEAT],
+        key: () => [`Heat-illness excess visits per summer: ${tri("heat_visits_excess")} at +0 / +2 / +4 °C (calibrated, leave-one-year-out Q² 0.66).`, `热病症超额就诊每个夏季：${tri("heat_visits_excess")} 次（+0 / +2 / +4 °C；留一年验证 Q² 0.66）。`] },
+      { id: "B2", cc: "--ch4", en: "Outages → homes, nursing homes, medical devices → care demand", zh: "停电 → 住宅、养老院、医疗设备 → 就医需求", edges: [...PRE, ["zone", "indoor"], ["urban", "indoor"], ["indoor", "exposure"], ["pop", "exposure"], ["zone", "facility"], ["facility", "exposure"], ["zone", "illness"], ["exposure", "illness"], ["illness", "access"]],
+        key: () => [`At +4 °C: ${fmt(sv("+4", "indoor_outage_pop_hours"))} outage-driven indoor person-hours, ${fmt(sv("+4", "nh_exposed_hours"))} nursing-home resident-hours, ${fmt(sv("+4", "dep_visits"))} device-user visits.`, `+4 °C 时：停电造成的室内暴露 ${fmt(sv("+4", "indoor_outage_pop_hours"))} 人·小时，养老院住户 ${fmt(sv("+4", "nh_exposed_hours"))} 人·小时，设备用户就诊 ${fmt(sv("+4", "dep_visits"))} 次。`] },
+    ] },
+  ];
+  const CHAINS = SETS.flatMap(s => s.chains);
+  const EDGE = {};
+  R.forEach(r => r.edges.forEach(([a, b]) => { EDGE[a + ">" + b] = { r, k: kindOf(r.g) }; }));
+  CHAINS.forEach(c => c.edges.forEach(([a, b]) => { if (!EDGE[a + ">" + b]) console.warn("chain edge not in R:", c.id, a, b); }));
+  const ACTIVE = new Set(["A", "B"]);
+  try { const v = JSON.parse(localStorage.getItem("atlas-chains-v2")); if (Array.isArray(v)) { ACTIVE.clear(); v.forEach(x => ACTIVE.add(x)); } } catch (e) { /* storage unavailable */ }
+  const keyOf = c => typeof c.key === "function" ? (SUMMARY ? c.key() : ["Results not loaded.", "尚未载入结果。"]) : c.key;
+  const chainsBox = document.getElementById("chains");
+  chainsBox.innerHTML = SETS.map(s => `<div class="chainset"><h3>${esc(s.en)}<span class="zh">${esc(s.zh)}</span></h3><div class="chains">` + s.chains.map(c => {
+    const ids = [...new Set(c.edges.map(([a, b]) => EDGE[a + ">" + b].r.id))].sort().join(" ");
+    return `<button type="button" class="chain${c.plan ? " dfr" : ""}" data-c="${c.id}" style="--cc:var(${c.cc})" aria-pressed="false">
+      <span class="cn1"><i>${c.id}${c.plan ? " · to build" : ""}</i>${esc(c.en)}</span><span class="cn2">${esc(c.zh)}</span>
+      <span class="ck">${esc(keyOf(c)[0])}<span class="zh">${esc(keyOf(c)[1])}</span></span><span class="cr">${ids}</span></button>`;
+  }).join("") + `</div></div>`).join("");
+  function applyChains() {
+    const svgEl = document.querySelector("#mapbox svg"), layer = document.getElementById("flows");
+    const on = new Set(), nodes = new Set();
+    let html = "";
+    CHAINS.forEach((c, i) => {
+      const pressed = ACTIVE.has(c.id);
+      chainsBox.querySelector(`[data-c="${c.id}"]`).setAttribute("aria-pressed", pressed);
+      if (!pressed) return;
+      c.edges.forEach(([a, b]) => {
+        const k = a + ">" + b, e = EDGE[k], d = edgePath(a, b)[0], dc = e.k ? " " + e.k : "";
+        on.add(k); nodes.add(a); nodes.add(b);
+        html += `<path class="flowbed${dc}" d="${d}" style="stroke:var(${c.cc})"/><path class="flow${dc}" d="${d}" style="stroke:var(${c.cc});animation-delay:${(-i * 0.15).toFixed(2)}s"/>`;
+      });
+    });
+    layer.innerHTML = html;
+    svgEl.classList.toggle("focus", ACTIVE.size > 0);
+    svgEl.querySelectorAll(".edge, .tag").forEach(el => el.classList.toggle("on", on.has(el.dataset.k)));
+    svgEl.querySelectorAll(".node").forEach(el => el.classList.toggle("on", nodes.has(el.dataset.id)));
+    try { localStorage.setItem("atlas-chains-v2", JSON.stringify([...ACTIVE])); } catch (e) { /* storage unavailable */ }
+  }
+  chainsBox.addEventListener("click", e => {
+    const b = e.target.closest(".chain"); if (!b) return;
+    const id = b.dataset.c; ACTIVE.has(id) ? ACTIVE.delete(id) : ACTIVE.add(id); applyChains();
+  });
+  document.getElementById("ch-all").addEventListener("click", () => { CHAINS.forEach(c => ACTIVE.add(c.id)); applyChains(); });
+  document.getElementById("ch-none").addEventListener("click", () => { ACTIVE.clear(); applyChains(); });
+
+  // ------------------------------------------------------------------ knockout contributions and data tiers
+  const relOfEdge = {};
+  if (CONTRIB) Object.entries(CONTRIB.relations).forEach(([rid, r]) => r.edges.forEach(([a, b]) => { relOfEdge[a + ">" + b] = rid; }));
+  const metricOf = () => "time_to_care_min";
+  const pct = v => v === null || v === undefined ? "—" : (Math.abs(v) < 0.005 ? "0%" : (v > 0 ? "" : "−") + Math.round(Math.abs(v) * 100) + "%");
+  function contribOf(rid, scen) {
+    const c = CONTRIB && CONTRIB.relations[rid];
+    return c ? c.contribution[scen][metricOf(rid)] : null;
+  }
+
+  function buildMap() {
+    let s = `<svg viewBox="0 0 ${MW} ${MH}" role="img" aria-label="Swim-lane map of all 26 relation lines across climate, power, transportation, water and health outcomes, with toggleable layers for lines A and B.">` +
+      `<defs><marker id="mh" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>`;
+    LANES.forEach(([k, y0, y1]) => {
+      s += `<rect class="lane" x="6" y="${y0}" width="${MW - 12}" height="${y1 - y0}" style="fill:var(--l-${k})"/>`;
+      s += `<text class="lanet" x="14" y="${y0 + 20}" style="fill:var(--l-${k})">${SYS[k].lane}</text>` +
+        `<text class="lanez" x="14" y="${y0 + 36}" style="fill:var(--l-${k})">${SYS[k].zh}</text>`;
+    });
+    const tags = [];
+    R.forEach(r => {
+      const k = kindOf(r.g);
+      r.edges.forEach(([a, b]) => {
+        const [d, tx, ty, vert] = edgePath(a, b);
+        s += `<path class="edge${k ? " " + k : ""}" data-k="${a}>${b}" d="${d}" marker-end="url(#mh)"/>`;
+        tags.push([r, a, b, tx, ty, k, vert]);
+      });
+    });
+    s += `<g id="flows"></g>`;
+    Object.entries(NODE).forEach(([id, n]) => {
+      const p = P(id), nk = n[5] === 1 ? " d" : (n[5] === 2 ? " p" : "");
+      s += `<g class="node${nk}" data-id="${id}"><rect x="${p.x - hw}" y="${p.y - hh}" width="${BW}" height="${BH}" style="stroke:var(--l-${n[2]})"/>` +
+        `<text class="en" x="${p.x}" y="${p.y - 3}" text-anchor="middle">${esc(n[0])}</text><text class="cn" x="${p.x}" y="${p.y + 13}" text-anchor="middle">${esc(n[1])}</text></g>`;
+    });
+    tags.forEach(([r, a, b, tx, ty, k, vert]) => {
+      s += `<a class="tag${k ? " " + k : ""}" data-k="${a}>${b}" href="#${r.id}" aria-label="${r.id}: ${esc(NODE[a][0])} to ${esc(NODE[b][0])}"><circle cx="${f(tx, 1)}" cy="${f(ty, 1)}" r="10"/>` +
+        `<text x="${f(tx, 1)}" y="${f(ty + 3.4, 1)}" text-anchor="middle">${r.id.slice(1)}</text></a>`;
+      const lx = vert ? tx + 13 : tx, ly = vert ? ty + 3.5 : ty + 21;
+      s += `<text class="ctb" data-k="${a}>${b}" x="${f(lx, 1)}" y="${f(ly, 1)}" text-anchor="${vert ? "start" : "middle"}"></text>`;
+    });
+    if (CONTRIB) Object.entries(NODE).forEach(([id, n]) => {
+      const t = CONTRIB.nodes[id]; if (!t || !t.tier) return;
+      const p = P(id), inh = t.inherited && t.inherited !== t.tier, w = inh ? 44 : 20;
+      const x = p.x + hw - w + 4, y = p.y - hh - 7;
+      s += `<g class="tier"><title>${esc(t.weakest_inputs.join("; "))}</title><rect x="${x}" y="${y}" width="${w}" height="13" rx="2" style="fill:var(--${t.tier.toLowerCase()})"/>` +
+        `<text x="${x + 3}" y="${y + 9.5}">${t.tier}${inh ? " ↑" + t.inherited : ""}</text></g>`;
+    });
+    s += "</svg>";
+    document.getElementById("mapbox").innerHTML = s;
+  }
+  buildMap();
+  // ---- assumption variants and observed heat waves (tables under the map)
+  (function extraTables() {
+    const box = document.getElementById("extra");
+    let h = "";
+    if (VARIANTS) {
+      const sc = Object.keys(VARIANTS.results)[0], rows = VARIANTS.results[sc];
+      h += `<h3>Line B assumption variants (${sc} °C)<span class="zh">B 线假设情景对照（${sc} °C）</span></h3>
+        <p>Same random numbers; only the named T4 parameters are fixed. Time to care = added travel + waiting per ED visit.<span class="zh">相同随机数，只固定所列的 T4 参数。就医时间 = 每次急诊就诊增加的路程 + 等待。</span></p>
+        <div class="tblwrap"><table><thead><tr><th>Variant 情景</th><th>median min 中位数</th><th>p95 min</th><th>mean min 均值</th><th>runs &gt; 30 min</th><th>device-user visits</th></tr></thead><tbody>` +
+        Object.entries(rows).map(([k, v]) => `<tr><td>${esc(k)}</td><td>${v.time_to_care_median}</td><td>${v.time_to_care_p95}</td><td>${v.time_to_care_mean}</td><td>${pc(v.share_runs_over_30min)}</td><td>${v.device_visits}</td></tr>`).join("") +
+        `</tbody></table></div>`;
+    }
+    if (HEATWAVES && HEATWAVES.length) {
+      h += `<h3>Observed heat waves<span class="zh">实际热浪</span></h3>
+        <p>Each period is the hottest five days of its summer at BNA, with one day before and after; +0 °C uses the observed temperatures.<span class="zh">每段为该年夏季 BNA 最热的连续 5 天，前后各加一天；+0 °C 为实测气温。</span></p>
+        <div class="tblwrap"><table><thead><tr><th>Heat wave 热浪</th><th>scenario</th><th>runs with outage</th><th>person-hours without power</th><th>excess heat-illness visits</th><th>time to care median / p95 min</th><th>dialysis sessions affected</th></tr></thead><tbody>` +
+        HEATWAVES.map(w => Object.entries(w.scenarios).map(([s, v]) => `<tr><td>${esc(w.label)}</td><td>${s} °C</td><td>${pc(v.share_runs_with_any_outage)}</td><td>${fmt(v.pop_hours)}</td><td>${fmt(v.heat_visits_excess)}</td><td>${fmt(v.ttc_median)} / ${fmt(v.ttc_p95)}</td><td>${fmt(v.dialysis_sessions)}</td></tr>`).join("")).join("") +
+        `</tbody></table></div>`;
+    }
+    box.innerHTML = h;
+    box.hidden = !h;
+  })();
+  function applyContrib() {
+    const box = document.getElementById("mapbox"), scen = document.getElementById("ctb-scen").value;
+    box.querySelectorAll(".ctb").forEach(el => {
+      const rid = relOfEdge[el.dataset.k], v = rid ? contribOf(rid, scen) : null;
+      el.textContent = v === null ? "" : pct(v);
+      el.setAttribute("class", "ctb" + (v !== null && v < -0.005 ? " neg" : "") + (v !== null && Math.abs(v) < 0.005 ? " zero" : ""));
+    });
+    box.querySelectorAll(".edge").forEach(el => {
+      const rid = relOfEdge[el.dataset.k], v = rid ? contribOf(rid, scen) : null;
+      el.style.strokeWidth = v === null || !document.getElementById("show-ctb").checked ? "" : (1.2 + 2.3 * Math.min(1, Math.abs(v))).toFixed(2);
+    });
+  }
+  if (CONTRIB) {
+    applyContrib();
+    document.getElementById("ctb-scen").addEventListener("change", applyContrib);
+    document.getElementById("show-ctb").addEventListener("change", e => { document.getElementById("mapbox").classList.toggle("hide-ctb", !e.target.checked); applyContrib(); });
+    document.getElementById("show-tier").addEventListener("change", e => document.getElementById("mapbox").classList.toggle("hide-tier", !e.target.checked));
+    document.getElementById("ctbnote").innerHTML = CONTRIB_NOTE;
+  } else {
+    document.getElementById("ctbtools").hidden = true;
+  }
+  applyChains();
+  document.getElementById("show-d").addEventListener("change", e => {
+    document.getElementById("mapbox").classList.toggle("hide-d", !e.target.checked);
+  });
+})();
+</script>

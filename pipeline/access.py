@@ -46,6 +46,9 @@ def population_cells(buildings, zones, cell_m):
     c = b.groupby(["cx", "cy"]).agg(pop=("p", "sum"), eld=("e", "sum"), wx=("wx", "sum"), wy=("wy", "sum")).reset_index()
     c = c[c["pop"] > 0]
     c["x"], c["y"] = c["wx"] / c["pop"], c["wy"] / c["pop"]
+    # 【中文】每个网格记人口最多的分区（B 线新增就诊按分区分配到网格）/ dominant zone per cell
+    zc = b.groupby(["cx", "cy", "zone"])["p"].sum().reset_index().sort_values("p").drop_duplicates(["cx", "cy"], keep="last")
+    c = c.merge(zc[["cx", "cy", "zone"]], on=["cx", "cy"], how="left")
     return c.drop(columns=["wx", "wy"])
 
 

@@ -1,17 +1,20 @@
 {
- "created": "2026-11-10T22:26:49+00:00",
+ "created": "2026-11-11T19:31:10+00:00",
  "runs": 500,
  "seed": 20261027,
  "scenarios_delta_c": [
   2.0,
   4.0
  ],
- "method": "Knockout (do-intervention) with common random numbers: contribution = (base \u2212 knockout) / base. Positive: the relation adds to the outcome; negative: it buffers. Relations in series share the downstream effect, so contributions do not add up. time_to_care_min = care_time_loss_min (line A) + wait_increase_min (line B, peak-day ED waiting). care_time_loss_min = population-mean added minutes to hospital + dialysis + EMS at each run's worst hour, cells that lose every facility of a type inside the area counted at 30 min (assumption).",
+ "method": "Knockout (do-intervention) with common random numbers: contribution = (base − knockout) / base. Positive: the relation adds to the outcome; negative: it buffers. Relations in series share the downstream effect, so contributions do not add up. time_to_care_min = added travel (rerouting and congestion) plus added waiting per ED visit on each run's peak day, with per-hospital queues (pipeline.care). dialysis_sessions_affected is reported separately. care_time_loss_min (old line A metric) = population-mean added minutes to hospital + dialysis + EMS at each run's worst hour, cells that lose every facility of a type inside the area counted at 30 min (assumption).",
  "outcomes": {
   "2.0": {
    "base": {
-    "time_to_care_min": 10.7212,
-    "wait_increase_min": 10.2695,
+    "time_to_care_min": 11.7774,
+    "wait_increase_min": 11.7345,
+    "time_to_care_median_min": 1.6523,
+    "ed_travel_increase_min": 0.0019,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.452,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -19,8 +22,11 @@
     "indoor_pop_hours": 53564680.0
    },
    "R01": {
-    "time_to_care_min": 12.1775,
-    "wait_increase_min": 11.6247,
+    "time_to_care_min": 12.7529,
+    "wait_increase_min": 12.7011,
+    "time_to_care_median_min": 1.7193,
+    "ed_travel_increase_min": 0.0025,
+    "dialysis_sessions_affected": 15.14,
     "care_time_loss_min": 0.553,
     "dialysis_none_available": 0.002,
     "pop_hours": 779224.9,
@@ -28,8 +34,11 @@
     "indoor_pop_hours": 67899493.7
    },
    "R05": {
-    "time_to_care_min": 10.7212,
-    "wait_increase_min": 10.2695,
+    "time_to_care_min": 11.7774,
+    "wait_increase_min": 11.7345,
+    "time_to_care_median_min": 1.6523,
+    "ed_travel_increase_min": 0.0019,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.452,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -37,8 +46,11 @@
     "indoor_pop_hours": 53564680.0
    },
    "R06": {
-    "time_to_care_min": 10.7212,
-    "wait_increase_min": 10.2695,
+    "time_to_care_min": 11.7774,
+    "wait_increase_min": 11.7345,
+    "time_to_care_median_min": 1.6523,
+    "ed_travel_increase_min": 0.0019,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.452,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -46,8 +58,11 @@
     "indoor_pop_hours": 53564680.0
    },
    "R14": {
-    "time_to_care_min": 10.6025,
-    "wait_increase_min": 10.2695,
+    "time_to_care_min": 11.7364,
+    "wait_increase_min": 11.7345,
+    "time_to_care_median_min": 1.6381,
+    "ed_travel_increase_min": 0.0019,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.333,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -55,8 +70,11 @@
     "indoor_pop_hours": 53564680.0
    },
    "R17": {
-    "time_to_care_min": 10.3638,
-    "wait_increase_min": 10.2695,
+    "time_to_care_min": 11.2007,
+    "wait_increase_min": 11.1597,
+    "time_to_care_median_min": 1.6523,
+    "ed_travel_increase_min": 0.0,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.094,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -64,8 +82,11 @@
     "indoor_pop_hours": 53564680.0
    },
    "R22": {
-    "time_to_care_min": 0.4517,
+    "time_to_care_min": 0.0429,
     "wait_increase_min": 0.0,
+    "time_to_care_median_min": 0.0,
+    "ed_travel_increase_min": 0.0019,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.452,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -75,6 +96,9 @@
    "R02": {
     "time_to_care_min": 1.54,
     "wait_increase_min": 1.54,
+    "time_to_care_median_min": 1.3591,
+    "ed_travel_increase_min": 0.0,
+    "dialysis_sessions_affected": 0.0,
     "care_time_loss_min": 0.0,
     "dialysis_none_available": 0.0,
     "pop_hours": 0.0,
@@ -82,8 +106,11 @@
     "indoor_pop_hours": 53517943.6
    },
    "R03a": {
-    "time_to_care_min": 2.3151,
-    "wait_increase_min": 2.2709,
+    "time_to_care_min": 2.8203,
+    "wait_increase_min": 2.8158,
+    "time_to_care_median_min": 1.3889,
+    "ed_travel_increase_min": 0.0006,
+    "dialysis_sessions_affected": 0.7,
     "care_time_loss_min": 0.044,
     "dialysis_none_available": 0.0,
     "pop_hours": 39879.9,
@@ -91,8 +118,11 @@
     "indoor_pop_hours": 53519938.4
    },
    "R03b": {
-    "time_to_care_min": 1.545,
-    "wait_increase_min": 1.544,
+    "time_to_care_min": 1.5444,
+    "wait_increase_min": 1.5443,
+    "time_to_care_median_min": 1.3634,
+    "ed_travel_increase_min": 0.0,
+    "dialysis_sessions_affected": 0.0,
     "care_time_loss_min": 0.001,
     "dialysis_none_available": 0.0,
     "pop_hours": 881.5,
@@ -102,6 +132,9 @@
    "R04": {
     "time_to_care_min": 1.54,
     "wait_increase_min": 1.54,
+    "time_to_care_median_min": 1.3591,
+    "ed_travel_increase_min": 0.0,
+    "dialysis_sessions_affected": 0.0,
     "care_time_loss_min": 0.0,
     "dialysis_none_available": 0.0,
     "pop_hours": 0.0,
@@ -109,8 +142,11 @@
     "indoor_pop_hours": 53517943.6
    },
    "R07": {
-    "time_to_care_min": 2.5473,
-    "wait_increase_min": 2.2811,
+    "time_to_care_min": 2.7616,
+    "wait_increase_min": 2.7303,
+    "time_to_care_median_min": 1.425,
+    "ed_travel_increase_min": 0.0,
+    "dialysis_sessions_affected": 5.62,
     "care_time_loss_min": 0.266,
     "dialysis_none_available": 0.0,
     "pop_hours": 155022.5,
@@ -118,8 +154,11 @@
     "indoor_pop_hours": 53518484.8
    },
    "R08": {
-    "time_to_care_min": 5.5688,
-    "wait_increase_min": 5.3669,
+    "time_to_care_min": 5.9366,
+    "wait_increase_min": 5.9091,
+    "time_to_care_median_min": 1.62,
+    "ed_travel_increase_min": 0.0007,
+    "dialysis_sessions_affected": 5.74,
     "care_time_loss_min": 0.202,
     "dialysis_none_available": 0.0,
     "pop_hours": 333165.5,
@@ -127,8 +166,11 @@
     "indoor_pop_hours": 53540514.6
    },
    "R09": {
-    "time_to_care_min": 10.7212,
-    "wait_increase_min": 10.2695,
+    "time_to_care_min": 11.7774,
+    "wait_increase_min": 11.7345,
+    "time_to_care_median_min": 1.6523,
+    "ed_travel_increase_min": 0.0019,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.452,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -136,8 +178,11 @@
     "indoor_pop_hours": 53564680.0
    },
    "R10": {
-    "time_to_care_min": 10.7212,
-    "wait_increase_min": 10.2695,
+    "time_to_care_min": 11.7774,
+    "wait_increase_min": 11.7345,
+    "time_to_care_median_min": 1.6523,
+    "ed_travel_increase_min": 0.0019,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.452,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -145,8 +190,11 @@
     "indoor_pop_hours": 53564680.0
    },
    "R11": {
-    "time_to_care_min": 9.7605,
-    "wait_increase_min": 9.6567,
+    "time_to_care_min": 11.2029,
+    "wait_increase_min": 11.1595,
+    "time_to_care_median_min": 1.6539,
+    "ed_travel_increase_min": 0.0,
+    "dialysis_sessions_affected": 0.0,
     "care_time_loss_min": 0.104,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -154,8 +202,11 @@
     "indoor_pop_hours": 53564680.0
    },
    "R12": {
-    "time_to_care_min": 10.7212,
-    "wait_increase_min": 10.2695,
+    "time_to_care_min": 11.7774,
+    "wait_increase_min": 11.7345,
+    "time_to_care_median_min": 1.6523,
+    "ed_travel_increase_min": 0.0019,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.452,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -163,8 +214,11 @@
     "indoor_pop_hours": 53564680.0
    },
    "R13": {
-    "time_to_care_min": 10.6065,
-    "wait_increase_min": 10.2695,
+    "time_to_care_min": 11.7364,
+    "wait_increase_min": 11.7345,
+    "time_to_care_median_min": 1.6381,
+    "ed_travel_increase_min": 0.0019,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.337,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -172,8 +226,11 @@
     "indoor_pop_hours": 53564680.0
    },
    "R18": {
-    "time_to_care_min": 10.6874,
-    "wait_increase_min": 10.2357,
+    "time_to_care_min": 11.7327,
+    "wait_increase_min": 11.6898,
+    "time_to_care_median_min": 1.6523,
+    "ed_travel_increase_min": 0.0019,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.452,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -181,8 +238,11 @@
     "indoor_pop_hours": 53517943.6
    },
    "R19": {
-    "time_to_care_min": 8.9587,
-    "wait_increase_min": 8.507,
+    "time_to_care_min": 10.0201,
+    "wait_increase_min": 9.9772,
+    "time_to_care_median_min": 0.0,
+    "ed_travel_increase_min": 0.0019,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.452,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -190,8 +250,11 @@
     "indoor_pop_hours": 0.0
    },
    "R21": {
-    "time_to_care_min": 8.9586,
-    "wait_increase_min": 8.5069,
+    "time_to_care_min": 10.0199,
+    "wait_increase_min": 9.977,
+    "time_to_care_median_min": 0.0,
+    "ed_travel_increase_min": 0.0019,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.452,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -199,8 +262,11 @@
     "indoor_pop_hours": 53564680.0
    },
    "R23": {
-    "time_to_care_min": 10.7211,
-    "wait_increase_min": 10.2693,
+    "time_to_care_min": 11.7772,
+    "wait_increase_min": 11.7343,
+    "time_to_care_median_min": 1.6523,
+    "ed_travel_increase_min": 0.0019,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.452,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -208,8 +274,11 @@
     "indoor_pop_hours": 53564680.0
    },
    "R24": {
-    "time_to_care_min": 2.2507,
-    "wait_increase_min": 1.799,
+    "time_to_care_min": 1.902,
+    "wait_increase_min": 1.8603,
+    "time_to_care_median_min": 1.3889,
+    "ed_travel_increase_min": 0.0008,
+    "dialysis_sessions_affected": 10.41,
     "care_time_loss_min": 0.452,
     "dialysis_none_available": 0.0,
     "pop_hours": 603730.7,
@@ -219,8 +288,11 @@
   },
   "4.0": {
    "base": {
-    "time_to_care_min": 36.5742,
-    "wait_increase_min": 34.4849,
+    "time_to_care_min": 37.471,
+    "wait_increase_min": 37.3392,
+    "time_to_care_median_min": 2.793,
+    "ed_travel_increase_min": 0.0099,
+    "dialysis_sessions_affected": 66.04,
     "care_time_loss_min": 2.089,
     "dialysis_none_available": 0.018,
     "pop_hours": 3511109.6,
@@ -228,8 +300,11 @@
     "indoor_pop_hours": 76362995.4
    },
    "R01": {
-    "time_to_care_min": 42.2504,
-    "wait_increase_min": 39.7562,
+    "time_to_care_min": 41.588,
+    "wait_increase_min": 41.4273,
+    "time_to_care_median_min": 3.1568,
+    "ed_travel_increase_min": 0.0056,
+    "dialysis_sessions_affected": 90.83,
     "care_time_loss_min": 2.494,
     "dialysis_none_available": 0.022,
     "pop_hours": 4469350.2,
@@ -237,8 +312,11 @@
     "indoor_pop_hours": 85120453.2
    },
    "R05": {
-    "time_to_care_min": 36.5382,
-    "wait_increase_min": 34.4547,
+    "time_to_care_min": 37.4202,
+    "wait_increase_min": 37.289,
+    "time_to_care_median_min": 2.7367,
+    "ed_travel_increase_min": 0.0098,
+    "dialysis_sessions_affected": 65.88,
     "care_time_loss_min": 2.083,
     "dialysis_none_available": 0.018,
     "pop_hours": 3507862.4,
@@ -246,8 +324,11 @@
     "indoor_pop_hours": 76362995.4
    },
    "R06": {
-    "time_to_care_min": 36.5382,
-    "wait_increase_min": 34.4547,
+    "time_to_care_min": 37.4202,
+    "wait_increase_min": 37.289,
+    "time_to_care_median_min": 2.7367,
+    "ed_travel_increase_min": 0.0098,
+    "dialysis_sessions_affected": 65.88,
     "care_time_loss_min": 2.083,
     "dialysis_none_available": 0.018,
     "pop_hours": 3507862.4,
@@ -255,8 +336,11 @@
     "indoor_pop_hours": 76362995.4
    },
    "R14": {
-    "time_to_care_min": 36.2338,
-    "wait_increase_min": 34.4849,
+    "time_to_care_min": 37.3491,
+    "wait_increase_min": 37.3392,
+    "time_to_care_median_min": 2.6855,
+    "ed_travel_increase_min": 0.0099,
+    "dialysis_sessions_affected": 66.04,
     "care_time_loss_min": 1.749,
     "dialysis_none_available": 0.018,
     "pop_hours": 3511109.6,
@@ -264,8 +348,11 @@
     "indoor_pop_hours": 76362995.4
    },
    "R17": {
-    "time_to_care_min": 34.7637,
-    "wait_increase_min": 34.4849,
+    "time_to_care_min": 34.3598,
+    "wait_increase_min": 34.2379,
+    "time_to_care_median_min": 2.6953,
+    "ed_travel_increase_min": 0.0,
+    "dialysis_sessions_affected": 66.04,
     "care_time_loss_min": 0.279,
     "dialysis_none_available": 0.0,
     "pop_hours": 3511109.6,
@@ -273,8 +360,11 @@
     "indoor_pop_hours": 76362995.4
    },
    "R22": {
-    "time_to_care_min": 2.0892,
-    "wait_increase_min": 0.0,
+    "time_to_care_min": 0.1609,
+    "wait_increase_min": 0.0291,
+    "time_to_care_median_min": 0.0179,
+    "ed_travel_increase_min": 0.0099,
+    "dialysis_sessions_affected": 66.04,
     "care_time_loss_min": 2.089,
     "dialysis_none_available": 0.018,
     "pop_hours": 3511109.6,
@@ -282,8 +372,11 @@
     "indoor_pop_hours": 76362995.4
    },
    "R02": {
-    "time_to_care_min": 1.5808,
-    "wait_increase_min": 1.5701,
+    "time_to_care_min": 1.5893,
+    "wait_increase_min": 1.5874,
+    "time_to_care_median_min": 1.3634,
+    "ed_travel_increase_min": 0.0,
+    "dialysis_sessions_affected": 0.15,
     "care_time_loss_min": 0.011,
     "dialysis_none_available": 0.0,
     "pop_hours": 3271.4,
@@ -291,8 +384,11 @@
     "indoor_pop_hours": 75880927.9
    },
    "R03a": {
-    "time_to_care_min": 7.951,
-    "wait_increase_min": 7.6327,
+    "time_to_care_min": 8.5179,
+    "wait_increase_min": 8.4918,
+    "time_to_care_median_min": 1.5245,
+    "ed_travel_increase_min": 0.0016,
+    "dialysis_sessions_affected": 7.63,
     "care_time_loss_min": 0.318,
     "dialysis_none_available": 0.002,
     "pop_hours": 487079.9,
@@ -300,8 +396,11 @@
     "indoor_pop_hours": 75930189.6
    },
    "R03b": {
-    "time_to_care_min": 1.7773,
-    "wait_increase_min": 1.7558,
+    "time_to_care_min": 1.8966,
+    "wait_increase_min": 1.894,
+    "time_to_care_median_min": 1.3763,
+    "ed_travel_increase_min": 0.0,
+    "dialysis_sessions_affected": 0.25,
     "care_time_loss_min": 0.022,
     "dialysis_none_available": 0.0,
     "pop_hours": 7748.5,
@@ -309,8 +408,11 @@
     "indoor_pop_hours": 75881625.5
    },
    "R04": {
-    "time_to_care_min": 1.5808,
-    "wait_increase_min": 1.5701,
+    "time_to_care_min": 1.5893,
+    "wait_increase_min": 1.5874,
+    "time_to_care_median_min": 1.3634,
+    "ed_travel_increase_min": 0.0,
+    "dialysis_sessions_affected": 0.15,
     "care_time_loss_min": 0.011,
     "dialysis_none_available": 0.0,
     "pop_hours": 3271.4,
@@ -318,8 +420,11 @@
     "indoor_pop_hours": 75880927.9
    },
    "R07": {
-    "time_to_care_min": 11.1304,
-    "wait_increase_min": 10.0287,
+    "time_to_care_min": 10.287,
+    "wait_increase_min": 10.1762,
+    "time_to_care_median_min": 1.5695,
+    "ed_travel_increase_min": 0.0022,
+    "dialysis_sessions_affected": 35.53,
     "care_time_loss_min": 1.102,
     "dialysis_none_available": 0.004,
     "pop_hours": 970413.6,
@@ -327,8 +432,11 @@
     "indoor_pop_hours": 75897217.5
    },
    "R08": {
-    "time_to_care_min": 19.7549,
-    "wait_increase_min": 18.8334,
+    "time_to_care_min": 19.9124,
+    "wait_increase_min": 19.8227,
+    "time_to_care_median_min": 2.3762,
+    "ed_travel_increase_min": 0.0041,
+    "dialysis_sessions_affected": 37.32,
     "care_time_loss_min": 0.921,
     "dialysis_none_available": 0.002,
     "pop_hours": 1994870.7,
@@ -336,8 +444,11 @@
     "indoor_pop_hours": 76103045.9
    },
    "R09": {
-    "time_to_care_min": 36.5742,
-    "wait_increase_min": 34.4849,
+    "time_to_care_min": 37.471,
+    "wait_increase_min": 37.3392,
+    "time_to_care_median_min": 2.793,
+    "ed_travel_increase_min": 0.0099,
+    "dialysis_sessions_affected": 66.04,
     "care_time_loss_min": 2.089,
     "dialysis_none_available": 0.018,
     "pop_hours": 3511109.6,
@@ -345,8 +456,11 @@
     "indoor_pop_hours": 76362995.4
    },
    "R10": {
-    "time_to_care_min": 36.5742,
-    "wait_increase_min": 34.4849,
+    "time_to_care_min": 37.471,
+    "wait_increase_min": 37.3392,
+    "time_to_care_median_min": 2.793,
+    "ed_travel_increase_min": 0.0099,
+    "dialysis_sessions_affected": 66.04,
     "care_time_loss_min": 2.089,
     "dialysis_none_available": 0.018,
     "pop_hours": 3511109.6,
@@ -354,8 +468,11 @@
     "indoor_pop_hours": 76362995.4
    },
    "R11": {
-    "time_to_care_min": 30.9625,
-    "wait_increase_min": 30.6623,
+    "time_to_care_min": 34.3669,
+    "wait_increase_min": 34.2365,
+    "time_to_care_median_min": 2.6953,
+    "ed_travel_increase_min": 0.0,
+    "dialysis_sessions_affected": 0.0,
     "care_time_loss_min": 0.3,
     "dialysis_none_available": 0.0,
     "pop_hours": 3511109.6,
@@ -363,8 +480,11 @@
     "indoor_pop_hours": 76362995.4
    },
    "R12": {
-    "time_to_care_min": 36.5742,
-    "wait_increase_min": 34.4849,
+    "time_to_care_min": 37.471,
+    "wait_increase_min": 37.3392,
+    "time_to_care_median_min": 2.793,
+    "ed_travel_increase_min": 0.0099,
+    "dialysis_sessions_affected": 66.04,
     "care_time_loss_min": 2.089,
     "dialysis_none_available": 0.018,
     "pop_hours": 3511109.6,
@@ -372,8 +492,11 @@
     "indoor_pop_hours": 76362995.4
    },
    "R13": {
-    "time_to_care_min": 36.2153,
-    "wait_increase_min": 34.4849,
+    "time_to_care_min": 37.3491,
+    "wait_increase_min": 37.3392,
+    "time_to_care_median_min": 2.6855,
+    "ed_travel_increase_min": 0.0099,
+    "dialysis_sessions_affected": 66.04,
     "care_time_loss_min": 1.73,
     "dialysis_none_available": 0.016,
     "pop_hours": 3511109.6,
@@ -381,8 +504,11 @@
     "indoor_pop_hours": 76362995.4
    },
    "R18": {
-    "time_to_care_min": 36.2051,
-    "wait_increase_min": 34.1159,
+    "time_to_care_min": 37.076,
+    "wait_increase_min": 36.9442,
+    "time_to_care_median_min": 2.7795,
+    "ed_travel_increase_min": 0.0099,
+    "dialysis_sessions_affected": 66.04,
     "care_time_loss_min": 2.089,
     "dialysis_none_available": 0.018,
     "pop_hours": 3511109.6,
@@ -390,8 +516,11 @@
     "indoor_pop_hours": 75880927.9
    },
    "R19": {
-    "time_to_care_min": 33.8884,
-    "wait_increase_min": 31.7992,
+    "time_to_care_min": 34.9912,
+    "wait_increase_min": 34.8594,
+    "time_to_care_median_min": 0.7857,
+    "ed_travel_increase_min": 0.0099,
+    "dialysis_sessions_affected": 66.04,
     "care_time_loss_min": 2.089,
     "dialysis_none_available": 0.018,
     "pop_hours": 3511109.6,
@@ -399,8 +528,11 @@
     "indoor_pop_hours": 0.0
    },
    "R21": {
-    "time_to_care_min": 33.8874,
-    "wait_increase_min": 31.7981,
+    "time_to_care_min": 34.99,
+    "wait_increase_min": 34.8582,
+    "time_to_care_median_min": 0.7857,
+    "ed_travel_increase_min": 0.0099,
+    "dialysis_sessions_affected": 66.04,
     "care_time_loss_min": 2.089,
     "dialysis_none_available": 0.018,
     "pop_hours": 3511109.6,
@@ -408,8 +540,11 @@
     "indoor_pop_hours": 76362995.4
    },
    "R23": {
-    "time_to_care_min": 36.5731,
-    "wait_increase_min": 34.4838,
+    "time_to_care_min": 37.4698,
+    "wait_increase_min": 37.338,
+    "time_to_care_median_min": 2.793,
+    "ed_travel_increase_min": 0.0099,
+    "dialysis_sessions_affected": 66.04,
     "care_time_loss_min": 2.089,
     "dialysis_none_available": 0.018,
     "pop_hours": 3511109.6,
@@ -417,8 +552,11 @@
     "indoor_pop_hours": 76362995.4
    },
    "R24": {
-    "time_to_care_min": 4.7561,
-    "wait_increase_min": 2.6669,
+    "time_to_care_min": 3.8712,
+    "wait_increase_min": 3.7416,
+    "time_to_care_median_min": 1.5821,
+    "ed_travel_increase_min": 0.0077,
+    "dialysis_sessions_affected": 66.04,
     "care_time_loss_min": 2.089,
     "dialysis_none_available": 0.018,
     "pop_hours": 3511109.6,
@@ -438,16 +576,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": -0.1358,
-     "wait_increase_min": -0.132,
+     "time_to_care_min": -0.0828,
+     "time_to_care_median_min": -0.0405,
+     "ed_travel_increase_min": -0.3158,
+     "wait_increase_min": -0.0824,
+     "dialysis_sessions_affected": -0.4544,
      "care_time_loss_min": -0.2235,
      "pop_hours": -0.2907,
      "indoor_pop_hours": -0.2676,
      "indoor_outage_pop_hours": -0.7924
     },
     "+4": {
-     "time_to_care_min": -0.1552,
-     "wait_increase_min": -0.1529,
+     "time_to_care_min": -0.1099,
+     "time_to_care_median_min": -0.1303,
+     "ed_travel_increase_min": 0.4343,
+     "wait_increase_min": -0.1095,
+     "dialysis_sessions_affected": -0.3754,
      "care_time_loss_min": -0.1939,
      "pop_hours": -0.2729,
      "indoor_pop_hours": -0.1147,
@@ -466,15 +610,21 @@
    "contribution": {
     "+2": {
      "time_to_care_min": 0.0,
+     "time_to_care_median_min": 0.0,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.001,
-     "wait_increase_min": 0.0009,
+     "time_to_care_min": 0.0014,
+     "time_to_care_median_min": 0.0202,
+     "ed_travel_increase_min": 0.0101,
+     "wait_increase_min": 0.0013,
+     "dialysis_sessions_affected": 0.0024,
      "care_time_loss_min": 0.0029,
      "pop_hours": 0.0009,
      "indoor_pop_hours": 0.0,
@@ -497,15 +647,21 @@
    "contribution": {
     "+2": {
      "time_to_care_min": 0.0,
+     "time_to_care_median_min": 0.0,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.001,
-     "wait_increase_min": 0.0009,
+     "time_to_care_min": 0.0014,
+     "time_to_care_median_min": 0.0202,
+     "ed_travel_increase_min": 0.0101,
+     "wait_increase_min": 0.0013,
+     "dialysis_sessions_affected": 0.0024,
      "care_time_loss_min": 0.0029,
      "pop_hours": 0.0009,
      "indoor_pop_hours": 0.0,
@@ -514,7 +670,7 @@
    }
   },
   "R14": {
-   "what_is_switched_off": "dark signals keep full capacity (R14\u2013R16 are in series, so one knockout covers all three)",
+   "what_is_switched_off": "dark signals keep full capacity (R14–R16 are in series, so one knockout covers all three)",
    "edges": [
     [
      "signals",
@@ -531,16 +687,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.0111,
+     "time_to_care_min": 0.0035,
+     "time_to_care_median_min": 0.0086,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.2633,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.0093,
+     "time_to_care_min": 0.0033,
+     "time_to_care_median_min": 0.0385,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.1628,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -558,16 +720,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.0333,
-     "wait_increase_min": 0.0,
+     "time_to_care_min": 0.049,
+     "time_to_care_median_min": 0.0,
+     "ed_travel_increase_min": 1.0,
+     "wait_increase_min": 0.049,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.792,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.0495,
-     "wait_increase_min": 0.0,
+     "time_to_care_min": 0.083,
+     "time_to_care_median_min": 0.035,
+     "ed_travel_increase_min": 1.0,
+     "wait_increase_min": 0.0831,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.8664,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -585,16 +753,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.9579,
+     "time_to_care_min": 0.9964,
+     "time_to_care_median_min": 1.0,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 1.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.9429,
-     "wait_increase_min": 1.0,
+     "time_to_care_min": 0.9957,
+     "time_to_care_median_min": 0.9936,
+     "ed_travel_increase_min": 0.0,
+     "wait_increase_min": 0.9992,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -612,16 +786,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.8564,
-     "wait_increase_min": 0.85,
+     "time_to_care_min": 0.8692,
+     "time_to_care_median_min": 0.1774,
+     "ed_travel_increase_min": 1.0,
+     "wait_increase_min": 0.8688,
+     "dialysis_sessions_affected": 1.0,
      "care_time_loss_min": 1.0,
      "pop_hours": 1.0,
      "indoor_pop_hours": 0.0009,
      "indoor_outage_pop_hours": 1.0
     },
     "+4": {
-     "time_to_care_min": 0.9568,
-     "wait_increase_min": 0.9545,
+     "time_to_care_min": 0.9576,
+     "time_to_care_median_min": 0.5119,
+     "ed_travel_increase_min": 1.0,
+     "wait_increase_min": 0.9575,
+     "dialysis_sessions_affected": 0.9977,
      "care_time_loss_min": 0.9947,
      "pop_hours": 0.9991,
      "indoor_pop_hours": 0.0063,
@@ -639,16 +819,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.7841,
-     "wait_increase_min": 0.7789,
+     "time_to_care_min": 0.7605,
+     "time_to_care_median_min": 0.1594,
+     "ed_travel_increase_min": 0.6842,
+     "wait_increase_min": 0.76,
+     "dialysis_sessions_affected": 0.9328,
      "care_time_loss_min": 0.9027,
      "pop_hours": 0.9339,
      "indoor_pop_hours": 0.0008,
      "indoor_outage_pop_hours": 0.9573
     },
     "+4": {
-     "time_to_care_min": 0.7826,
-     "wait_increase_min": 0.7787,
+     "time_to_care_min": 0.7727,
+     "time_to_care_median_min": 0.4542,
+     "ed_travel_increase_min": 0.8384,
+     "wait_increase_min": 0.7726,
+     "dialysis_sessions_affected": 0.8845,
      "care_time_loss_min": 0.8478,
      "pop_hours": 0.8613,
      "indoor_pop_hours": 0.0057,
@@ -666,16 +852,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.8559,
-     "wait_increase_min": 0.8497,
+     "time_to_care_min": 0.8689,
+     "time_to_care_median_min": 0.1748,
+     "ed_travel_increase_min": 1.0,
+     "wait_increase_min": 0.8684,
+     "dialysis_sessions_affected": 1.0,
      "care_time_loss_min": 0.9978,
      "pop_hours": 0.9985,
      "indoor_pop_hours": 0.0009,
      "indoor_outage_pop_hours": 0.993
     },
     "+4": {
-     "time_to_care_min": 0.9514,
-     "wait_increase_min": 0.9491,
+     "time_to_care_min": 0.9494,
+     "time_to_care_median_min": 0.5072,
+     "ed_travel_increase_min": 1.0,
+     "wait_increase_min": 0.9493,
+     "dialysis_sessions_affected": 0.9962,
      "care_time_loss_min": 0.9895,
      "pop_hours": 0.9978,
      "indoor_pop_hours": 0.0063,
@@ -693,16 +885,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.8564,
-     "wait_increase_min": 0.85,
+     "time_to_care_min": 0.8692,
+     "time_to_care_median_min": 0.1774,
+     "ed_travel_increase_min": 1.0,
+     "wait_increase_min": 0.8688,
+     "dialysis_sessions_affected": 1.0,
      "care_time_loss_min": 1.0,
      "pop_hours": 1.0,
      "indoor_pop_hours": 0.0009,
      "indoor_outage_pop_hours": 1.0
     },
     "+4": {
-     "time_to_care_min": 0.9568,
-     "wait_increase_min": 0.9545,
+     "time_to_care_min": 0.9576,
+     "time_to_care_median_min": 0.5119,
+     "ed_travel_increase_min": 1.0,
+     "wait_increase_min": 0.9575,
+     "dialysis_sessions_affected": 0.9977,
      "care_time_loss_min": 0.9947,
      "pop_hours": 0.9991,
      "indoor_pop_hours": 0.0063,
@@ -720,16 +918,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.7624,
-     "wait_increase_min": 0.7779,
+     "time_to_care_min": 0.7655,
+     "time_to_care_median_min": 0.1376,
+     "ed_travel_increase_min": 1.0,
+     "wait_increase_min": 0.7673,
+     "dialysis_sessions_affected": 0.4601,
      "care_time_loss_min": 0.4115,
      "pop_hours": 0.7432,
      "indoor_pop_hours": 0.0009,
      "indoor_outage_pop_hours": 0.9884
     },
     "+4": {
-     "time_to_care_min": 0.6957,
-     "wait_increase_min": 0.7092,
+     "time_to_care_min": 0.7255,
+     "time_to_care_median_min": 0.4381,
+     "ed_travel_increase_min": 0.7778,
+     "wait_increase_min": 0.7275,
+     "dialysis_sessions_affected": 0.462,
      "care_time_loss_min": 0.4725,
      "pop_hours": 0.7236,
      "indoor_pop_hours": 0.0061,
@@ -747,16 +951,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.4806,
-     "wait_increase_min": 0.4774,
+     "time_to_care_min": 0.4959,
+     "time_to_care_median_min": 0.0195,
+     "ed_travel_increase_min": 0.6316,
+     "wait_increase_min": 0.4964,
+     "dialysis_sessions_affected": 0.4486,
      "care_time_loss_min": 0.5531,
      "pop_hours": 0.4482,
      "indoor_pop_hours": 0.0005,
      "indoor_outage_pop_hours": 0.5171
     },
     "+4": {
-     "time_to_care_min": 0.4599,
-     "wait_increase_min": 0.4539,
+     "time_to_care_min": 0.4686,
+     "time_to_care_median_min": 0.1492,
+     "ed_travel_increase_min": 0.5859,
+     "wait_increase_min": 0.4691,
+     "dialysis_sessions_affected": 0.4349,
      "care_time_loss_min": 0.5591,
      "pop_hours": 0.4318,
      "indoor_pop_hours": 0.0034,
@@ -775,7 +985,10 @@
    "contribution": {
     "+2": {
      "time_to_care_min": 0.0,
+     "time_to_care_median_min": 0.0,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -783,7 +996,10 @@
     },
     "+4": {
      "time_to_care_min": 0.0,
+     "time_to_care_median_min": 0.0,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -806,7 +1022,10 @@
    "contribution": {
     "+2": {
      "time_to_care_min": 0.0,
+     "time_to_care_median_min": 0.0,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -814,7 +1033,10 @@
     },
     "+4": {
      "time_to_care_min": 0.0,
+     "time_to_care_median_min": 0.0,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -832,16 +1054,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.0896,
-     "wait_increase_min": 0.0597,
+     "time_to_care_min": 0.0488,
+     "time_to_care_median_min": -0.001,
+     "ed_travel_increase_min": 1.0,
+     "wait_increase_min": 0.049,
+     "dialysis_sessions_affected": 1.0,
      "care_time_loss_min": 0.7699,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.1534,
-     "wait_increase_min": 0.1108,
+     "time_to_care_min": 0.0828,
+     "time_to_care_median_min": 0.035,
+     "ed_travel_increase_min": 1.0,
+     "wait_increase_min": 0.0831,
+     "dialysis_sessions_affected": 1.0,
      "care_time_loss_min": 0.8564,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -860,7 +1088,10 @@
    "contribution": {
     "+2": {
      "time_to_care_min": 0.0,
+     "time_to_care_median_min": 0.0,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -868,7 +1099,10 @@
     },
     "+4": {
      "time_to_care_min": 0.0,
+     "time_to_care_median_min": 0.0,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -886,16 +1120,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.0107,
+     "time_to_care_min": 0.0035,
+     "time_to_care_median_min": 0.0086,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.2544,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.0098,
+     "time_to_care_min": 0.0033,
+     "time_to_care_median_min": 0.0385,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.1719,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -913,16 +1153,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.0032,
-     "wait_increase_min": 0.0033,
+     "time_to_care_min": 0.0038,
+     "time_to_care_median_min": 0.0,
+     "ed_travel_increase_min": 0.0,
+     "wait_increase_min": 0.0038,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0009,
      "indoor_outage_pop_hours": 1.0
     },
     "+4": {
-     "time_to_care_min": 0.0101,
-     "wait_increase_min": 0.0107,
+     "time_to_care_min": 0.0105,
+     "time_to_care_median_min": 0.0048,
+     "ed_travel_increase_min": 0.0,
+     "wait_increase_min": 0.0106,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0063,
@@ -940,16 +1186,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.1644,
-     "wait_increase_min": 0.1716,
+     "time_to_care_min": 0.1492,
+     "time_to_care_median_min": 1.0,
+     "ed_travel_increase_min": 0.0,
+     "wait_increase_min": 0.1498,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 1.0,
      "indoor_outage_pop_hours": 1.0
     },
     "+4": {
-     "time_to_care_min": 0.0734,
-     "wait_increase_min": 0.0779,
+     "time_to_care_min": 0.0662,
+     "time_to_care_median_min": 0.7187,
+     "ed_travel_increase_min": 0.0,
+     "wait_increase_min": 0.0664,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 1.0,
@@ -967,16 +1219,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.1644,
-     "wait_increase_min": 0.1716,
+     "time_to_care_min": 0.1492,
+     "time_to_care_median_min": 1.0,
+     "ed_travel_increase_min": 0.0,
+     "wait_increase_min": 0.1498,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.0735,
-     "wait_increase_min": 0.0779,
+     "time_to_care_min": 0.0662,
+     "time_to_care_median_min": 0.7187,
+     "ed_travel_increase_min": 0.0,
+     "wait_increase_min": 0.0664,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -995,7 +1253,10 @@
    "contribution": {
     "+2": {
      "time_to_care_min": 0.0,
+     "time_to_care_median_min": 0.0,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -1003,7 +1264,10 @@
     },
     "+4": {
      "time_to_care_min": 0.0,
+     "time_to_care_median_min": 0.0,
+     "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -1021,16 +1285,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.7901,
-     "wait_increase_min": 0.8248,
+     "time_to_care_min": 0.8385,
+     "time_to_care_median_min": 0.1594,
+     "ed_travel_increase_min": 0.5789,
+     "wait_increase_min": 0.8415,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.87,
-     "wait_increase_min": 0.9227,
+     "time_to_care_min": 0.8967,
+     "time_to_care_median_min": 0.4335,
+     "ed_travel_increase_min": 0.2222,
+     "wait_increase_min": 0.8998,
+     "dialysis_sessions_affected": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,

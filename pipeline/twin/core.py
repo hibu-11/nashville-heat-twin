@@ -64,7 +64,9 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
     Main loop. day_mask marks local 08:00–20:00 (daytime gains in K9); shed is the rotating-outage share (K4).
     off: relation ids from KNOCKOUTS to switch off (R01, R05, R06, R14–R17, R22 are switched in pipeline.core).
     lineb: line B inputs {"nh_res": residents per nursing home, "zone_dep": electricity-dependent residents per zone,
-    "day": day index per hour}; without it the line B outputs stay zero."""
+    "day": day index per hour, "hour_local": local hour per hour}; without it the line B outputs stay zero.
+    With lineb the result also carries "care": peak-day extra visits per zone, hospital hours closed that day, and
+    dialysis hours closed during operating hours (06–18), used by pipeline.care."""
     N, S, H, Z = len(th["C-P1"]), len(net.sid), len(Ta_c), len(net.zone_id)
     col = lambda k: th[k][:, None]  # noqa: E731
     Ta_sub = np.repeat(np.asarray(Ta_c, float)[:, None], S, axis=1) if Ta_sub is None else np.asarray(Ta_sub, float)
@@ -109,8 +111,12 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
         nh_res = np.asarray(lineb["nh_res"], float)[None, :]
         zone_dep = np.asarray(lineb["zone_dep"], float)[None, :]
         dayi = np.asarray(lineb["day"], int)
-        extra_day = np.zeros((N, int(dayi.max()) + 1))
-        hosp_day = np.zeros_like(extra_day)                 # 【中文】每天医院停电的小时数 / hospital-hours closed per day
+        D_ = int(dayi.max()) + 1
+        extra_day = np.zeros((N, D_))
+        extra_zd = np.zeros((N, D_, Z), dtype=np.float32)    # 【中文】每天各分区的新增就诊 / extra visits per day and zone
+        hosp_d = np.zeros((N, D_, len(hs)), dtype=np.float32)  # 【中文】每天各医院停电小时 / hospital hours closed per day
+        dial_op = np.zeros((N, len(ds)))                    # 【中文】透析中心营业时间内停电小时 / dialysis closed in hours 06–18
+        hloc = np.asarray(lineb.get("hour_local", np.arange(H) % 24))
         k_heat = np.zeros((N, 1)) if "R21" in off else col("C-H11")
         hb, q, T_nh = np.maximum(col("C-H12"), 1.0), col("C-H13"), col("C-H17")
         Tin_nh = np.repeat(T_set, len(ns), axis=1)
@@ -230,10 +236,20 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
             hit = zdown & (age_prev < hb) & (age >= hb)
             dep = np.zeros(N) if "R24" in off else (hit * zone_dep).sum(1) * q[:, 0]
             # 【中文】热病症就诊的超额部分 = k × 当小时高温暴露人·小时 / excess heat-illness visits
-            expo = (e_out * pop).sum(1) + ((1 - f_ac) * hot_no * pop).sum(1) + nh_exp
-            heat = k_heat[:, 0] * expo
+            expo_z = e_out * pop + (1 - f_ac) * hot_no * pop                   # 【中文】分区暴露 / exposure by zone
+            nh_z = np.zeros((N, Z))
+            if len(ns):
+                nz = np.asarray(lineb.get("nh_zone", np.zeros(len(ns), int)))
+                np.add.at(nh_z.T, nz, ((nl & (Tin_nh >= T_nh)) * nh_res).T)
+            heat_z = k_heat * (expo_z + nh_z)
+            dep_z = np.zeros((N, Z)) if "R24" in off else hit * zone_dep * q
+            expo = expo_z.sum(1) + nh_exp
+            heat = heat_z.sum(1)
             extra_day[:, dayi[h]] += heat + dep
-            hosp_day[:, dayi[h]] += hl.sum(1)
+            extra_zd[:, dayi[h]] += (heat_z + dep_z).astype(np.float32)
+            hosp_d[:, dayi[h]] += hl
+            if 6 <= hloc[h] < 18:
+                dial_op += dl
             tot["nh_exposed_hours"] += nh_exp; tot["dep_visits"] += dep; tot["heat_visits_excess"] += heat
         out["indoor_ac_max_c"][h] = Tin_ac[zdown].max() if zdown.any() else np.nan
         repair = np.maximum(repair - 1, 0)
@@ -241,9 +257,13 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
     tot["indoor_pop_hours"] = tot["indoor_outage_pop_hours"] + tot["indoor_no_ac_pop_hours"]
     if lb:
         pk = extra_day.argmax(1)
-        tot["peak_day_extra_visits"] = extra_day[np.arange(N), pk]
+        ar = np.arange(N)
+        tot["peak_day_extra_visits"] = extra_day[ar, pk]
         # 【中文】高峰日医院的平均可用比例（停电小时数折算）/ average open share of hospitals on the peak day
-        tot["peak_day_open_share"] = 1 - hosp_day[np.arange(N), pk] / (24 * max(len(hs), 1))
+        tot["peak_day_open_share"] = 1 - hosp_d[ar, pk].sum(1) / (24 * max(len(hs), 1))
+        care = {"extra_zone": extra_zd[ar, pk].astype(float), "hosp_closed_h": hosp_d[ar, pk].astype(float),
+                "dial_closed_op_h": dial_op}
         tot["mean_day_extra_visits"] = extra_day.mean(1)
     return {"hourly": out, "pop_out": pop_out, "totals": tot,
-            "worst": {"hour": worst_h, "roads": snap_deg, "hosp": snap_h, "dial": snap_d}}
+            "worst": {"hour": worst_h, "roads": snap_deg, "hosp": snap_h, "dial": snap_d},
+            "care": care if lb else None}

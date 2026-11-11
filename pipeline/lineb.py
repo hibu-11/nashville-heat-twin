@@ -102,15 +102,32 @@ def calibrate(argv=None):
     cov = e.var(ddof=2) * np.linalg.inv(X.T @ X)
     rho, p = spearmanr(df["indoor_pop_hours"], df["visits"])
     H = float(df["hours"].mean())
+    # 【中文】留一年交叉验证与去掉 2020 年的稳健性检查 / leave-one-year-out and a check without 2020
+    loo_pred, loo_k = [], []
+    for i in range(len(df)):
+        m = np.arange(len(df)) != i
+        bi, *_ = np.linalg.lstsq(X[m], yv[m], rcond=None)
+        loo_pred.append(float(X[i] @ bi)); loo_k.append(float(bi[1]))
+    loo_pred = np.array(loo_pred)
+    loo = {"rmse_visits": round(float(np.sqrt(np.mean((loo_pred - yv) ** 2))), 1),
+           "mean_abs_pct_error": round(float(np.mean(np.abs(loo_pred - yv) / yv) * 100), 1),
+           "q2": round(float(1 - np.sum((loo_pred - yv) ** 2) / np.sum((yv - yv.mean()) ** 2)), 3),
+           "k_min": float(f"{min(loo_k):.3g}"), "k_max": float(f"{max(loo_k):.3g}")}
+    m = df["year"].to_numpy() != 2020
+    b20, *_ = np.linalg.lstsq(X[m], yv[m], rcond=None)
+    e20 = yv[m] - X[m] @ b20
+    no2020 = {"k": float(f"{b20[1]:.3g}"), "r2": round(float(1 - e20.var() / yv[m].var()), 3), "n": int(m.sum())}
     out = {"source": "Tennessee Department of Health heat-illness ED visits, Davidson, by year (tdh_hri_ed); simulated indoor heat exposure with mid parameters and no outages (core model, May–September)",
            "years": df["year"].tolist(), "table": df.round(1).to_dict(orient="records"),
            "model": "annual visits = a_season + k · indoor heat person-hours",
            "a_season": round(float(b[0]), 2), "k_per_person_hour": float(f"{b[1]:.4g}"), "k_se": float(f"{np.sqrt(cov[1, 1]):.3g}"),
            "a_per_hour": float(f"{b[0] / H:.4g}"), "season_hours": H,
            "r2": round(float(1 - e.var() / yv.var()), 3), "spearman": {"rho": round(float(rho), 3), "p": round(float(p), 3)},
+           "leave_one_year_out": loo, "without_2020": no2020,
            "caveat": "Ten annual points; exposure is simulated indoor heat (homes without AC dominate), not observed. 2020 visits are low (COVID-19)."}
     Path(ROOT / a.out).write_text(json.dumps(out, indent=2))
-    print(json.dumps({k: out[k] for k in ("a_season", "k_per_person_hour", "k_se", "a_per_hour", "r2", "spearman")}, indent=1))
+    print(json.dumps({k: out[k] for k in ("a_season", "k_per_person_hour", "k_se", "a_per_hour", "r2", "spearman",
+                                          "leave_one_year_out", "without_2020")}, indent=1))
     print("wrote", a.out)
 
 

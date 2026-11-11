@@ -26,7 +26,8 @@ from . import access
 from .adapters.base import write_json
 from .build import ROOT
 from .cascade import air_field_temperatures, load, river_inputs
-from .core import access_runs, adequacy_shed, lineb_inputs, waiting
+from . import care
+from .core import access_runs, adequacy_shed, lineb_inputs, time_to_care
 from .twin.cascade import Network
 from .twin.core import KNOCKOUTS, simulate_core
 from .twin.params import Params
@@ -103,6 +104,8 @@ def main(argv=None):
     ap.add_argument("--start", default="2023-06-01")
     ap.add_argument("--end", default="2023-08-31")
     ap.add_argument("--scenarios", default="2,4")
+    ap.add_argument("--variants", action="store_true",
+                    help="instead of knockouts, run assumption variants for line B (q, ED parameters) → contrib_variants.json")
     args = ap.parse_args(argv)
     scen = [float(x) for x in args.scenarios.split(",")]
 
@@ -124,7 +127,10 @@ def main(argv=None):
     river = river_inputs(cfg, hours)
     actx = access.prepare(cfg, std, assets, deps, drivers, params, verbose=False)
     LB = lineb_inputs(assets, net, hours, tz)
+    CP = care.prepare(actx, net, assets)
 
+    if args.variants:
+        return run_variants(args, scen, Ta, Ta_sub, Ta_zone, day_mask, hours, tz, params, net, river, actx, LB, CP, proj)
     cases = ["base"] + list(OUTER) + list(KNOCKOUTS)
     res = {}
     for dT in scen:
@@ -140,10 +146,14 @@ def main(argv=None):
                                 Ta_zone=Ta_zone + dT if (local and Ta_zone is not None) else None,
                                 shed=shed, off=frozenset([case]) & set(KNOCKOUTS), lineb=LB)
             acc = access_runs(actx, net, sim, th, hours, tz, off=frozenset([case]) & {"R14", "R17"})
-            wait = waiting(sim, th, off=frozenset([case]) & {"R22"})
-            ttc = acc.pop("_care_runs") + wait
+            care_ = acc.pop("_care_runs")
+            ed = time_to_care(CP, sim, th, acc, off=frozenset([case]) & {"R14", "R17", "R22"})
+            ttc, wait = ed["time"], ed["wait"]
             t = sim["totals"]
             res[dT][case] = {"time_to_care_min": round(float(ttc.mean()), 4), "wait_increase_min": round(float(wait.mean()), 4),
+                             "time_to_care_median_min": round(float(np.median(ttc)), 4),
+                             "ed_travel_increase_min": round(float(ed["travel"].mean()), 4),
+                             "dialysis_sessions_affected": round(float(ed["dialysis_sessions"].mean()), 2),
                              "care_time_loss_min": acc["care_time_loss_min"]["mean"],
                              "dialysis_none_available": acc["dialysis"]["runs_with_none_available"],
                              "pop_hours": round(float(t["pop_hours"].mean()), 1),
@@ -158,19 +168,59 @@ def main(argv=None):
     rel = {}
     for case in cases[1:]:
         rel[case] = {"what_is_switched_off": OUTER.get(case) or KNOCKOUTS[case], "edges": EDGES[case],
-                     "contribution": {f"{dT:+.0f}": {k: share(dT, case, k) for k in ("time_to_care_min", "wait_increase_min", "care_time_loss_min", "pop_hours", "indoor_pop_hours", "indoor_outage_pop_hours")} for dT in scen}}
+                     "contribution": {f"{dT:+.0f}": {k: share(dT, case, k) for k in ("time_to_care_min", "time_to_care_median_min", "ed_travel_increase_min", "wait_increase_min", "dialysis_sessions_affected", "care_time_loss_min", "pop_hours", "indoor_pop_hours", "indoor_outage_pop_hours")} for dT in scen}}
     out = {"created": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "runs": args.runs, "seed": args.seed,
            "scenarios_delta_c": scen,
            "method": "Knockout (do-intervention) with common random numbers: contribution = (base − knockout) / base. "
                      "Positive: the relation adds to the outcome; negative: it buffers. Relations in series share the "
-                     "downstream effect, so contributions do not add up. time_to_care_min = care_time_loss_min (line A) + "
-                     "wait_increase_min (line B, peak-day ED waiting). care_time_loss_min = population-mean added "
+                     "downstream effect, so contributions do not add up. time_to_care_min = added travel (rerouting and congestion) "
+                     "plus added waiting per ED visit on each run's peak day, with per-hospital queues (pipeline.care). "
+                     "dialysis_sessions_affected is reported separately. care_time_loss_min (old line A metric) = population-mean added "
                      "minutes to hospital + dialysis + EMS at each run's worst hour, cells that lose every facility of a "
                      "type inside the area counted at 30 min (assumption).",
            "outcomes": res, "relations": rel, "nodes": node_tiers()}
     p = ROOT / proj.get("site_data_dir", "site/data") / "twin" / "core" / "contrib.json"
     write_json(p, out)
     print(f"[contrib] wrote {p}")
+
+
+# 【中文】B 线假设的情景对照：固定某些 T4 参数，比较就医时间的中位数与 p95 / line B assumption variants
+VARIANTS = {
+    "base": {},
+    "q = 0 (no device-user visits)": {"C-H13": 0.0},
+    "q = 0.01": {"C-H13": 0.01},
+    "q = 0.15": {"C-H13": 0.15},
+    "ED slack (rho0 0.60, D0 1400, W0 20)": {"C-H14": 0.60, "C-H15": 1400, "C-H16": 20},
+    "ED stretched (rho0 0.85, D0 700, W0 45)": {"C-H14": 0.85, "C-H15": 700, "C-H16": 45},
+}
+
+
+def run_variants(args, scen, Ta, Ta_sub, Ta_zone, day_mask, hours, tz, params, net, river, actx, LB, CP, proj):
+    res = {}
+    for dT in scen:
+        res[f"{dT:+.0f}"] = {}
+        for name, fix in VARIANTS.items():
+            rng = np.random.default_rng(args.seed)
+            th = params.sample(args.runs, rng)
+            for k, v in fix.items():
+                th[k] = np.full(args.runs, float(v))
+            shed = adequacy_shed(river, Ta, th, dT)
+            sim = simulate_core(net, Ta + dT, th, rng, day_mask, Ta_sub=None if Ta_sub is None else Ta_sub + dT,
+                                Ta_zone=None if Ta_zone is None else Ta_zone + dT, shed=shed, lineb=LB)
+            acc = access_runs(actx, net, sim, th, hours, tz)
+            ed = time_to_care(CP, sim, th, acc)
+            t = ed["time"]
+            res[f"{dT:+.0f}"][name] = {"time_to_care_mean": round(float(t.mean()), 2), "time_to_care_median": round(float(np.median(t)), 2),
+                                       "time_to_care_p95": round(float(np.percentile(t, 95)), 1),
+                                       "wait_median": round(float(np.median(ed["wait"])), 2),
+                                       "device_visits": round(float(sim["totals"]["dep_visits"].mean()), 1),
+                                       "share_runs_over_30min": round(float((t > 30).mean()), 3)}
+            print(f"[variants] {dT:+.0f} °C {name:42s} median {res[f'{dT:+.0f}'][name]['time_to_care_median']:.2f} "
+                  f"p95 {res[f'{dT:+.0f}'][name]['time_to_care_p95']:.1f} mean {res[f'{dT:+.0f}'][name]['time_to_care_mean']:.1f} min")
+    out = {"created": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "runs": args.runs, "variants": VARIANTS, "results": res}
+    p = ROOT / proj.get("site_data_dir", "site/data") / "twin" / "core" / "contrib_variants.json"
+    write_json(p, out)
+    print(f"[variants] wrote {p}")
 
 
 if __name__ == "__main__":
