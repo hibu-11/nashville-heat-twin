@@ -245,84 +245,80 @@ By-year Spearman ρ: 2015 -0.04, 2016 0.00, 2017 0.14, 2019 -0.27, 2020 0.04, 20
 
 ## 11. Core skeleton model
 
-Run `core-20261111T183212Z-65731ebbe3`: 2,000 Monte Carlo runs per scenario, links K1, K2, K3, K4, K5, K6, K7, K8, K9, K10; deferred D1, D2, D3, D5, D6, D7, D8, D9. Selection and equations: [CORE_MODEL.md](CORE_MODEL.md). Population in zones 702,461 (65+ 89,379, below poverty 98,031).
+Run `core-20261117T175756Z-9e2ab949ad`: 2,000 Monte Carlo runs per scenario, links K1, K2, K3, K4, K5, K6, K7, K8, K9, K10; deferred D1, D2, D3, D5, D6, D7, D8, D9, D10. Selection and equations: [CORE_MODEL.md](CORE_MODEL.md). Population in zones 702,461 (65+ 89,379, below poverty 98,031).
 
 Values are means per run unless marked median (p95; mean). Time to care is computed per ED visit on each run's peak day (pipeline.care): travel to the nearest open hospital plus waiting at per-hospital queues.
 
 | Output | +0 °C | +2 °C | +4 °C |
 | --- | --- | --- | --- |
-| Runs with any outage | 16.1% | 38.4% | 67.6% |
-| Thermal failures (core) | 1.57 | 16.06 | 106.40 |
+| Runs with any outage | 15.4% | 39.2% | 68.0% |
+| Thermal failures (core) | 1.54 | 16.10 | 106.34 |
 | Thermal failures + overload trips (full) | 22.00 | 154.41 | 772.63 |
-| Person-hours without power (core) | 61,916 | 655,448 | 4,077,135 |
+| Person-hours without power (core) | 65,569 | 639,476 | 4,007,851 |
 | Person-hours without power (full) | 776,836 | 6,016,354 | 29,991,519 |
-| Person-hours without AC due to outages | 58,453 | 616,938 | 3,833,628 |
-| Indoor heat person-hours from outages, all | 3,038 | 56,743 | 629,094 |
-| … aged 65+ | 389 | 6,812 | 76,694 |
-| … below poverty | 442 | 8,384 | 91,550 |
+| Person-hours without AC due to outages | 61,852 | 601,899 | 3,768,455 |
+| Indoor heat person-hours from outages, all | 3,316 | 55,255 | 610,700 |
+| … aged 65+ | 363 | 6,511 | 74,817 |
+| … below poverty | 534 | 8,248 | 88,725 |
 | Background indoor heat person-hours (homes without AC) | 28,034,396 | 53,657,207 | 76,058,371 |
-| Highest indoor temperature in an AC home during an outage (°C) | 33.0 | 35.9 | 38.9 |
-| Dialysis facility-hours lost (core) | 1.6 | 16.3 | 105.9 |
-| Hospital facility-hours lost (core) | 0.07 | 0.66 | 4.42 |
+| Highest indoor temperature in an AC home during an outage (°C) | 33.5 | 36.3 | 38.5 |
+| Hospital hours closed (core): all | 0.05 | 0.65 | 4.33 |
+| … from power (backup failed) | 0.05 | 0.65 | 4.33 |
+| … from water (on-site supply exhausted) | 0.00 | 0.00 | 0.00 |
+| Water-out hours (system) | 0.00 | 0.00 | 0.00 |
 | Runs with a TVA shortfall | 0.0% | 0.0% | 4.2% |
-| K8 runs with degraded segments or facility closures | 16.2% | 38.4% | 67.7% |
-| K8 hospital Δ population mean, min (p99) | 0.009 (0.23) | 0.055 (1.10) | 0.190 (2.15) |
-| K8 hospital largest cell increase p95, min | 1.4 | 4.0 | 10.0 |
-| K8 dialysis Δ population mean, min (p99) | 0.047 (1.53) | 0.351 (5.93) | 1.437 (22.70) |
-| K8 runs with no dialysis centre available | 0.0% | 0.1% | 2.7% |
-| K8 EMS Δ population mean, min (p99) | 0.005 (0.13) | 0.025 (0.34) | 0.079 (0.65) |
-| Old line A metric: population-mean added travel (hospital + dialysis + EMS), min | 0.06 | 0.45 | 2.52 |
-| K10 excess heat-illness ED visits | 121.5 | 232.7 | 332.2 |
-| K10 visits by electricity-dependent residents | 3.5 | 35.7 | 210.7 |
-| K10 nursing-home resident-hours ≥ 26 °C | 24 | 298 | 2,111 |
-| K10 peak-day extra visits | 5.9 | 15.3 | 44.7 |
+| K8 runs with degraded segments or hospital closures | 15.7% | 39.5% | 68.0% |
+| K8 hospital Δ population mean, min (p99) | 0.012 (0.24) | 0.056 (1.06) | 0.221 (2.31) |
+| K8 hospital largest cell increase p95, min | 1.6 | 3.9 | 12.4 |
+| K10 excess heat-illness ED visits (summer) | 121.5 | 232.6 | 332.1 |
+| K10 visits by ventilator and other device users (summer) | 3.7 | 34.8 | 207.6 |
+| K10 peak-day extra visits: heat illness / device users | 4.2 / 1.9 | 4.5 / 10.4 | 5.0 / 39.3 |
 | Per ED visit: added travel (rerouting + congestion), min | 0.000 (0.000; mean 0.000) | 0.000 (0.000; mean 0.000) | 0.000 (0.020; mean 0.010) |
-| Per ED visit: added congestion only, min | 0.000 (0.030; mean 0.010) | 0.000 (0.240; mean 0.040) | 0.020 (0.670; mean 0.130) |
-| Per ED visit: added waiting, min | 1.4 (5.8; mean 3.1) | 1.8 (47.3; mean 11.8) | 3.1 (284.6; mean 43.4) |
-| **Time to care per ED visit (travel + waiting), min** | **1.4 (5.8; mean 3.1)** | **1.8 (47.4; mean 11.8)** | **3.1 (284.7; mean 43.5)** |
-| Dialysis sessions affected (cancelled or moved) | 1.0 | 9.6 | 68.9 |
+| Per ED visit: added congestion only, min | 0.000 (0.040; mean 0.010) | 0.000 (0.220; mean 0.040) | 0.020 (0.590; mean 0.120) |
+| Per ED visit: added waiting, min | 1.4 (5.6; mean 3.4) | 1.8 (52.3; mean 11.8) | 3.1 (271.0; mean 42.3) |
+| **Time to care per ED visit (travel + waiting), min** | **1.4 (5.6; mean 3.4)** | **1.8 (52.5; mean 11.8)** | **3.1 (271.4; mean 42.4)** |
+| Share of visits at hospitals at the queue cap (ρ = 0.95) | 0.000 (0.000; mean 0.000) | 0.000 (0.010; mean 0.010) | 0.000 (0.410; mean 0.050) |
 
-Validation: ρ(model, EAGLE-I) all hours 0.03 [-0.04, 0.12] (n = 2,208 h, 92 days); non-storm -0.01 [-0.08, 0.06] (n = 1,994 h, 92 days).
+Validation: ρ(model, EAGLE-I) all hours 0.05 [-0.03, 0.13] (n = 2,208 h, 92 days); non-storm 0.01 [-0.06, 0.09] (n = 1,994 h, 92 days).
 
 | Parameter | Basis | ρ with person-hours without power | ρ with indoor heat person-hours from outages |
 | --- | --- | --- | --- |
-| `C-P1.Kd` K_design | assumption | 0.439 | 0.144 |
-| `C-P3.sigma` sigma | assumption | 0.339 | 0.161 |
-| `C-P3` theta_50 | assumption | -0.24 | -0.116 |
-| `C-P2.dTOR` dTheta_TO_R | standard | 0.144 | 0.071 |
-| `C-P2.dHR` dTheta_H_R | standard | 0.089 | 0.043 |
-| `C-P6` repair_hours | internal | 0.048 | 0.133 |
-| `C-P1.Td` T_design | assumption | -0.046 | -0.03 |
-| `C-P2.tau` tau_TO | standard | -0.046 | -0.012 |
+| `C-P1.Kd` K_design | assumption | 0.445 | 0.174 |
+| `C-P3.sigma` sigma | assumption | 0.305 | 0.144 |
+| `C-P3` theta_50 | assumption | -0.255 | -0.112 |
+| `C-P2.dTOR` dTheta_TO_R | standard | 0.116 | 0.038 |
+| `C-P2.dHR` dTheta_H_R | standard | 0.099 | 0.06 |
+| `C-T2` p_no_battery | literature | -0.051 | -0.016 |
+| `C-P6` repair_hours | internal | 0.047 | 0.124 |
+| `C-P2.tau` tau_TO | standard | -0.044 | -0.03 |
 
 ### 11.1 Knockout contributions
 
-`python -m pipeline.contrib` (500 runs, 2026-11-11): share of time to care (mean per ED visit) lost when only that relation is switched off (negative = buffer). Series links share values; figures do not add up. Method: CORE_MODEL §4.2.
+`python -m pipeline.contrib` (500 runs, 2026-11-17): share of time to care (mean per ED visit) lost when only that relation is switched off (negative = buffer). Series links share values; figures do not add up. Method: CORE_MODEL §4.2.
 
 | Relation | Switched off | time to care +2 °C | time to care +4 °C | travel part (last) | waiting part (last) |
 | --- | --- | ---: | ---: | ---: | ---: |
-| R01 | local temperature = background (airport) series everywhere (no urban field) | -8% | -11% | 43% | -11% |
-| R05 | TVA load is not scaled by scenario warming | 0% | 0% | 1% | 0% |
-| R06 | no rotating outages from a system shortfall | 0% | 0% | 1% | 0% |
+| R01 | local temperature = background (airport) series everywhere (no urban field) | -17% | -17% | -36% | -17% |
+| R05 | TVA load is not scaled by scenario warming | 0% | 0% | 0% | 0% |
+| R06 | no rotating outages from a system shortfall | 0% | 0% | 0% | 0% |
 | R14 | dark signals keep full capacity (R14–R16 are in series, so one knockout covers all three) | 0% | 0% | 0% | 0% |
-| R17 | closed facilities stay on the destination list | 5% | 8% | 100% | 8% |
+| R17 | closed hospitals keep their patients and capacity (no rerouting, no capacity loss) | 5% | 7% | 100% | 7% |
 | R22 | extra care demand does not lengthen waiting | 100% | 100% | 0% | 100% |
-| R02 | load does not respond to temperature (m = 1) | 87% | 96% | 100% | 96% |
-| R03a | hot spot sees each station's period-mean ambient instead of the hourly value | 76% | 77% | 84% | 77% |
-| R03b | hot spot sees each run's period-mean load instead of the hourly load | 87% | 95% | 100% | 95% |
-| R04 | no thermal failures (p = 0) | 87% | 96% | 100% | 96% |
-| R07 | a failed station returns after one hour | 77% | 73% | 78% | 73% |
-| R08 | no upstream propagation: a station is out only if it failed or was shed itself | 50% | 47% | 59% | 47% |
+| R02 | load does not respond to temperature (m = 1) | 86% | 96% | 100% | 96% |
+| R03a | hot spot sees each station's period-mean ambient instead of the hourly value | 74% | 74% | 83% | 74% |
+| R03b | hot spot sees each run's period-mean load instead of the hourly load | 86% | 96% | 100% | 96% |
+| R04 | no thermal failures (p = 0) | 86% | 96% | 100% | 96% |
+| R07 | a failed station returns after one hour | 73% | 73% | 85% | 73% |
+| R08 | no upstream propagation: a station is out only if it failed or was shed itself | 49% | 49% | 62% | 49% |
 | R09 | water plants never lose power | 0% | 0% | 0% | 0% |
 | R10 | no storage buffer: water is lost as soon as every plant stops | 0% | 0% | 0% | 0% |
-| R11 | facilities never lose function from a zone outage | 5% | 8% | 100% | 8% |
-| R12 | dialysis ignores water loss | 0% | 0% | 0% | 0% |
+| R11 | hospitals never lose function from a zone outage | 5% | 7% | 100% | 7% |
+| R12 | hospitals ignore water loss | 0% | 0% | 0% | 0% |
 | R13 | signals never go dark | 0% | 0% | 0% | 0% |
-| R18 | homes with AC keep their set point during outages | 0% | 1% | 0% | 1% |
-| R19 | indoor equilibrium is not driven by outdoor temperature (held at the AC set point) | 15% | 7% | 0% | 7% |
-| R21 | heat exposure does not raise heat-illness visits (k = 0) | 15% | 7% | 0% | 7% |
-| R23 | nursing-home residents are not exposed when cooling is lost | 0% | 0% | 0% | 0% |
-| R24 | electricity-dependent residents make no visits during outages | 84% | 90% | 22% | 90% |
+| R18 | homes with AC keep their set point during outages | 1% | 1% | 0% | 2% |
+| R19 | indoor equilibrium is not driven by outdoor temperature (held at the AC set point) | 17% | 7% | 0% | 7% |
+| R21 | heat exposure does not raise heat-illness visits (k = 0) | 17% | 7% | 0% | 7% |
+| R24 | ventilator and other device users make no visits during outages | 84% | 92% | 59% | 92% |
 
 ### 11.2 Line B assumption variants
 
@@ -330,25 +326,129 @@ Validation: ρ(model, EAGLE-I) all hours 0.03 [-0.04, 0.12] (n = 2,208 h, 92 day
 
 | Variant (+4 °C) | Time to care median, min | p95 | mean | Runs over 30 min | Device-user visits |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| base | 3.35 | 277.2 | 45.18 | 23.7% | 224.2 |
-| q = 0 (no device-user visits) | 1.7 | 19.5 | 5.1 | 4.0% | 0.0 |
-| q = 0.01 | 2.29 | 42.2 | 8.63 | 5.7% | 34.3 |
-| q = 0.15 | 4.66 | 449.9 | 90.03 | 36.3% | 514.7 |
-| ED slack (rho0 0.60, D0 1400, W0 20) | 0.5 | 26.3 | 5.51 | 4.7% | 224.2 |
-| ED stretched (rho0 0.85, D0 700, W0 45) | 20.6 | 600.6 | 144.86 | 44.0% | 224.2 |
+| base | 3.18 | 279.2 | 47.96 | 26.0% | 229.6 |
+| q = 0 (no device-user visits) | 1.66 | 19.2 | 4.83 | 3.7% | 0.0 |
+| q = 0.01 | 2.2 | 46.0 | 7.95 | 8.0% | 35.1 |
+| q = 0.15 | 4.52 | 454.9 | 94.59 | 35.7% | 526.0 |
+| ED slack (rho0 0.60, D0 1400, W0 20) | 0.45 | 29.6 | 5.45 | 5.0% | 229.6 |
+| ED stretched (rho0 0.85, D0 700, W0 45) | 20.13 | 600.2 | 149.48 | 43.3% | 229.6 |
+| queue cap 0.90 | 3.18 | 138.8 | 27.64 | 26.0% | 229.6 |
+| queue cap 0.98 | 3.18 | 599.8 | 92.55 | 26.7% | 229.6 |
 
 ### 11.3 Observed heat waves
 
 Hottest five days of the summer at BNA, with one day before and after; +0 °C uses observed temperatures.
 
-| Heat wave | Scenario | Runs with outage | Person-hours without power | Excess heat-illness visits | Time to care median (p95), min | Dialysis sessions affected |
+| Heat wave | Scenario | Runs with outage | Person-hours without power | Excess heat-illness visits | Device-user visits | Time to care median (p95), min |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| 2022-06-20 – 2022-06-26 | +0 °C | 17.1% | 77,427 | 20.3 | 1.4 (5.9) | 1.3 |
-| 2022-06-20 – 2022-06-26 | +2 °C | 40.6% | 551,339 | 24.4 | 1.7 (66.8) | 9.1 |
-| 2023-08-21 – 2023-08-27 | +0 °C | 14.9% | 62,565 | 23.7 | 1.4 (5.2) | 1.1 |
-| 2023-08-21 – 2023-08-27 | +2 °C | 36.7% | 466,584 | 28.2 | 1.7 (42.0) | 7.9 |
-| 2024-08-25 – 2024-08-31 | +0 °C | 26.2% | 208,382 | 20.9 | 1.4 (18.3) | 3.2 |
-| 2024-08-25 – 2024-08-31 | +2 °C | 53.0% | 1,163,287 | 26.4 | 2.1 (165.2) | 19.7 |
-| 2025-08-14 – 2025-08-20 | +0 °C | 12.0% | 48,201 | 22.9 | 1.3 (4.8) | 0.8 |
-| 2025-08-14 – 2025-08-20 | +2 °C | 33.6% | 417,072 | 27.1 | 1.7 (35.9) | 7.0 |
+| 2022-06-20 – 2022-06-26 | +0 °C | 16.6% | 76,766 | 20.3 | 3.5 | 1.4 (6.2) |
+| 2022-06-20 – 2022-06-26 | +2 °C | 39.9% | 522,825 | 24.3 | 24.0 | 1.8 (72.3) |
+| 2023-08-21 – 2023-08-27 | +0 °C | 13.4% | 55,533 | 23.7 | 2.3 | 1.4 (5.2) |
+| 2023-08-21 – 2023-08-27 | +2 °C | 37.3% | 470,565 | 28.2 | 21.1 | 1.7 (54.9) |
+| 2024-08-25 – 2024-08-31 | +0 °C | 26.8% | 207,690 | 20.9 | 9.2 | 1.5 (17.8) |
+| 2024-08-25 – 2024-08-31 | +2 °C | 52.2% | 1,123,418 | 26.4 | 53.2 | 2.0 (180.2) |
+| 2025-08-14 – 2025-08-20 | +0 °C | 12.5% | 45,675 | 22.8 | 1.8 | 1.3 (4.9) |
+| 2025-08-14 – 2025-08-20 | +2 °C | 35.6% | 401,898 | 27.1 | 18.1 | 1.7 (42.4) |
+
+### 11.4 What drives the extreme runs
+
+`python -m pipeline.extremes`. Each run's added time per ED visit is split by Shapley decomposition over four causes on the peak day (heat-illness visits, device-user visits, hospital capacity lost to power and to water); congestion is additive. Runs are grouped by their time to care.
+
+**+2 °C — minutes per ED visit by cause**
+
+| Runs (by time to care) | Runs | Total | heat-illness visits | device-user visits | hospital closed (power) | hospital closed (water) | dark-signal congestion | Visits at capped hospitals |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| below p50 | 1000 | 1.1 | 1.04 | 0.03 | 0.00 | 0.00 | 0.01 | 0% |
+| p50–75 | 500 | 2.5 | 2.15 | 0.30 | 0.01 | 0.00 | 0.02 | 0% |
+| p75–90 | 300 | 6.2 | 2.85 | 3.27 | 0.07 | 0.00 | 0.05 | 0% |
+| p90–95 | 100 | 28.2 | 2.45 | 24.36 | 1.21 | 0.00 | 0.16 | 1% |
+| p95–99 | 80 | 116.7 | 4.31 | 104.14 | 8.11 | 0.00 | 0.19 | 9% |
+| p99 and above | 20 | 366.1 | 6.69 | 334.71 | 24.27 | 0.00 | 0.39 | 58% |
+
+**+2 °C — upstream chain (medians)**
+
+| Variable | Middle 50% of runs | Worst 5% | Worst 1% |
+| --- | ---: | ---: | ---: |
+| thermal failures | 0 | 107.5 | 272.5 |
+| person-hours without power | 0 | 4.953e+06 | 1.413e+07 |
+| hospital hours closed (summer) | 0 | 5 | 13 |
+| peak-day heat-illness visits | 4.543 | 4.566 | 4.231 |
+| peak-day device-user visits | 0 | 112.9 | 229.9 |
+| peak-day open share of hospitals | 1 | 1 | 0.9983 |
+| hospitals at the queue cap | 0 | 2 | 6 |
+| share of visits at hospitals at the cap | 0 | 0.0601 | 0.5486 |
+| K_design | 0.8397 | 0.9348 | 0.9517 |
+| theta_50 (°C) | 140.4 | 137.1 | 136.2 |
+| sigma (K) | 8.06 | 9.411 | 9.148 |
+| repair (h) | 5.015 | 6.407 | 7.009 |
+| q (visit probability) | 0.066 | 0.0836 | 0.0931 |
+| battery (h) | 3.283 | 3.136 | 2.122 |
+| rho0 | 0.7468 | 0.7549 | 0.7729 |
+| D0 | 1,013 | 978.8 | 987.2 |
+| W0 (min) | 31.76 | 32.12 | 32.7 |
+
+**+2 °C — path analysis** (outcome log(1 + time to care per ED visit, min); R² of the outcome equation 0.936; 2,000 runs). Standardised total effects with 95% bootstrap intervals and the main routes.
+
+| Parameter | Total effect [95% CI] | Share of explained spread | Main route |
+| --- | ---: | ---: | --- |
+| K_design | +0.35 [+0.33, +0.37] | 35% | K_design → failures → outage → device_peak → Y (+0.39) |
+| rho0 | +0.30 [+0.28, +0.32] | 26% | rho0 → Y (+0.30) |
+| sigma | +0.21 [+0.19, +0.23] | 13% | sigma → failures → outage → device_peak → Y (+0.24) |
+| theta50 | -0.19 [-0.20, -0.17] | 10% | theta50 → failures → outage → device_peak → Y (-0.21) |
+| battery | -0.14 [-0.16, -0.11] | 6% | battery → device_peak → Y (-0.14) |
+| D0 | -0.11 [-0.12, -0.10] | 3% | D0 → Y (-0.11) |
+| W0 | +0.10 [+0.08, +0.11] | 3% | W0 → Y (+0.10) |
+| q | +0.08 [+0.06, +0.11] | 2% | q → device_peak → Y (+0.08) |
+| k_heat | +0.07 [+0.06, +0.09] | 2% | k_heat → heat_peak → Y (+0.07) |
+| repair | +0.03 [+0.01, +0.04] | 0% | repair → outage → device_peak → Y (+0.03) |
+| hosp_backup | +0.01 [+0.01, +0.02] | 0% | hosp_backup → hosp_closed → Y (+0.01) |
+
+**+4 °C — minutes per ED visit by cause**
+
+| Runs (by time to care) | Runs | Total | heat-illness visits | device-user visits | hospital closed (power) | hospital closed (water) | dark-signal congestion | Visits at capped hospitals |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| below p50 | 1000 | 1.5 | 1.34 | 0.16 | 0.00 | 0.00 | 0.02 | 0% |
+| p50–75 | 500 | 8.9 | 2.32 | 6.18 | 0.33 | 0.00 | 0.11 | 0% |
+| p75–90 | 300 | 60.2 | 3.56 | 50.51 | 5.90 | 0.00 | 0.25 | 2% |
+| p90–95 | 100 | 197.2 | 7.09 | 176.05 | 13.72 | 0.00 | 0.34 | 19% |
+| p95–99 | 80 | 376.4 | 8.96 | 344.58 | 22.31 | 0.00 | 0.54 | 62% |
+| p99 and above | 20 | 544.0 | 8.65 | 507.95 | 26.85 | 0.00 | 0.51 | 78% |
+
+**+4 °C — upstream chain (medians)**
+
+| Variable | Middle 50% of runs | Worst 5% | Worst 1% |
+| --- | ---: | ---: | ---: |
+| thermal failures | 4 | 684.5 | 844.5 |
+| person-hours without power | 9.651e+04 | 2.633e+07 | 3.794e+07 |
+| hospital hours closed (summer) | 0 | 31 | 37 |
+| peak-day heat-illness visits | 4.699 | 6.427 | 7.39 |
+| peak-day device-user visits | 1.754 | 277.7 | 348.2 |
+| peak-day open share of hospitals | 1 | 0.9878 | 0.9826 |
+| hospitals at the queue cap | 0 | 7 | 8 |
+| share of visits at hospitals at the cap | 0 | 0.6857 | 0.7472 |
+| K_design | 0.8388 | 0.9418 | 0.9469 |
+| theta_50 (°C) | 140.3 | 137.1 | 137.4 |
+| sigma (K) | 8.161 | 8.818 | 8.923 |
+| repair (h) | 5.061 | 6.484 | 6.517 |
+| q (visit probability) | 0.0646 | 0.0903 | 0.1002 |
+| battery (h) | 3.208 | 2.655 | 2.629 |
+| rho0 | 0.7493 | 0.756 | 0.7474 |
+| D0 | 1,006 | 978.8 | 1,018 |
+| W0 (min) | 31.94 | 32.71 | 38.02 |
+
+**+4 °C — path analysis** (outcome log(1 + time to care per ED visit, min); R² of the outcome equation 0.949; 2,000 runs). Standardised total effects with 95% bootstrap intervals and the main routes.
+
+| Parameter | Total effect [95% CI] | Share of explained spread | Main route |
+| --- | ---: | ---: | --- |
+| K_design | +0.43 [+0.41, +0.45] | 49% | K_design → failures → outage → device_peak → Y (+0.44) |
+| theta50 | -0.23 [-0.24, -0.21] | 14% | theta50 → failures → outage → device_peak → Y (-0.24) |
+| sigma | +0.22 [+0.20, +0.23] | 12% | sigma → failures → outage → device_peak → Y (+0.23) |
+| rho0 | +0.21 [+0.20, +0.23] | 12% | rho0 → Y (+0.21) |
+| battery | -0.16 [-0.18, -0.13] | 7% | battery → device_peak → Y (-0.16) |
+| q | +0.10 [+0.08, +0.13] | 3% | q → device_peak → Y (+0.10) |
+| D0 | -0.08 [-0.09, -0.07] | 2% | D0 → Y (-0.08) |
+| W0 | +0.07 [+0.06, +0.08] | 1% | W0 → Y (+0.07) |
+| k_heat | +0.02 [+0.02, +0.03] | 0% | k_heat → heat_peak → Y (+0.02) |
+| repair | +0.02 [+0.00, +0.04] | 0% | repair → outage → device_peak → Y (+0.02) |
+| hosp_backup | +0.02 [+0.01, +0.02] | 0% | hosp_backup → hosp_closed → Y (+0.02) |
 

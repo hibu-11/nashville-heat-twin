@@ -1,5 +1,5 @@
 {
- "created": "2026-11-11T19:36:34+00:00",
+ "created": "2026-11-17T18:05:16+00:00",
  "runs": 300,
  "variants": {
   "base": {},
@@ -21,57 +21,79 @@
    "C-H14": 0.85,
    "C-H15": 700,
    "C-H16": 45
+  },
+  "queue cap 0.90": {
+   "_rho_max": 0.9
+  },
+  "queue cap 0.98": {
+   "_rho_max": 0.98
   }
  },
  "results": {
   "+4": {
    "base": {
-    "time_to_care_mean": 45.18,
-    "time_to_care_median": 3.35,
-    "time_to_care_p95": 277.2,
-    "wait_median": 3.16,
-    "device_visits": 224.2,
-    "share_runs_over_30min": 0.237
+    "time_to_care_mean": 47.96,
+    "time_to_care_median": 3.18,
+    "time_to_care_p95": 279.2,
+    "wait_median": 3.13,
+    "device_visits": 229.6,
+    "share_runs_over_30min": 0.26
    },
    "q = 0 (no device-user visits)": {
-    "time_to_care_mean": 5.1,
-    "time_to_care_median": 1.7,
-    "time_to_care_p95": 19.5,
-    "wait_median": 1.62,
+    "time_to_care_mean": 4.83,
+    "time_to_care_median": 1.66,
+    "time_to_care_p95": 19.2,
+    "wait_median": 1.59,
     "device_visits": 0.0,
-    "share_runs_over_30min": 0.04
+    "share_runs_over_30min": 0.037
    },
    "q = 0.01": {
-    "time_to_care_mean": 8.63,
-    "time_to_care_median": 2.29,
-    "time_to_care_p95": 42.2,
-    "wait_median": 2.24,
-    "device_visits": 34.3,
-    "share_runs_over_30min": 0.057
+    "time_to_care_mean": 7.95,
+    "time_to_care_median": 2.2,
+    "time_to_care_p95": 46.0,
+    "wait_median": 2.13,
+    "device_visits": 35.1,
+    "share_runs_over_30min": 0.08
    },
    "q = 0.15": {
-    "time_to_care_mean": 90.03,
-    "time_to_care_median": 4.66,
-    "time_to_care_p95": 449.9,
-    "wait_median": 4.58,
-    "device_visits": 514.7,
-    "share_runs_over_30min": 0.363
+    "time_to_care_mean": 94.59,
+    "time_to_care_median": 4.52,
+    "time_to_care_p95": 454.9,
+    "wait_median": 4.5,
+    "device_visits": 526.0,
+    "share_runs_over_30min": 0.357
    },
    "ED slack (rho0 0.60, D0 1400, W0 20)": {
-    "time_to_care_mean": 5.51,
-    "time_to_care_median": 0.5,
-    "time_to_care_p95": 26.3,
+    "time_to_care_mean": 5.45,
+    "time_to_care_median": 0.45,
+    "time_to_care_p95": 29.6,
     "wait_median": 0.4,
-    "device_visits": 224.2,
-    "share_runs_over_30min": 0.047
+    "device_visits": 229.6,
+    "share_runs_over_30min": 0.05
    },
    "ED stretched (rho0 0.85, D0 700, W0 45)": {
-    "time_to_care_mean": 144.86,
-    "time_to_care_median": 20.6,
-    "time_to_care_p95": 600.6,
-    "wait_median": 20.59,
-    "device_visits": 224.2,
-    "share_runs_over_30min": 0.44
+    "time_to_care_mean": 149.48,
+    "time_to_care_median": 20.13,
+    "time_to_care_p95": 600.2,
+    "wait_median": 20.1,
+    "device_visits": 229.6,
+    "share_runs_over_30min": 0.433
+   },
+   "queue cap 0.90": {
+    "time_to_care_mean": 27.64,
+    "time_to_care_median": 3.18,
+    "time_to_care_p95": 138.8,
+    "wait_median": 3.13,
+    "device_visits": 229.6,
+    "share_runs_over_30min": 0.26
+   },
+   "queue cap 0.98": {
+    "time_to_care_mean": 92.55,
+    "time_to_care_median": 3.18,
+    "time_to_care_p95": 599.8,
+    "wait_median": 3.13,
+    "device_visits": 229.6,
+    "share_runs_over_30min": 0.267
    }
   }
  }

@@ -7,11 +7,13 @@
     K4  系统供需缺口 → 轮流停电                               M-18（只含负荷侧）C-P9.avail, C-P9.imp
     K5  供电依赖（拓扑）→ 分区停电；固定修复时长              Eq. 9–10  C-P5, C-P6
     K6  分区停电 → 水厂（备用）→ 储水耗尽 → 断水              Eq. 13    C-W2, C-W3
-    K7  分区停电 → 医院 / 养老院（备用）、透析（电 ∨ 水）     Eq. 11    C-H1, C-H2, C-H3
-    K8  分区停电 → 信号灯熄灭 → 路段通行能力下降 → 到医院 / 透析 / 急救站的行程时间
+    K7  医院：分区停电且备用电源失效，或断水超过院内储水时长（2026-11-17 起医疗设施只保留医院）
+                                                              Eq. 11    C-H1, C-H18
+    K8  分区停电 → 信号灯熄灭 → 路段通行能力下降 → 到医院的行程时间
                                                               Eq. 11, 16, M-28, M-29  C-T2, C-T3, C-T5, C-T6.*
         （本函数记录每次运行降级路段最多的小时的状态；行程时间由 pipeline.core 调用 pipeline.access 计算）
     K9  停电 → 失去空调 → 室内温度（一阶 RC）→ 室内高温暴露    M-32, M-33 C-B1–B4, C-H10
+    K10 B 线：高温暴露 → 热病症 → 就医需求；分区停电 → 呼吸机等设备用户 → 就医需求  M-47  C-H11–C-H16
 
 与完整模型（pipeline/twin/cascade.py）相比去掉：同电压站之间的负荷转移与过载跳闸（C-P4，Motter–Lai）、
 河温降额（M-18 供给侧）、路面模块（Eq. 15）、室外复合暴露阈值（C-POP2，由 K9 取代）。
@@ -38,21 +40,20 @@ KNOCKOUTS = {
     "R08": "no upstream propagation: a station is out only if it failed or was shed itself",
     "R09": "water plants never lose power",
     "R10": "no storage buffer: water is lost as soon as every plant stops",
-    "R11": "facilities never lose function from a zone outage",
-    "R12": "dialysis ignores water loss",
+    "R11": "hospitals never lose function from a zone outage",
+    "R12": "hospitals ignore water loss",
     "R13": "signals never go dark",
     "R18": "homes with AC keep their set point during outages",
     "R19": "indoor equilibrium is not driven by outdoor temperature (held at the AC set point)",
     "R21": "heat exposure does not raise heat-illness visits (k = 0)",
-    "R23": "nursing-home residents are not exposed when cooling is lost",
-    "R24": "electricity-dependent residents make no visits during outages",
+    "R24": "ventilator and other device users make no visits during outages",
 }
 
 # 【中文】骨架模型用到的参数（敏感性分析只看这些）/ parameters used by the core model
 CORE_PARAMS = ["C-P1", "C-P1.T0", "C-P1.Kd", "C-P1.Td", "C-P2.dTOR", "C-P2.dHR", "C-P2.R", "C-P2.n", "C-P2.m",
-               "C-P2.tau", "C-P3", "C-P3.sigma", "C-P6", "C-P9.avail", "C-P9.imp", "C-H1", "C-H2", "C-W2", "C-W3",
+               "C-P2.tau", "C-P3", "C-P3.sigma", "C-P6", "C-P9.avail", "C-P9.imp", "C-H1", "C-H18", "C-W2", "C-W3",
                "C-T2", "C-T5", "C-B1", "C-B2", "C-B3", "C-B4", "C-H10",
-               "C-H11", "C-H11.a", "C-H12", "C-H13", "C-H14", "C-H15", "C-H16", "C-H17"]
+               "C-H11", "C-H11.a", "C-H12", "C-H13", "C-H14", "C-H15", "C-H16"]
 
 
 def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Generator, day_mask: np.ndarray,
@@ -63,10 +64,10 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
 
     Main loop. day_mask marks local 08:00–20:00 (daytime gains in K9); shed is the rotating-outage share (K4).
     off: relation ids from KNOCKOUTS to switch off (R01, R05, R06, R14–R17, R22 are switched in pipeline.core).
-    lineb: line B inputs {"nh_res": residents per nursing home, "zone_dep": electricity-dependent residents per zone,
-    "day": day index per hour, "hour_local": local hour per hour}; without it the line B outputs stay zero.
-    With lineb the result also carries "care": peak-day extra visits per zone, hospital hours closed that day, and
-    dialysis hours closed during operating hours (06–18), used by pipeline.care."""
+    lineb: line B inputs {"zone_dep": device users (ventilators and other electricity-dependent equipment) per zone,
+    "day": day index per hour}; without it the line B outputs stay zero. With lineb the result also carries "care":
+    peak-day extra visits per zone (heat illness and device users separately) and hospital hours closed that day
+    (power and water separately), used by pipeline.care."""
     N, S, H, Z = len(th["C-P1"]), len(net.sid), len(Ta_c), len(net.zone_id)
     col = lambda k: th[k][:, None]  # noqa: E731
     Ta_sub = np.repeat(np.asarray(Ta_c, float)[:, None], S, axis=1) if Ta_sub is None else np.asarray(Ta_sub, float)
@@ -89,13 +90,15 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
         m_mean = 1 + beta * np.stack([np.maximum(0, TF[:, s_] - T0).mean(1) for s_ in range(S)], axis=1)
 
     # K6–K8 下游资产 / downstream assets
-    hs, ns, ds = net.sub_of(net.hosp), net.sub_of(net.nurs), net.sub_of(net.dial)
+    hs = net.sub_of(net.hosp)
     ps, gs = net.sub_of(net.plants), net.sub_of(net.signals)
-    p_bh, p_bn, p_bw = col("C-H1"), col("C-H2"), col("C-W2")
+    p_bh, p_bw = col("C-H1"), col("C-W2")
     no_batt = rng.random((N, len(gs))) < col("C-T2")
-    B_h = np.zeros((N, len(hs)), bool); B_n = np.zeros((N, len(ns)), bool); B_w = np.zeros((N, len(ps)), bool)
-    prev_h = np.zeros_like(B_h); prev_n = np.zeros_like(B_n); prev_w = np.zeros_like(B_w)
+    B_h = np.zeros((N, len(hs)), bool); B_w = np.zeros((N, len(ps)), bool)
+    prev_h = np.zeros_like(B_h); prev_w = np.zeros_like(B_w)
     storage_left = col("C-W3").astype(float)
+    h_water = col("C-H18")                                  # 【中文】医院院内储水可维持的小时数 / hospital on-site water hours
+    water_age = np.zeros((N, 1))
 
     # K9 室内温度：有空调住户（停电时自由升温）与无空调住户（始终自由升温）/ indoor temperature
     tau_b, gain, T_set, f_ac, T_thr = col("C-B1"), col("C-B2"), col("C-B3"), col("C-B4"), col("C-H10")
@@ -105,25 +108,23 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
     zs = net.zone_sub
     pop, eld, pov = net.zone_pop[None, :], net.zone_eld[None, :], net.zone_pov[None, :]
 
-    # B 线第一版：养老院住户暴露、依赖电力设备的居民、热病症就诊 / line B v1
+    # B 线：热病症就诊、呼吸机等设备用户的就诊 / line B: heat illness and device users
     lb = lineb is not None
     if lb:
-        nh_res = np.asarray(lineb["nh_res"], float)[None, :]
         zone_dep = np.asarray(lineb["zone_dep"], float)[None, :]
         dayi = np.asarray(lineb["day"], int)
         D_ = int(dayi.max()) + 1
         extra_day = np.zeros((N, D_))
-        extra_zd = np.zeros((N, D_, Z), dtype=np.float32)    # 【中文】每天各分区的新增就诊 / extra visits per day and zone
-        hosp_d = np.zeros((N, D_, len(hs)), dtype=np.float32)  # 【中文】每天各医院停电小时 / hospital hours closed per day
-        dial_op = np.zeros((N, len(ds)))                    # 【中文】透析中心营业时间内停电小时 / dialysis closed in hours 06–18
-        hloc = np.asarray(lineb.get("hour_local", np.arange(H) % 24))
+        heat_zd = np.zeros((N, D_, Z), dtype=np.float32)     # 【中文】每天各分区热病症新增就诊 / heat-illness visits per day, zone
+        dep_zd = np.zeros((N, D_, Z), dtype=np.float32)      # 【中文】每天各分区设备用户就诊 / device-user visits per day, zone
+        hosp_pd = np.zeros((N, D_, len(hs)), dtype=np.float32)  # 【中文】每天各医院因停电关闭的小时 / closed by power
+        hosp_wd = np.zeros((N, D_, len(hs)), dtype=np.float32)  # 【中文】每天各医院只因断水关闭的小时 / closed by water only
         k_heat = np.zeros((N, 1)) if "R21" in off else col("C-H11")
-        hb, q, T_nh = np.maximum(col("C-H12"), 1.0), col("C-H13"), col("C-H17")
-        Tin_nh = np.repeat(T_set, len(ns), axis=1)
+        hb, q = np.maximum(col("C-H12"), 1.0), col("C-H13")
         age = np.zeros((N, Z))
 
     out = {k: np.zeros((H, S)) for k in ("p_down", "p_thermal", "theta_h")}
-    for k, w in (("hosp", len(hs)), ("nurs", len(ns)), ("dial", len(ds)), ("water_out", 1), ("signals_dark", 1),
+    for k, w in (("hosp", len(hs)), ("water_out", 1), ("signals_dark", 1),
                  ("roads_degraded", 1), ("n_down", 1), ("roads_p", len(net.roads)), ("indoor_out_pop", 1),
                  ("indoor_ac_max_c", 1)):
         out[k] = np.zeros((H, w))
@@ -132,12 +133,12 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
     # K8: per run, the hour with the most degraded segments and the state at that hour
     worst_h, worst_n = np.full(N, -1), np.zeros(N)
     snap_deg = np.zeros((N, len(net.roads)), bool)
-    snap_h, snap_d = np.zeros((N, len(hs)), bool), np.zeros((N, len(ds)), bool)
+    snap_h = np.zeros((N, len(hs)), bool)
     tot = {k: np.zeros(N) for k in ("thermal", "deenergised_hours", "pop_hours", "shed_station_hours", "hospital_hours",
-                                    "nursing_hours", "dialysis_hours", "water_out_hours", "signal_dark_hours",
+                                    "hospital_power_hours", "hospital_water_hours", "water_out_hours", "signal_dark_hours",
                                     "max_subs_down", "ac_loss_pop_hours", "indoor_pop_hours",
                                     "indoor_outage_pop_hours", "indoor_outage_elderly_hours",
-                                    "indoor_outage_poverty_hours", "indoor_no_ac_pop_hours", "nh_exposed_hours",
+                                    "indoor_outage_poverty_hours", "indoor_no_ac_pop_hours",
                                     "dep_visits", "heat_visits_excess")}
 
     for h in range(H):
@@ -181,36 +182,39 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
         pop_out[:, h] = po
         tot["pop_hours"] += po
 
-        # K6–K7：设施备用电源（每次停电开始时抽样）与供水 / backup draws and water
+        # K6–K7：医院与水厂的备用电源（每次停电开始时抽样）与供水 / backup draws and water
         def backed(src_down, B, prev, pb):
             start = src_down & ~prev
             B = np.where(start, rng.random(B.shape) < pb, B)
             return src_down & B, B, src_down
 
         fac_down = np.zeros_like(down) if "R11" in off else down
-        hl, B_h, prev_h = backed(fac_down[:, hs], B_h, prev_h, p_bh)
-        nl, B_n, prev_n = backed(fac_down[:, ns], B_n, prev_n, p_bn)
+        hl_p, B_h, prev_h = backed(fac_down[:, hs], B_h, prev_h, p_bh)
         wl, B_w, prev_w = backed((np.zeros_like(down) if "R09" in off else down)[:, ps], B_w, prev_w, p_bw)
         prod_lost = wl.all(1, keepdims=True) if len(ps) else np.zeros((N, 1), bool)
         storage_left = np.where(prod_lost, storage_left - 1, col("C-W3"))
         water_out = prod_lost & (storage_left < 0) if (net.has_storage and "R10" not in off) else prod_lost
-        dl = fac_down[:, ds] | (False if "R12" in off else water_out)
+        # 【中文】医院断水：断水持续超过院内储水时长后失去功能（全系统断水，对所有医院相同）
+        # hospitals lose function once system water loss outlasts their on-site supply
+        water_age = np.where(water_out, water_age + 1, 0)
+        hl_w = np.repeat((water_age > h_water) & ("R12" not in off), len(hs), axis=1) & ~hl_p
+        hl = hl_p | hl_w
         # K8：信号灯熄灭 → 所控路段降级（供 pipeline.access 使用）/ dark signals → degraded segments
         dark = down[:, gs] & no_batt & ("R13" not in off)
         deg = (dark.astype(float) @ net.M_sig_road) > 0
 
-        out["hosp"][h] = hl.mean(0); out["nurs"][h] = nl.mean(0); out["dial"][h] = dl.mean(0)
+        out["hosp"][h] = hl.mean(0)
         out["water_out"][h] = water_out.mean(); out["signals_dark"][h] = dark.sum(1).mean()
         out["roads_degraded"][h] = deg.sum(1).mean(); out["roads_p"][h] = deg.mean(0)
-        tot["hospital_hours"] += hl.sum(1); tot["nursing_hours"] += nl.sum(1); tot["dialysis_hours"] += dl.sum(1)
+        tot["hospital_hours"] += hl.sum(1); tot["hospital_power_hours"] += hl_p.sum(1); tot["hospital_water_hours"] += hl_w.sum(1)
         tot["water_out_hours"] += water_out[:, 0]; tot["signal_dark_hours"] += dark.sum(1)
-        # 【中文】最坏小时：降级路段数 + 关闭的医院与透析中心（每家记 500，使有设施关闭的小时优先）
-        # worst hour: degraded segments plus closed hospitals and dialysis centres (500 each, so closures come first)
-        nd = deg.sum(1) + 500 * (hl.sum(1) + dl.sum(1))
+        # 【中文】最坏小时：降级路段数 + 关闭的医院（每家记 500，使有医院关闭的小时优先）
+        # worst hour: degraded segments plus closed hospitals (500 each, so closures come first)
+        nd = deg.sum(1) + 500 * hl.sum(1)
         better = nd > worst_n
         if better.any():
             worst_h[better], worst_n[better] = h, nd[better]
-            snap_deg[better], snap_h[better], snap_d[better] = deg[better], hl[better], dl[better]
+            snap_deg[better], snap_h[better] = deg[better], hl[better]
 
         # K9：室内温度 T_in = T_eq + (T_in − T_eq)·e^(−1/τ_b)，T_eq = θ_A + 得热温升 / indoor RC step
         Teq = np.repeat(T_set, Z, axis=1) if "R19" in off else Ta_zone[h][None, :] + np.where(day_mask[h], gain, 1.0)
@@ -226,31 +230,22 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
         tot["indoor_no_ac_pop_hours"] += ((1 - f_ac) * hot_no * pop).sum(1)
         out["indoor_out_pop"][h] = (e_out * pop).sum(1).mean()
         if lb:
-            # 【中文】养老院：失去制冷后按同一热响应升温，超过老年人阈值的住户·小时 / nursing homes losing cooling
-            Teq_nh = Ta_sub[h][ns][None, :] + np.where(day_mask[h], gain, 1.0)
-            Tin_nh = np.where(nl & ("R23" not in off), Teq_nh + (Tin_nh - Teq_nh) * decay, T_set)
-            nh_exp = ((nl & (Tin_nh >= T_nh)) * nh_res).sum(1)
-            # 【中文】依赖电力设备的居民：停电持续到电池耗尽时，以概率 q 就医（每次停电一次）/ device users
+            # 【中文】呼吸机等设备用户：停电持续到电池耗尽时，以概率 q 就医（每次停电一次）/ device users
             age_prev = age
             age = np.where(zdown, age + 1, 0)
             hit = zdown & (age_prev < hb) & (age >= hb)
             dep = np.zeros(N) if "R24" in off else (hit * zone_dep).sum(1) * q[:, 0]
             # 【中文】热病症就诊的超额部分 = k × 当小时高温暴露人·小时 / excess heat-illness visits
             expo_z = e_out * pop + (1 - f_ac) * hot_no * pop                   # 【中文】分区暴露 / exposure by zone
-            nh_z = np.zeros((N, Z))
-            if len(ns):
-                nz = np.asarray(lineb.get("nh_zone", np.zeros(len(ns), int)))
-                np.add.at(nh_z.T, nz, ((nl & (Tin_nh >= T_nh)) * nh_res).T)
-            heat_z = k_heat * (expo_z + nh_z)
+            heat_z = k_heat * expo_z
             dep_z = np.zeros((N, Z)) if "R24" in off else hit * zone_dep * q
-            expo = expo_z.sum(1) + nh_exp
             heat = heat_z.sum(1)
             extra_day[:, dayi[h]] += heat + dep
-            extra_zd[:, dayi[h]] += (heat_z + dep_z).astype(np.float32)
-            hosp_d[:, dayi[h]] += hl
-            if 6 <= hloc[h] < 18:
-                dial_op += dl
-            tot["nh_exposed_hours"] += nh_exp; tot["dep_visits"] += dep; tot["heat_visits_excess"] += heat
+            heat_zd[:, dayi[h]] += heat_z.astype(np.float32)
+            dep_zd[:, dayi[h]] += dep_z.astype(np.float32)
+            hosp_pd[:, dayi[h]] += hl_p
+            hosp_wd[:, dayi[h]] += hl_w
+            tot["dep_visits"] += dep; tot["heat_visits_excess"] += heat
         out["indoor_ac_max_c"][h] = Tin_ac[zdown].max() if zdown.any() else np.nan
         repair = np.maximum(repair - 1, 0)
 
@@ -260,10 +255,13 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
         ar = np.arange(N)
         tot["peak_day_extra_visits"] = extra_day[ar, pk]
         # 【中文】高峰日医院的平均可用比例（停电小时数折算）/ average open share of hospitals on the peak day
-        tot["peak_day_open_share"] = 1 - hosp_d[ar, pk].sum(1) / (24 * max(len(hs), 1))
-        care = {"extra_zone": extra_zd[ar, pk].astype(float), "hosp_closed_h": hosp_d[ar, pk].astype(float),
-                "dial_closed_op_h": dial_op}
+        cp_, cw_ = hosp_pd[ar, pk].astype(float), hosp_wd[ar, pk].astype(float)
+        tot["peak_day_open_share"] = 1 - (cp_ + cw_).sum(1) / (24 * max(len(hs), 1))
+        eh, ed_ = heat_zd[ar, pk].astype(float), dep_zd[ar, pk].astype(float)
+        tot["peak_day_heat_visits"], tot["peak_day_dep_visits"] = eh.sum(1), ed_.sum(1)
+        care = {"extra_heat_zone": eh, "extra_dep_zone": ed_, "extra_zone": eh + ed_,
+                "hosp_closed_power_h": cp_, "hosp_closed_water_h": cw_, "hosp_closed_h": cp_ + cw_}
         tot["mean_day_extra_visits"] = extra_day.mean(1)
     return {"hourly": out, "pop_out": pop_out, "totals": tot,
-            "worst": {"hour": worst_h, "roads": snap_deg, "hosp": snap_h, "dial": snap_d},
+            "worst": {"hour": worst_h, "roads": snap_deg, "hosp": snap_h},
             "care": care if lb else None}

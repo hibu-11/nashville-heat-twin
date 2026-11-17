@@ -82,31 +82,37 @@ links:
     evidence_zh: 制水和加压依赖电力，储水提供数小时缓冲；这是供水系统对电力的主要依赖。
   - id: K7
     upstream: [K5, K6]
-    name_en: Zone outage → hospitals and nursing homes (backup power); dialysis (power or water)
-    name_zh: 分区停电 → 医院与养老院（备用电源）；透析中心（电或水）
+    name_en: Hospitals — zone outage with backup failure, or system water loss beyond on-site supply
+    name_zh: 医院：分区停电且备用电源失效，或全系统断水超过院内储水时长
     methods: []
-    relations: ["R-H1:0"]
-    couplings: [C-H1, C-H2, C-H3]
-    citations: [cms2016, kelman2015, anderson2012]
-    evidence_en: Backup power is required but can fail; dialysis interruptions after Hurricane Sandy were associated with excess deaths.
-    evidence_zh: 法规要求备用电源但它可能失效；飓风桑迪后透析中断与超额死亡相关。
+    relations: ["R-H1:1"]
+    couplings: [C-H1, C-H18]
+    citations: [cms2016, marqusee2020, irvinbarnwell2020]
+    evidence_en: >-
+      Since 2026-11-17 the medical-facility node holds hospitals only (dialysis centres and nursing homes moved to D10).
+      Hospitals use electricity and water heavily: CMS requires backup power, which can fail, and emergency plans that
+      cover water, but no minimum on-site volume. A hospital loses ED capacity for the hours it is closed; its patients
+      move to the next open hospital.
+    evidence_zh: >-
+      2026-11-17 起医疗设施节点只含医院（透析中心和养老院移到 D10）。医院大量用电用水：CMS 要求备用电源（可能失效），
+      应急预案要覆盖用水，但没有院内储水量的下限。医院关闭的小时数按比例减少急诊接诊能力，病人改去下一家开放的医院。
   - id: K8
     upstream: [K5, K7]
-    name_en: Zone outage → dark traffic signals → link capacity → travel time to hospitals, dialysis and EMS
-    name_zh: 分区停电 → 信号灯熄灭 → 路段通行能力下降 → 到医院、透析中心和急救站的行程时间
+    name_en: Zone outage → dark traffic signals → link capacity → travel time to hospitals
+    name_zh: 分区停电 → 信号灯熄灭 → 路段通行能力下降 → 到医院的行程时间
     methods: [M-28, M-29]
     relations: ["R-T3:0", "R-T1:1", "R-T4:2", "R-H3:2"]
     couplings: [C-T2, C-T3, C-T5, C-T6.a, C-T6.b, C-T6.cap_fwy, C-T6.cap_art, C-T6.cap_loc]
     citations: [rinaldi2001, ouyang2014, hcm2022, bpr1964, kelman2015]
     evidence_en: >-
       The transport link with a direct health consequence: signals depend on grid power (Rinaldi et al. 2001), a dark
-      signal operates as an all-way stop with reduced capacity (HCM), and patients displaced from a closed dialysis
-      centre must travel to another (Kelman et al. 2015). Computed per run at that run's worst hour, with the run's
-      own dark signals and facility outages, so tail cases are kept rather than averaged away.
+      signal operates as an all-way stop with reduced capacity (HCM), and patients of a closed hospital must travel
+      to another. Computed per run at that run's worst hour, with the run's own dark signals and hospital closures,
+      so tail cases are kept rather than averaged away.
     evidence_zh: >-
       交通系统中与健康结局直接相关的一环：信号灯依赖电网供电（Rinaldi 等 2001）；信号灯熄灭后按全向停车控制处理，
-      通行能力下降（HCM）；透析中心停电时患者必须去另一家（Kelman 等 2015）。按每次运行在其最坏小时的实际状态
-      （该次运行熄灭的信号灯和停电的设施）计算，保留尾部情形，而不是像完整模型那样按期望值平均掉。
+      通行能力下降（HCM）；医院关闭时病人必须去另一家。按每次运行在其最坏小时的实际状态
+      （该次运行熄灭的信号灯和关闭的医院）计算，保留尾部情形，而不是像完整模型那样按期望值平均掉。
   - id: K9
     upstream: [K1, K5]
     name_en: Outage → loss of air conditioning → indoor temperature → indoor heat exposure
@@ -120,22 +126,25 @@ links:
 
   - id: K10
     upstream: [K1, K5, K7, K9]
-    name_en: Line B v1 — heat exposure, nursing-home residents and device users → care demand → ED waiting → time to care
-    name_zh: B 线第一版：高温暴露、养老院住户、依赖电力设备的居民 → 就医需求 → 急诊等待 → 就医时间
+    name_en: Line B — heat exposure → heat illness → care demand; zone outage → ventilator and other device users → care demand; demand → ED waiting → time to care
+    name_zh: B 线：高温暴露 → 热病症 → 就医需求；分区停电 → 呼吸机等设备用户 → 就医需求；需求 → 急诊等待 → 就医时间
     methods: [M-47]
-    relations: ["R-H5:3", "R-H6:1", "R-H7:1", "R-H8:0"]
-    couplings: [C-H11, C-H11.a, C-H12, C-H13, C-H14, C-H15, C-H16, C-H17]
-    citations: [tdh_hri_ed, gasparrini2015, lin2011, falaize2014, hhs_empower, meade2024, sun2020]
+    relations: ["R-H5:3", "R-H6:1", "R-H8:0"]
+    couplings: [C-H11, C-H11.a, C-H12, C-H13, C-H14, C-H15, C-H16]
+    citations: [tdh_hri_ed, gasparrini2015, lin2011, hhs_empower, sun2020]
     evidence_en: >-
       Heat-illness visits = a + k · indoor heat person-hours, with k calibrated on Davidson's annual heat-illness ED
-      visits 2014–2023 against simulated exposure (R² 0.75, ρ 0.70); nursing-home residents exposed when cooling is not
-      kept; electricity-dependent residents (HHS emPOWER) seek care once device batteries run out. Peak-day extra
-      visits raise waiting at per-hospital queues (W = W0·ρ/(1−ρ)); time to care is per ED visit (travel + waiting,
-      pipeline/care.py) and dialysis is counted as sessions affected. The waiting step rests on T4 assumptions (ρ0, D0, W0, q).
+      visits 2014–2023 against simulated exposure (R² 0.75, ρ 0.70). Users of ventilators and other electricity-dependent
+      home devices (HHS emPOWER, 4,163 Medicare beneficiaries; 3,864 allocated to zones) seek care with probability q
+      once a zone outage outlasts the device battery. Heat illness and device users are separate sources of care
+      demand. Peak-day extra visits raise waiting at per-hospital queues (W = W0·ρ/(1−ρ), ρ ≤ 0.95); time to care is
+      per ED visit (travel + waiting, pipeline/care.py) and is decomposed by cause (pipeline/extremes.py). The waiting
+      step rests on T4 assumptions (ρ0, D0, W0, q).
     evidence_zh: >-
-      热病症就诊 = a + k × 室内高温暴露人·小时，k 用 Davidson 2014–2023 年度急诊人次对模拟暴露校准（R² 0.75，ρ 0.70）；
-      养老院失去制冷时住户暴露；依赖电力设备的居民（HHS emPOWER）在设备电池耗尽后就医。高峰日新增就诊按 W = W0·ρ/(1−ρ)
-      增加各医院的等待；就医时间按急诊就诊人次计算（路程 + 等待，pipeline/care.py），透析计受影响次数。等待这一步依赖 T4 假设（ρ0、D0、W0、q）。
+      热病症就诊 = a + k × 室内高温暴露人·小时，k 用 Davidson 2014–2023 年度急诊人次对模拟暴露校准（R² 0.75，ρ 0.70）。
+      呼吸机等家用医疗设备用户（HHS emPOWER，4,163 名医保受益人，3,864 人分配到分区）在分区停电超过设备电池时长后以概率 q 就医。
+      热病症与设备用户是两个独立的就医需求来源。高峰日新增就诊按 W = W0·ρ/(1−ρ)（ρ ≤ 0.95）增加各医院的等待；
+      就医时间按急诊就诊人次计算（路程 + 等待，pipeline/care.py），并按原因分解（pipeline/extremes.py）。等待这一步依赖 T4 假设（ρ0、D0、W0、q）。
 
 deferred:
   - id: D1
@@ -204,20 +213,18 @@ deferred:
     reason_en: Fixed repair time is kept until NES restoration records are available.
     reason_zh: 在拿到 NES 修复记录之前保留固定修复时长。
   - id: D8
-    name_en: Distribution transformers, line ampacity, water hydraulics and hospital / nursing-home water, electricity-dependent residents, dialysis relocation, cooling centres
-    name_zh: 配电变压器、线路载流量、供水水力及医院 / 养老院用水、依赖电力设备的居民、透析转诊、避暑中心
+    name_en: Distribution transformers, line ampacity, water hydraulics (pressure zones serving each hospital), cooling centres
+    name_zh: 配电变压器、线路载流量、供水水力（各医院所在的压力分区）、避暑中心
     relations: ["R-P6:1", "R-P5:2", "R-W1:2s", "R-H6:2", "R-H2:2", "R-H4:1"]
     couplings: []
     citations: [bartos2016, ieee738_2012, klise2017, molinari2017, kelman2015]
     reason_en: >-
-      Each refines a core link but needs data we do not hold (NES assets, Metro Water model, emPOWER, patient counts).
-      Hospitals and nursing homes also depend on water (chiller cooling towers, sterilisation, sanitation); the
-      dependency graph links them (R-W1, R-W2) but the core applies water loss to dialysis only, because hospitals have
-      on-site storage and priority supply and no core run lost water.
+      Each refines a core link but needs data we do not hold (NES assets, Metro Water hydraulic model). The core
+      treats water loss as system-wide (all plants out and storage exhausted); a hydraulic model would show which
+      hospitals lose pressure first.
     reason_zh: >-
-      每一项都是对某个主线环节的细化，但需要尚未获得的数据（NES 资产、Metro Water 模型、emPOWER、患者数）。
-      医院和养老院同样依赖供水（冷水机组冷却塔、消毒灭菌、卫生）；依赖图中已连接（R-W1、R-W2），但骨架只对透析中心
-      使用断水，因为医院有自备储水和优先供水，而且骨架运行中没有出现断水。
+      每一项都是对某个主线环节的细化，但需要尚未获得的数据（NES 资产、Metro Water 水力模型）。骨架把断水当作全系统事件
+      （所有水厂停产且储水耗尽）；有水力模型后才能知道哪家医院先失压。
   - id: D9
     paused: true   # 2026-11-10: economic outcomes paused by the user
     name_en: Economic loss (customer interruption costs; monetised health outcomes)
@@ -232,3 +239,17 @@ deferred:
     reason_zh: >-
       健康之外的第二个结局。停电损失 = 各类用户停电的用户·小时 × 供电可靠性价值（LBNL ICE 计算器，Sullivan 等 2015）；
       健康损失 = 归因死亡 × 统计生命价值加医疗费用，需等 D6。两者分开报告，不相加。需要 NES 按分区、用户类别的户数。
+  - id: D10
+    paused: true   # 2026-11-17: medical facilities = hospitals only, at the user's request
+    name_en: Dialysis centres and nursing homes
+    name_zh: 透析中心与养老院
+    relations: ["R-H7:1", "R-H2:2"]
+    couplings: [C-H2, C-H3, C-H17]
+    citations: [kelman2015, hhs_oig_nh2026, meade2024]
+    reason_en: >-
+      Removed from the core on 2026-11-17 so the medical-facility node holds hospitals only. In the 2026-11-11 runs
+      they did not change time to care (nursing homes about 0%); dialysis sessions affected (about 69 per summer at
+      +4 °C) are recorded in git 7298ae6. Code for both remains in the full model.
+    reason_zh: >-
+      2026-11-17 起从骨架中移除，医疗设施节点只保留医院。在 2026-11-11 的运行中它们对就医时间几乎没有影响（养老院约 0%）；
+      受影响的透析次数（+4 °C 时每个夏季约 69 次）记录在 git 7298ae6。两者的代码保留在完整模型中。

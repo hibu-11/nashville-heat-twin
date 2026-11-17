@@ -3,6 +3,8 @@ raw/*
 !raw/README.md
 # 【中文】标准表体积大，存 GCS / Zenodo / standard tables live on GCS or Zenodo
 data/standard/
+# 【中文】运行日志 / run logs
+data/logs/
 __pycache__/
 *.pyc
 .DS_Store

@@ -1,8 +1,7 @@
 """
 【中文】骨架模型的因果贡献（敲除实验）与模块数据分级。
 对关系图集中的每条关系，用相同的随机数（公共随机数）分别运行"全部开启"和"只关掉这一条"，比较三个结局：
-就医时间增量（A 线，医院 + 透析 + 急救的人口加权分钟数，研究区内无可用设施按 30 分钟计）、停电人·小时、
-室内高温暴露人·小时（B 线的输入）。贡献 = (基准 − 敲除) / 基准：正值表示这条关系放大结局，负值表示它起缓冲作用。
+每次急诊就诊的就医时间增量（路程 + 等待，pipeline.care）、停电人·小时、室内高温暴露人·小时（B 线的输入）。贡献 = (基准 − 敲除) / 基准：正值表示这条关系放大结局，负值表示它起缓冲作用。
 串联链上任何一环被关掉，下游效果都会消失，因此串联各环的贡献相同；贡献不能相加。
 同时按变量表与参数表的可信度栏，给结构图的每个模块计算"本模块输入最弱档"和"连同上游最弱档"。
 
@@ -38,7 +37,7 @@ OUTER = {
     "R05": "TVA load is not scaled by scenario warming",
     "R06": "no rotating outages from a system shortfall",
     "R14": "dark signals keep full capacity (R14–R16 are in series, so one knockout covers all three)",
-    "R17": "closed facilities stay on the destination list",
+    "R17": "closed hospitals keep their patients and capacity (no rerouting, no capacity loss)",
     "R22": "extra care demand does not lengthen waiting",
 }
 # 【中文】关系 → 结构图上的边 / relation → map edges
@@ -46,11 +45,11 @@ EDGES = {
     "R01": [["bg", "urban"]], "R02": [["urban", "load"]], "R03a": [["urban", "hotspot"]], "R03b": [["load", "hotspot"]],
     "R04": [["hotspot", "failure"]], "R05": [["load", "margin"]], "R06": [["margin", "shed"], ["shed", "topo"]],
     "R07": [["failure", "topo"]], "R08": [["topo", "zone"]], "R09": [["zone", "plant"]],
-    "R10": [["plant", "storage"], ["storage", "wservice"]], "R11": [["zone", "facility"]], "R12": [["wservice", "facility"]],
+    "R10": [["plant", "storage"], ["storage", "wservice"]], "R11": [["zone", "hospital"]], "R12": [["wservice", "hospital"]],
     "R13": [["zone", "signals"]], "R14": [["signals", "capacity"], ["capacity", "travel"], ["travel", "access"]],
-    "R17": [["facility", "access"]], "R18": [["zone", "indoor"]], "R19": [["urban", "indoor"]],
-    "R21": [["exposure", "illness"]], "R22": [["illness", "access"]], "R23": [["facility", "exposure"]],
-    "R24": [["zone", "illness"]],
+    "R17": [["hospital", "access"]], "R18": [["zone", "indoor"]], "R19": [["urban", "indoor"]],
+    "R21": [["exposure", "illness"], ["illness", "demand"]], "R22": [["demand", "access"]],
+    "R24": [["zone", "demand"]],
 }
 # 【中文】结构图模块 → 输入变量与参数（用于数据分级）/ map module → input variables and couplings
 NODE_INPUTS = {
@@ -60,14 +59,12 @@ NODE_INPUTS = {
     "shed": ["C-P9.avail", "C-P9.imp"], "river": ["C-P9", "C-P9.span", "C-P9.Qmin", "C-P9.flow"], "overload": ["C-P4"],
     "signals": ["TRN-06", "TRN-07"], "capacity": ["TRN-12", "TRN-15"], "travel": ["TRN-01", "TRN-10", "TRN-11", "TRN-13", "TRN-14"],
     "plant": ["WAT-01", "WAT-09"], "storage": ["WAT-04"], "wservice": ["C-W1"],
-    "facility": ["HLT-01", "HLT-03", "HLT-05", "HLT-07", "HLT-08", "C-H3"], "access": ["TRN-21", "POP-01", "C-H14", "C-H15", "C-H16"],
+    "hospital": ["HLT-01", "HLT-03", "HLT-09", "C-H18"], "access": ["TRN-21", "POP-01", "C-H14", "C-H15", "C-H16"],
     "indoor": ["BLD-08", "BLD-09", "BLD-12", "HLT-24"], "pop": ["POP-01", "POP-02", "POP-03"],
-    "exposure": ["HLT-23", "BLD-04"], "illness": ["HLT-12", "HLT-17", "C-H11", "C-H13"],
+    "exposure": ["HLT-23", "BLD-04"], "illness": ["HLT-12", "C-H11"], "demand": ["HLT-17", "C-H12", "C-H13"],
 }
 MAP_EDGES = [e for v in EDGES.values() for e in v] + [["indoor", "exposure"], ["pop", "exposure"], ["urban", "exposure"],
-                                                      ["exposure", "illness"], ["illness", "access"], ["overload", "failure"],
-                                                      ["bg", "river"], ["river", "margin"],
-                                                      ["facility", "exposure"], ["zone", "illness"]]
+                                                      ["overload", "failure"], ["bg", "river"], ["river", "margin"]]
 TIERS = ["T1", "T2", "T3", "T4"]
 
 
@@ -153,9 +150,8 @@ def main(argv=None):
             res[dT][case] = {"time_to_care_min": round(float(ttc.mean()), 4), "wait_increase_min": round(float(wait.mean()), 4),
                              "time_to_care_median_min": round(float(np.median(ttc)), 4),
                              "ed_travel_increase_min": round(float(ed["travel"].mean()), 4),
-                             "dialysis_sessions_affected": round(float(ed["dialysis_sessions"].mean()), 2),
+                             "time_to_care_p95_min": round(float(np.percentile(ttc, 95)), 4),
                              "care_time_loss_min": acc["care_time_loss_min"]["mean"],
-                             "dialysis_none_available": acc["dialysis"]["runs_with_none_available"],
                              "pop_hours": round(float(t["pop_hours"].mean()), 1),
                              "indoor_outage_pop_hours": round(float(t["indoor_outage_pop_hours"].mean()), 1),
                              "indoor_pop_hours": round(float(t["indoor_pop_hours"].mean()), 1)}
@@ -168,16 +164,15 @@ def main(argv=None):
     rel = {}
     for case in cases[1:]:
         rel[case] = {"what_is_switched_off": OUTER.get(case) or KNOCKOUTS[case], "edges": EDGES[case],
-                     "contribution": {f"{dT:+.0f}": {k: share(dT, case, k) for k in ("time_to_care_min", "time_to_care_median_min", "ed_travel_increase_min", "wait_increase_min", "dialysis_sessions_affected", "care_time_loss_min", "pop_hours", "indoor_pop_hours", "indoor_outage_pop_hours")} for dT in scen}}
+                     "contribution": {f"{dT:+.0f}": {k: share(dT, case, k) for k in ("time_to_care_min", "time_to_care_median_min", "time_to_care_p95_min", "ed_travel_increase_min", "wait_increase_min", "care_time_loss_min", "pop_hours", "indoor_pop_hours", "indoor_outage_pop_hours")} for dT in scen}}
     out = {"created": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "runs": args.runs, "seed": args.seed,
            "scenarios_delta_c": scen,
            "method": "Knockout (do-intervention) with common random numbers: contribution = (base − knockout) / base. "
                      "Positive: the relation adds to the outcome; negative: it buffers. Relations in series share the "
                      "downstream effect, so contributions do not add up. time_to_care_min = added travel (rerouting and congestion) "
                      "plus added waiting per ED visit on each run's peak day, with per-hospital queues (pipeline.care). "
-                     "dialysis_sessions_affected is reported separately. care_time_loss_min (old line A metric) = population-mean added "
-                     "minutes to hospital + dialysis + EMS at each run's worst hour, cells that lose every facility of a "
-                     "type inside the area counted at 30 min (assumption).",
+                     "care_time_loss_min (older line A metric) = population-mean added minutes to the nearest hospital at "
+                     "each run's worst hour, cells that lose every hospital counted at 30 min (assumption).",
            "outcomes": res, "relations": rel, "nodes": node_tiers()}
     p = ROOT / proj.get("site_data_dir", "site/data") / "twin" / "core" / "contrib.json"
     write_json(p, out)
@@ -192,6 +187,9 @@ VARIANTS = {
     "q = 0.15": {"C-H13": 0.15},
     "ED slack (rho0 0.60, D0 1400, W0 20)": {"C-H14": 0.60, "C-H15": 1400, "C-H16": 20},
     "ED stretched (rho0 0.85, D0 700, W0 45)": {"C-H14": 0.85, "C-H15": 700, "C-H16": 45},
+    # 【中文】排队上限：利用率封顶值决定满负荷医院的等待（0.95 → W0 × 19）/ the utilisation cap sets the wait at full hospitals
+    "queue cap 0.90": {"_rho_max": 0.90},
+    "queue cap 0.98": {"_rho_max": 0.98},
 }
 
 
@@ -203,7 +201,9 @@ def run_variants(args, scen, Ta, Ta_sub, Ta_zone, day_mask, hours, tz, params, n
             rng = np.random.default_rng(args.seed)
             th = params.sample(args.runs, rng)
             for k, v in fix.items():
-                th[k] = np.full(args.runs, float(v))
+                if not k.startswith("_"):
+                    th[k] = np.full(args.runs, float(v))
+            care.RHO_MAX = fix.get("_rho_max", 0.95)
             shed = adequacy_shed(river, Ta, th, dT)
             sim = simulate_core(net, Ta + dT, th, rng, day_mask, Ta_sub=None if Ta_sub is None else Ta_sub + dT,
                                 Ta_zone=None if Ta_zone is None else Ta_zone + dT, shed=shed, lineb=LB)
@@ -215,6 +215,7 @@ def run_variants(args, scen, Ta, Ta_sub, Ta_zone, day_mask, hours, tz, params, n
                                        "wait_median": round(float(np.median(ed["wait"])), 2),
                                        "device_visits": round(float(sim["totals"]["dep_visits"].mean()), 1),
                                        "share_runs_over_30min": round(float((t > 30).mean()), 3)}
+            care.RHO_MAX = 0.95
             print(f"[variants] {dT:+.0f} °C {name:42s} median {res[f'{dT:+.0f}'][name]['time_to_care_median']:.2f} "
                   f"p95 {res[f'{dT:+.0f}'][name]['time_to_care_p95']:.1f} mean {res[f'{dT:+.0f}'][name]['time_to_care_mean']:.1f} min")
     out = {"created": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "runs": args.runs, "variants": VARIANTS, "results": res}

@@ -8,18 +8,22 @@ Builds the relation atlas from docs/atlas/relation-atlas.template.html and the l
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from pipeline.run_all import HEATWAVES  # noqa: E402
 CORE = ROOT / "site/data/twin/core"
 TEMPLATE = ROOT / "docs/atlas/relation-atlas.template.html"
 OUT = ROOT / "site/architecture/relation-atlas.html"
-PLACEHOLDER = '  const CONTRIB = null, CONTRIB_NOTE = "", SUMMARY = null, VARIANTS = null, HEATWAVES = null;   // filled by scripts/build_atlas.py'
-HW_LABELS = {"hw2024aug": "2024 Aug 26–30", "hw2022jun": "2022 Jun 21–25", "hw2025aug": "2025 Aug 15–19", "hw2023aug": "2023 Aug 22–26"}
-KEEP = ["share_runs_with_any_outage", "thermal", "pop_hours", "hospital_hours", "nursing_hours", "dialysis_hours",
+PLACEHOLDER = '  const CONTRIB = null, CONTRIB_NOTE = "", SUMMARY = null, VARIANTS = null, HEATWAVES = null, EXTREMES = null;   // filled by scripts/build_atlas.py'
+HW_LABELS = {tag: label for tag, (_, _, label) in HEATWAVES.items()}
+KEEP = ["share_runs_with_any_outage", "thermal", "pop_hours", "hospital_hours", "hospital_power_hours", "hospital_water_hours",
         "water_out_hours", "indoor_outage_pop_hours", "indoor_outage_elderly_hours", "indoor_no_ac_pop_hours",
-        "indoor_ac_max_c", "runs_with_shed", "heat_visits_excess", "dep_visits", "nh_exposed_hours", "peak_day_extra_visits",
-        "time_to_care_min", "ed_travel_increase_min", "ed_congestion_min", "wait_increase_min", "dialysis_sessions_affected"]
+        "indoor_ac_max_c", "runs_with_shed", "heat_visits_excess", "dep_visits", "peak_day_extra_visits", "peak_day_heat_visits",
+        "peak_day_dep_visits", "peak_day_open_share", "time_to_care_min", "ed_travel_increase_min", "ed_congestion_min",
+        "wait_increase_min", "share_visits_at_cap"]
 
 
 def read(p: Path):
@@ -31,8 +35,7 @@ def summary_slice(s: dict) -> dict:
     for k, v in s["scenarios"].items():
         a = v.get("access", {})
         sc[k] = {f: v[f] for f in KEEP if f in v} | {"access": {
-            "runs_with_degraded_segments": a.get("runs_with_degraded_segments"),
-            "dialysis": {"runs_with_none_available": a.get("dialysis", {}).get("runs_with_none_available")}}}
+            "runs_with_degraded_segments": a.get("runs_with_degraded_segments")}}
     full = s.get("full_model") or {}
     return {"run_id": s["run_id"], "scenarios": sc, "sensitivity": s.get("sensitivity", []),
             "full_model": {"run_id": full.get("run_id"), "scenarios": {k: {"pop_hours": v.get("pop_hours")}
@@ -50,7 +53,7 @@ def heatwaves() -> list:
             t = v.get("time_to_care_min", {})
             sc[k] = {"share_runs_with_any_outage": v["share_runs_with_any_outage"], "pop_hours": v["pop_hours"]["mean"],
                      "heat_visits_excess": v.get("heat_visits_excess", {}).get("mean"), "ttc_median": t.get("50"),
-                     "ttc_p95": t.get("95"), "dialysis_sessions": v.get("dialysis_sessions_affected", {}).get("mean")}
+                     "ttc_p95": t.get("95"), "dep_visits": v.get("dep_visits", {}).get("mean")}
         out.append({"tag": tag, "label": label, "period": s["period"], "run_id": s["run_id"], "scenarios": sc})
     return out
 
@@ -75,14 +78,18 @@ def main():
     t = TEMPLATE.read_text(encoding="utf-8")
     assert t.count(PLACEHOLDER) == 1, "placeholder line not found in the template"
     s, c, v = read(CORE / "summary.json"), read(CORE / "contrib.json"), read(CORE / "contrib_variants.json")
+    ex = read(CORE / "extremes.json")
+    ex = {"run_id": ex["run_id"], "scenarios": {k: {"bins": d["bins"], "chain": d["chain"]} for k, d in ex["scenarios"].items()}} \
+        if ex and s and ex.get("run_id") == s["run_id"] else None
     contrib = {"relations": {k: {"edges": r["edges"], "contribution": r["contribution"]} for k, r in c["relations"].items()},
                "nodes": c["nodes"]} if c else None
     dump = lambda x: json.dumps(x, ensure_ascii=False, separators=(",", ":"))  # noqa: E731
     line = (f"  const CONTRIB = {dump(contrib)}, CONTRIB_NOTE = {dump(note(c, s) if (c and s) else '')}, "
-            f"SUMMARY = {dump(summary_slice(s) if s else None)}, VARIANTS = {dump(v)}, HEATWAVES = {dump(heatwaves())};")
+            f"SUMMARY = {dump(summary_slice(s) if s else None)}, VARIANTS = {dump(v)}, HEATWAVES = {dump(heatwaves())}, "
+            f"EXTREMES = {dump(ex)};")
     OUT.write_text(t.replace(PLACEHOLDER, line), encoding="utf-8")
     print(f"wrote {OUT.relative_to(ROOT)} (summary {s['run_id'] if s else None}, contrib {'yes' if c else 'no'}, "
-          f"variants {'yes' if v else 'no'}, heat waves {len(heatwaves())})")
+          f"variants {'yes' if v else 'no'}, heat waves {len(heatwaves())}, extremes {'yes' if ex else 'no'})")
 
 
 if __name__ == "__main__":

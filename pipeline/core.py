@@ -34,7 +34,26 @@ from .twin.river import shed_fraction
 from .twin.validate import spearman_ci
 
 # 【中文】与完整模型对比的指标 / outputs compared with the full model
-COMPARE = ["thermal", "pop_hours", "dialysis_hours", "hospital_hours", "water_out_hours", "shed_station_hours"]
+COMPARE = ["thermal", "pop_hours", "hospital_hours", "water_out_hours", "shed_station_hours"]
+
+
+DECOMP_KEYS = ("heat", "device", "power", "water", "congestion")
+
+
+def decomposition_summary(ed: dict) -> dict:
+    """【中文】按就医时间排序分组（全部、中间 50%、最坏 5%、最坏 1%），每组各原因的平均分钟数 / mean minutes by cause."""
+    t, dc = ed["time"], ed["decomp"]
+    groups = {"all": np.ones(len(t), bool), "middle50": (t >= np.percentile(t, 25)) & (t <= np.percentile(t, 75)),
+              "top5": t >= np.percentile(t, 95), "top1": t >= np.percentile(t, 99)}
+    out = {}
+    for g, m in groups.items():
+        out[g] = {k: round(float(dc[k][m].mean()), 3) for k in DECOMP_KEYS} | {
+            "total": round(float(t[m].mean()), 3), "runs": int(m.sum()),
+            "travel": round(float(dc["travel"][m].mean() + dc["congestion"][m].mean()), 3),
+            "wait": round(float(dc["wait"][m].mean()), 3),
+            "share_visits_at_cap": round(float(ed["share_visits_at_cap"][m].mean()), 3),
+            "hospitals_at_cap": round(float(ed["hospitals_at_cap"][m].mean()), 2)}
+    return out
 
 
 def adequacy_shed(river, Ta, th, dT):
@@ -60,13 +79,13 @@ LOST_PENALTY_MIN = 30.0
 
 
 def access_runs(ctx, net, sim, th, hours, tz, off=frozenset()):
-    """【中文】K8：每次运行在其降级路段最多的小时，按该次运行实际熄灭的信号灯（通行能力 × φ_dark）和实际停电的
-    医院 / 透析中心，计算各人口格到最近可用设施的时间，与同一小时的正常情况相减。从未降级的运行变化为 0。
+    """【中文】K8：每次运行在其降级路段最多的小时，按该次运行实际熄灭的信号灯（通行能力 × φ_dark）和实际关闭的
+    医院，计算各人口格到最近可用医院的时间，与同一小时的正常情况相减。从未降级的运行变化为 0。
     K8: per run, at its hour with the most degraded segments, travel time with that run's dark signals and
     facility outages minus the normal time at the same hour. Runs that never degrade contribute zero.
     off: "R14" (or R15 / R16) ignores dark-signal capacity loss; "R17" ignores facility closures.
-    care_time_loss = sum over hospital, dialysis and EMS of the population-mean added minutes, with cells that lose
-    every facility of a type counted at LOST_PENALTY_MIN."""
+    care_time_loss = population-mean added minutes to the nearest hospital, with cells that lose every hospital
+    counted at LOST_PENALTY_MIN (older line A metric, kept for comparison)."""
     no_phi = bool(off & {"R14", "R15", "R16"})
     edges, pop = ctx["edges"], ctx["pop"]
     ridx = {r: i for i, r in enumerate(net.roads)}
@@ -86,8 +105,7 @@ def access_runs(ctx, net, sim, th, hours, tz, off=frozenset()):
         phi = np.ones(len(edges))
         if not no_phi:
             phi[ctl] = np.where(w["roads"][r, e_road[ctl]], th["C-T5"][r], 1.0)
-        down = {} if "R17" in off else (
-            {i: 1.0 for i, d in zip(net.hosp, w["hosp"][r]) if d} | {i: 1.0 for i, d in zip(net.dial, w["dial"][r]) if d})
+        down = {} if "R17" in off else {i: 1.0 for i, d in zip(net.hosp, w["hosp"][r]) if d}
         _, t = access.evaluate(ctx, lh, phi, down, summary=False)
         # 【中文】只有信号灯熄灭（不含设施关闭）的路程，用于就医时间中的拥堵部分 / congestion only, no closures
         _, tc = access.evaluate(ctx, lh, phi, None, summary=False) if (down and not no_phi) else (None, t if not down else base[lh])
@@ -122,23 +140,21 @@ def access_runs(ctx, net, sim, th, hours, tz, off=frozenset()):
 
 
 def lineb_inputs(assets, net, hours, tz):
-    """【中文】B 线输入：养老院住户、各分区依赖电力设备的人数、每小时所属的日序号 / line B inputs."""
-    zone_of_sub = {s: z for z, s in enumerate(net.zone_sub) if s >= 0}
-    return {"nh_res": lineb.nursing_residents(assets, net),
-            "nh_zone": np.array([zone_of_sub.get(s, 0) for s in net.sub_of(net.nurs)], dtype=int),
-            "zone_dep": lineb.zone_dependents(assets, net, ROOT / "raw/health/empower_zip_davidson.json",
+    """【中文】B 线输入：各分区呼吸机等设备用户人数（emPOWER）、每小时所属的日序号 / line B inputs."""
+    return {"zone_dep": lineb.zone_dependents(assets, net, ROOT / "raw/health/empower_zip_davidson.json",
                                               ROOT / "raw/health/zcta_health.gpkg"),
-            "day": pd.factorize(hours.tz_convert(tz).date)[0], "hour_local": np.asarray(hours.tz_convert(tz).hour)}
+            "day": pd.factorize(hours.tz_convert(tz).date)[0]}
 
 
-def time_to_care(cp, sim, th, acc, off=frozenset()):
-    """【中文】就医时间（每次急诊就诊的路程 + 等待增量）与受影响的透析次数；见 pipeline.care。
-    Time to care per ED visit (travel + waiting) and dialysis sessions affected; see pipeline.care."""
+def time_to_care(cp, sim, th, acc, off=frozenset(), decompose=False):
+    """【中文】就医时间（每次急诊就诊的路程 + 等待增量）；decompose=True 时附上 Shapley 分解。见 pipeline.care。
+    Time to care per ED visit (travel + waiting), optionally with its Shapley decomposition; see pipeline.care."""
     cong = None if (off & {"R14", "R15", "R16"}) else acc.pop("_congestion_hospital")
     acc.pop("_congestion_hospital", None)
     acc.pop("_care_runs", None)
     ed = care.ed_time(cp, sim["care"], th, congestion=cong, off=off)
-    ed["dialysis_sessions"] = care.dialysis_sessions(cp, sim["care"])
+    if decompose:
+        ed["decomp"] = care.decompose(cp, sim["care"], th, congestion=cong)
     return ed
 
 
@@ -189,10 +205,11 @@ def main(argv=None):
     print(f"[core] {len(net.sid)} substations, {len(net.zone_id)} zones, {int(net.U.sum())} supply edges, {len(hours)} hours")
 
     actx = access.prepare(cfg, std, assets, deps, drivers, params, verbose=False)
+    actx["dest"] = {"hospital": actx["dest"]["hospital"]}  # 【中文】医疗设施只含医院（2026-11-17）/ hospitals only
     print(f"[core] access network: {actx['net']['stats']['edges']} edges, {len(actx['cells'])} population cells")
     LB = lineb_inputs(assets, net, hours, tz)
     CP = care.prepare(actx, net, assets)
-    print(f"[core] line B: {LB['nh_res'].sum():,.0f} nursing-home residents, {LB['zone_dep'].sum():,.0f} electricity-dependent residents")
+    print(f"[core] line B: {LB['zone_dep'].sum():,.0f} ventilator and other device users")
     sims, th0 = {}, None
     for dT in scen:
         rng = np.random.default_rng(args.seed)          # 【中文】公共随机数 / common random numbers
@@ -206,7 +223,8 @@ def main(argv=None):
         sims[dT]["runs_with_shed"] = None if shed is None else round(float((shed.max(1) > 0).mean()), 4)
         sims[dT]["access"] = access_runs(actx, net, sims[dT], th, hours, tz)
         # 【中文】就医时间：每次急诊就诊的路程（含改道与拥堵）+ 分医院的等待增量 / per ED visit travel + waiting
-        sims[dT]["ed"] = time_to_care(CP, sims[dT], th, sims[dT]["access"])
+        sims[dT]["ed"] = time_to_care(CP, sims[dT], th, sims[dT]["access"], decompose=True)
+        sims[dT]["th"] = th
     mc = sims[0.0]
     tot = mc["totals"]
 
@@ -250,7 +268,7 @@ def main(argv=None):
            "scenarios_delta_c": scen, "air_field": air_info, "outage_source": args.outage_source, "hours": len(hours),
            "links": [k["id"] for k in core_spec["links"]], "deferred": [d["id"] for d in core_spec["deferred"]],
            "network": {"substations": len(net.sid), "zones": len(net.zone_id), "supply_edges": int(net.U.sum()),
-                       "hospitals": len(net.hosp), "nursing_homes": len(net.nurs), "dialysis": len(net.dial),
+                       "hospitals": len(net.hosp),
                        "water_plants": len(net.plants), "signals": len(net.signals)}}
     scen_summary = {}
     for dT, r in sims.items():
@@ -264,7 +282,7 @@ def main(argv=None):
             "max_air_temp_c": round(float(np.max(Ta) + dT), 1), "access": r["access"],
             "time_to_care_min": q(r["ed"]["time"]), "ed_travel_increase_min": q(r["ed"]["travel"]),
             "ed_congestion_min": q(r["ed"].get("congestion", np.zeros(1))), "wait_increase_min": q(r["ed"]["wait"]),
-            "dialysis_sessions_affected": q(r["ed"]["dialysis_sessions"])}
+            "share_visits_at_cap": q(r["ed"]["share_visits_at_cap"]), "decomposition": decomposition_summary(r["ed"])}
     summary = run | {"population_in_zones": int(net.zone_pop.sum()), "elderly_in_zones": int(net.zone_eld.sum()),
                      "poverty_in_zones": int(net.zone_pov.sum()), "scenarios": scen_summary,
                      "validation": val, "sensitivity": sens, "full_model": full}
@@ -280,7 +298,7 @@ def main(argv=None):
                                     "indoor_outage_pop_mean": np.round(r["hourly"]["indoor_out_pop"][:, 0], 1).tolist(),
                                     "subs_down_mean": np.round(r["hourly"]["n_down"][:, 0], 3).tolist()}
                       for dT, r in sims.items()}})
-    stress = {"run_id": run_id, "roads": net.roads, "hospitals": net.hosp, "dialysis": net.dial, "scenarios": {}}
+    stress = {"run_id": run_id, "roads": net.roads, "hospitals": net.hosp, "scenarios": {}}
     for dT, r in sims.items():
         hh = r["hourly"]
         k = int(np.argmax(hh["roads_degraded"][:, 0]))
@@ -288,24 +306,31 @@ def main(argv=None):
             "hour_utc": hours[k].isoformat(), "hour_local": hours[k].tz_convert(tz).isoformat(),
             "roads_degraded_mean": round(float(hh["roads_degraded"][k, 0]), 2),
             "p_road_degraded": np.round(hh["roads_p"][k], 4).tolist(),
-            "p_hospital_down": np.round(hh["hosp"][k], 4).tolist(), "p_dialysis_down": np.round(hh["dial"][k], 4).tolist()}
+            "p_hospital_down": np.round(hh["hosp"][k], 4).tolist()}
     write_json(res_dir / "stress_hours.json", stress)
     write_json(site / "stress_hours.json", stress)
+    # 【中文】逐次运行的明细，供 pipeline.extremes 做极端情况分析与通径分析 / per-run detail for pipeline.extremes
+    for dT, r in sims.items():
+        np.savez_compressed(res_dir / f"runs_{dT:+.0f}.npz", **{f"th:{k}": r["th"][k] for k in CORE_PARAMS},
+                            **{f"tot:{k}": v for k, v in r["totals"].items()},
+                            **{f"ed:{k}": v for k, v in r["ed"].items() if k != "decomp"},
+                            **{f"dec:{k}": v for k, v in r["ed"]["decomp"].items()},
+                            **{f"care:{k}": v for k, v in r["care"].items()})
 
     for s, v in scen_summary.items():
         print(f"[core] {s} °C: any outage {v['share_runs_with_any_outage']:.1%}, person-hours without power "
               f"{v['pop_hours']['mean']:,.0f}, indoor heat person-hours from outages {v['indoor_outage_pop_hours']['mean']:,.0f} "
               f"(65+ {v['indoor_outage_elderly_hours']['mean']:,.0f}), shed runs {v['runs_with_shed']}")
         a_ = v["access"]
-        print(f"        access at each run's worst hour: hospital Δ mean {a_['hospital']['delta_pop_mean_min']['mean']} min "
-              f"(p99 {a_['hospital']['delta_pop_mean_min'][99]}), EMS Δ mean {a_['ems']['delta_pop_mean_min']['mean']} min, "
-              f"largest cell increase p95 {a_['hospital']['largest_cell_increase_min'][95]} min, "
-              f"runs with no dialysis centre available {a_['dialysis']['runs_with_none_available']:.1%}")
+        print(f"        hospitals closed {v['hospital_hours']['mean']:.2f} h (power {v['hospital_power_hours']['mean']:.2f}, "
+              f"water {v['hospital_water_hours']['mean']:.2f}); access at each run's worst hour: hospital Δ mean "
+              f"{a_['hospital']['delta_pop_mean_min']['mean']} min (p99 {a_['hospital']['delta_pop_mean_min'][99]})")
         print(f"        line B: excess heat-illness visits {v['heat_visits_excess']['mean']:.1f}, device-user visits "
-              f"{v['dep_visits']['mean']:.2f}, nursing-home resident-hours {v['nh_exposed_hours']['mean']:.0f}, "
-              f"peak-day extra visits {v['peak_day_extra_visits']['mean']:.2f}; per ED visit: travel +{v['ed_travel_increase_min']['mean']:.3f}, "
-              f"wait +{v['wait_increase_min']['mean']:.2f} (median {v['wait_increase_min'][50]:.2f}), time to care +{v['time_to_care_min']['mean']:.2f} "
-              f"(median {v['time_to_care_min'][50]:.2f}, p95 {v['time_to_care_min'][95]:.2f}) min; dialysis sessions affected {v['dialysis_sessions_affected']['mean']:.1f}")
+              f"{v['dep_visits']['mean']:.2f}, peak-day extra visits {v['peak_day_extra_visits']['mean']:.2f}; per ED visit: "
+              f"travel +{v['ed_travel_increase_min']['mean']:.3f}, wait +{v['wait_increase_min']['mean']:.2f}, time to care "
+              f"{v['time_to_care_min'][50]:.2f} (p95 {v['time_to_care_min'][95]:.2f}; mean {v['time_to_care_min']['mean']:.2f}) min")
+        top = v["decomposition"]["top5"]
+        print("        worst 5% of runs, minutes by cause: " + ", ".join(f"{k} {top[k]:.1f}" for k in DECOMP_KEYS))
     print(f"[core] {run_id}: ρ(model, EAGLE-I) {val['power_all_hours']['rho']}, top sensitivity "
           f"{[(r['param'], r['pop_hours']) for r in sens[:3]]}")
 

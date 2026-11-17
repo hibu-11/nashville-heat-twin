@@ -30,9 +30,9 @@ class FakeNet:
         self.zone_pop = np.array([1000.0, 2000.0, 3000.0])
         self.zone_eld = self.zone_pop * 0.15
         self.zone_pov = self.zone_pop * 0.12
-        self.hosp, self.nurs, self.dial = ["H1", "H2"], ["N1"], ["D1"]
+        self.hosp = ["H1", "H2"]
         self.plants, self.signals = ["W1"], ["G1", "G2"]
-        self._feed = {"H1": 1, "H2": 2, "N1": 3, "D1": 2, "W1": 1, "G1": 2, "G2": 3}
+        self._feed = {"H1": 1, "H2": 2, "W1": 1, "G1": 2, "G2": 3}
         self.roads = ["r1", "r2"]
         self.M_sig_road = np.eye(2)
         self.has_storage = True
@@ -48,18 +48,18 @@ def params(n=N, seed=1, hot=True):
             "C-P2.R": 4.5, "C-P2.n": 0.8, "C-P2.m": 0.8, "C-P2.tau": 3, "C-P3": 120 if hot else 160, "C-P3.sigma": 8,
             "C-P6": 3, "C-P9.avail": 0.9, "C-P9.imp": 4000, "C-H1": 0.05, "C-H2": 0.3, "C-W2": 0.05, "C-W3": 10,
             "C-T2": 0.9, "C-T5": 0.5, "C-B1": 12, "C-B2": 4, "C-B3": 22.5, "C-B4": 0.94, "C-H10": 28,
-            "C-H11": 4e-6, "C-H11.a": 0.0086, "C-H12": 2, "C-H13": 0.05, "C-H14": 0.75, "C-H15": 1000, "C-H16": 30, "C-H17": 26}
+            "C-H11": 4e-6, "C-H11.a": 0.0086, "C-H12": 2, "C-H13": 0.05, "C-H14": 0.75, "C-H15": 1000, "C-H16": 30, "C-H18": 4}
     assert set(base) >= set(CORE_PARAMS)
     return {k: np.full(n, float(v)) * (1 + 0.05 * rng.standard_normal(n) * (k in ("C-P1.Kd", "C-P3"))) for k, v in base.items()}
 
 
-def run(off=frozenset(), seed=7, shed=None, lineb=True, hot=True):
-    net = FakeNet()
+def run(off=frozenset(), seed=7, shed=None, lineb=True, hot=True, th=None, net=None):
+    net = net or FakeNet()
     t = np.arange(H)
     Ta = 30 + 6 * np.sin((t - 9) / 24 * 2 * np.pi)
     day = ((t % 24) >= 8) & ((t % 24) < 20)
-    lb = {"nh_res": np.array([100.0]), "zone_dep": np.array([10.0, 20.0, 30.0]), "day": t // 24} if lineb else None
-    return simulate_core(net, Ta, params(hot=hot), np.random.default_rng(seed), day, shed=shed, off=frozenset(off), lineb=lb)
+    lb = {"zone_dep": np.array([10.0, 20.0, 30.0]), "day": t // 24} if lineb else None
+    return simulate_core(net, Ta, th or params(hot=hot), np.random.default_rng(seed), day, shed=shed, off=frozenset(off), lineb=lb)
 
 
 def tot(r, k):
@@ -87,7 +87,7 @@ def test_no_thermal_failure_means_no_outage():
 
 @pytest.mark.parametrize("ko, changed, unchanged", [
     ("R13", ["signal_dark_hours"], ["pop_hours", "hospital_hours", "indoor_outage_pop_hours"]),
-    ("R11", ["hospital_hours", "nursing_hours"], ["pop_hours", "signal_dark_hours"]),
+    ("R11", ["hospital_hours"], ["pop_hours", "signal_dark_hours"]),
     ("R18", ["indoor_outage_pop_hours"], ["pop_hours", "hospital_hours", "indoor_no_ac_pop_hours"]),
     ("R24", ["dep_visits"], ["pop_hours", "heat_visits_excess"]),
     ("R21", ["heat_visits_excess"], ["pop_hours", "dep_visits"]),
@@ -125,14 +125,20 @@ def test_every_knockout_is_handled():
 def toy_care(nH=3, ncell=6):
     """【中文】6 个网格、3 家医院的小算例 / six cells, three hospitals."""
     T = np.array([[5, 10, 20], [6, 9, 18], [12, 4, 15], [14, 5, 11], [20, 12, 3], [18, 13, 4]], float)[:ncell, :nH]
-    cp = {"T": T, "order": np.argsort(T, axis=1), "cz": np.array([0, 0, 1, 1, 2, 2])[:ncell],
-          "pop": np.full(ncell, 100.0), "zone_pop": np.array([200.0, 200.0, 200.0]), "patients": np.array([30.0])}
-    return cp
+    order = np.argsort(T, axis=1)
+    pop = np.full(ncell, 100.0)
+    share = pop / pop.sum()
+    return {"T": T, "order": order, "Tsorted": np.take_along_axis(T, order, axis=1), "cz": np.array([0, 0, 1, 1, 2, 2])[:ncell],
+            "pop": pop, "share": share, "zone_pop": np.array([200.0, 200.0, 200.0]),
+            "L0": np.bincount(order[:, 0], weights=share, minlength=nH)}
 
 
-def care_state(extra=0.0, closed=None, n=N):
-    return {"extra_zone": np.full((n, 3), extra / 3), "hosp_closed_h": np.zeros((n, 3)) if closed is None else np.tile(closed, (n, 1)),
-            "dial_closed_op_h": np.zeros((n, 1))}
+def care_state(extra=0.0, closed=None, n=N, device=0.0, water=None):
+    z = lambda x: np.full((n, 3), x / 3)  # noqa: E731
+    cp_ = np.zeros((n, 3)) if closed is None else np.tile(closed, (n, 1)).astype(float)
+    cw_ = np.zeros((n, 3)) if water is None else np.tile(water, (n, 1)).astype(float)
+    return {"extra_heat_zone": z(extra), "extra_dep_zone": z(device), "extra_zone": z(extra) + z(device),
+            "hosp_closed_power_h": cp_, "hosp_closed_water_h": cw_, "hosp_closed_h": cp_ + cw_}
 
 
 def test_time_to_care_zero_at_baseline():
@@ -158,16 +164,36 @@ def test_no_waiting_effect_when_switched_off():
     np.testing.assert_allclose(out["wait"], 0, atol=1e-9)
 
 
-def test_dialysis_sessions():
-    cp = toy_care()
-    st = care_state()
-    st["dial_closed_op_h"] = np.full((N, 1), 12.0)
-    np.testing.assert_allclose(care.dialysis_sessions(cp, st), 30 * 3 / 7, rtol=1e-9)
+def test_decomposition_adds_up():
+    """【中文】四个原因的 Shapley 分量之和等于路程 + 等待增量；没有的原因分到 0。"""
+    th = params()
+    st = care_state(extra=60, device=200, closed=np.array([12.0, 0, 0]))
+    d = care.decompose(toy_care(), st, th, runs=range(5))
+    parts = sum(d[f] for f in care.FACTORS)
+    np.testing.assert_allclose(parts, d["travel"] + d["wait"], rtol=1e-9, atol=1e-9)
+    np.testing.assert_allclose(d["water"], 0, atol=1e-12)
+    assert (d["device"] > d["heat"]).all() and (d["power"] > 0).all()
+    np.testing.assert_allclose(d["baseline_minus"], 0, atol=1e-9)
+
+
+def test_hospital_water_loss():
+    """【中文】断水超过院内储水时长后医院关闭；R12 关掉后不受断水影响。"""
+    net = FakeNet()
+    net.has_storage = False
+    th = params()
+    th["C-W2"] = np.ones(N)                  # 【中文】水厂备用电源总是失效 / plant backup always fails
+    th["C-H18"] = np.zeros(N)
+    th["C-H1"] = np.zeros(N)                 # 【中文】医院备用电源从不失效，只剩断水路径 / hospital power never fails
+    a, b = run(th=th, net=net), run(th=th, net=net, off={"R12"})
+    assert tot(a, "hospital_water_hours").sum() > 0 and tot(a, "hospital_power_hours").sum() == 0
+    assert tot(b, "hospital_water_hours").sum() == 0
 
 
 def test_line_b_outputs_present():
     r = run()
-    for k in ("heat_visits_excess", "dep_visits", "nh_exposed_hours", "peak_day_extra_visits", "peak_day_open_share"):
+    for k in ("heat_visits_excess", "dep_visits", "peak_day_extra_visits", "peak_day_open_share", "peak_day_heat_visits",
+              "peak_day_dep_visits"):
         assert k in r["totals"]
     assert r["care"]["extra_zone"].shape == (N, 3) and r["care"]["hosp_closed_h"].shape == (N, 2)
+    np.testing.assert_allclose(r["care"]["extra_zone"], r["care"]["extra_heat_zone"] + r["care"]["extra_dep_zone"])
     assert (r["totals"]["peak_day_open_share"] <= 1).all() and (r["totals"]["peak_day_open_share"] >= 0).all()

@@ -227,6 +227,7 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
 .extra h3 .zh { font: 500 13.5px/1.3 var(--font-zh); color: var(--muted); margin-left: 8px; }
 .extra p { margin: 0; font-size: 13px; color: var(--muted); max-width: 120ch; }
 .extra p .zh { display: block; }
+.extra td:first-child { white-space: nowrap; }
 .tblwrap { overflow-x: auto; border: 1px solid var(--rule); background: var(--sheet); }
 .extra table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
 .extra th, .extra td { padding: 6px 10px; border-bottom: 1px solid var(--rule); text-align: right; white-space: nowrap; }
@@ -254,14 +255,19 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
     <div class="eyebrow">Nashville heat-cascade digital twin · core skeleton · 26 relation lines · Davidson County · structure of 2026-11-10</div>
     <h1>Heat Twin Relation Atlas<span class="zh">热浪孪生关系图解</span></h1>
     <div class="intro">
-      <p>Every arrow in the twin, one card at a time, organised around two lines that both end in time to care. Line A: power, water and transport failures disrupt medical facilities and the trip to them. Line B: heat raises heat-related illness and the number of people who need care. Each card says why the line matters, what it does, the equation, its parameters, the evidence and the 2,000-run result.</p>
-      <p class="zh">孪生模型中的每一条关系线，逐条说明，并围绕两条最终都落到"就医时间"的主线组织。A 线：电、水、交通的失效影响医疗设施和去医疗设施的路程。B 线：高温使热相关病症和需要就医的人数增加。每张卡片说明为什么重要、它做什么、公式、参数、依据和 2,000 次运行的结果。</p>
+      <p>Every arrow in the twin, one card at a time, organised around two lines that both end in time to care. Line A: power, water and transport failures disrupt hospitals and the trip to them. Line B: heat illness and device users who lose power raise the number of people who need care. Each card says why the line matters, what it does, the equation, its parameters, the evidence and the 2,000-run result.</p>
+      <p class="zh">孪生模型中的每一条关系线，逐条说明，并围绕两条最终都落到"就医时间"的主线组织。A 线：电、水、交通的失效影响医院和去医院的路程。B 线：热病症和停电后的设备用户使需要就医的人数增加。每张卡片说明为什么重要、它做什么、公式、参数、依据和 2,000 次运行的结果。</p>
     </div>
     <div class="howto">
       <div><b>R01–R26</b>Relation line, numbered along the causal chain.<span class="zh">关系线编号，按因果顺序排列。</span></div>
       <div><b>K1–K9</b>Line A and the grid, running in the model.<span class="zh">A 线与电网主线，已在模型中运行。</span></div>
       <div><b>K10</b>Line B v1, simulated with T4 waiting assumptions.<span class="zh">B 线第一版，已模拟；等待部分依赖 T4 假设。</span></div>
       <div><b>D1–D2</b>Deferred detail, dashed. Code is kept.<span class="zh">暂缓的细节（虚线），代码保留。</span></div>
+    </div>
+    <div class="changes">
+      <b>Revision 2026-11-17</b>
+      <p>Medical facilities are now hospitals only; dialysis centres and nursing homes are removed (deferred D10). Hospitals depend on power and on water: a hospital closes when its zone is out and backup fails, or when system water loss outlasts its on-site supply. Line B splits heat illness from care demand, and keeps the outage path for ventilator and other device users. Each run's added time to care is decomposed by cause (heat illness, device users, hospital power, hospital water, congestion), shown in the table under the map.</p>
+      <p class="zh">医疗设施只保留医院，透析中心和养老院移出（暂缓 D10）。医院同时依赖电和水：所在分区停电且备用电源失效，或全系统断水超过院内储水时长时，医院关闭。B 线把"热病症"和"就医需求"分成两个节点，并保留"分区停电 → 呼吸机等设备用户 → 就医需求"。每次运行增加的就医时间按原因分解（热病症、设备用户、医院停电、医院断水、拥堵），见图下的表。</p>
     </div>
     <div class="changes">
       <b>Revision 2026-11-11</b>
@@ -307,8 +313,8 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
     <p class="ctbnote" id="ctbnote"></p>
     <figure class="mapfig">
       <div class="mapbox" id="mapbox"></div>
-      <figcaption>Background climate and urban base information set local temperature. Line A: heat overloads the grid, zone outages cut medical facilities directly and through water, and dark signals slow the trip, so time to care rises. Line B: heat exposure outdoors and in homes that lose cooling raises heat-related illness and the number of people seeking care, which also lengthens time to care.
-        <span class="zh">背景气候与城市基础信息决定本地气温。A 线：高温使电网过载，分区停电直接或通过供水影响医疗设施，信号灯熄灭使路程变慢，就医时间增加。B 线：室外高温以及停电后失去制冷的室内高温，使热相关病症和就医人数增加，同样拉长就医时间。</span></figcaption>
+      <figcaption>Background climate and urban base information set local temperature. Line A: heat overloads the grid, zone outages close hospitals directly and through water, and dark signals slow the trip, so time to care rises. Line B: heat exposure outdoors and in homes that lose cooling raises heat illness, and outages stop home medical devices; both add to care demand, which lengthens waiting.
+        <span class="zh">背景气候与城市基础信息决定本地气温。A 线：高温使电网过载，分区停电直接或通过供水使医院关闭，信号灯熄灭使路程变慢，就医时间增加。B 线：室外高温以及停电后失去制冷的室内高温使热病症增加，停电还使家用医疗设备停机；两者都增加就医需求，拉长等待。</span></figcaption>
     </figure>
     <div class="extra" id="extra"></div>
   </section>
@@ -317,7 +323,7 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
 <script>
 (function () {
   // CONTRIB is filled from site/data/twin/core/contrib.json (pipeline.contrib)
-  const CONTRIB = null, CONTRIB_NOTE = "", SUMMARY = null, VARIANTS = null, HEATWAVES = null;   // filled by scripts/build_atlas.py
+  const CONTRIB = null, CONTRIB_NOTE = "", SUMMARY = null, VARIANTS = null, HEATWAVES = null, EXTREMES = null;   // filled by scripts/build_atlas.py
   // ---- result helpers: numbers on cards are read from SUMMARY (site/data/twin/core/summary.json) at load time
   const SC = ["+0", "+2", "+4"];
   const sv = (s, k, st = "mean") => {
@@ -357,10 +363,10 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
     travel: ["Travel time", "路段行程时间", "transport", 8, "tr"],
     plant: ["Water plants", "水厂", "water", 6, "wa"], storage: ["Storage", "储水", "water", 7, "wa"],
     wservice: ["Water service", "供水服务", "water", 8, "wa"],
-    indoor: ["Indoor temp", "室内温度", "health", 1, "ha"], facility: ["Medical facilities", "医疗设施", "health", 8, "ha"],
+    indoor: ["Indoor temp", "室内温度", "health", 1, "ha"], hospital: ["Hospitals", "医院", "health", 8, "ha"],
     access: ["Time to care", "就医时间", "health", 9, "ha"],
     pop: ["Population", "分区人口", "health", 0, "hb"], exposure: ["Heat exposure", "高温暴露", "health", 1, "hb"],
-    illness: ["Heat illness · demand", "热病症与就医需求", "health", 2, "hb"],
+    illness: ["Heat illness", "热病症", "health", 2, "hb"], demand: ["Care demand", "就医需求", "health", 3, "hb"],
   };
   const GROUPS = [
     ["K1", "climate", "Background climate + urban base → local temperature", "背景气候 + 城市基础信息 → 本地气温", "Every later link is driven by local temperature, built from the regional record and the city's own heat pattern.", "后面每一环都由本地气温驱动，它由区域气候记录和城市自身的热分布共同决定。"],
@@ -369,10 +375,10 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
     ["K4", "power", "System shortfall → rotating outages", "系统供需缺口 → 轮流停电", "Rising demand erodes the reserve margin; only the demand side is kept in the core.", "负荷上升吃掉备用容量；骨架只保留负荷侧。"],
     ["K5", "power", "Supply dependency → zone outage", "供电依赖 → 分区停电", "A station with no energised source loses power, which turns equipment failures into customer outages.", "上游电源全部失电的变电站随之失电，这一步把设备失效变成用户停电。"],
     ["K6", "water", "Plant power → storage → water service", "水厂供电 → 储水 → 供水服务", "Treatment and pumping depend on electricity; storage buys hours.", "制水和加压依赖电力，储水提供数小时缓冲。"],
-    ["K7", "health", "Line A · power and water → medical facilities", "A 线 · 电与水 → 医疗设施", "Hospitals, nursing homes and dialysis centres as one facility layer, each with its own backup rule.", "医院、养老院、透析中心合并为一个设施层，各自保留自己的备用规则。"],
-    ["K8", "transport", "Line A · transport and closures → time to care", "A 线 · 交通与设施关闭 → 就医时间", "Dark signals slow the trip and closed facilities lengthen it; both add to time to care.", "信号灯熄灭使路程变慢，设施关闭使路程变长，两者都增加就医时间。"],
+    ["K7", "health", "Line A · power and water → hospitals", "A 线 · 电与水 → 医院", "Hospitals use electricity and water heavily; losing either closes part of their emergency capacity.", "医院大量用电用水，失去任何一项都会减少急诊接诊能力。"],
+    ["K8", "transport", "Line A · transport and closures → time to care", "A 线 · 交通与设施关闭 → 就医时间", "Dark signals slow the trip and closed hospitals lengthen it; both add to time to care.", "信号灯熄灭使路程变慢，医院关闭使路程变长，两者都增加就医时间。"],
     ["K9", "health", "Loss of cooling → indoor heat → heat exposure", "失去制冷 → 室内高温 → 高温暴露", "A blackout during a heat wave harms people through indoor temperature once cooling is lost (Stone et al. 2023).", "热浪中的停电通过失去制冷后的室内温度伤害人群（Stone 等 2023）。"],
-    ["K10", "health", "Line B v1 · heat illness and care demand → time to care", "B 线第一版 · 热病症与就医需求 → 就医时间", "Simulated since 2026-11-10: heat illness, nursing-home residents who lose cooling and electricity-dependent residents bring more people to the same emergency departments, which lengthens waiting and so time to care.", "2026-11-10 起已模拟：热病症、失去制冷的养老院住户和依赖电力设备的居民，使更多人去同样的急诊就医，等待变长，就医时间随之增加。"],
+    ["K10", "health", "Line B · heat illness and device users → care demand → time to care", "B 线 · 热病症与设备用户 → 就医需求 → 就医时间", "Heat illness and ventilator and other device users who lose power are two sources of care demand; more patients at the same emergency departments lengthen waiting and so time to care.", "热病症和停电后的呼吸机等设备用户是就医需求的两个来源；更多人去同样的急诊就医，等待变长，就医时间随之增加。"],
     ["D1", "power", "Peer overload transfer", "过载转移", "Deferred: topological redistribution can misstate grid vulnerability; returns as DC power flow.", "暂缓：纯拓扑的负荷重分配可能误判电网脆弱性；以后以直流潮流形式加回。"],
     ["D2", "power", "River-temperature derate", "河温降额", "Deferred: the modelled Cumberland never reached the derating threshold in 2014–2025.", "暂缓：2014–2025 年模拟的坎伯兰河水温从未达到降额阈值。"],
   ];
@@ -450,26 +456,26 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
       eq: "S(t) = S(t−1) − 1 h while all plants are out;   S = h_s otherwise\nw_out = (⋀_k plant_out_k) ∧ (S < 0)", par: "h_s 5 / 10 / 18 h (revised 2026-11-10 from 6 / 12 / 24 h)",
       ev: "Metro Water Services FY2024 disclosure; MWS commercial-paper memorandum Dec 2025; Klise et al. 2017", res: () => `Water-out hours per run: ${tri("water_out_hours")}.`,
       cap: ["All plants stop at hour 2; 12 h of storage runs out at hour 14.", "第 2 小时所有水厂停产；12 h 的储水在第 14 小时耗尽。"] },
-    { id: "R11", g: "K7", edges: [["zone", "facility"]], title: ["Zone outage → medical facilities", "分区停电 → 医疗设施"], kind: "and:Zone out|Backup fails",
-      why: ["Facilities are where both lines meet. Hospitals treat heat illness; nursing homes house the residents least able to cope with heat (20 homes, 2,396 beds in Davidson); dialysis patients cannot skip treatment (19 centres, 360 stations). Each type keeps its own backup rule inside one layer.", "医疗设施是两条主线的交汇点。医院救治热病症；养老院住着最难应对高温的人（Davidson 有 20 家、2,396 张床）；透析病人不能停治疗（19 家中心、360 个透析位）。三类设施合为一层，但各自保留自己的备用规则。"],
-      zh: "设施在分区停电且备用失效时失去功能：医院按备用发电机失效概率；养老院按无法维持制冷的概率；透析中心没有备用，分区停电即停诊。",
-      en: "A facility loses function when its zone is out and backup fails: hospitals by generator failure probability, nursing homes by the probability that cooling is not maintained, dialysis centres with no backup, closing whenever the zone is out.",
-      eq: "y_f = d_z ∧ B_f,   B_f ~ Bernoulli(p_type)   (p_dialysis = 1)", par: "Hospitals 0.01 / 0.05 / 0.15 · nursing homes (cooling) 0.10 / 0.30 / 0.50 · dialysis 1",
-      ev: "CMS 2016; Marqusee & Jenket 2020; Irvin-Barnwell et al. 2020; HHS OIG 2026; Kelman et al. 2015; CMS provider data 2026", res: () => `Facility-hours lost per run: hospitals ${tri("hospital_hours")}; nursing homes ${tri("nursing_hours")}; dialysis ${tri("dialysis_hours")}.`,
-      cap: ["AND gate: a facility fails only if its zone is out and its backup does not hold.", "与门：分区停电且备用失效时，设施才失去功能。"] },
-    { id: "R12", g: "K7", edges: [["wservice", "facility"]], title: ["Water service → medical facilities", "供水服务 → 医疗设施"], kind: "and:Water out|On-site supply empty",
-      why: ["Dialysis uses about 120 L of treated water per session and stops at once; hospitals use about 300 gal per bed per day and need water for chillers and sterilisation, but hold on-site supply for days. In Texas 2021, water loss stopped hospital chillers and dialysis and moved 300 patients.", "透析每次用约 120 升处理过的水，断水即停；医院每床每天用水约 300 加仑，冷水机组和灭菌都离不开水，但有可撑数天的自备水。2021 年德州断水使医院冷水机组和透析停运，转移了约 300 名病人。"],
-      zh: "断水时透析中心立即停诊（串联依赖）；医院和养老院在自备供水用完后才受影响，目前不模拟，因为没有一次运行出现断水。",
-      en: "A water outage closes dialysis centres at once (series dependency); hospitals and nursing homes are affected only after their on-site supply runs out, which is not simulated because no run lost water.",
-      eq: "y_dialysis = d_z ∨ w_out\ny_hospital,water = w_out ∧ (on-site supply exhausted)   (not simulated)", par: "Dialysis: series · hospitals: ~300 gal/bed/day, on-site supply days (EPA; CDC/AWWA EWSP)",
-      ev: "Kelman et al. 2015; EPA WaterSense at Work 2024; CDC/EPA/AWWA EWSP guide 2019; ASPR TRACIE 2021", res: "Water never ran out, so this line added no closures.",
-      cap: ["AND gate for hospitals; dialysis closes on water loss alone.", "医院为与门；透析中心断水即停。"] },
+    { id: "R11", g: "K7", edges: [["zone", "hospital"]], title: ["Zone outage → hospitals", "分区停电 → 医院"], kind: "and:Zone out|Backup fails",
+      why: ["Hospitals are where both lines meet: they treat heat illness and the device users who lose power, and they are among the largest electricity users in the city. A hospital whose backup fails loses emergency capacity for those hours and sends patients to the next hospital.", "医院是两条主线的交汇点：它们救治热病症和停电后的设备用户，同时也是城市里用电最多的设施之一。备用电源失效的医院在那几个小时里失去急诊能力，病人改去下一家医院。"],
+      zh: "医院所在分区停电时，按备用发电机失效概率抽样（每次停电开始时抽一次）；失效则医院在这段停电中关闭。关闭的小时数按比例减少该医院当天的急诊接诊能力。",
+      en: "When a hospital's zone is out, its backup generator fails with a sampled probability (drawn once per outage); if it fails the hospital is closed for that outage. Closed hours reduce that day's emergency capacity in proportion.",
+      eq: "y_h,power = d_z ∧ B_h,   B_h ~ Bernoulli(p_backup)", par: "p_backup 0.01 / 0.05 / 0.15 (C-H1, T2) · 12 hospitals (CMS)",
+      ev: "CMS 2016; Marqusee & Jenket 2020; Irvin-Barnwell et al. 2020; CMS provider data 2026", res: () => `Hospital hours closed by power per run: ${tri("hospital_power_hours", "mean", v => v == null ? "—" : v.toFixed(2))}.`,
+      cap: ["AND gate: a hospital closes only if its zone is out and its backup does not hold.", "与门：分区停电且备用电源失效时，医院才关闭。"] },
+    { id: "R12", g: "K7", edges: [["wservice", "hospital"]], title: ["Water service → hospitals", "供水服务 → 医院"], kind: "and:Water out|On-site supply empty",
+      why: ["Hospitals use about 300 gal of water per bed per day for chillers, sterilisation, dialysis units and sanitation. In Texas in 2021, water loss stopped hospital chillers and moved patients. CMS requires plans that cover water but sets no on-site volume.", "医院每床每天用水约 300 加仑，冷水机组、消毒灭菌、院内透析和卫生都离不开水。2021 年德州断水使医院冷水机组停运、病人被转移。CMS 要求应急预案覆盖用水，但没有规定院内储水量。"],
+      zh: "已模拟（2026-11-17）。全系统断水（所有水厂停产且储水耗尽）持续超过医院院内储水时长 h_water 后，医院关闭，效果与停电关闭相同。h_water 没有本地数据，是 T4 占位。",
+      en: "Simulated (2026-11-17). When system water loss (every plant stopped and storage exhausted) outlasts a hospital's on-site supply h_water, the hospital closes, with the same effect as a power closure. h_water has no local data and is a T4 placeholder.",
+      eq: "y_h,water = w_out(t) ∧ (hours of w_out > h_water)\ny_h = y_h,power ∨ y_h,water", par: "h_water 0 / 4 / 24 h (C-H18, T4) · ~300 gal per bed per day (EPA)",
+      ev: "CMS 2016; EPA WaterSense at Work 2024; CDC/EPA/AWWA EWSP guide 2019; ASPR TRACIE 2021", res: () => `Hospital hours closed by water per run: ${tri("hospital_water_hours", "mean", v => v == null ? "—" : v.toFixed(2))}; system water-out hours ${tri("water_out_hours")}.`,
+      cap: ["AND gate: a hospital closes when water is out and its on-site supply is empty.", "与门：断水且院内储水用完时，医院关闭。"] },
     { id: "R13", g: "K8", edges: [["zone", "signals"]], kind: "and:Zone out|No battery · p 0.90",
       why: ["Signals are the transport system's direct dependency on the grid. Metro lists 592 signals; battery cabinets are confirmed only on the Lebanon Pike corridor, so a zone outage darkens nearly every intersection in it.", "信号灯是交通系统对电网的直接依赖。Metro 登记了 592 个信号灯，只有 Lebanon Pike 沿线确认装了电池柜，所以分区停电几乎会让区内所有路口熄灯。"],
       zh: "信号灯所在分区停电、且没有可用电池备用时熄灭；是否有电池在每次运行开始时抽一次。",
       en: "A signal goes dark when its zone is out and it has no working battery, drawn once per run.",
       eq: "dark_g = d_z ∧ NB_g,   NB_g ~ Bernoulli(p_nb)", par: "p_nb 0.75 / 0.90 / 1.00 · battery runtime 2–8 h not modelled",
-      ev: "Metro open data (592 signals); WSMV news 2025–2026; NYSDOT C-06-08 (2009)", res: () => `Runs with degraded segments or facility closures: ${SC.map(s => pc(av(s, ["runs_with_degraded_segments"]))).join(" / ")}.`,
+      ev: "Metro open data (592 signals); WSMV news 2025–2026; NYSDOT C-06-08 (2009)", res: () => `Runs with degraded segments or hospital closures: ${SC.map(s => pc(av(s, ["runs_with_degraded_segments"]))).join(" / ")}.`,
       cap: ["AND gate with the mid share of signals without a working battery.", "与门，无可用电池的比例取中值。"] },
     { id: "R14", g: "K8", edges: [["signals", "capacity"]], kind: "capacity",
       why: ["A dark intersection runs as an all-way stop with roughly half the capacity. This is the mechanism by which a power outage reaches road travel.", "熄灯的路口按全向停车运行，通行能力约减半。停电正是通过这一步影响道路出行。"],
@@ -486,19 +492,19 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
       ev: "BPR 1964; HCM 7th ed. 2022", res: "Link delay only; all-way-stop delay at dark intersections is not included, so congestion is a lower bound.",
       cap: ["Travel-time ratio t / t0 with normal capacity and with φ = 0.5.", "正常通行能力与 φ = 0.5 时的行程时间比 t / t0。"] },
     { id: "R16", g: "K8", edges: [["travel", "access"]], title: ["Travel time → time to care", "路段行程时间 → 就医时间"], kind: "path",
-      why: ["Time to care is the shared endpoint of both lines, counted per ED visit on each run's peak day: added travel (rerouting from hospitals without power, congestion from dark signals) plus added waiting at per-hospital queues. Dialysis is reported separately as sessions affected.", "就医时间是两条主线的共同终点，按每次急诊就诊在高峰日计算：增加的路程（停电医院的病人改道、信号灯熄灭的拥堵）加上各医院排队增加的等待。透析单独报告受影响的次数。"],
-      zh: "从 14,602 个人口网格出发，用多源 Dijkstra 求到最近可用设施的时间；每次运行取其降级路段最多的小时，与同一小时的正常情况相减。",
-      en: "From 14,602 population cells, multi-source Dijkstra gives the time to the nearest open facility. Each run is evaluated at its hour with the most degraded segments and compared with the normal time at that hour.",
-      eq: "τ(c,k) = min over open f in F_k of SP(c, f)\nΔτ = τ(degraded) − τ(normal, same hour)", par: "Thresholds: hospital 15 min · dialysis 15 min · EMS 8 min",
+      why: ["Time to care is the shared endpoint of both lines, counted per ED visit on each run's peak day: added travel (rerouting from closed hospitals, congestion from dark signals) plus added waiting at per-hospital queues.", "就医时间是两条主线的共同终点，按每次急诊就诊在高峰日计算：增加的路程（关闭医院的病人改道、信号灯熄灭的拥堵）加上各医院排队增加的等待。"],
+      zh: "从 14,602 个人口网格出发，用多源 Dijkstra 求到最近开放医院的时间；拥堵部分按每次运行降级路段最多的小时，与同一小时的正常情况相减。",
+      en: "From 14,602 population cells, multi-source Dijkstra gives the time to the nearest open hospital. Congestion is evaluated at each run's hour with the most degraded segments and compared with the normal time at that hour.",
+      eq: "τ(c,k) = min over open f in F_k of SP(c, f)\nΔτ = τ(degraded) − τ(normal, same hour)", par: "12 hospitals · threshold 15 min",
       ev: "Ouyang 2014", res: () => `Added travel per ED visit (rerouting and congestion): ${tri("ed_travel_increase_min")} min; congestion alone ${tri("ed_congestion_min")} min.`,
-      cap: ["A cell reaches the nearer of two facilities; a degraded link (dashed) lengthens one route.", "人口网格到较近的设施；降级路段（虚线）使其中一条路线变长。"] },
-    { id: "R17", g: "K8", edges: [["facility", "access"]], title: ["Closed facilities → rerouting", "设施关闭 → 改道"], kind: "reroute",
-      why: ["Closed facilities send patients to the next open one, the rerouting half of line A. With the whole county in the model, losing every dialysis centre at once is rare; it was common when the area was downtown only, which showed how much the boundary mattered.", "关闭的设施会让病人转去下一家开放的设施，这是 A 线的改道部分。研究区扩到全县后，透析中心同时全部关闭的情况很少见；只算市中心时这种情况很常见，说明研究区边界的影响很大。"],
-      zh: "失去功能的设施不再作为目的地，患者改去下一家可用设施；研究区内全部透析中心停诊时，记为无可用透析中心。",
-      en: "A facility that has lost function is removed as a destination and patients go to the next open one. When every dialysis centre in the area is closed, the run counts as no dialysis available.",
-      eq: "F_k(open) = F_k \\ { f : y_f = 1 }", par: "Davidson County: 12 hospitals, 20 dialysis centres (CMS: 19 centres, 360 stations)",
-      ev: "Kelman et al. 2015; CMS 2016; Ouyang 2014", res: () => `No dialysis centre available at the worst hour: ${SC.map(s => pc(av(s, ["dialysis", "runs_with_none_available"]))).join(" / ")} of runs; dialysis sessions affected per summer: ${tri("dialysis_sessions_affected")}.`,
-      cap: ["The nearest facility is closed, so the route diverts to the next one.", "最近的设施关闭，路线改到下一家。"] },
+      cap: ["A cell reaches the nearer of two hospitals; a degraded link (dashed) lengthens one route.", "人口网格到较近的医院；降级路段（虚线）使其中一条路线变长。"] },
+    { id: "R17", g: "K8", edges: [["hospital", "access"]], title: ["Closed hospitals → rerouting and lost capacity", "医院关闭 → 改道与接诊能力下降"], kind: "reroute",
+      why: ["A closed hospital acts on time to care twice: its patients travel to the next open hospital, and that hospital's queue grows. With 12 hospitals in the county the extra distance is small; the extra load is what matters.", "医院关闭从两方面影响就医时间：它的病人要去下一家开放的医院，而那家医院的排队随之变长。全县有 12 家医院，多走的路很少，多出来的负荷才是关键。"],
+      zh: "医院在高峰日关闭的小时比例 = 其病人改去下一家开放医院的比例；容量按开放比例折算。",
+      en: "The share of the peak day a hospital is closed is the share of its patients sent to the next open hospital; its capacity scales with the open share.",
+      eq: "o_h = 1 − closed_h / 24\nshare to the k-th nearest = o_k · Π_{j<k} (1 − o_j)", par: "Davidson County: 12 hospitals (CMS)",
+      ev: "CMS 2016; Ouyang 2014", res: () => `Added travel per ED visit: ${tri("ed_travel_increase_min", "mean", v => v == null ? "—" : v.toFixed(3))} min; peak-day open share of hospitals ${tri("peak_day_open_share", "mean", v => v == null ? "—" : v.toFixed(3))}.`,
+      cap: ["The nearest hospital is closed, so the route diverts to the next one.", "最近的医院关闭，路线改到下一家。"] },
     { id: "R18", g: "K9", edges: [["zone", "indoor"]], kind: "rc",
       why: ["This is how an outage feeds line B: a home that loses cooling warms over hours. Stone et al. (2023) found a multiday blackout during a heat wave more than doubles heat deaths through this pathway. The building time constant τ_b ranks first in sensitivity for indoor exposure from outages.", "停电正是通过这一步进入 B 线：失去制冷的住户在几个小时内升温。Stone 等（2023）发现热浪中的多日停电通过这一途径使高温死亡增加一倍以上。建筑热时间常数 τ_b 对停电造成的室内暴露敏感性排第一。"],
       zh: "有空调的住户在有电时保持设定温度；停电后，室内温度以热时间常数 τ_b 趋向平衡温度。",
@@ -521,33 +527,26 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
       eq: "E_g = Σ_t Σ_z pop(z,g) · [f_AC · 1(d_z ∧ T_in ≥ T_thr) + (1 − f_AC) · 1(T_in,noAC ≥ T_thr)]", par: "T_thr 26 / 28 / 32 °C · 702,461 people · 89,379 aged 65+ · 98,031 below poverty (Davidson County)",
       ev: "Meade et al. 2024; Huizenga et al. 2024; Stone et al. 2023; ACS 2020–2022", res: () => `From outages: ${tri("indoor_outage_pop_hours")} person-hours (aged 65+: ${tri("indoor_outage_elderly_hours")}); homes without AC: ${tri("indoor_no_ac_pop_hours")}.`,
       cap: ["With τ_b = 12 h a home at 22.5 °C crosses 28 °C about 6 h after power loss; shaded hours count as exposure.", "τ_b = 12 h 时，22.5 °C 的住户停电约 6 小时后超过 28 °C；阴影部分计为暴露。"] },
-    { id: "R21", g: "K10", edges: [["exposure", "illness"]], title: ["Heat exposure → heat illness and care demand", "高温暴露 → 热病症与就医需求"], kind: "rr",
+    { id: "R21", g: "K10", edges: [["exposure", "illness"], ["illness", "demand"]], title: ["Heat exposure → heat illness → care demand", "高温暴露 → 热病症 → 就医需求"], kind: "rr",
       why: ["Line B starts here: hotter days bring more heat illness and more people to emergency departments, whether or not the power fails. Davidson County recorded 141–320 heat-illness ED visits a year in 2012–2023; outages during heat add to the risk (Anderson & Bell 2012; Stone et al. 2023).", "B 线从这里开始：无论是否停电，越热的日子热病症越多，去急诊的人越多。Davidson 县 2012–2023 年每年有 141–320 人次高温病症急诊；热浪中的停电会进一步增加风险（Anderson & Bell 2012；Stone 等 2023）。"],
-      zh: "第一版已模拟。每小时超额热病症就诊 = a + k × 当小时室内高温暴露人·小时（无空调住户、停电失去空调的住户、失去制冷的养老院住户）。k 和 a 用 Davidson 2014–2023 年每年的高温病症急诊人次，对同期模拟暴露（无停电）回归得到：R² 0.75，ρ 0.70。只有 10 个年度点，逐日关系仍需逐日急诊数据。",
-      en: "Simulated (v1). Excess heat-illness visits per hour = a + k × indoor heat person-hours that hour (homes without AC, homes that lose AC in outages, nursing-home residents who lose cooling). k and a come from regressing Davidson's annual heat-illness ED visits 2014–2023 on simulated exposure without outages: R² 0.75, ρ 0.70. Ten annual points; the daily relation still needs daily ED counts.",
+      zh: "第一版已模拟。每小时超额热病症就诊 = a + k × 当小时室内高温暴露人·小时（无空调住户、停电失去空调的住户）。每次热病症就诊计为一次就医需求。k 和 a 用 Davidson 2014–2023 年每年的高温病症急诊人次，对同期模拟暴露（无停电）回归得到：R² 0.75，ρ 0.70。只有 10 个年度点，逐日关系仍需逐日急诊数据。",
+      en: "Simulated (v1). Excess heat-illness visits per hour = a + k × indoor heat person-hours that hour (homes without AC, homes that lose AC in outages). Each heat-illness visit is one unit of care demand. k and a come from regressing Davidson's annual heat-illness ED visits 2014–2023 on simulated exposure without outages: R² 0.75, ρ 0.70. Ten annual points; the daily relation still needs daily ED counts.",
       eq: "v(t) = a + k · E(t)\nk = 4.3 × 10⁻⁶ visits per person-hour (SE 0.9 × 10⁻⁶),  a = 0.0086 per hour", par: "k 2.6 / 4.3 / 6.1 × 10⁻⁶ (C-H11, T2) · a 0.0086 per hour (C-H11.a, T2)",
-      ev: "Tennessee Dept. of Health heat-illness ED visits 2012–2023; pipeline.lineb calibrate; Gasparrini et al. 2015", res: () => `Excess heat-illness visits per summer (Jun–Aug): ${tri("heat_visits_excess")} at +0 / +2 / +4 °C.`,
+      ev: "Tennessee Dept. of Health heat-illness ED visits 2012–2023; pipeline.lineb calibrate; Gasparrini et al. 2015", res: () => `Excess heat-illness visits per summer (Jun–Aug): ${tri("heat_visits_excess")} at +0 / +2 / +4 °C; on the peak day ${tri("peak_day_heat_visits")}.`,
       cap: ["Placeholder relative risk without outage and with outage exposure (A = 2).", "占位相对风险：无停电，以及有停电暴露（A = 2）。"] },
-    { id: "R22", g: "K10", edges: [["illness", "access"]], title: ["Care demand → time to care", "就医需求 → 就医时间"], kind: "queue",
-      why: ["More patients at the same facilities mean longer waits, the part of time to care that line A cannot see. It also reacts to line A: closures raise the load on the facilities that stay open. Joining both lines in one measure lets their effects be compared and added.", "同样的医疗设施来了更多病人，等待就会变长，这是 A 线看不到的那部分就医时间。它也和 A 线相互作用：设施关闭会让仍在运营的设施负荷更高。两条线落到同一个指标上，作用才能比较和相加。"],
-      zh: "已模拟（2026-11-11 版）。取每次运行新增就诊最多的一天，按医院分别排队：每家医院的负荷 = 日常就诊 + 新增就诊（停电医院的病人按停电小时比例改去下一家），容量按开放比例折算，ρ_h 上限 0.95，等待 W_h = W0·ρ_h/(1−ρ_h)。每位就诊者与自己的正常路程和等待比较。ρ0、D0、W0 都是 T4 假设。",
-      en: "Simulated (2026-11-11 version). On each run's peak day of extra visits, queues are per hospital: load = normal visits + extra visits, with patients of hospitals without power moving to the next one in proportion to closed hours; capacity scales with the open share, ρ_h is capped at 0.95 and waiting W_h = W0·ρ_h/(1−ρ_h). Each visitor is compared with their own normal trip and wait. ρ0, D0 and W0 are T4 assumptions.",
+    { id: "R22", g: "K10", edges: [["demand", "access"]], title: ["Care demand → time to care", "就医需求 → 就医时间"], kind: "queue",
+      why: ["More patients at the same facilities mean longer waits, the part of time to care that line A cannot see. It also reacts to line A: closures raise the load on the hospitals that stay open. Joining both lines in one measure lets their effects be compared and added.", "同样的医疗设施来了更多病人，等待就会变长，这是 A 线看不到的那部分就医时间。它也和 A 线相互作用：医院关闭会让仍在运营的医院负荷更高。两条线落到同一个指标上，作用才能比较和相加。"],
+      zh: "已模拟（2026-11-11 版）。取每次运行新增就诊最多的一天，按医院分别排队：每家医院的负荷 = 日常就诊 + 新增就诊（停电医院的病人按停电小时比例改去下一家），容量按开放比例折算，ρ_h 上限 0.95，等待 W_h = W0·ρ_h/(1−ρ_h)。每位就诊者与自己的正常路程和等待比较。ρ0、D0、W0 都是 T4 假设；上限 0.95 决定了满负荷医院的等待（W0 × 19），是极端运行中等待的直接来源。",
+      en: "Simulated (2026-11-11 version). On each run's peak day of extra visits, queues are per hospital: load = normal visits + extra visits, with patients of hospitals without power moving to the next one in proportion to closed hours; capacity scales with the open share, ρ_h is capped at 0.95 and waiting W_h = W0·ρ_h/(1−ρ_h). Each visitor is compared with their own normal trip and wait. ρ0, D0 and W0 are T4 assumptions; the 0.95 cap sets the wait at a full hospital (W0 × 19) and so the size of the extreme runs.",
       eq: "ρ = ρ0 · (1 + ΔD / D0) / s_open,   ΔW = W0 · [ρ/(1 − ρ) − ρ0/(1 − ρ0)]\nT_care = Δτ_travel (line A) + ΔW", par: "ρ0 0.60 / 0.75 / 0.85 · D0 700 / 1,000 / 1,400 visits per day · W0 20 / 30 / 45 min (all T4)",
-      ev: "Queueing approximation; CMS provider data; assumptions to replace with hospital ED volumes and CMS ED timeliness measures", res: () => `Peak-day extra visits ${tri("peak_day_extra_visits")}. Added waiting per ED visit: median ${tri("wait_increase_min", "50")} min, p95 ${tri("wait_increase_min", "95")} min (mean ${tri("wait_increase_min")}).`,
-      cap: ["Illustrative: waiting time grows sharply as utilisation approaches 1; a heat day moves a facility from 0.75 to 0.85.", "示意：利用率接近 1 时等待时间急剧上升；高温日使设施从 0.75 升到 0.85。"] },
-    { id: "R23", g: "K10", edges: [["facility", "exposure"]], title: ["Nursing-home cooling loss → residents' heat exposure", "养老院失去制冷 → 住户高温暴露"], kind: "and:Zone out|Cooling not kept · p 0.30",
-      why: ["Nursing homes hold the residents least able to cope with heat: about 2,090 people a day in Davidson's 20 homes (CMS). When cooling is not kept during an outage, their exposure is the most dangerous in the city; in 2017 twelve residents of a Florida home died after cooling failed in Hurricane Irma. Today this loss reaches no outcome in the model.", "养老院住着最难应对高温的人：Davidson 20 家养老院每天约 2,090 名住户（CMS）。停电期间如果制冷没有维持，他们的暴露是全市最危险的；2017 年飓风 Irma 期间，佛罗里达一家养老院空调停运后有 12 名住户死亡。目前模型中这一损失没有传到任何结局。"],
-      zh: "第一版已模拟。养老院失去制冷后，住户温度按 K9 的建筑热响应趋向本地平衡温度；超过 26 °C 的住户·小时计入高温暴露，进而计入热病症就诊。住户数取 CMS 每日平均住户。",
-      en: "Simulated (v1). When a nursing home loses cooling, its residents' temperature relaxes toward the local equilibrium with the K9 thermal response; resident-hours above 26 °C count as heat exposure and feed heat-illness visits. Resident counts are CMS average daily residents.",
-      eq: "T_nh(t) = T_eq + (T_nh(t−1) − T_eq) · e^(−1/τ_b)   while cooling is lost\nE_nh = Σ_t Σ_f residents_f · 1[cooling lost ∧ T_nh ≥ 26 °C]", par: "24 homes · 2,334 residents (CMS) · p_cooling_lost 0.10 / 0.30 / 0.50 (C-H2) · threshold 26 °C (C-H17)",
-      ev: "CMS provider data 2026; HHS OIG 2026; Sun et al. 2020; Meade et al. 2024", res: () => `Resident-hours above 26 °C per summer: ${tri("nh_exposed_hours")}. Each hour falls on the most vulnerable residents.`,
-      cap: ["AND gate: residents are exposed when the zone is out and cooling is not kept.", "与门：分区停电且制冷没有维持时，住户暴露在高温中。"] },
-    { id: "R24", g: "K10", edges: [["zone", "illness"]], title: ["Zone outage → electricity-dependent residents → care demand", "分区停电 → 依赖电力设备的居民 → 就医需求"], kind: "and:Zone out|Device battery empty",
+      ev: "Queueing approximation; CMS provider data; assumptions to replace with hospital ED volumes and CMS ED timeliness measures", res: () => `Peak-day extra visits ${tri("peak_day_extra_visits")}. Added waiting per ED visit: median ${tri("wait_increase_min", "50")} min, p95 ${tri("wait_increase_min", "95")} min (mean ${tri("wait_increase_min")}). Share of visits at hospitals at the cap: ${tri("share_visits_at_cap", "mean", v => pc(v))}.`,
+      cap: ["Illustrative: waiting time grows sharply as utilisation approaches 1; a heat day moves a hospital from 0.75 to 0.85.", "示意：利用率接近 1 时等待时间急剧上升；高温日使医院从 0.75 升到 0.85。"] },
+    { id: "R24", g: "K10", edges: [["zone", "demand"]], title: ["Zone outage → ventilator and other device users → care demand", "分区停电 → 呼吸机等设备用户 → 就医需求"], kind: "and:Zone out|Device battery empty",
       why: ["An outage sends people to emergency care even without heat: home oxygen concentrators have no battery and ventilators last 3–9 h. Davidson has 4,163 Medicare beneficiaries who rely on electricity-dependent equipment (HHS emPOWER). Respiratory hospital admissions rose sharply during the 2003 New York blackout (Lin et al. 2011).", "即使不热，停电也会把人推向急诊：家用制氧机没有电池，呼吸机只能撑 3–9 小时。Davidson 有 4,163 名医保用户依赖电力医疗设备（HHS emPOWER）。2003 年纽约大停电期间呼吸系统住院明显增加（Lin 等 2011）。"],
-      zh: "第一版已模拟。emPOWER 依赖电力设备的居民按 ZCTA 面积分到各分区（3,864 人）；分区停电持续到电池时长 h_b 时，每人以概率 q 就医（每次停电一次），计入就医需求。q 没有数据，是 T4 假设。",
-      en: "Simulated (v1). emPOWER electricity-dependent residents are allocated to zones through ZCTA areas (3,864 people); when a zone outage outlasts the battery time h_b, each person seeks care with probability q (once per outage), adding to care demand. q has no data and is a T4 assumption.",
+      zh: "已模拟。emPOWER 中依赖电力设备的医保受益人（呼吸机、BiPAP、制氧机等；emPOWER 不单列呼吸机）按 ZCTA 面积分到各分区（3,864 人）；分区停电持续到电池时长 h_b 时，其中一部分人（概率 q，每次停电一次）去急诊，计入就医需求。q 没有数据，是 T4 假设。",
+      en: "Simulated. emPOWER Medicare beneficiaries who rely on electricity-dependent equipment (ventilators, BiPAP, oxygen concentrators and others; emPOWER does not list ventilators separately) are allocated to zones through ZCTA areas (3,864 people). When a zone outage outlasts the battery time h_b, a share of them (probability q, once per outage) goes to the ED, adding to care demand. q has no data and is a T4 assumption.",
       eq: "visits_dep = Σ_z n_dep,z · 1[outage age reaches h_b] · q", par: "3,864 residents (emPOWER) · h_b 0 / 2 / 8 h (C-H12, T3) · q 0.01 / 0.05 / 0.15 (C-H13, T4)",
-      ev: "HHS emPOWER 2026; Lin et al. 2011; Falaize et al. 2014", res: () => `Device-user visits per summer: ${tri("dep_visits")}. These rest on the assumed visit probability q (T4); see the assumption variants below the map.`,
+      ev: "HHS emPOWER 2026; Lin et al. 2011; Falaize et al. 2014", res: () => `Device-user visits per summer: ${tri("dep_visits")}; on the peak day ${tri("peak_day_dep_visits")}. These rest on the assumed visit probability q (T4); see the variants and the decomposition below the map.`,
       cap: ["AND gate: the device stops when the zone is out and its battery is empty.", "与门：分区停电且电池耗尽时设备停止。"] },
     { id: "R25", g: "D1", edges: [["overload", "failure"]], kind: "overload",
       why: ["Deferred because it decided the full model's result: with an assumed tolerance α it accounts for about 89% of person-hours without power. Topological load sharing can misstate grid vulnerability; it returns as a power-flow model once NES ratings exist.", "暂缓，因为它决定了完整模型的结果：在假设的容忍度 α 下，它贡献了约 89% 的停电人·小时。纯拓扑的负荷分摊可能误判电网脆弱性；有 NES 额定值后以潮流模型加回。"],
@@ -755,7 +754,7 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
         s += `<rect class="bxa" x="${P.a[0] - 8}" y="${P.a[1] - 8}" width="16" height="16"/>` + txt(P.a[0] + 14, P.a[1] + 4, "A", "lb");
         s += `<rect class="bxa" x="${P.b[0] - 8}" y="${P.b[1] - 8}" width="16" height="16"/>` + txt(P.b[0] + 14, P.b[1] + 4, "B", "lb");
         [P.m1, P.m2, P.m3].forEach(p => { s += `<circle class="bx" cx="${p[0]}" cy="${p[1]}" r="4"/>`; });
-        return s + txt(20, 160, kind === "path" ? "nearest open facility = shortest time" : "nearest facility closed → route to B", "lbm");
+        return s + txt(20, 160, kind === "path" ? "nearest open hospital = shortest time" : "nearest hospital closed → route to B", "lbm");
       }
       case "rc": {
         const fr = frame(0, 48, 20, 38, [0, 12, 24, 36, 48], [20, 26, 32, 38], "hours since power loss", "indoor °C");
@@ -934,18 +933,17 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
     const k = a + ">" + b, pa = P(a), pb = P(b);
     const bus = (y, toRight, xEnd) => [`M${BUSX} ${BUSY}V${y}H${xEnd}`, toRight ? xEnd - 22 : xEnd + 22, y];
     switch (k) {
-      case "urban>load": case "load>margin": case "indoor>exposure": case "wservice>facility": case "bg>river": {
+      case "urban>load": case "load>margin": case "indoor>exposure": case "wservice>hospital": case "bg>river": {
         const s = B(a), e = T(b); return [`M${s[0]} ${s[1]}V${e[1]}`, s[0], (s[1] + e[1]) / 2, 1];
       }
       case "urban>hotspot": { const s = [pa.x + 30, pa.y + hh], e = T(b), y = 76; return [`M${s[0]} ${s[1]}V${y}H${e[0]}V${e[1]}`, (s[0] + e[0]) / 2, y]; }
       case "shed>topo": { const s = T(a), x = pb.x - 30, y = 150; return [`M${s[0]} ${s[1]}V${y}H${x}V${pb.y + hh}`, s[0] + 46, y]; }
       case "overload>failure": { const x = pb.x + 30; return [`M${x} ${pa.y - hh}V${pb.y + hh}`, x, 163, 1]; }
-      case "zone>signals": case "zone>plant": case "zone>facility": return bus(pb.y, true, L(b)[0]);
+      case "zone>signals": case "zone>plant": case "zone>hospital": return bus(pb.y, true, L(b)[0]);
       case "zone>indoor": return bus(pb.y, false, Rt(b)[0]);
       case "travel>access": { const s = Rt(a), e = T(b); return [`M${s[0]} ${s[1]}H${e[0]}V${e[1]}`, e[0], 303, 1]; }
-      case "facility>exposure": { const s = B(a), y = 441, x = pb.x + 30; return [`M${s[0]} ${s[1]}V${y}H${x}V${pb.y - hh}`, X(7), y]; }
-      case "zone>illness": { const x = pb.x + 30, y = 457; return [`M${BUSX} ${BUSY}V${y}H${x}V${pb.y - hh}`, X(4), y]; }
-      case "illness>access": { const s = Rt(a), e = B(b); return [`M${s[0]} ${s[1]}H${e[0]}V${e[1]}`, X(6), s[1]]; }
+      case "zone>demand": { const x = pb.x + 30, y = 452; return [`M${BUSX} ${BUSY}V${y}H${x}V${pb.y - hh}`, X(4) + 20, y]; }
+      case "demand>access": { const s = Rt(a), e = B(b); return [`M${s[0]} ${s[1]}H${e[0]}V${e[1]}`, X(6), s[1]]; }
       case "urban>indoor": { const s = [pa.x - 30, pa.y - hh], e = L(b); return [`M${s[0]} ${s[1]}V6H${GUT}V${e[1]}H${e[0]}`, GUT, 300, 1]; }
       case "urban>exposure": { const s = [pa.x - 30, pa.y - hh], x = pb.x - 30, y = 449; return [`M${s[0]} ${s[1]}V6H${GUT}V${y}H${x}V${pb.y - hh}`, (GUT + x) / 2, y]; }
     }
@@ -956,27 +954,27 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
 
   // ------------------------------------------------------------------ chain layers
   const PRE = [["bg", "urban"], ["urban", "load"], ["urban", "hotspot"], ["load", "hotspot"], ["hotspot", "failure"], ["failure", "topo"], ["topo", "zone"]];
-  const WATER = [["zone", "plant"], ["plant", "storage"], ["storage", "wservice"], ["wservice", "facility"]];
+  const WATER = [["zone", "plant"], ["plant", "storage"], ["storage", "wservice"], ["wservice", "hospital"]];
   const ROAD = [["zone", "signals"], ["signals", "capacity"], ["capacity", "travel"], ["travel", "access"]];
-  const HEAT = [["urban", "exposure"], ["urban", "indoor"], ["indoor", "exposure"], ["pop", "exposure"], ["exposure", "illness"], ["illness", "access"]];
+  const HEAT = [["urban", "exposure"], ["urban", "indoor"], ["indoor", "exposure"], ["pop", "exposure"], ["exposure", "illness"], ["illness", "demand"], ["demand", "access"]];
   const SETS = [
-    { en: "Line A · power, water and transport disrupt medical facilities → time to care", zh: "A 线 · 电、水、交通影响医疗设施 → 就医时间", chains: [
-      { id: "A", cc: "--ch1", en: "Line A, all branches", zh: "A 线全部分支", edges: [...PRE, ["zone", "facility"], ...WATER, ...ROAD, ["facility", "access"]],
-        key: () => [`Simulated. Added travel per ED visit ${tri("ed_travel_increase_min")} min; dialysis sessions affected per summer ${tri("dialysis_sessions_affected")}.`, `已模拟。每次急诊就诊增加路程 ${tri("ed_travel_increase_min")} 分钟；每个夏季受影响透析 ${tri("dialysis_sessions_affected")} 次。`] },
-      { id: "A1", cc: "--ch3", en: "Power → facilities → time to care", zh: "电力 → 医疗设施 → 就医时间", edges: [...PRE, ["zone", "facility"], ["facility", "access"]],
-        key: () => [`Facility-hours lost per run at +4 °C: dialysis ${fmt(sv("+4", "dialysis_hours"))}, nursing homes ${fmt(sv("+4", "nursing_hours"))}, hospitals ${fmt(sv("+4", "hospital_hours"))}.`, `+4 °C 时每次运行的设施失能小时：透析 ${fmt(sv("+4", "dialysis_hours"))}、养老院 ${fmt(sv("+4", "nursing_hours"))}、医院 ${fmt(sv("+4", "hospital_hours"))}。`] },
-      { id: "A2", cc: "--ch5", en: "Water → facilities → time to care", zh: "供水 → 医疗设施 → 就医时间", edges: [...PRE, ...WATER, ["facility", "access"]],
-        key: () => [`Water-out hours per run: ${tri("water_out_hours")}; four generators per plant and 5–18 h of storage.`, `每次运行断水小时：${tri("water_out_hours")}；每座水厂 4 台发电机，储水 5–18 小时。`] },
+    { en: "Line A · power, water and transport disrupt hospitals → time to care", zh: "A 线 · 电、水、交通影响医院 → 就医时间", chains: [
+      { id: "A", cc: "--ch1", en: "Line A, all branches", zh: "A 线全部分支", edges: [...PRE, ["zone", "hospital"], ...WATER, ...ROAD, ["hospital", "access"]],
+        key: () => [`Simulated. Added travel per ED visit ${tri("ed_travel_increase_min", "mean", v => v == null ? "—" : v.toFixed(3))} min; hospital hours closed per run ${tri("hospital_hours", "mean", v => v == null ? "—" : v.toFixed(2))}.`, `已模拟。每次急诊就诊增加路程 ${tri("ed_travel_increase_min", "mean", v => v == null ? "—" : v.toFixed(3))} 分钟；每次运行医院关闭 ${tri("hospital_hours", "mean", v => v == null ? "—" : v.toFixed(2))} 小时。`] },
+      { id: "A1", cc: "--ch3", en: "Power → hospitals → time to care", zh: "电力 → 医院 → 就医时间", edges: [...PRE, ["zone", "hospital"], ["hospital", "access"]],
+        key: () => [`Hospital hours closed by power per run at +4 °C: ${fmt(sv("+4", "hospital_power_hours"))}; closed hospitals lose ED capacity and send patients to the next one.`, `+4 °C 时每次运行医院因停电关闭 ${fmt(sv("+4", "hospital_power_hours"))} 小时；关闭的医院失去急诊能力，病人改去下一家。`] },
+      { id: "A2", cc: "--ch5", en: "Water → hospitals → time to care", zh: "供水 → 医院 → 就医时间", edges: [...PRE, ...WATER, ["hospital", "access"]],
+        key: () => [`Water-out hours per run: ${tri("water_out_hours")}; hospital hours closed by water ${tri("hospital_water_hours")}. Four generators per plant and 5–18 h of storage.`, `每次运行断水小时：${tri("water_out_hours")}；医院因断水关闭 ${tri("hospital_water_hours")} 小时。每座水厂 4 台发电机，储水 5–18 小时。`] },
       { id: "A3", cc: "--ch2", en: "Dark signals → travel time → time to care", zh: "信号灯熄灭 → 路程 → 就医时间", edges: [...PRE, ...ROAD],
         key: () => [`Congestion from dark signals adds ${tri("ed_congestion_min")} min per ED visit; a lower bound without intersection delay.`, `信号灯熄灭造成的拥堵使每次急诊就诊增加 ${tri("ed_congestion_min")} 分钟；未计路口延误，是下限。`] },
     ] },
-    { en: "Line B · heat illness raises care demand → time to care", zh: "B 线 · 热病症增加就医需求 → 就医时间", chains: [
-      { id: "B", cc: "--ch6", en: "Line B, all branches", zh: "B 线全部分支", edges: [...PRE, ["zone", "indoor"], ...HEAT, ["zone", "facility"], ["facility", "exposure"], ["zone", "illness"]],
+    { en: "Line B · heat illness and device users raise care demand → time to care", zh: "B 线 · 热病症与设备用户增加就医需求 → 就医时间", chains: [
+      { id: "B", cc: "--ch6", en: "Line B, all branches", zh: "B 线全部分支", edges: [...PRE, ["zone", "indoor"], ...HEAT, ["zone", "demand"]],
         key: () => [`Time to care per ED visit at +4 °C: median +${fmt(sv("+4", "time_to_care_min", "50"))} min, p95 +${fmt(sv("+4", "time_to_care_min", "95"))} min; the tail comes from emergency departments near capacity and rests on T4 assumptions.`, `+4 °C 时每次急诊就诊的就医时间：中位数 +${fmt(sv("+4", "time_to_care_min", "50"))} 分钟，p95 +${fmt(sv("+4", "time_to_care_min", "95"))} 分钟；长尾来自接近满负荷的急诊，依赖 T4 假设。`] },
       { id: "B1", cc: "--ch7", en: "Heat without outages → illness → time to care", zh: "无停电的高温 → 病症 → 就医时间", edges: [["bg", "urban"], ...HEAT],
         key: () => [`Heat-illness excess visits per summer: ${tri("heat_visits_excess")} at +0 / +2 / +4 °C (calibrated, leave-one-year-out Q² 0.66).`, `热病症超额就诊每个夏季：${tri("heat_visits_excess")} 次（+0 / +2 / +4 °C；留一年验证 Q² 0.66）。`] },
-      { id: "B2", cc: "--ch4", en: "Outages → homes, nursing homes, medical devices → care demand", zh: "停电 → 住宅、养老院、医疗设备 → 就医需求", edges: [...PRE, ["zone", "indoor"], ["urban", "indoor"], ["indoor", "exposure"], ["pop", "exposure"], ["zone", "facility"], ["facility", "exposure"], ["zone", "illness"], ["exposure", "illness"], ["illness", "access"]],
-        key: () => [`At +4 °C: ${fmt(sv("+4", "indoor_outage_pop_hours"))} outage-driven indoor person-hours, ${fmt(sv("+4", "nh_exposed_hours"))} nursing-home resident-hours, ${fmt(sv("+4", "dep_visits"))} device-user visits.`, `+4 °C 时：停电造成的室内暴露 ${fmt(sv("+4", "indoor_outage_pop_hours"))} 人·小时，养老院住户 ${fmt(sv("+4", "nh_exposed_hours"))} 人·小时，设备用户就诊 ${fmt(sv("+4", "dep_visits"))} 次。`] },
+      { id: "B2", cc: "--ch4", en: "Outages → homes and medical devices → care demand", zh: "停电 → 住宅、医疗设备 → 就医需求", edges: [...PRE, ["zone", "indoor"], ["urban", "indoor"], ["indoor", "exposure"], ["pop", "exposure"], ["exposure", "illness"], ["illness", "demand"], ["zone", "demand"], ["demand", "access"]],
+        key: () => [`At +4 °C: ${fmt(sv("+4", "indoor_outage_pop_hours"))} outage-driven indoor person-hours and ${fmt(sv("+4", "dep_visits"))} visits by ventilator and other device users per summer.`, `+4 °C 时：每个夏季停电造成的室内暴露 ${fmt(sv("+4", "indoor_outage_pop_hours"))} 人·小时，呼吸机等设备用户就诊 ${fmt(sv("+4", "dep_visits"))} 次。`] },
     ] },
   ];
   const CHAINS = SETS.flatMap(s => s.chains);
@@ -1031,7 +1029,7 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
   }
 
   function buildMap() {
-    let s = `<svg viewBox="0 0 ${MW} ${MH}" role="img" aria-label="Swim-lane map of all 26 relation lines across climate, power, transportation, water and health outcomes, with toggleable layers for lines A and B.">` +
+    let s = `<svg viewBox="0 0 ${MW} ${MH}" role="img" aria-label="Swim-lane map of all relation lines across climate, power, transportation, water and health outcomes, with toggleable layers for lines A and B.">` +
       `<defs><marker id="mh" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>`;
     LANES.forEach(([k, y0, y1]) => {
       s += `<rect class="lane" x="6" y="${y0}" width="${MW - 12}" height="${y1 - y0}" style="fill:var(--l-${k})"/>`;
@@ -1085,8 +1083,21 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
     if (HEATWAVES && HEATWAVES.length) {
       h += `<h3>Observed heat waves<span class="zh">实际热浪</span></h3>
         <p>Each period is the hottest five days of its summer at BNA, with one day before and after; +0 °C uses the observed temperatures.<span class="zh">每段为该年夏季 BNA 最热的连续 5 天，前后各加一天；+0 °C 为实测气温。</span></p>
-        <div class="tblwrap"><table><thead><tr><th>Heat wave 热浪</th><th>scenario</th><th>runs with outage</th><th>person-hours without power</th><th>excess heat-illness visits</th><th>time to care median / p95 min</th><th>dialysis sessions affected</th></tr></thead><tbody>` +
-        HEATWAVES.map(w => Object.entries(w.scenarios).map(([s, v]) => `<tr><td>${esc(w.label)}</td><td>${s} °C</td><td>${pc(v.share_runs_with_any_outage)}</td><td>${fmt(v.pop_hours)}</td><td>${fmt(v.heat_visits_excess)}</td><td>${fmt(v.ttc_median)} / ${fmt(v.ttc_p95)}</td><td>${fmt(v.dialysis_sessions)}</td></tr>`).join("")).join("") +
+        <div class="tblwrap"><table><thead><tr><th>Heat wave 热浪</th><th>scenario</th><th>runs with outage</th><th>person-hours without power</th><th>excess heat-illness visits</th><th>device-user visits</th><th>time to care median / p95 min</th></tr></thead><tbody>` +
+        HEATWAVES.map(w => Object.entries(w.scenarios).map(([s, v]) => `<tr><td>${esc(w.label)}</td><td>${s} °C</td><td>${pc(v.share_runs_with_any_outage)}</td><td>${fmt(v.pop_hours)}</td><td>${fmt(v.heat_visits_excess)}</td><td>${fmt(v.dep_visits)}</td><td>${fmt(v.ttc_median)} / ${fmt(v.ttc_p95)}</td></tr>`).join("")).join("") +
+        `</tbody></table></div>`;
+    }
+    if (EXTREMES && EXTREMES.scenarios["+4"]) {
+      const d = EXTREMES.scenarios["+4"], C = [["heat", "heat-illness visits", "热病症就诊"], ["device", "device-user visits", "设备用户就诊"], ["power", "hospital closed (power)", "医院停电"], ["water", "hospital closed (water)", "医院断水"], ["congestion", "congestion", "拥堵"]];
+      const f2 = v => v == null ? "—" : (Math.abs(v) < 0.005 ? "0" : v.toFixed(Math.abs(v) < 10 ? 2 : 1));
+      h += `<h3>Where the added time comes from (+4 °C)<span class="zh">就医时间增量从哪里来（+4 °C）</span></h3>
+        <p>Runs grouped by their time to care; each run's added minutes per ED visit split by Shapley decomposition over the four causes on the peak day, plus congestion.<span class="zh">按就医时间把运行分档；每次运行每次急诊就诊增加的分钟数，按高峰日的四个原因做 Shapley 分解，另加拥堵。</span></p>
+        <div class="tblwrap"><table><thead><tr><th>Runs 运行</th><th>total min 合计</th>${C.map(c => `<th>${c[1]}<span class="zh">${c[2]}</span></th>`).join("")}<th>visits at capped hospitals 满负荷医院就诊比例</th></tr></thead><tbody>` +
+        d.bins.map(b => `<tr><td>${esc(b.bin)} (${b.runs})</td><td>${f2(b.total)}</td>${C.map(c => `<td>${f2(b[c[0]])}</td>`).join("")}<td>${pc(b.share_visits_at_cap)}</td></tr>`).join("") +
+        `</tbody></table></div>`;
+      h += `<p>Upstream chain, medians: middle 50% of runs vs worst 5% and worst 1%.<span class="zh">上游各环节的中位数：中间 50% 的运行与最坏 5%、最坏 1% 对比。</span></p>
+        <div class="tblwrap"><table><thead><tr><th>Variable 变量</th><th>middle 50%</th><th>worst 5%</th><th>worst 1%</th></tr></thead><tbody>` +
+        d.chain.map(r => `<tr><td>${esc(r.variable)}</td><td>${fmt(r["middle 50%"])}</td><td>${fmt(r["worst 5%"])}</td><td>${fmt(r["worst 1%"])}</td></tr>`).join("") +
         `</tbody></table></div>`;
     }
     box.innerHTML = h;

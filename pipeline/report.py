@@ -197,25 +197,23 @@ def core_section(w, path):
             ("… below poverty", lambda v, f: n(v["indoor_outage_poverty_hours"]["mean"])),
             ("Background indoor heat person-hours (homes without AC)", lambda v, f: n(v["indoor_no_ac_pop_hours"]["mean"])),
             ("Highest indoor temperature in an AC home during an outage (°C)", lambda v, f: n(v["indoor_ac_max_c"], 1)),
-            ("Dialysis facility-hours lost (core)", lambda v, f: n(v["dialysis_hours"]["mean"], 1)),
-            ("Hospital facility-hours lost (core)", lambda v, f: n(v["hospital_hours"]["mean"], 2)),
+            ("Hospital hours closed (core): all", lambda v, f: n(v["hospital_hours"]["mean"], 2)),
+            ("… from power (backup failed)", lambda v, f: n(v.get("hospital_power_hours", {}).get("mean"), 2)),
+            ("… from water (on-site supply exhausted)", lambda v, f: n(v.get("hospital_water_hours", {}).get("mean"), 2)),
+            ("Water-out hours (system)", lambda v, f: n(v["water_out_hours"]["mean"], 2)),
             ("Runs with a TVA shortfall", lambda v, f: "—" if v["runs_with_shed"] is None else f"{v['runs_with_shed']:.1%}"),
-            ("K8 runs with degraded segments or facility closures", lambda v, f: f"{v['access']['runs_with_degraded_segments']:.1%}"),
+            ("K8 runs with degraded segments or hospital closures", lambda v, f: f"{v['access']['runs_with_degraded_segments']:.1%}"),
             ("K8 hospital Δ population mean, min (p99)", lambda v, f: acc(v, "hospital")),
             ("K8 hospital largest cell increase p95, min", lambda v, f: n(v["access"]["hospital"]["largest_cell_increase_min"]["95"], 1)),
-            ("K8 dialysis Δ population mean, min (p99)", lambda v, f: acc(v, "dialysis")),
-            ("K8 runs with no dialysis centre available", lambda v, f: f"{v['access']['dialysis']['runs_with_none_available']:.1%}"),
-            ("K8 EMS Δ population mean, min (p99)", lambda v, f: acc(v, "ems")),
-            ("Old line A metric: population-mean added travel (hospital + dialysis + EMS), min", lambda v, f: n(v["access"].get("care_time_loss_min", {}).get("mean"), 2)),
-            ("K10 excess heat-illness ED visits", lambda v, f: n(v.get("heat_visits_excess", {}).get("mean"), 1)),
-            ("K10 visits by electricity-dependent residents", lambda v, f: n(v.get("dep_visits", {}).get("mean"), 1)),
-            ("K10 nursing-home resident-hours ≥ 26 °C", lambda v, f: n(v.get("nh_exposed_hours", {}).get("mean"))),
-            ("K10 peak-day extra visits", lambda v, f: n(v.get("peak_day_extra_visits", {}).get("mean"), 1)),
+            ("K10 excess heat-illness ED visits (summer)", lambda v, f: n(v.get("heat_visits_excess", {}).get("mean"), 1)),
+            ("K10 visits by ventilator and other device users (summer)", lambda v, f: n(v.get("dep_visits", {}).get("mean"), 1)),
+            ("K10 peak-day extra visits: heat illness / device users", lambda v, f: f"{n(v.get('peak_day_heat_visits', {}).get('mean'), 1)} / "
+             f"{n(v.get('peak_day_dep_visits', {}).get('mean'), 1)}"),
             ("Per ED visit: added travel (rerouting + congestion), min", lambda v, f: qs(v, "ed_travel_increase_min", 3)),
             ("Per ED visit: added congestion only, min", lambda v, f: qs(v, "ed_congestion_min", 3)),
             ("Per ED visit: added waiting, min", lambda v, f: qs(v, "wait_increase_min")),
             ("**Time to care per ED visit (travel + waiting), min**", lambda v, f: qs(v, "time_to_care_min", bold=True)),
-            ("Dialysis sessions affected (cancelled or moved)", lambda v, f: n(v.get("dialysis_sessions_affected", {}).get("mean"), 1))]
+            ("Share of visits at hospitals at the queue cap (ρ = 0.95)", lambda v, f: qs(v, "share_visits_at_cap", 3))]
     for label, fn in rows:
         w(f"| {label} | " + " | ".join(fn(sc[k], full.get(k)) for k in keys) + " |")
     v = x["validation"]
@@ -251,15 +249,50 @@ def core_section(w, path):
     if hw:
         w("### 11.3 Observed heat waves\n")
         w("Hottest five days of the summer at BNA, with one day before and after; +0 °C uses observed temperatures.\n")
-        w("| Heat wave | Scenario | Runs with outage | Person-hours without power | Excess heat-illness visits | Time to care median (p95), min | Dialysis sessions affected |")
+        w("| Heat wave | Scenario | Runs with outage | Person-hours without power | Excess heat-illness visits | Device-user visits | Time to care median (p95), min |")
         w("| --- | --- | ---: | ---: | ---: | ---: | ---: |")
         for f_ in hw:
             y = read(f_)
             for k, v in y["scenarios"].items():
                 t = v.get("time_to_care_min", {})
                 w(f"| {y['period'][0]} – {y['period'][1]} | {k} °C | {v['share_runs_with_any_outage']:.1%} | {n(v['pop_hours']['mean'])} | "
-                  f"{n(v.get('heat_visits_excess', {}).get('mean'), 1)} | {t.get('50', float('nan')):.1f} ({t.get('95', float('nan')):.1f}) | "
-                  f"{n(v.get('dialysis_sessions_affected', {}).get('mean'), 1)} |")
+                  f"{n(v.get('heat_visits_excess', {}).get('mean'), 1)} | {n(v.get('dep_visits', {}).get('mean'), 1)} | "
+                  f"{t.get('50', float('nan')):.1f} ({t.get('95', float('nan')):.1f}) |")
+        w("")
+    ex = read(path.parent / "extremes.json")
+    if ex and ex.get("run_id") == x["run_id"]:
+        extremes_section(w, ex)
+
+
+CAUSE_LABEL = {"heat": "heat-illness visits", "device": "device-user visits", "power": "hospital closed (power)",
+               "water": "hospital closed (water)", "congestion": "dark-signal congestion"}
+
+
+def extremes_section(w, ex):
+    """【中文】11.4 极端情况：就医时间增量由哪一块造成 / where the added time comes from."""
+    w("### 11.4 What drives the extreme runs\n")
+    w("`python -m pipeline.extremes`. Each run's added time per ED visit is split by Shapley decomposition over four "
+      "causes on the peak day (heat-illness visits, device-user visits, hospital capacity lost to power and to water); "
+      "congestion is additive. Runs are grouped by their time to care.\n")
+    for sc, d in ex["scenarios"].items():
+        w(f"**{sc} °C — minutes per ED visit by cause**\n")
+        w("| Runs (by time to care) | Runs | Total | " + " | ".join(CAUSE_LABEL[c] for c in CAUSE_LABEL) + " | Visits at capped hospitals |")
+        w("| --- | ---: | ---: |" + " ---: |" * (len(CAUSE_LABEL) + 1))
+        for b in d["bins"]:
+            w(f"| {b['bin']} | {b['runs']} | {b['total']:.1f} | " + " | ".join(f"{b[c]:.2f}" for c in CAUSE_LABEL)
+              + f" | {b['share_visits_at_cap']:.0%} |")
+        w(f"\n**{sc} °C — upstream chain (medians)**\n")
+        w("| Variable | Middle 50% of runs | Worst 5% | Worst 1% |\n| --- | ---: | ---: | ---: |")
+        for r in d["chain"]:
+            w(f"| {r['variable']} | {r['middle 50%']:,.4g} | {r['worst 5%']:,.4g} | {r['worst 1%']:,.4g} |")
+        p = d["path"]
+        w(f"\n**{sc} °C — path analysis** (outcome {p['outcome']}; R² of the outcome equation {p['r2']['Y']}; "
+          f"{p['runs']:,} runs). Standardised total effects with 95% bootstrap intervals and the main routes.\n")
+        w("| Parameter | Total effect [95% CI] | Share of explained spread | Main route |\n| --- | ---: | ---: | --- |")
+        for e in [e for e in p["effects"] if e["kind"] == "parameter"]:
+            r0 = e["routes"][0] if e["routes"] else {"route": "—", "effect": 0}
+            w(f"| {e['variable']} | {e['total']:+.2f} [{e['ci95'][0]:+.2f}, {e['ci95'][1]:+.2f}] | {e.get('share_of_explained', 0):.0%} | "
+              f"{r0['route']} ({r0['effect']:+.2f}) |")
         w("")
 
 

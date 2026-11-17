@@ -20,6 +20,10 @@ pipeline/
     dependencies.py      依赖规则 → dependencies + 供电分区 + 网页依赖图
   twin/                级联模型 v0：rules（依赖规则 R-*）、params、cascade（Eq. 2–16）、validate
   core.py              精简主线模型（骨架）入口：python -m pipeline.core（见 docs/CORE_MODEL.md）
+  care.py              就医时间（每次急诊就诊的路程 + 等待）与按原因的 Shapley 分解
+  extremes.py          极端运行分析：就医时间增量由哪一块造成、通径分析
+  contrib.py           敲除实验（因果贡献）与 B 线假设情景
+  run_all.py           一条命令按顺序跑完骨架模型的全部结果
   cascade.py           完整模型入口：python -m pipeline.cascade（另存于 git 分支 full-model）
   report.py            由最近一次运行生成 docs/RESULTS.md
 twin/                  耦合参数表 couplings.csv（每行带来源与证据）、参考文献 references.yaml
@@ -69,13 +73,12 @@ site/                  GitHub Pages 发布的网站
 .venv/bin/python -m pipeline.lineb calibrate                # B 线：用年度急诊数据校准热病症系数 → twin/evidence/lineb_calibration.json
 .venv/bin/python -m pipeline.cascade --runs 2000 --mid-runs 500 --scenarios 0,2,4   # 完整模型 / full model
 .venv/bin/python -m pipeline.access                         # 完整模型的可达性
-.venv/bin/python -m pipeline.core --runs 2000                # 骨架模型（A 线 + B 线，就医时间）/ core skeleton
-.venv/bin/python -m pipeline.contrib --runs 500 --scenarios 2,4   # 敲除实验：每条关系的因果贡献
-.venv/bin/python -m pipeline.report                         # 生成 docs/RESULTS.md
-.venv/bin/python -m pipeline.registry                       # 登记表、可信度分级与 core.yaml 检查 → docs/DATA_CATALOG.md
+.venv/bin/python -m pipeline.run_all                         # 骨架模型全部结果：测试 → 骨架 → 极端分析 → 敲除、情景、热浪 → 报告 → 登记检查 → 关系图集
+.venv/bin/python -m pipeline.run_all --quick                 # 每步少量运行，检查流程（约 15 分钟）
+.venv/bin/python -m pipeline.run_all --from report           # 从某一步开始
 ```
 
-全县规模下，构建 + 完整模型 + 骨架模型 + 敲除实验合计约 1.5–2 小时。
+`run_all` 的各步也可以单独运行：`pipeline.core --runs 2000`（骨架，A 线 + B 线，就医时间）、`pipeline.extremes`（极端情况分解与通径分析）、`pipeline.contrib --runs 500 --scenarios 2,4`（敲除实验）、`pipeline.contrib --variants`（B 线假设与排队上限情景）、`pipeline.report`（生成 docs/RESULTS.md）、`pipeline.registry`（登记表检查 → docs/DATA_CATALOG.md）、`scripts/build_atlas.py`（关系图集）。日志在 `data/logs/`。全县规模下骨架模型全部结果约 2–2.5 小时；构建和完整模型另计。
 
 **证据脚本 / evidence scripts**（结果写入 `twin/evidence/`，只含汇总数字）：
 - `scripts/eaglei_restoration.py`：EAGLE-I 用户恢复供电时长（C-P6）。
