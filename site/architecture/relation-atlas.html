@@ -175,6 +175,7 @@ nav.index a.pl { border-style: dotted; }
 body.hide-def .group.def, body.hide-def nav.index a.def, body.hide-def .card.def, body.hide-def #mapbox .d,
 body.hide-def .chain.dfr, body.hide-def .loopnote .d { display: none; }
 .hidedef { display: inline-flex; gap: 6px; align-items: center; font-weight: 600; cursor: pointer; }
+.rail { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: square; }
 .edge.loop { stroke: var(--loop); stroke-dasharray: 2 3; stroke-width: 1.6; }
 .looptag text { fill: var(--loop); font: 700 10.5px var(--font-mono); }
 .looptag rect { fill: var(--paper); }
@@ -979,7 +980,7 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
   const MW = X(9) + hw + 14, MH = 528;
   const P = id => ({ x: X(NODE[id][3]), y: ROW[NODE[id][4]] });
   const L = id => [P(id).x - hw, P(id).y], Rt = id => [P(id).x + hw, P(id).y], T = id => [P(id).x, P(id).y - hh], B = id => [P(id).x, P(id).y + hh];
-  const BUSX = X(5), BUSY = B("zone")[1], CLB = LANES[0][2];   // 【中文】CLB：气候泳道底边 / bottom of the climate lane
+  const BUSX = X(5), BUSY = B("zone")[1], CLB = LANES[0][2] + 5;   // 【中文】CLB：气候输入总线的高度 / height of the climate input rail
   // each edge: [path, tag x, tag y]; adjacent nodes in a row are joined by a straight line with the tag in the gap
   function edgePath(a, b) {
     const k = a + ">" + b, pa = P(a), pb = P(b);
@@ -990,7 +991,7 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
       if (b === "indoor") { const e = L(b); return [`M${GUT} ${CLB}V${e[1]}H${e[0]}`, GUT, 300, 1]; }
       if (b === "exposure") { const x = pb.x - 30, y = 449; return [`M${GUT} ${CLB}V${y}H${x}V${pb.y - hh}`, (GUT + x) / 2, y]; }
       if (b === "rut") { const e = L(b); return [`M${GUT} ${CLB}V${e[1]}H${e[0]}`, (GUT + e[0]) / 2, e[1]]; }
-      return [`M${pb.x} ${CLB}V${pb.y - hh}`, pb.x, b === "rut" ? 160 : (CLB + pb.y - hh) / 2, 1];
+      return [`M${pb.x} ${CLB}V${pb.y - hh}`, pb.x, (CLB + pb.y - hh) / 2, 2];   // 【中文】2：贡献度写在左侧 / label on the left
     }
     switch (k) {
       case "indoor>exposure": case "wservice>hospital": case "load>margin": case "failure>topo": {
@@ -1093,13 +1094,13 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
   }
 
   const LOOPS = [
-    { id: "F1", path: `M${X(1) + 46} ${ROW.pa - hh}V${LANES[0][2]}`, tx: X(1) + 76, ty: 77,
+    { id: "F1", path: `M${X(1) + 46} ${ROW.pa - hh}V${CLB + 1}`, tx: X(1) + 76, ty: 86,
       en: "Cooling load → air-conditioning waste heat → warmer urban air → more cooling load. A reinforcing loop: in Phoenix, waste heat from air conditioning raised night-time urban air temperature by up to about 1 °C (Salamanca et al. 2014).",
       zh: "制冷负荷 → 空调排热 → 城市气温升高 → 制冷负荷更大。正反馈：在 Phoenix，空调排热使夜间城市气温最多升高约 1 °C（Salamanca 等 2014）。" },
-    { id: "F2", path: `M${X(5)} ${ROW.pa - hh}V${LANES[0][2]}`, tx: X(5) + 30, ty: 77,
+    { id: "F2", path: `M${X(5)} ${ROW.pa - hh}V${CLB + 1}`, tx: X(5) + 30, ty: 86,
       en: "Zone outage → air conditioners stop → less waste heat → slightly cooler air outside, while indoor temperature rises. A dampening loop on outdoor air, opposite in sign to F1.",
       zh: "分区停电 → 空调停止 → 排热减少 → 室外气温略降，而室内温度上升。对室外气温是负反馈，与 F1 方向相反。" },
-    { id: "F3", d: 1, path: `M${X(0) - 40} ${ROW.pb - hh}V${LANES[0][2]}`, tx: X(0) - 40, ty: 140,
+    { id: "F3", d: 1, path: `M${X(0) - 40} ${ROW.pb - hh}V${CLB + 1}`, tx: X(0) - 40, ty: 140,
       en: "Thermal plants → heated cooling-water discharge → warmer river → less cooling capacity downstream. Acts on river temperature, part of the background climate; tied to the deferred river derate (D2).",
       zh: "火电厂 → 温排水 → 河水变暖 → 下游电厂冷却能力下降。作用在河水温度上（属于背景气候）；与暂缓的河温降额（D2）相连。" },
   ];
@@ -1130,6 +1131,9 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
       s += `<g class="loopg${l.d ? " d" : ""}"><path class="edge loop" d="${l.path}" marker-end="url(#mh)" style="color:var(--loop)"/>` +
         `<g class="looptag"><rect x="${l.tx - 15}" y="${l.ty - 9}" width="30" height="13" rx="2"/><text x="${l.tx}" y="${l.ty + 1.5}" text-anchor="middle">↻${l.id}</text></g></g>`;
     });
+    // 【中文】气候输入总线：两个气候节点各用短竖线接入，下游箭头都从总线落下（两者之间没有关系线）
+    // climate input rail: each climate node drops onto it, and every downstream arrow leaves from it
+    s += `<path class="rail" d="M${GUT} ${CLB}H${X(5)}M${X(0)} ${ROW.cl + hh}V${CLB}M${X(1)} ${ROW.cl + hh}V${CLB}"/>`;
     s += `<g id="flows"></g>`;
     Object.entries(NODE).forEach(([id, n]) => {
       const p = P(id), nk = n[5] === 1 ? " d" : (n[5] === 2 ? " p" : "");
@@ -1139,8 +1143,8 @@ figure.mapfig figcaption .zh { display: block; font-size: 12.5px; }
     tags.forEach(([r, a, b, tx, ty, k, vert]) => {
       s += `<a class="tag${k ? " " + k : ""}" data-k="${a}>${b}" href="#${r.id}" aria-label="${r.id}: ${esc(NODE[a][0])} to ${esc(NODE[b][0])}"><circle cx="${f(tx, 1)}" cy="${f(ty, 1)}" r="10"/>` +
         `<text x="${f(tx, 1)}" y="${f(ty + 3.4, 1)}" text-anchor="middle">${r.id.slice(1)}</text></a>`;
-      const lx = vert ? tx + 13 : tx, ly = vert ? ty + 3.5 : ty + 21;
-      s += `<text class="ctb${k === "d" ? " d" : ""}" data-k="${a}>${b}"${k === "d" ? ' data-d="1"' : ""} x="${f(lx, 1)}" y="${f(ly, 1)}" text-anchor="${vert ? "start" : "middle"}"></text>`;
+      const lx = vert === 2 ? tx - 13 : (vert ? tx + 13 : tx), ly = vert ? ty + 3.5 : ty + 21;
+      s += `<text class="ctb${k === "d" ? " d" : ""}" data-k="${a}>${b}"${k === "d" ? ' data-d="1"' : ""} x="${f(lx, 1)}" y="${f(ly, 1)}" text-anchor="${vert === 2 ? "end" : (vert ? "start" : "middle")}"></text>`;
     });
     if (CONTRIB) Object.entries(NODE).forEach(([id, n]) => {
       const t = CONTRIB.nodes[id]; if (!t || !t.tier) return;
