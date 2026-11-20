@@ -32,44 +32,45 @@ links:
     evidence_zh: 基于走航测温的气温模型能分辨城市内部数开尔文的差异；后面每一环都由本地气温驱动。
   - id: K2
     upstream: [K1]
-    name_en: Air temperature → electric load
-    name_zh: 气温 → 用电负荷
+    name_en: Local air temperature → cooling load; base load does not depend on temperature
+    name_zh: 本地气温 → 制冷负荷；基础负荷不随气温
     methods: []
     relations: []
     couplings: [C-P1, C-P1.T0, C-P1.Kd, C-P1.Td]
-    citations: [auffhammer2017, bartos2016, cascadingheat2026]
-    evidence_en: Peak demand rises with temperature (cooling load); this is the first step of every heat–grid pathway.
-    evidence_zh: 峰值负荷随气温上升（制冷负荷），是所有"高温 → 电网"路径的第一步。
+    citations: [auffhammer2017, bartos2016, cascadingheat2026, salamanca2014]
+    evidence_en: >-
+      Peak demand rises with temperature through cooling load; this is the first step of every heat–grid pathway. Since
+      2026-11-20 the load is shown as a base load that does not depend on temperature (1/m(Td) of the design-day load)
+      plus a cooling load β·max(0, T − T0). Cooling load also feeds back on air temperature through air-conditioning
+      waste heat (loop F1; Salamanca et al. 2014), which the model does not simulate.
+    evidence_zh: >-
+      峰值负荷通过制冷负荷随气温上升，是所有"高温 → 电网"路径的第一步。2026-11-20 起负荷分成不随气温的基础负荷（占设计日负荷的 1/m(Td)）
+      和制冷负荷 β·max(0, T − T0)。制冷负荷还通过空调排热反过来抬高气温（循环 F1；Salamanca 等 2014），模型未模拟这一反馈。
   - id: K3
     upstream: [K1, K2]
-    name_en: Load and air temperature → transformer hot spot → thermal failure
-    name_zh: 负荷与气温 → 变压器热点温度 → 热失效
+    name_en: Base + cooling load and air temperature → transformer hot spot → thermal failure
+    name_zh: 基础负荷 + 制冷负荷与气温 → 变压器热点温度 → 热失效
     methods: []
     relations: []
     couplings: [C-P2.dTOR, C-P2.dHR, C-P2.R, C-P2.n, C-P2.m, C-P2.tau, C-P3, C-P3.sigma]
     citations: [ieee_c5791_2011, bartos2016, shinozuka2000]
     evidence_en: Heat reduces substation capacity while load rises; the IEEE C57.91 thermal model is the standard way to turn both into insulation stress.
     evidence_zh: 高温降低变电设备容量、同时推高负荷；IEEE C57.91 热模型是把两者转换为绝缘热应力的标准方法。
-  - id: K4
-    upstream: [K1, K2]
-    name_en: System supply shortfall → rotating outages (demand side)
-    name_zh: 系统供需缺口 → 轮流停电（负荷侧）
-    methods: [M-18]
-    relations: ["R-P0:2"]
-    couplings: [C-P9.avail, C-P9.imp]
-    citations: [auffhammer2017, eia860, eia930]
-    evidence_en: Rising peak demand erodes reserve margins. Only the demand side is kept; in the full model this produced all TVA shortfalls at +2 and +4 °C.
-    evidence_zh: 峰值负荷上升会吃掉备用容量。只保留负荷侧；完整模型中 +2、+4 °C 情景下 TVA 的缺口全部来自负荷侧。
   - id: K5
-    upstream: [K3, K4]
-    name_en: Supply dependency along the grid topology; fixed restoration time
-    name_zh: 沿电网拓扑的供电依赖；固定修复时长
+    upstream: [K3]
+    name_en: Failed substation → outage of the zone it serves; fixed restoration time
+    name_zh: 失效的变电站 → 它供电的分区停电；固定修复时长
     methods: []
-    relations: ["R-P1:1", "R-P1b:1", "R-P2:0", "R-P3:0", "R-P4:0", "R-POP1:1"]
-    couplings: [C-P5, C-P6, C-POP1]
-    citations: [buldyrev2010, rinaldi2001]
-    evidence_en: A station without any energised upstream source loses power (functional dependency); this turns station failures into customer outages.
-    evidence_zh: 上游电源全部失电的变电站随之失电（功能依赖）；这一步把设备失效变成用户停电。
+    relations: ["R-POP1:1"]
+    couplings: [C-P6, C-POP1]
+    citations: [eaglei2023, stone2023]
+    evidence_en: >-
+      A thermally failed substation cuts power to the zone it serves until restoration (C-P6, from EAGLE-I). Since
+      2026-11-20 outages no longer propagate down the supply topology: that dependency (D13) rested on OSM lines with
+      unknown switch states.
+    evidence_zh: >-
+      热失效的变电站使它供电的分区停电，直到恢复（C-P6，来自 EAGLE-I）。2026-11-20 起停电不再沿供电拓扑向下游传播：
+      这种依赖（D13）建立在开关状态未知的 OSM 线路上。
   - id: K6
     upstream: [K5]
     name_en: Zone outage → water plants (backup) → storage exhausted → water loss
@@ -146,6 +147,23 @@ links:
       热病症与设备用户是两个独立的就医需求来源。高峰日新增就诊按 W = W0·ρ/(1−ρ)（ρ ≤ 0.95）增加各医院的等待；
       就医时间按急诊就诊人次计算（路程 + 等待，pipeline/care.py），并按原因分解（pipeline/extremes.py）。等待这一步依赖 T4 假设（ρ0、D0、W0、q）。
 
+  - id: K11
+    upstream: [K1]
+    name_en: Pavement heat → rutting → road roughness → travel time to hospitals
+    name_zh: 路面高温 → 车辙 → 路面平整度 → 到医院的路程
+    methods: [M-49]
+    relations: ["R-T8:1"]
+    couplings: [C-T8, C-T11, C-T12]
+    citations: [fhwa_hpms2024, wang2014roughness]
+    evidence_en: >-
+      Added at the user's request on 2026-11-20. Rut depth in Davidson is about 1.8% deeper per °C of summer road LST
+      (HPMS 2024, cross-sectional); deeper ruts raise roughness, and roughness lowers free-flow speed only slightly
+      (about 0.3–0.4 mph per 1 m/km of IRI; Wang et al. 2014). The change in travel time to the nearest hospital is
+      added to time to care. Rutting builds up over years, so this is a long-run effect of warming, not a heat-wave one.
+    evidence_zh: >-
+      2026-11-20 按用户要求加入。Davidson 的车辙深度随夏季路面地表温度每 °C 约深 1.8%（HPMS 2024，横截面）；车辙加深使路面变粗糙，
+      而粗糙度对自由流车速的影响很小（IRI 每增加 1 m/km 车速约降 0.3–0.4 mph；Wang 等 2014）。到最近医院的路程变化计入就医时间。
+      车辙是多年累积的，所以这是升温的长期效应，不是热浪当天的效应。
 deferred:
   - id: D1
     name_en: Peer load transfer and overload trips (Motter–Lai)
@@ -253,3 +271,32 @@ deferred:
     reason_zh: >-
       2026-11-17 起从骨架中移除，医疗设施节点只保留医院。在 2026-11-11 的运行中它们对就医时间几乎没有影响（养老院约 0%）；
       受影响的透析次数（+4 °C 时每个夏季约 69 次）记录在 git 7298ae6。两者的代码保留在完整模型中。
+  - id: D12
+    name_en: System supply shortfall → rotating outages
+    name_zh: 系统供需缺口 → 轮流停电
+    methods: [M-18]
+    relations: ["R-P0:2"]
+    couplings: [C-P9.avail, C-P9.imp]
+    citations: [auffhammer2017, eia860, eia930]
+    reason_en: >-
+      Former K4, deferred on 2026-11-20. A TVA shortfall appeared in 4% of +4 °C runs and switching it off changed time
+      to care by 0% (knockouts R05, R06, 2026-11-17; 2,000-run check 2026-11-19). It returns with a regional heat-wave
+      scenario in which TVA reserves are actually short. Runs with `python -m pipeline.core --shortfall`.
+    reason_zh: >-
+      原 K4，2026-11-20 暂缓。+4 °C 时只有 4% 的运行出现 TVA 缺口，关掉它对就医时间的影响为 0%（敲除 R05、R06，2026-11-17；
+      2026-11-19 的 2,000 次检查）。等有 TVA 备用确实不足的区域热浪情景时加回。用 `python -m pipeline.core --shortfall` 运行。
+  - id: D13
+    name_en: Supply dependency along the grid topology
+    name_zh: 沿电网拓扑的供电依赖
+    relations: ["R-P1:1", "R-P1b:1", "R-P2:0", "R-P3:0", "R-P4:0"]
+    couplings: [C-P5]
+    citations: [buldyrev2010, rinaldi2001, osm2026]
+    reason_en: >-
+      Removed from the core on 2026-11-20 at the user's request. Outages propagated from transmission to distribution
+      stations along OSM lines, with switch states unknown (A-P6) and 35% placeholder edges; in the 2026-11-17 knockouts
+      this propagation carried about half of the mean time to care. It returns with NES feeder maps and switching data.
+      Run with `python -m pipeline.core --supply-dependency`.
+    reason_zh: >-
+      2026-11-20 按用户要求从骨架中移出。原来停电沿 OSM 线路从输电站传到配电站，开关状态未知（A-P6），35% 是占位边；
+      在 2026-11-17 的敲除实验中，这种传播约占就医时间均值的一半。拿到 NES 馈线图和开关数据后加回。
+      用 `python -m pipeline.core --supply-dependency` 运行。

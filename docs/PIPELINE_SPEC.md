@@ -932,6 +932,31 @@ E^c_g=\sum_t\sum_z\mathrm{pop}_{z,g}\,o_z(t)\,\mathbf 1\big[HI(x_z,t)\ge HI_{thr
 
 参数 C-H11, C-H11.a (T2) · C-H12 (T3) · C-H13, C-H14, C-H15, C-H16, C-H18 (T4) · C-H1 (T2) · 输入 HLT-12 ✅, HLT-17 ✅, HLT-01 ✅ · 文献 [tdh_hri_ed]、[lin2011]、[hhs_empower]、[cms2016]
 
+#### M-48 本地气温脆弱性：变电站热失效 Air-temperature fragility for substation thermal failure
+
+**中文：**（2026-11-20 做的简化对比；同日用户决定保留负荷链，所以这是可选做法：`python -m pipeline.core --power fragility`。）每座变电站的热应力是当前本地气温与按时间常数 $`\tau`$ 一阶滞后的本地气温的加权平均，权重 $`w`$ 是热点温度对气温的斜率中顶油（有滞后）部分所占的比例；每小时热失效概率是热应力的正态累积分布函数。参数范围由原 IEEE 参数的三角分布换算得到（`fragility_from_ieee`：在每小时失效概率约 1% 处线性化），2,000 次运行中两种做法的就医时间相差 3–8%，逐次排序相关 0.99（CORE_MODEL §4.7）。下一步用 EAGLE-I、NES 非风暴停电记录直接校准 $`T_{50}`$。
+
+**English:** (Compared on 2026-11-20; the same day the user chose to keep the load chain, so this is optional: `python -m pipeline.core --power fragility`.) Each substation's heat stress is a weighted mean of the current local air temperature and the same temperature lagged with time constant $`\tau`$; the weight $`w`$ is the top-oil (lagged) share of the hot spot's slope with respect to air temperature. The hourly probability of thermal failure is a normal CDF of the heat stress. The ranges are mapped from the former IEEE draws (`fragility_from_ieee`, linearised where the hourly failure probability is about 1%); over 2,000 runs the two chains give the same time to care within 3–8% (run-level rank correlation 0.99; CORE_MODEL §4.7). Next, $`T_{50}`$ is to be calibrated directly on non-storm outage records (EAGLE-I, NES).
+
+```math
+T^{eff}_s(t)=(1-w)\,\theta_A(s,t)+w\,\bar\theta_A(s,t),\quad \bar\theta_A(s,t)=\bar\theta_A(s,t-1)+\big[\theta_A(s,t)-\bar\theta_A(s,t-1)\big]\big(1-e^{-1/\tau}\big),\quad
+p_s(t)=\Phi\!\Big(\frac{T^{eff}_s(t)-T_{50}}{\sigma_T}\Big)
+```
+
+参数 C-P11 $`T_{50}`$ 39 / 45 / 54 °C, C-P11.sigma 1.2 / 2.1 / 3.3 °C (T4) · C-P11.tau 2 / 3 / 4 h (T2) · C-P11.w 0.48 (T3) · 输入 CLM-19 ✅, PWR-35 · 文献 [ieee_c5791_2011]、[shinozuka2000]
+
+#### M-49 车辙 → 路面平整度 → 车速 → 到医院的路程 Rutting → roughness → speed → travel time to hospitals
+
+**中文：**（2026-11-20，骨架 K11。）每条匹配到 HPMS 2024 实测车辙深度 $`r_e`$（英寸）的路段，情景升温 $`\Delta T`$ 使车辙加深 $`r_e k\,\Delta T`$（$`k`$ 为横截面估计的每 °C 路面地表温度增幅，假设路面温度与气温同幅上升），平整度增加 $`b`$ 倍的车辙增量，自由流车速下降 $`c`$ 倍的平整度增量。由于变化很小，到最近医院的路程增量与车速下降成线性：先按"每英寸车辙降 1 mph"算一次全县每次急诊就诊的路程增量 $`U`$（`care.rut_unit`，17:00 交通），每次运行的车辙增量为 $`U\,k\,\Delta T\,b\,c`$，与拥堵一样单独加到就医时间（原因分解中的 rutting）。车辙是多年累积的，这是升温的长期效应。
+
+**English:** (2026-11-20, core K11.) On every edge matched to an HPMS 2024 rut depth $`r_e`$ (inches), scenario warming $`\Delta T`$ deepens the rut by $`r_e k\,\Delta T`$ ($`k`$ is the cross-sectional increase per °C of summer road LST; pavement temperature is assumed to rise with air temperature), roughness rises by $`b`$ times the added rut, and free-flow speed falls by $`c`$ times the added roughness. The change is small, so travel time to the nearest hospital responds linearly: the county-wide added travel per ED visit $`U`$ for a 1 mph slowdown per inch of rut is computed once (`care.rut_unit`, 17:00 traffic), and each run adds $`U\,k\,\Delta T\,b\,c`$ to time to care, like congestion (cause "rutting" in the decomposition). Rutting builds up over years, so this is a long-run effect of warming.
+
+```math
+\Delta v_e = c\,b\,k\,\Delta T\,r_e,\qquad \Delta\tau_{rut}(r)=U\,k_r\,\Delta T\,b_r\,c_r,\quad U=\sum_i s_i\big[\min_h T'_{ih}-\min_h T_{ih}\big]_{\Delta v_e=r_e}
+```
+
+参数 C-T8 $`k`$ 0.0106 / 0.0176 / 0.0246 per °C (T3) · C-T11 $`b`$ 355 / 395 / 437 in/mi per in (T3) · C-T12 $`c`$ 0.0048 / 0.0056 / 0.0083 mph per in/mi (T3) · 输入 TRN-25 ✅, TRN-30 ✅ · 文献 [fhwa_hpms2024]、[wang2014roughness]
+
 ### 5.8 不确定性、敏感性与校准 Uncertainty, sensitivity and calibration (L7)
 
 #### M-42 Sobol 总效应指数 Sobol total-effect index

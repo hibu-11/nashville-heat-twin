@@ -1,0 +1,144 @@
+{
+ "runs": 2000,
+ "scenarios": {
+  "+0": {
+   "ieee": {
+    "any_outage": 0.154,
+    "thermal_mean": 1.54,
+    "pop_hours_mean": 65569,
+    "hospital_hours_mean": 0.05,
+    "dep_visits_mean": 3.7,
+    "ttc_median": 1.4,
+    "ttc_p95": 5.6,
+    "ttc_mean": 3.42,
+    "ttc_top1_mean": 125.3,
+    "top1_device_share": 0.918
+   },
+   "fragility": {
+    "any_outage": 0.141,
+    "thermal_mean": 1.38,
+    "pop_hours_mean": 60148,
+    "hospital_hours_mean": 0.05,
+    "dep_visits_mean": 3.4,
+    "ttc_median": 1.39,
+    "ttc_p95": 5.5,
+    "ttc_mean": 3.38,
+    "ttc_top1_mean": 124.8,
+    "top1_device_share": 0.918,
+    "run_level_spearman_vs_ieee": {
+     "pop_hours": 0.958,
+     "time_to_care": 0.998
+    }
+   }
+  },
+  "+2": {
+   "ieee": {
+    "any_outage": 0.392,
+    "thermal_mean": 16.1,
+    "pop_hours_mean": 639476,
+    "hospital_hours_mean": 0.65,
+    "dep_visits_mean": 34.8,
+    "ttc_median": 1.81,
+    "ttc_p95": 52.5,
+    "ttc_mean": 11.83,
+    "ttc_top1_mean": 366.1,
+    "top1_device_share": 0.914
+   },
+   "fragility": {
+    "any_outage": 0.376,
+    "thermal_mean": 15.04,
+    "pop_hours_mean": 598349,
+    "hospital_hours_mean": 0.62,
+    "dep_visits_mean": 32.6,
+    "ttc_median": 1.78,
+    "ttc_p95": 48.9,
+    "ttc_mean": 11.43,
+    "ttc_top1_mean": 364.2,
+    "top1_device_share": 0.922,
+    "run_level_spearman_vs_ieee": {
+     "pop_hours": 0.98,
+     "time_to_care": 0.99
+    }
+   }
+  },
+  "+4": {
+   "ieee": {
+    "any_outage": 0.68,
+    "thermal_mean": 106.34,
+    "pop_hours_mean": 4007851,
+    "hospital_hours_mean": 4.33,
+    "dep_visits_mean": 207.5,
+    "ttc_median": 3.12,
+    "ttc_p95": 271.4,
+    "ttc_mean": 42.39,
+    "ttc_top1_mean": 544.0,
+    "top1_device_share": 0.934
+   },
+   "fragility": {
+    "any_outage": 0.67,
+    "thermal_mean": 100.76,
+    "pop_hours_mean": 3806092,
+    "hospital_hours_mean": 4.07,
+    "dep_visits_mean": 197.6,
+    "ttc_median": 3.02,
+    "ttc_p95": 265.8,
+    "ttc_mean": 40.81,
+    "ttc_top1_mean": 527.6,
+    "top1_device_share": 0.947,
+    "run_level_spearman_vs_ieee": {
+     "pop_hours": 0.995,
+     "time_to_care": 0.993
+    }
+   },
+   "fragility_nolag": {
+    "any_outage": 0.746,
+    "thermal_mean": 189.99,
+    "pop_hours_mean": 7064055,
+    "hospital_hours_mean": 7.7,
+    "dep_visits_mean": 363.1,
+    "ttc_median": 5.36,
+    "ttc_p95": 359.6,
+    "ttc_mean": 62.1,
+    "ttc_top1_mean": 573.6,
+    "top1_device_share": 0.949,
+    "run_level_spearman_vs_ieee": {
+     "pop_hours": 0.971,
+     "time_to_care": 0.948
+    }
+   },
+   "fragility_noshed": {
+    "any_outage": 0.657,
+    "thermal_mean": 100.76,
+    "pop_hours_mean": 3804007,
+    "hospital_hours_mean": 4.06,
+    "dep_visits_mean": 197.6,
+    "ttc_median": 3.01,
+    "ttc_p95": 265.8,
+    "ttc_mean": 40.8,
+    "ttc_top1_mean": 527.6,
+    "top1_device_share": 0.947,
+    "run_level_spearman_vs_ieee": {
+     "pop_hours": 0.99,
+     "time_to_care": 0.992
+    }
+   }
+  }
+ },
+ "implied_fragility": {
+  "T50_c": {
+   "5": 41.3,
+   "50": 45.7,
+   "95": 51.0
+  },
+  "sigma_T_c": {
+   "5": 1.45,
+   "50": 2.1,
+   "95": 2.99
+  },
+  "w_lag": {
+   "5": 0.44,
+   "50": 0.48,
+   "95": 0.51
+  }
+ }
+}

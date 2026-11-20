@@ -27,17 +27,23 @@ LOST_PENALTY_MIN = 30.0               # 【中文】同 pipeline.core / same ass
 FACTORS = ("heat", "device", "power", "water")
 
 
-def prepare(ctx: dict, net, assets=None, hour_local: int = 17) -> dict:
-    """【中文】网格 × 医院的正常路程矩阵、网格所属分区 / travel matrix cells × hospitals and cell zones."""
-    w = traffic.travel_time(ctx["edges"], ctx["eta"][hour_local], ctx["cap_lane"], ctx["A"], ctx["B"], None)
+def _hospital_times(ctx: dict, net, edges, hour_local: int) -> np.ndarray:
+    """【中文】每个人口网格到每家医院的路程（分钟）/ travel time from every population cell to every hospital."""
+    w = traffic.travel_time(edges, ctx["eta"][hour_local], ctx["cap_lane"], ctx["A"], ctx["B"], None)
     d = ctx["dest"]["hospital"]
     node_of = dict(zip(d["ids"], d["nodes"]))
-    cells = ctx["cells"]
-    T = np.full((len(cells), len(net.hosp)), np.inf)
+    T = np.full((len(ctx["cells"]), len(net.hosp)), np.inf)
     for j, h in enumerate(net.hosp):
         n = node_of.get(h, -1)
         if n >= 0:
             T[:, j] = traffic.nearest_time(ctx["net"], w, [n])[ctx["cell_nodes"]]
+    return T
+
+
+def prepare(ctx: dict, net, assets=None, hour_local: int = 17) -> dict:
+    """【中文】网格 × 医院的正常路程矩阵、网格所属分区 / travel matrix cells × hospitals and cell zones."""
+    T = _hospital_times(ctx, net, ctx["edges"], hour_local)
+    cells = ctx["cells"]
     zidx = {z: i for i, z in enumerate(net.zone_id)}
     cz = np.array([zidx.get(z, -1) for z in cells.get("zone", pd.Series([None] * len(cells)))])
     pop = ctx["pop"].astype(float)
@@ -46,8 +52,26 @@ def prepare(ctx: dict, net, assets=None, hour_local: int = 17) -> dict:
     T, cz, pop = T[reach], cz[reach], pop[reach]
     order = np.argsort(T, axis=1)
     share = pop / pop.sum()
-    return {"T": T, "order": order, "Tsorted": np.take_along_axis(T, order, axis=1), "cz": cz, "pop": pop,
-            "share": share, "zone_pop": zone_pop, "L0": np.bincount(order[:, 0], weights=share, minlength=T.shape[1])}
+    cp = {"T": T, "order": order, "Tsorted": np.take_along_axis(T, order, axis=1), "cz": cz, "pop": pop,
+          "share": share, "zone_pop": zone_pop, "L0": np.bincount(order[:, 0], weights=share, minlength=T.shape[1]),
+          "reach": reach}
+    cp["rut_unit"] = rut_unit(ctx, net, cp, hour_local)
+    return cp
+
+
+def rut_unit(ctx: dict, net, cp: dict, hour_local: int = 17, dv: float = 1.0) -> float:
+    """【中文】K11 车辙（M-49）：每条有实测车辙的路段车速降低 dv × 车辙深度（英寸）mph 时，每次急诊就诊到最近医院的平均路程增量
+    （分钟）。增量很小，与车速降低成线性，所以每次运行的车辙增量 = 本值 × (k_rut · ΔT · b_iri · c_speed) / dv。
+
+    K11 rutting (M-49): added travel per ED visit to the nearest hospital when every edge with a measured rut slows by
+    dv mph per inch of rut. The effect is small and linear, so each run scales it by k_rut * dT * b_iri * c_speed / dv."""
+    e = ctx["edges"]
+    if "rut_in" not in e or not (e["rut_in"] > 0).any():
+        return 0.0
+    v = e["speed_mph"].to_numpy(float)
+    slow = np.maximum(v - dv * e["rut_in"].to_numpy(float), 1.0)
+    T2 = _hospital_times(ctx, net, e.assign(t0_min=e["length_m"] / (slow * traffic.MPH) / 60.0), hour_local)[cp["reach"]]
+    return float((cp["share"] * (np.min(T2, axis=1) - cp["Tsorted"][:, 0])).sum())
 
 
 def _one(cp: dict, D0: float, rho0: float, W0: float, closed_h: np.ndarray, extra_zone: np.ndarray,

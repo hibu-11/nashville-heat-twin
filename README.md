@@ -74,11 +74,11 @@ site/                  GitHub Pages 发布的网站
 .venv/bin/python -m pipeline.cascade --runs 2000 --mid-runs 500 --scenarios 0,2,4   # 完整模型 / full model
 .venv/bin/python -m pipeline.access                         # 完整模型的可达性
 .venv/bin/python -m pipeline.run_all                         # 骨架模型全部结果：测试 → 骨架 → 极端分析 → 敲除、情景、热浪 → 报告 → 登记检查 → 关系图集
-.venv/bin/python -m pipeline.run_all --quick                 # 每步少量运行，检查流程（约 15 分钟）
+.venv/bin/python -m pipeline.run_all --quick                 # 每步少量运行，检查流程（约 8 分钟）
 .venv/bin/python -m pipeline.run_all --from report           # 从某一步开始
 ```
 
-`run_all` 的各步也可以单独运行：`pipeline.core --runs 2000`（骨架，A 线 + B 线，就医时间）、`pipeline.extremes`（极端情况分解与通径分析）、`pipeline.contrib --runs 500 --scenarios 2,4`（敲除实验）、`pipeline.contrib --variants`（B 线假设与排队上限情景）、`pipeline.report`（生成 docs/RESULTS.md）、`pipeline.registry`（登记表检查 → docs/DATA_CATALOG.md）、`scripts/build_atlas.py`（关系图集）。日志在 `data/logs/`。全县规模下骨架模型全部结果约 2–2.5 小时；构建和完整模型另计。
+`run_all` 的各步也可以单独运行：`pipeline.core --runs 2000`（骨架，A 线 + B 线，就医时间；`--power fragility` 用两参数气温脆弱性曲线，`--supply-dependency`、`--shortfall` 加回暂缓的供电依赖与系统缺口）、`pipeline.extremes`（极端情况分解与通径分析）、`pipeline.contrib --runs 500 --scenarios 2,4`（敲除实验）、`pipeline.contrib --variants`（B 线假设与排队上限情景）、`pipeline.report`（生成 docs/RESULTS.md）、`pipeline.registry`（登记表检查 → docs/DATA_CATALOG.md）、`scripts/build_atlas.py`（关系图集）。日志在 `data/logs/`。全县规模下骨架模型全部结果约 1–1.5 小时；`scripts/power_compare.py` 重现电力部分简化的对比（CORE_MODEL §4.7）；构建和完整模型另计。
 
 **证据脚本 / evidence scripts**（结果写入 `twin/evidence/`，只含汇总数字）：
 - `scripts/eaglei_restoration.py`：EAGLE-I 用户恢复供电时长（C-P6）。

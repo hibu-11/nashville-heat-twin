@@ -1,6 +1,6 @@
 {
- "built_at": "2026-11-17T17:28:42+00:00",
- "code_version": "git:7298ae6-dirty",
+ "built_at": "2026-11-20T18:55:52+00:00",
+ "code_version": "git:bfa16de-dirty",
  "config_sha256": "7583c94952aed607",
  "python": "3.14.4",
  "packages": {
@@ -121,7 +121,7 @@
   },
   "twin_couplings": {
    "status": "built",
-   "fingerprint": "350cce0bf7fc94ab"
+   "fingerprint": "61b079bf424808a5"
   },
   "twin_dependencies": {
    "status": "cached",
@@ -131,7 +131,7 @@
  "tables": {
   "assets": 396727,
   "dependencies": 11579,
-  "couplings": 57,
+  "couplings": 64,
   "exposures": 2971780,
   "events": 96683,
   "drivers": 537337,
@@ -165,5 +165,5 @@
   ]
  },
  "chain_check": true,
- "run_id": "20261117T172842Z-81c59317"
+ "run_id": "20261120T185552Z-a9d452de"
 }

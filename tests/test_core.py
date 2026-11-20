@@ -11,7 +11,7 @@ import pandas as pd
 import pytest
 
 from pipeline import care
-from pipeline.twin.core import CORE_PARAMS, KNOCKOUTS, simulate_core
+from pipeline.twin.core import CORE_PARAMS, KNOCKOUTS, fragility_from_ieee, simulate_core
 
 H, N = 72, 40
 
@@ -42,24 +42,26 @@ class FakeNet:
 
 
 def params(n=N, seed=1, hot=True):
-    """【中文】中值附近的参数；hot=True 时让变压器容易过热，以便出现停电 / parameters near mid values."""
+    """【中文】中值附近的参数；hot=True 时让变电站容易热失效，以便出现停电。C-P11 只用于 power="fragility"。
+    Parameters near mid values; hot=True makes thermal failures likely. C-P11 is only used with power="fragility"."""
     rng = np.random.default_rng(seed)
     base = {"C-P1": 0.024, "C-P1.T0": 75, "C-P1.Kd": 1.0 if hot else 0.6, "C-P1.Td": 93, "C-P2.dTOR": 55, "C-P2.dHR": 25,
             "C-P2.R": 4.5, "C-P2.n": 0.8, "C-P2.m": 0.8, "C-P2.tau": 3, "C-P3": 120 if hot else 160, "C-P3.sigma": 8,
-            "C-P6": 3, "C-P9.avail": 0.9, "C-P9.imp": 4000, "C-H1": 0.05, "C-H2": 0.3, "C-W2": 0.05, "C-W3": 10,
-            "C-T2": 0.9, "C-T5": 0.5, "C-B1": 12, "C-B2": 4, "C-B3": 22.5, "C-B4": 0.94, "C-H10": 28,
+            "C-P11": 34 if hot else 45, "C-P11.sigma": 2, "C-P11.tau": 3, "C-P11.w": 0.48, "C-P6": 3, "C-P9.avail": 0.9, "C-P9.imp": 4000, "C-H1": 0.05, "C-H2": 0.3, "C-W2": 0.05, "C-W3": 10,
+            "C-T2": 0.9, "C-T5": 0.5, "C-T8": 0.0176, "C-T11": 395, "C-T12": 0.0056, "C-B1": 12, "C-B2": 4, "C-B3": 22.5, "C-B4": 0.94, "C-H10": 28,
             "C-H11": 4e-6, "C-H11.a": 0.0086, "C-H12": 2, "C-H13": 0.05, "C-H14": 0.75, "C-H15": 1000, "C-H16": 30, "C-H18": 4}
     assert set(base) >= set(CORE_PARAMS)
-    return {k: np.full(n, float(v)) * (1 + 0.05 * rng.standard_normal(n) * (k in ("C-P1.Kd", "C-P3"))) for k, v in base.items()}
+    return {k: np.full(n, float(v)) * (1 + 0.05 * rng.standard_normal(n) * (k in ("C-P1.Kd", "C-P3", "C-P11"))) for k, v in base.items()}
 
 
-def run(off=frozenset(), seed=7, shed=None, lineb=True, hot=True, th=None, net=None):
+def run(off=frozenset(), seed=7, shed=None, lineb=True, hot=True, th=None, net=None, power="load", supply_dependency=False):
     net = net or FakeNet()
     t = np.arange(H)
     Ta = 30 + 6 * np.sin((t - 9) / 24 * 2 * np.pi)
     day = ((t % 24) >= 8) & ((t % 24) < 20)
     lb = {"zone_dep": np.array([10.0, 20.0, 30.0]), "day": t // 24} if lineb else None
-    return simulate_core(net, Ta, th or params(hot=hot), np.random.default_rng(seed), day, shed=shed, off=frozenset(off), lineb=lb)
+    return simulate_core(net, Ta, th or params(hot=hot), np.random.default_rng(seed), day, shed=shed, off=frozenset(off), lineb=lb,
+                         power=power, supply_dependency=supply_dependency)
 
 
 def tot(r, k):
@@ -113,8 +115,9 @@ def test_repair_one_hour_reduces_outage():
 
 
 def test_supply_dependency_propagates():
-    """【中文】关掉供电依赖后，只有自身失效的站停电，停电人·小时不会增加。"""
-    assert tot(run(off={"R08"}), "pop_hours").mean() <= tot(run(), "pop_hours").mean()
+    """【中文】供电依赖（D13，默认关闭）打开后，输电站 S0 失效会使下游分区停电，停电人·小时不会减少。"""
+    assert tot(run(supply_dependency=True), "pop_hours").mean() >= tot(run(), "pop_hours").mean()
+    assert tot(run(supply_dependency=True, off={"R08"}), "pop_hours").mean() == tot(run(), "pop_hours").mean()
 
 
 def test_every_knockout_is_handled():
@@ -197,3 +200,34 @@ def test_line_b_outputs_present():
     assert r["care"]["extra_zone"].shape == (N, 3) and r["care"]["hosp_closed_h"].shape == (N, 2)
     np.testing.assert_allclose(r["care"]["extra_zone"], r["care"]["extra_heat_zone"] + r["care"]["extra_dep_zone"])
     assert (r["totals"]["peak_day_open_share"] <= 1).all() and (r["totals"]["peak_day_open_share"] >= 0).all()
+
+
+def test_fragility_power_model_runs():
+    """【中文】可选的气温脆弱性曲线（power="fragility"）可运行，热的参数下有停电；"ieee" 是负荷链的旧名。"""
+    assert tot(run(power="fragility"), "pop_hours").mean() > 0
+    assert tot(run(power="fragility", off={"R04"}), "pop_hours").sum() == 0
+    np.testing.assert_array_equal(tot(run(power="ieee"), "pop_hours"), tot(run(), "pop_hours"))
+
+
+def test_cooling_load_knockout():
+    """【中文】制冷负荷不随气温（R02，只剩基础负荷）时热失效不会增加。"""
+    assert tot(run(off={"R02"}), "thermal").sum() <= tot(run(), "thermal").sum()
+
+
+def test_rutting_delay():
+    """【中文】车辙增量 = rut_unit × k × ΔT × b × c；+0 °C 或关掉 R27 时为 0。"""
+    from pipeline.core import time_to_care
+    th = params()
+    cp = toy_care() | {"rut_unit": 0.5}
+    ed = lambda dT, off=frozenset(): time_to_care(cp, {"care": care_state()}, th, {"_congestion_hospital": np.zeros(N)},  # noqa: E731
+                                                  off=off, dT=dT)
+    np.testing.assert_allclose(ed(4.0)["rutting"], 0.5 * 4.0 * th["C-T8"] * th["C-T11"] * th["C-T12"])
+    np.testing.assert_allclose(ed(4.0)["time"], ed(4.0)["rutting"], atol=1e-9)
+    assert ed(0.0)["rutting"].sum() == 0 and ed(4.0, frozenset({"R27"}))["rutting"].sum() == 0
+
+
+def test_fragility_mapping_from_ieee():
+    """【中文】由 IEEE 参数换算的气温脆弱性：T50 在合理范围内，热的参数（设计负荷率高）门槛更低。"""
+    hot, cold = (fragility_from_ieee(params(hot=h)) for h in (True, False))
+    assert np.all((hot[0] > 0) & (hot[0] < cold[0]))
+    assert np.all((hot[1] > 0) & (hot[2] > 0) & (hot[2] < 1))

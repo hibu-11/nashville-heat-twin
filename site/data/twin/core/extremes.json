@@ -1,177 +1,183 @@
 {
- "run_id": "core-20261117T175756Z-9e2ab949ad",
+ "run_id": "core-20261120T192400Z-7f3fc1a6c4",
  "scenarios": {
   "+2": {
    "bins": [
     {
      "bin": "below p50",
      "runs": 1000,
-     "total": 1.07,
+     "total": 1.06,
      "share_visits_at_cap": 0.0,
-     "heat": 1.04,
-     "device": 0.03,
+     "heat": 1.0,
+     "device": 0.04,
      "power": 0.0,
      "water": 0.0,
-     "congestion": 0.01
+     "congestion": 0.01,
+     "rutting": 0.0
     },
     {
      "bin": "p50–75",
      "runs": 500,
-     "total": 2.47,
+     "total": 2.31,
      "share_visits_at_cap": 0.0,
-     "heat": 2.15,
-     "device": 0.3,
-     "power": 0.01,
+     "heat": 2.06,
+     "device": 0.23,
+     "power": 0.0,
      "water": 0.0,
-     "congestion": 0.02
+     "congestion": 0.02,
+     "rutting": 0.0
     },
     {
      "bin": "p75–90",
      "runs": 300,
-     "total": 6.24,
+     "total": 4.48,
      "share_visits_at_cap": 0.0,
-     "heat": 2.85,
-     "device": 3.27,
-     "power": 0.07,
+     "heat": 2.88,
+     "device": 1.56,
+     "power": 0.0,
      "water": 0.0,
-     "congestion": 0.05
+     "congestion": 0.03,
+     "rutting": 0.0
     },
     {
      "bin": "p90–95",
      "runs": 100,
-     "total": 28.18,
-     "share_visits_at_cap": 0.008,
-     "heat": 2.45,
-     "device": 24.36,
-     "power": 1.21,
+     "total": 11.92,
+     "share_visits_at_cap": 0.003,
+     "heat": 2.48,
+     "device": 8.94,
+     "power": 0.42,
      "water": 0.0,
-     "congestion": 0.16
+     "congestion": 0.07,
+     "rutting": 0.0
     },
     {
      "bin": "p95–99",
      "runs": 80,
-     "total": 116.74,
-     "share_visits_at_cap": 0.087,
-     "heat": 4.31,
-     "device": 104.14,
-     "power": 8.11,
+     "total": 42.64,
+     "share_visits_at_cap": 0.016,
+     "heat": 2.93,
+     "device": 35.26,
+     "power": 4.29,
      "water": 0.0,
-     "congestion": 0.19
+     "congestion": 0.16,
+     "rutting": 0.0
     },
     {
      "bin": "p99 and above",
      "runs": 20,
-     "total": 366.06,
-     "share_visits_at_cap": 0.576,
-     "heat": 6.69,
-     "device": 334.71,
-     "power": 24.27,
+     "total": 201.48,
+     "share_visits_at_cap": 0.216,
+     "heat": 4.8,
+     "device": 182.7,
+     "power": 13.7,
      "water": 0.0,
-     "congestion": 0.39
+     "congestion": 0.27,
+     "rutting": 0.0
     }
    ],
    "chain": [
     {
      "variable": "thermal failures",
      "middle 50%": 0.0,
-     "worst 5%": 107.5,
-     "worst 1%": 272.5
+     "worst 5%": 124.5,
+     "worst 1%": 360.0
     },
     {
      "variable": "person-hours without power",
      "middle 50%": 0.0,
-     "worst 5%": 4952912.0,
-     "worst 1%": 14126178.5
+     "worst 5%": 2608131.5,
+     "worst 1%": 8384571.5
     },
     {
      "variable": "hospital hours closed (summer)",
      "middle 50%": 0.0,
-     "worst 5%": 5.0,
-     "worst 1%": 13.0
+     "worst 5%": 4.0,
+     "worst 1%": 7.0
     },
     {
      "variable": "peak-day heat-illness visits",
-     "middle 50%": 4.5434,
-     "worst 5%": 4.5662,
-     "worst 1%": 4.2308
+     "middle 50%": 4.4842,
+     "worst 5%": 4.5407,
+     "worst 1%": 4.6493
     },
     {
      "variable": "peak-day device-user visits",
      "middle 50%": 0.0,
-     "worst 5%": 112.9443,
-     "worst 1%": 229.899
+     "worst 5%": 59.4427,
+     "worst 1%": 145.6261
     },
     {
      "variable": "peak-day open share of hospitals",
      "middle 50%": 1.0,
      "worst 5%": 1.0,
-     "worst 1%": 0.9983
+     "worst 1%": 1.0
     },
     {
      "variable": "hospitals at the queue cap",
      "middle 50%": 0.0,
-     "worst 5%": 2.0,
-     "worst 1%": 6.0
+     "worst 5%": 1.0,
+     "worst 1%": 2.0
     },
     {
      "variable": "share of visits at hospitals at the cap",
      "middle 50%": 0.0,
-     "worst 5%": 0.0601,
-     "worst 1%": 0.5486
+     "worst 5%": 0.0142,
+     "worst 1%": 0.073
     },
     {
      "variable": "K_design",
-     "middle 50%": 0.8397,
-     "worst 5%": 0.9348,
-     "worst 1%": 0.9517
+     "middle 50%": 0.8433,
+     "worst 5%": 0.9422,
+     "worst 1%": 0.9686
     },
     {
      "variable": "theta_50 (°C)",
-     "middle 50%": 140.4274,
-     "worst 5%": 137.0829,
-     "worst 1%": 136.2439
+     "middle 50%": 140.2148,
+     "worst 5%": 137.3549,
+     "worst 1%": 137.0228
     },
     {
      "variable": "sigma (K)",
-     "middle 50%": 8.0599,
-     "worst 5%": 9.4112,
-     "worst 1%": 9.148
+     "middle 50%": 8.0897,
+     "worst 5%": 8.9473,
+     "worst 1%": 9.27
     },
     {
      "variable": "repair (h)",
-     "middle 50%": 5.0154,
-     "worst 5%": 6.4068,
-     "worst 1%": 7.0093
+     "middle 50%": 5.0352,
+     "worst 5%": 6.306,
+     "worst 1%": 5.0271
     },
     {
      "variable": "q (visit probability)",
-     "middle 50%": 0.066,
-     "worst 5%": 0.0836,
-     "worst 1%": 0.0931
+     "middle 50%": 0.0656,
+     "worst 5%": 0.0839,
+     "worst 1%": 0.0876
     },
     {
      "variable": "battery (h)",
-     "middle 50%": 3.2826,
-     "worst 5%": 3.1362,
-     "worst 1%": 2.122
+     "middle 50%": 3.2836,
+     "worst 5%": 2.7464,
+     "worst 1%": 2.2218
     },
     {
      "variable": "rho0",
-     "middle 50%": 0.7468,
-     "worst 5%": 0.7549,
-     "worst 1%": 0.7729
+     "middle 50%": 0.7442,
+     "worst 5%": 0.751,
+     "worst 1%": 0.7584
     },
     {
      "variable": "D0",
-     "middle 50%": 1012.6193,
-     "worst 5%": 978.8324,
-     "worst 1%": 987.2159
+     "middle 50%": 1013.955,
+     "worst 5%": 974.5039,
+     "worst 1%": 1007.0354
     },
     {
      "variable": "W0 (min)",
-     "middle 50%": 31.7607,
+     "middle 50%": 31.5478,
      "worst 5%": 32.1151,
-     "worst 1%": 32.7029
+     "worst 1%": 32.8287
     }
    ],
    "path": {
@@ -180,6 +186,7 @@
     "equations": {
      "failures": [
       "K_design",
+      "cool_slope",
       "theta50",
       "sigma"
      ],
@@ -211,385 +218,390 @@
      ]
     },
     "r2": {
-     "failures": 0.617,
-     "outage": 0.786,
-     "hosp_closed": 0.177,
-     "device_peak": 0.648,
-     "heat_peak": 0.255,
-     "Y": 0.936
+     "failures": 0.616,
+     "outage": 0.785,
+     "hosp_closed": 0.152,
+     "device_peak": 0.613,
+     "heat_peak": 0.275,
+     "Y": 0.922
     },
     "coefficients": [
      {
       "from": "K_design",
       "to": "failures",
-      "beta": 0.608,
+      "beta": 0.603,
       "ci95": [
-       0.586,
-       0.631
+       0.581,
+       0.626
+      ]
+     },
+     {
+      "from": "cool_slope",
+      "to": "failures",
+      "beta": 0.057,
+      "ci95": [
+       0.031,
+       0.082
       ]
      },
      {
       "from": "theta50",
       "to": "failures",
-      "beta": -0.326,
+      "beta": -0.327,
       "ci95": [
-       -0.356,
-       -0.301
+       -0.357,
+       -0.298
       ]
      },
      {
       "from": "sigma",
       "to": "failures",
-      "beta": 0.368,
+      "beta": 0.374,
       "ci95": [
-       0.34,
-       0.396
+       0.346,
+       0.404
       ]
      },
      {
       "from": "failures",
       "to": "outage",
-      "beta": 0.884,
+      "beta": 0.885,
       "ci95": [
        0.876,
-       0.892
+       0.893
       ]
      },
      {
       "from": "repair",
       "to": "outage",
-      "beta": 0.038,
+      "beta": 0.021,
       "ci95": [
-       0.019,
-       0.06
+       0.003,
+       0.043
       ]
      },
      {
       "from": "outage",
       "to": "hosp_closed",
-      "beta": 0.414,
+      "beta": 0.379,
       "ci95": [
-       0.379,
-       0.448
+       0.344,
+       0.412
       ]
      },
      {
       "from": "hosp_backup",
       "to": "hosp_closed",
-      "beta": 0.083,
+      "beta": 0.101,
       "ci95": [
-       0.041,
-       0.123
+       0.057,
+       0.144
       ]
      },
      {
       "from": "outage",
       "to": "device_peak",
-      "beta": 0.793,
+      "beta": 0.768,
       "ci95": [
-       0.778,
-       0.811
+       0.751,
+       0.785
       ]
      },
      {
       "from": "q",
       "to": "device_peak",
-      "beta": 0.092,
+      "beta": 0.089,
       "ci95": [
-       0.067,
-       0.12
+       0.063,
+       0.116
       ]
      },
      {
       "from": "battery",
       "to": "device_peak",
-      "beta": -0.148,
+      "beta": -0.167,
       "ci95": [
-       -0.175,
-       -0.123
+       -0.198,
+       -0.139
       ]
      },
      {
       "from": "k_heat",
       "to": "heat_peak",
-      "beta": 0.5,
+      "beta": 0.524,
       "ci95": [
-       0.468,
-       0.534
+       0.493,
+       0.557
       ]
      },
      {
       "from": "outage",
       "to": "heat_peak",
-      "beta": 0.082,
+      "beta": 0.023,
       "ci95": [
-       0.037,
-       0.123
+       -0.016,
+       0.061
       ]
      },
      {
       "from": "device_peak",
       "to": "Y",
-      "beta": 0.92,
+      "beta": 0.863,
       "ci95": [
-       0.884,
-       0.955
+       0.816,
+       0.901
       ]
      },
      {
       "from": "heat_peak",
       "to": "Y",
-      "beta": 0.148,
+      "beta": 0.198,
       "ci95": [
-       0.132,
-       0.168
+       0.179,
+       0.22
       ]
      },
      {
       "from": "hosp_closed",
       "to": "Y",
-      "beta": 0.121,
+      "beta": 0.151,
       "ci95": [
-       0.094,
-       0.15
+       0.111,
+       0.189
       ]
      },
      {
       "from": "outage",
       "to": "Y",
-      "beta": -0.148,
+      "beta": -0.147,
       "ci95": [
-       -0.168,
-       -0.127
+       -0.169,
+       -0.121
       ]
      },
      {
       "from": "rho0",
       "to": "Y",
-      "beta": 0.296,
+      "beta": 0.366,
       "ci95": [
-       0.278,
-       0.318
+       0.343,
+       0.392
       ]
      },
      {
       "from": "D0",
       "to": "Y",
-      "beta": -0.107,
+      "beta": -0.117,
       "ci95": [
-       -0.12,
-       -0.095
+       -0.133,
+       -0.103
       ]
      },
      {
       "from": "W0",
       "to": "Y",
-      "beta": 0.097,
+      "beta": 0.122,
       "ci95": [
-       0.083,
-       0.11
+       0.108,
+       0.136
       ]
      }
     ],
     "effects": [
      {
+      "variable": "rho0",
+      "kind": "parameter",
+      "total": 0.366,
+      "ci95": [
+       0.343,
+       0.392
+      ],
+      "direct": 0.366,
+      "routes": [
+       {
+        "route": "rho0 → Y",
+        "effect": 0.366
+       }
+      ],
+      "share_of_explained": 0.371
+     },
+     {
       "variable": "K_design",
       "kind": "parameter",
-      "total": 0.346,
+      "total": 0.309,
       "ci95": [
-       0.328,
-       0.367
+       0.291,
+       0.329
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "K_design → failures → outage → device_peak → Y",
-        "effect": 0.392
+        "effect": 0.354
        },
        {
         "route": "K_design → failures → outage → Y",
-        "effect": -0.08
+        "effect": -0.078
        },
        {
         "route": "K_design → failures → outage → hosp_closed → Y",
-        "effect": 0.027
-       },
-       {
-        "route": "K_design → failures → outage → heat_peak → Y",
-        "effect": 0.007
+        "effect": 0.03
        }
       ],
-      "share_of_explained": 0.354
-     },
-     {
-      "variable": "rho0",
-      "kind": "parameter",
-      "total": 0.296,
-      "ci95": [
-       0.278,
-       0.318
-      ],
-      "direct": 0.296,
-      "routes": [
-       {
-        "route": "rho0 → Y",
-        "effect": 0.296
-       }
-      ],
-      "share_of_explained": 0.259
+      "share_of_explained": 0.264
      },
      {
       "variable": "sigma",
       "kind": "parameter",
-      "total": 0.21,
+      "total": 0.191,
       "ci95": [
-       0.194,
-       0.225
+       0.176,
+       0.206
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "sigma → failures → outage → device_peak → Y",
-        "effect": 0.238
+        "effect": 0.219
        },
        {
         "route": "sigma → failures → outage → Y",
-        "effect": -0.048
+        "effect": -0.049
        },
        {
         "route": "sigma → failures → outage → hosp_closed → Y",
-        "effect": 0.016
+        "effect": 0.019
        }
       ],
-      "share_of_explained": 0.13
+      "share_of_explained": 0.101
      },
      {
       "variable": "theta50",
       "kind": "parameter",
-      "total": -0.186,
+      "total": -0.167,
       "ci95": [
-       -0.203,
-       -0.169
+       -0.184,
+       -0.151
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "theta50 → failures → outage → device_peak → Y",
-        "effect": -0.211
+        "effect": -0.192
        },
        {
         "route": "theta50 → failures → outage → Y",
-        "effect": 0.043
+        "effect": 0.042
        },
        {
         "route": "theta50 → failures → outage → hosp_closed → Y",
-        "effect": -0.014
+        "effect": -0.017
        }
       ],
-      "share_of_explained": 0.102
+      "share_of_explained": 0.077
      },
      {
       "variable": "battery",
       "kind": "parameter",
-      "total": -0.136,
+      "total": -0.145,
       "ci95": [
-       -0.161,
-       -0.113
+       -0.17,
+       -0.121
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "battery → device_peak → Y",
-        "effect": -0.136
+        "effect": -0.145
        }
       ],
-      "share_of_explained": 0.055
-     },
-     {
-      "variable": "D0",
-      "kind": "parameter",
-      "total": -0.107,
-      "ci95": [
-       -0.12,
-       -0.095
-      ],
-      "direct": -0.107,
-      "routes": [
-       {
-        "route": "D0 → Y",
-        "effect": -0.107
-       }
-      ],
-      "share_of_explained": 0.034
+      "share_of_explained": 0.058
      },
      {
       "variable": "W0",
       "kind": "parameter",
-      "total": 0.097,
+      "total": 0.122,
       "ci95": [
-       0.083,
-       0.11
+       0.108,
+       0.136
       ],
-      "direct": 0.097,
+      "direct": 0.122,
       "routes": [
        {
         "route": "W0 → Y",
-        "effect": 0.097
+        "effect": 0.122
        }
       ],
-      "share_of_explained": 0.028
+      "share_of_explained": 0.041
      },
      {
-      "variable": "q",
+      "variable": "D0",
       "kind": "parameter",
-      "total": 0.084,
+      "total": -0.117,
       "ci95": [
-       0.061,
-       0.11
+       -0.133,
+       -0.103
       ],
-      "direct": 0.0,
+      "direct": -0.117,
       "routes": [
        {
-        "route": "q → device_peak → Y",
-        "effect": 0.084
+        "route": "D0 → Y",
+        "effect": -0.117
        }
       ],
-      "share_of_explained": 0.021
+      "share_of_explained": 0.038
      },
      {
       "variable": "k_heat",
       "kind": "parameter",
-      "total": 0.074,
+      "total": 0.104,
       "ci95": [
-       0.064,
-       0.086
+       0.092,
+       0.118
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "k_heat → heat_peak → Y",
-        "effect": 0.074
+        "effect": 0.104
+       }
+      ],
+      "share_of_explained": 0.03
+     },
+     {
+      "variable": "q",
+      "kind": "parameter",
+      "total": 0.077,
+      "ci95": [
+       0.054,
+       0.102
+      ],
+      "direct": 0.0,
+      "routes": [
+       {
+        "route": "q → device_peak → Y",
+        "effect": 0.077
        }
       ],
       "share_of_explained": 0.016
      },
      {
-      "variable": "repair",
+      "variable": "cool_slope",
       "kind": "parameter",
-      "total": 0.025,
+      "total": 0.029,
       "ci95": [
-       0.012,
-       0.038
+       0.016,
+       0.042
       ],
       "direct": 0.0,
       "routes": [
        {
-        "route": "repair → outage → device_peak → Y",
-        "effect": 0.028
+        "route": "cool_slope → failures → outage → device_peak → Y",
+        "effect": 0.034
        },
        {
-        "route": "repair → outage → Y",
-        "effect": -0.006
+        "route": "cool_slope → failures → outage → Y",
+        "effect": -0.007
        }
       ],
       "share_of_explained": 0.002
@@ -597,16 +609,33 @@
      {
       "variable": "hosp_backup",
       "kind": "parameter",
-      "total": 0.01,
+      "total": 0.015,
       "ci95": [
-       0.005,
-       0.016
+       0.008,
+       0.023
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "hosp_backup → hosp_closed → Y",
-        "effect": 0.01
+        "effect": 0.015
+       }
+      ],
+      "share_of_explained": 0.001
+     },
+     {
+      "variable": "repair",
+      "kind": "parameter",
+      "total": 0.012,
+      "ci95": [
+       0.002,
+       0.025
+      ],
+      "direct": 0.0,
+      "routes": [
+       {
+        "route": "repair → outage → device_peak → Y",
+        "effect": 0.014
        }
       ],
       "share_of_explained": 0.0
@@ -614,104 +643,100 @@
      {
       "variable": "device_peak",
       "kind": "mediator",
-      "total": 0.92,
+      "total": 0.863,
       "ci95": [
-       0.884,
-       0.955
+       0.816,
+       0.901
       ],
-      "direct": 0.92,
+      "direct": 0.863,
       "routes": [
        {
         "route": "device_peak → Y",
-        "effect": 0.92
+        "effect": 0.863
        }
       ]
      },
      {
       "variable": "outage",
       "kind": "mediator",
-      "total": 0.644,
+      "total": 0.578,
       "ci95": [
-       0.623,
-       0.666
+       0.555,
+       0.601
       ],
-      "direct": -0.148,
+      "direct": -0.147,
       "routes": [
        {
         "route": "outage → device_peak → Y",
-        "effect": 0.73
+        "effect": 0.663
        },
        {
         "route": "outage → Y",
-        "effect": -0.148
+        "effect": -0.147
        },
        {
         "route": "outage → hosp_closed → Y",
-        "effect": 0.05
+        "effect": 0.057
        },
        {
         "route": "outage → heat_peak → Y",
-        "effect": 0.012
+        "effect": 0.005
        }
       ]
      },
      {
       "variable": "failures",
       "kind": "mediator",
-      "total": 0.57,
+      "total": 0.512,
       "ci95": [
-       0.549,
-       0.591
+       0.49,
+       0.533
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "failures → outage → device_peak → Y",
-        "effect": 0.645
+        "effect": 0.587
        },
        {
         "route": "failures → outage → Y",
-        "effect": -0.131
+        "effect": -0.13
        },
        {
         "route": "failures → outage → hosp_closed → Y",
-        "effect": 0.044
-       },
-       {
-        "route": "failures → outage → heat_peak → Y",
-        "effect": 0.011
+        "effect": 0.051
        }
       ]
      },
      {
       "variable": "heat_peak",
       "kind": "mediator",
-      "total": 0.148,
+      "total": 0.198,
       "ci95": [
-       0.132,
-       0.168
+       0.179,
+       0.22
       ],
-      "direct": 0.148,
+      "direct": 0.198,
       "routes": [
        {
         "route": "heat_peak → Y",
-        "effect": 0.148
+        "effect": 0.198
        }
       ]
      },
      {
       "variable": "hosp_closed",
       "kind": "mediator",
-      "total": 0.121,
+      "total": 0.151,
       "ci95": [
-       0.094,
-       0.15
+       0.111,
+       0.189
       ],
-      "direct": 0.121,
+      "direct": 0.151,
       "routes": [
        {
         "route": "hosp_closed → Y",
-        "effect": 0.121
+        "effect": 0.151
        }
       ]
      }
@@ -724,172 +749,178 @@
     {
      "bin": "below p50",
      "runs": 1000,
-     "total": 1.52,
+     "total": 1.41,
      "share_visits_at_cap": 0.0,
-     "heat": 1.34,
-     "device": 0.16,
+     "heat": 1.25,
+     "device": 0.14,
      "power": 0.0,
      "water": 0.0,
-     "congestion": 0.02
+     "congestion": 0.02,
+     "rutting": 0.0
     },
     {
      "bin": "p50–75",
      "runs": 500,
-     "total": 8.95,
-     "share_visits_at_cap": 0.001,
-     "heat": 2.32,
-     "device": 6.18,
-     "power": 0.33,
+     "total": 4.73,
+     "share_visits_at_cap": 0.0,
+     "heat": 2.3,
+     "device": 2.32,
+     "power": 0.03,
      "water": 0.0,
-     "congestion": 0.11
+     "congestion": 0.08,
+     "rutting": 0.0
     },
     {
      "bin": "p75–90",
      "runs": 300,
-     "total": 60.23,
-     "share_visits_at_cap": 0.023,
-     "heat": 3.56,
-     "device": 50.51,
-     "power": 5.9,
+     "total": 21.38,
+     "share_visits_at_cap": 0.004,
+     "heat": 2.53,
+     "device": 17.61,
+     "power": 1.1,
      "water": 0.0,
-     "congestion": 0.25
+     "congestion": 0.14,
+     "rutting": 0.0
     },
     {
      "bin": "p90–95",
      "runs": 100,
-     "total": 197.2,
-     "share_visits_at_cap": 0.192,
-     "heat": 7.09,
-     "device": 176.05,
-     "power": 13.72,
+     "total": 78.15,
+     "share_visits_at_cap": 0.032,
+     "heat": 3.89,
+     "device": 63.07,
+     "power": 10.93,
      "water": 0.0,
-     "congestion": 0.34
+     "congestion": 0.26,
+     "rutting": 0.0
     },
     {
      "bin": "p95–99",
      "runs": 80,
-     "total": 376.39,
-     "share_visits_at_cap": 0.617,
-     "heat": 8.96,
-     "device": 344.58,
-     "power": 22.31,
+     "total": 251.66,
+     "share_visits_at_cap": 0.285,
+     "heat": 7.74,
+     "device": 227.41,
+     "power": 16.12,
      "water": 0.0,
-     "congestion": 0.54
+     "congestion": 0.39,
+     "rutting": 0.0
     },
     {
      "bin": "p99 and above",
      "runs": 20,
-     "total": 543.96,
-     "share_visits_at_cap": 0.777,
-     "heat": 8.65,
-     "device": 507.95,
-     "power": 26.85,
+     "total": 486.85,
+     "share_visits_at_cap": 0.749,
+     "heat": 5.19,
+     "device": 459.46,
+     "power": 21.66,
      "water": 0.0,
-     "congestion": 0.51
+     "congestion": 0.54,
+     "rutting": 0.0
     }
    ],
    "chain": [
     {
      "variable": "thermal failures",
-     "middle 50%": 4.0,
-     "worst 5%": 684.5,
-     "worst 1%": 844.5
+     "middle 50%": 3.0,
+     "worst 5%": 733.0,
+     "worst 1%": 1151.5
     },
     {
      "variable": "person-hours without power",
-     "middle 50%": 96513.0,
-     "worst 5%": 26328595.5,
-     "worst 1%": 37942355.0
+     "middle 50%": 47264.5,
+     "worst 5%": 16668072.0,
+     "worst 1%": 29202654.0
     },
     {
      "variable": "hospital hours closed (summer)",
      "middle 50%": 0.0,
-     "worst 5%": 31.0,
-     "worst 1%": 37.0
+     "worst 5%": 16.0,
+     "worst 1%": 38.0
     },
     {
      "variable": "peak-day heat-illness visits",
-     "middle 50%": 4.6989,
-     "worst 5%": 6.4266,
-     "worst 1%": 7.39
+     "middle 50%": 4.689,
+     "worst 5%": 5.486,
+     "worst 1%": 5.1635
     },
     {
      "variable": "peak-day device-user visits",
-     "middle 50%": 1.7543,
-     "worst 5%": 277.6781,
-     "worst 1%": 348.2277
+     "middle 50%": 0.0,
+     "worst 5%": 201.7496,
+     "worst 1%": 300.9151
     },
     {
      "variable": "peak-day open share of hospitals",
      "middle 50%": 1.0,
-     "worst 5%": 0.9878,
-     "worst 1%": 0.9826
+     "worst 5%": 1.0,
+     "worst 1%": 0.9931
     },
     {
      "variable": "hospitals at the queue cap",
      "middle 50%": 0.0,
-     "worst 5%": 7.0,
+     "worst 5%": 4.0,
      "worst 1%": 8.0
     },
     {
      "variable": "share of visits at hospitals at the cap",
      "middle 50%": 0.0,
-     "worst 5%": 0.6857,
-     "worst 1%": 0.7472
+     "worst 5%": 0.2682,
+     "worst 1%": 0.7234
     },
     {
      "variable": "K_design",
-     "middle 50%": 0.8388,
-     "worst 5%": 0.9418,
-     "worst 1%": 0.9469
+     "middle 50%": 0.8395,
+     "worst 5%": 0.9446,
+     "worst 1%": 0.9516
     },
     {
      "variable": "theta_50 (°C)",
-     "middle 50%": 140.3199,
-     "worst 5%": 137.0988,
-     "worst 1%": 137.3863
+     "middle 50%": 140.3307,
+     "worst 5%": 137.4285,
+     "worst 1%": 136.6339
     },
     {
      "variable": "sigma (K)",
-     "middle 50%": 8.1609,
-     "worst 5%": 8.8175,
-     "worst 1%": 8.9228
+     "middle 50%": 8.1094,
+     "worst 5%": 8.8674,
+     "worst 1%": 9.0571
     },
     {
      "variable": "repair (h)",
-     "middle 50%": 5.0612,
-     "worst 5%": 6.4837,
-     "worst 1%": 6.5174
+     "middle 50%": 4.937,
+     "worst 5%": 6.3944,
+     "worst 1%": 5.9558
     },
     {
      "variable": "q (visit probability)",
-     "middle 50%": 0.0646,
-     "worst 5%": 0.0903,
-     "worst 1%": 0.1002
+     "middle 50%": 0.0644,
+     "worst 5%": 0.089,
+     "worst 1%": 0.0976
     },
     {
      "variable": "battery (h)",
-     "middle 50%": 3.2083,
-     "worst 5%": 2.6553,
-     "worst 1%": 2.6289
+     "middle 50%": 3.2164,
+     "worst 5%": 2.6388,
+     "worst 1%": 2.8241
     },
     {
      "variable": "rho0",
-     "middle 50%": 0.7493,
-     "worst 5%": 0.756,
-     "worst 1%": 0.7474
+     "middle 50%": 0.7485,
+     "worst 5%": 0.7528,
+     "worst 1%": 0.7549
     },
     {
      "variable": "D0",
      "middle 50%": 1005.9839,
-     "worst 5%": 978.8324,
-     "worst 1%": 1017.9526
+     "worst 5%": 999.6888,
+     "worst 1%": 1002.643
     },
     {
      "variable": "W0 (min)",
-     "middle 50%": 31.9396,
-     "worst 5%": 32.7147,
-     "worst 1%": 38.017
+     "middle 50%": 32.0317,
+     "worst 5%": 32.6902,
+     "worst 1%": 34.9889
     }
    ],
    "path": {
@@ -898,6 +929,7 @@
     "equations": {
      "failures": [
       "K_design",
+      "cool_slope",
       "theta50",
       "sigma"
      ],
@@ -929,48 +961,57 @@
      ]
     },
     "r2": {
-     "failures": 0.783,
-     "outage": 0.762,
-     "hosp_closed": 0.28,
-     "device_peak": 0.665,
-     "heat_peak": 0.157,
-     "Y": 0.949
+     "failures": 0.788,
+     "outage": 0.786,
+     "hosp_closed": 0.248,
+     "device_peak": 0.63,
+     "heat_peak": 0.206,
+     "Y": 0.937
     },
     "coefficients": [
      {
       "from": "K_design",
       "to": "failures",
-      "beta": 0.709,
+      "beta": 0.706,
       "ci95": [
-       0.689,
-       0.731
+       0.685,
+       0.728
+      ]
+     },
+     {
+      "from": "cool_slope",
+      "to": "failures",
+      "beta": 0.104,
+      "ci95": [
+       0.083,
+       0.123
       ]
      },
      {
       "from": "theta50",
       "to": "failures",
-      "beta": -0.377,
+      "beta": -0.374,
       "ci95": [
-       -0.401,
-       -0.355
+       -0.398,
+       -0.351
       ]
      },
      {
       "from": "sigma",
       "to": "failures",
-      "beta": 0.36,
+      "beta": 0.368,
       "ci95": [
-       0.338,
-       0.382
+       0.344,
+       0.392
       ]
      },
      {
       "from": "failures",
       "to": "outage",
-      "beta": 0.872,
+      "beta": 0.885,
       "ci95": [
-       0.865,
-       0.88
+       0.879,
+       0.892
       ]
      },
      {
@@ -979,133 +1020,133 @@
       "beta": 0.026,
       "ci95": [
        0.006,
-       0.049
+       0.047
       ]
      },
      {
       "from": "outage",
       "to": "hosp_closed",
-      "beta": 0.517,
+      "beta": 0.488,
       "ci95": [
-       0.496,
-       0.537
+       0.467,
+       0.508
       ]
      },
      {
       "from": "hosp_backup",
       "to": "hosp_closed",
-      "beta": 0.118,
+      "beta": 0.104,
       "ci95": [
-       0.08,
-       0.152
+       0.065,
+       0.141
       ]
      },
      {
       "from": "outage",
       "to": "device_peak",
-      "beta": 0.794,
+      "beta": 0.761,
       "ci95": [
-       0.779,
-       0.811
+       0.744,
+       0.777
       ]
      },
      {
       "from": "q",
       "to": "device_peak",
-      "beta": 0.115,
+      "beta": 0.125,
       "ci95": [
-       0.091,
-       0.141
+       0.1,
+       0.153
       ]
      },
      {
       "from": "battery",
       "to": "device_peak",
-      "beta": -0.176,
+      "beta": -0.209,
       "ci95": [
-       -0.204,
-       -0.147
+       -0.237,
+       -0.181
       ]
      },
      {
       "from": "k_heat",
       "to": "heat_peak",
-      "beta": 0.298,
+      "beta": 0.418,
       "ci95": [
-       0.26,
-       0.343
+       0.383,
+       0.463
       ]
      },
      {
       "from": "outage",
       "to": "heat_peak",
-      "beta": 0.267,
+      "beta": 0.187,
       "ci95": [
-       0.237,
-       0.292
+       0.151,
+       0.22
       ]
      },
      {
       "from": "device_peak",
       "to": "Y",
-      "beta": 0.904,
+      "beta": 0.873,
       "ci95": [
-       0.879,
-       0.927
+       0.847,
+       0.899
       ]
      },
      {
       "from": "heat_peak",
       "to": "Y",
-      "beta": 0.077,
+      "beta": 0.108,
       "ci95": [
-       0.064,
-       0.09
+       0.095,
+       0.125
       ]
      },
      {
       "from": "hosp_closed",
       "to": "Y",
-      "beta": 0.148,
+      "beta": 0.171,
       "ci95": [
-       0.129,
-       0.168
+       0.149,
+       0.193
       ]
      },
      {
       "from": "outage",
       "to": "Y",
-      "beta": -0.121,
+      "beta": -0.131,
       "ci95": [
-       -0.138,
-       -0.106
+       -0.146,
+       -0.115
       ]
      },
      {
       "from": "rho0",
       "to": "Y",
-      "beta": 0.212,
+      "beta": 0.256,
       "ci95": [
-       0.199,
-       0.226
+       0.24,
+       0.271
       ]
      },
      {
       "from": "D0",
       "to": "Y",
-      "beta": -0.077,
+      "beta": -0.091,
       "ci95": [
-       -0.088,
-       -0.066
+       -0.103,
+       -0.079
       ]
      },
      {
       "from": "W0",
       "to": "Y",
-      "beta": 0.066,
+      "beta": 0.086,
       "ci95": [
-       0.056,
-       0.076
+       0.075,
+       0.096
       ]
      }
     ],
@@ -1113,188 +1154,230 @@
      {
       "variable": "K_design",
       "kind": "parameter",
-      "total": 0.429,
+      "total": 0.399,
       "ci95": [
-       0.413,
-       0.448
+       0.382,
+       0.417
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "K_design → failures → outage → device_peak → Y",
-        "effect": 0.443
+        "effect": 0.415
        },
        {
         "route": "K_design → failures → outage → Y",
-        "effect": -0.075
+        "effect": -0.082
        },
        {
         "route": "K_design → failures → outage → hosp_closed → Y",
-        "effect": 0.047
+        "effect": 0.052
        },
        {
         "route": "K_design → failures → outage → heat_peak → Y",
         "effect": 0.013
        }
       ],
-      "share_of_explained": 0.49
+      "share_of_explained": 0.419
+     },
+     {
+      "variable": "rho0",
+      "kind": "parameter",
+      "total": 0.256,
+      "ci95": [
+       0.24,
+       0.271
+      ],
+      "direct": 0.256,
+      "routes": [
+       {
+        "route": "rho0 → Y",
+        "effect": 0.256
+       }
+      ],
+      "share_of_explained": 0.173
      },
      {
       "variable": "theta50",
       "kind": "parameter",
-      "total": -0.228,
+      "total": -0.211,
       "ci95": [
-       -0.244,
-       -0.214
+       -0.225,
+       -0.199
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "theta50 → failures → outage → device_peak → Y",
-        "effect": -0.236
+        "effect": -0.22
        },
        {
         "route": "theta50 → failures → outage → Y",
-        "effect": 0.04
+        "effect": 0.043
        },
        {
         "route": "theta50 → failures → outage → hosp_closed → Y",
-        "effect": -0.025
+        "effect": -0.028
        },
        {
         "route": "theta50 → failures → outage → heat_peak → Y",
         "effect": -0.007
        }
       ],
-      "share_of_explained": 0.138
+      "share_of_explained": 0.117
      },
      {
       "variable": "sigma",
       "kind": "parameter",
-      "total": 0.217,
+      "total": 0.208,
       "ci95": [
-       0.204,
-       0.231
+       0.195,
+       0.22
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "sigma → failures → outage → device_peak → Y",
-        "effect": 0.225
+        "effect": 0.216
        },
        {
         "route": "sigma → failures → outage → Y",
-        "effect": -0.038
+        "effect": -0.043
        },
        {
         "route": "sigma → failures → outage → hosp_closed → Y",
-        "effect": 0.024
+        "effect": 0.027
        },
        {
         "route": "sigma → failures → outage → heat_peak → Y",
-        "effect": 0.006
+        "effect": 0.007
        }
       ],
-      "share_of_explained": 0.125
-     },
-     {
-      "variable": "rho0",
-      "kind": "parameter",
-      "total": 0.212,
-      "ci95": [
-       0.199,
-       0.226
-      ],
-      "direct": 0.212,
-      "routes": [
-       {
-        "route": "rho0 → Y",
-        "effect": 0.212
-       }
-      ],
-      "share_of_explained": 0.12
+      "share_of_explained": 0.114
      },
      {
       "variable": "battery",
       "kind": "parameter",
-      "total": -0.159,
+      "total": -0.183,
       "ci95": [
-       -0.184,
-       -0.134
+       -0.207,
+       -0.158
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "battery → device_peak → Y",
-        "effect": -0.159
+        "effect": -0.183
        }
       ],
-      "share_of_explained": 0.067
+      "share_of_explained": 0.088
      },
      {
       "variable": "q",
       "kind": "parameter",
-      "total": 0.104,
+      "total": 0.109,
       "ci95": [
-       0.081,
-       0.127
+       0.088,
+       0.134
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "q → device_peak → Y",
-        "effect": 0.104
+        "effect": 0.109
        }
       ],
-      "share_of_explained": 0.029
+      "share_of_explained": 0.031
      },
      {
       "variable": "D0",
       "kind": "parameter",
-      "total": -0.077,
+      "total": -0.091,
       "ci95": [
-       -0.088,
-       -0.066
+       -0.103,
+       -0.079
       ],
-      "direct": -0.077,
+      "direct": -0.091,
       "routes": [
        {
         "route": "D0 → Y",
-        "effect": -0.077
+        "effect": -0.091
        }
       ],
-      "share_of_explained": 0.016
+      "share_of_explained": 0.022
      },
      {
       "variable": "W0",
       "kind": "parameter",
-      "total": 0.066,
+      "total": 0.086,
       "ci95": [
-       0.056,
-       0.076
+       0.075,
+       0.096
       ],
-      "direct": 0.066,
+      "direct": 0.086,
       "routes": [
        {
         "route": "W0 → Y",
-        "effect": 0.066
+        "effect": 0.086
        }
       ],
-      "share_of_explained": 0.012
+      "share_of_explained": 0.019
+     },
+     {
+      "variable": "cool_slope",
+      "kind": "parameter",
+      "total": 0.059,
+      "ci95": [
+       0.047,
+       0.069
+      ],
+      "direct": 0.0,
+      "routes": [
+       {
+        "route": "cool_slope → failures → outage → device_peak → Y",
+        "effect": 0.061
+       },
+       {
+        "route": "cool_slope → failures → outage → Y",
+        "effect": -0.012
+       },
+       {
+        "route": "cool_slope → failures → outage → hosp_closed → Y",
+        "effect": 0.008
+       }
+      ],
+      "share_of_explained": 0.009
      },
      {
       "variable": "k_heat",
       "kind": "parameter",
-      "total": 0.023,
+      "total": 0.045,
       "ci95": [
-       0.018,
-       0.029
+       0.039,
+       0.054
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "k_heat → heat_peak → Y",
-        "effect": 0.023
+        "effect": 0.045
+       }
+      ],
+      "share_of_explained": 0.005
+     },
+     {
+      "variable": "hosp_backup",
+      "kind": "parameter",
+      "total": 0.018,
+      "ci95": [
+       0.011,
+       0.025
+      ],
+      "direct": 0.0,
+      "routes": [
+       {
+        "route": "hosp_backup → hosp_closed → Y",
+        "effect": 0.018
        }
       ],
       "share_of_explained": 0.001
@@ -1302,32 +1385,15 @@
      {
       "variable": "repair",
       "kind": "parameter",
-      "total": 0.018,
+      "total": 0.017,
       "ci95": [
        0.004,
-       0.035
+       0.029
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "repair → outage → device_peak → Y",
-        "effect": 0.019
-       }
-      ],
-      "share_of_explained": 0.001
-     },
-     {
-      "variable": "hosp_backup",
-      "kind": "parameter",
-      "total": 0.017,
-      "ci95": [
-       0.011,
-       0.023
-      ],
-      "direct": 0.0,
-      "routes": [
-       {
-        "route": "hosp_backup → hosp_closed → Y",
         "effect": 0.017
        }
       ],
@@ -1336,68 +1402,68 @@
      {
       "variable": "device_peak",
       "kind": "mediator",
-      "total": 0.904,
+      "total": 0.873,
       "ci95": [
-       0.879,
-       0.927
+       0.847,
+       0.899
       ],
-      "direct": 0.904,
+      "direct": 0.873,
       "routes": [
        {
         "route": "device_peak → Y",
-        "effect": 0.904
+        "effect": 0.873
        }
       ]
      },
      {
       "variable": "outage",
       "kind": "mediator",
-      "total": 0.694,
+      "total": 0.638,
       "ci95": [
-       0.676,
-       0.71
+       0.619,
+       0.654
       ],
-      "direct": -0.121,
+      "direct": -0.131,
       "routes": [
        {
         "route": "outage → device_peak → Y",
-        "effect": 0.718
+        "effect": 0.665
        },
        {
         "route": "outage → Y",
-        "effect": -0.121
+        "effect": -0.131
        },
        {
         "route": "outage → hosp_closed → Y",
-        "effect": 0.077
+        "effect": 0.084
        },
        {
         "route": "outage → heat_peak → Y",
-        "effect": 0.021
+        "effect": 0.02
        }
       ]
      },
      {
       "variable": "failures",
       "kind": "mediator",
-      "total": 0.605,
+      "total": 0.565,
       "ci95": [
-       0.587,
-       0.623
+       0.547,
+       0.581
       ],
       "direct": 0.0,
       "routes": [
        {
         "route": "failures → outage → device_peak → Y",
-        "effect": 0.626
+        "effect": 0.588
        },
        {
         "route": "failures → outage → Y",
-        "effect": -0.106
+        "effect": -0.116
        },
        {
         "route": "failures → outage → hosp_closed → Y",
-        "effect": 0.067
+        "effect": 0.074
        },
        {
         "route": "failures → outage → heat_peak → Y",
@@ -1408,32 +1474,32 @@
      {
       "variable": "hosp_closed",
       "kind": "mediator",
-      "total": 0.148,
+      "total": 0.171,
       "ci95": [
-       0.129,
-       0.168
+       0.149,
+       0.193
       ],
-      "direct": 0.148,
+      "direct": 0.171,
       "routes": [
        {
         "route": "hosp_closed → Y",
-        "effect": 0.148
+        "effect": 0.171
        }
       ]
      },
      {
       "variable": "heat_peak",
       "kind": "mediator",
-      "total": 0.077,
+      "total": 0.108,
       "ci95": [
-       0.064,
-       0.09
+       0.095,
+       0.125
       ],
-      "direct": 0.077,
+      "direct": 0.108,
       "routes": [
        {
         "route": "heat_peak → Y",
-        "effect": 0.077
+        "effect": 0.108
        }
       ]
      }

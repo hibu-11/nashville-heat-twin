@@ -26,7 +26,7 @@ from .adapters.base import write_json
 from .build import ROOT
 from .cascade import air_field_temperatures, load, river_inputs
 from . import care
-from .core import access_runs, adequacy_shed, lineb_inputs, time_to_care
+from .core import access_runs, lineb_inputs, time_to_care
 from .twin.cascade import Network
 from .twin.core import KNOCKOUTS, simulate_core
 from .twin.params import Params
@@ -34,27 +34,27 @@ from .twin.params import Params
 # 【中文】在 pipeline.core 层面处理的敲除 / knockouts handled outside simulate_core
 OUTER = {
     "R01": "local temperature = background (airport) series everywhere (no urban field)",
-    "R05": "TVA load is not scaled by scenario warming",
-    "R06": "no rotating outages from a system shortfall",
     "R14": "dark signals keep full capacity (R14–R16 are in series, so one knockout covers all three)",
     "R17": "closed hospitals keep their patients and capacity (no rerouting, no capacity loss)",
     "R22": "extra care demand does not lengthen waiting",
+    "R27": "rutting does not deepen with warming (no rutting delay)",
 }
 # 【中文】关系 → 结构图上的边 / relation → map edges
 EDGES = {
-    "R01": [["bg", "urban"]], "R02": [["urban", "load"]], "R03a": [["urban", "hotspot"]], "R03b": [["load", "hotspot"]],
-    "R04": [["hotspot", "failure"]], "R05": [["load", "margin"]], "R06": [["margin", "shed"], ["shed", "topo"]],
-    "R07": [["failure", "topo"]], "R08": [["topo", "zone"]], "R09": [["zone", "plant"]],
+    "R01": [], "R02": [["bg", "load"], ["urban", "load"]], "R03a": [["bg", "hotspot"], ["urban", "hotspot"]],
+    "R03b": [["load", "hotspot"]], "R04": [["hotspot", "failure"]],
+    "R07": [["failure", "zone"]], "R09": [["zone", "plant"]],
     "R10": [["plant", "storage"], ["storage", "wservice"]], "R11": [["zone", "hospital"]], "R12": [["wservice", "hospital"]],
     "R13": [["zone", "signals"]], "R14": [["signals", "capacity"], ["capacity", "travel"], ["travel", "access"]],
-    "R17": [["hospital", "access"]], "R18": [["zone", "indoor"]], "R19": [["urban", "indoor"]],
+    "R17": [["hospital", "access"]], "R18": [["zone", "indoor"]], "R19": [["bg", "indoor"], ["urban", "indoor"]],
     "R21": [["exposure", "illness"], ["illness", "demand"]], "R22": [["demand", "access"]],
-    "R24": [["zone", "demand"]],
+    "R24": [["zone", "demand"]], "R27": [["rut", "travel"]],
 }
 # 【中文】结构图模块 → 输入变量与参数（用于数据分级）/ map module → input variables and couplings
 NODE_INPUTS = {
     "bg": ["CLM-01"], "urban": ["CLM-19", "CLM-20", "BLD-05", "BLD-06", "BLD-11"],
-    "load": ["PWR-03", "PWR-04", "PWR-05", "PWR-06", "C-P1.Kd", "C-P1.Td"], "hotspot": ["PWR-11"], "failure": ["PWR-15"],
+    "load": ["PWR-05", "PWR-06", "PWR-36"], "base": ["PWR-03", "PWR-04", "C-P1.Kd", "C-P1.Td"], "hotspot": ["PWR-11"],
+    "failure": ["PWR-15"], "rut": ["TRN-25", "TRN-30", "C-T8", "C-T11", "C-T12"],
     "topo": ["PWR-01", "PWR-02", "PWR-24"], "zone": ["PWR-20"], "margin": ["PWR-07", "PWR-09", "PWR-32", "PWR-33"],
     "shed": ["C-P9.avail", "C-P9.imp"], "river": ["C-P9", "C-P9.span", "C-P9.Qmin", "C-P9.flow"], "overload": ["C-P4"],
     "signals": ["TRN-06", "TRN-07"], "capacity": ["TRN-12", "TRN-15"], "travel": ["TRN-01", "TRN-10", "TRN-11", "TRN-13", "TRN-14"],
@@ -63,8 +63,9 @@ NODE_INPUTS = {
     "indoor": ["BLD-08", "BLD-09", "BLD-12", "HLT-24"], "pop": ["POP-01", "POP-02", "POP-03"],
     "exposure": ["HLT-23", "BLD-04"], "illness": ["HLT-12", "C-H11"], "demand": ["HLT-17", "C-H12", "C-H13"],
 }
+# 【中文】数据分级沿主线的边向下游继承；暂缓的边（D1、D2、D12、D13）不参与 / tiers are inherited along core edges only
 MAP_EDGES = [e for v in EDGES.values() for e in v] + [["indoor", "exposure"], ["pop", "exposure"], ["urban", "exposure"],
-                                                      ["overload", "failure"], ["bg", "river"], ["river", "margin"]]
+                                                      ["bg", "exposure"], ["base", "hotspot"], ["bg", "rut"], ["urban", "rut"]]
 TIERS = ["T1", "T2", "T3", "T4"]
 
 
@@ -136,15 +137,14 @@ def main(argv=None):
             t0 = time.time()
             rng = np.random.default_rng(args.seed)          # 【中文】公共随机数 / common random numbers
             th = params.sample(args.runs, rng)
-            shed = None if case == "R06" else adequacy_shed(river, Ta, th, 0.0 if case == "R05" else dT)
             local = case != "R01"
             sim = simulate_core(net, Ta + dT, th, rng, day_mask,
                                 Ta_sub=Ta_sub + dT if (local and Ta_sub is not None) else None,
                                 Ta_zone=Ta_zone + dT if (local and Ta_zone is not None) else None,
-                                shed=shed, off=frozenset([case]) & set(KNOCKOUTS), lineb=LB)
+                                off=frozenset([case]) & set(KNOCKOUTS), lineb=LB)
             acc = access_runs(actx, net, sim, th, hours, tz, off=frozenset([case]) & {"R14", "R17"})
             care_ = acc.pop("_care_runs")
-            ed = time_to_care(CP, sim, th, acc, off=frozenset([case]) & {"R14", "R17", "R22"})
+            ed = time_to_care(CP, sim, th, acc, off=frozenset([case]) & {"R14", "R17", "R22", "R27"}, dT=dT)
             ttc, wait = ed["time"], ed["wait"]
             t = sim["totals"]
             res[dT][case] = {"time_to_care_min": round(float(ttc.mean()), 4), "wait_increase_min": round(float(wait.mean()), 4),
@@ -204,11 +204,10 @@ def run_variants(args, scen, Ta, Ta_sub, Ta_zone, day_mask, hours, tz, params, n
                 if not k.startswith("_"):
                     th[k] = np.full(args.runs, float(v))
             care.RHO_MAX = fix.get("_rho_max", 0.95)
-            shed = adequacy_shed(river, Ta, th, dT)
             sim = simulate_core(net, Ta + dT, th, rng, day_mask, Ta_sub=None if Ta_sub is None else Ta_sub + dT,
-                                Ta_zone=None if Ta_zone is None else Ta_zone + dT, shed=shed, lineb=LB)
+                                Ta_zone=None if Ta_zone is None else Ta_zone + dT, lineb=LB)
             acc = access_runs(actx, net, sim, th, hours, tz)
-            ed = time_to_care(CP, sim, th, acc)
+            ed = time_to_care(CP, sim, th, acc, dT=dT)
             t = ed["time"]
             res[f"{dT:+.0f}"][name] = {"time_to_care_mean": round(float(t.mean()), 2), "time_to_care_median": round(float(np.median(t)), 2),
                                        "time_to_care_p95": round(float(np.percentile(t, 95)), 1),

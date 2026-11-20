@@ -1,11 +1,11 @@
 """
 【中文】精简主线模型（骨架）。只保留文献中证据最强的一条链，见 docs/CORE_MODEL.md 和 twin/core.yaml：
 
-    K1  城市气温场 θ_A(x,t)                                  M-6
-    K2  气温 → 负荷倍数 → 标幺负荷 K                         Eq. 2–3   C-P1
-    K3  IEEE C57.91 热点温度 → 热失效                         Eq. 4–7   C-P2, C-P3
-    K4  系统供需缺口 → 轮流停电                               M-18（只含负荷侧）C-P9.avail, C-P9.imp
-    K5  供电依赖（拓扑）→ 分区停电；固定修复时长              Eq. 9–10  C-P5, C-P6
+    K1  城市气温场 θ_A(x,t)（背景气候与城市基础信息只作输入）  M-6
+    K2  本地气温 → 制冷负荷；基础负荷不随气温（2026-11-20 拆分）  Eq. 2–3   C-P1
+    K3  基础负荷 + 制冷负荷 → IEEE C57.91 热点温度 → 热失效    Eq. 4–7   C-P2, C-P3
+    K5  失效的变电站 → 它自己供电的分区停电；固定修复时长（2026-11-20 起不沿拓扑传播，供电依赖暂缓 D13）
+                                                              Eq. 10    C-P6
     K6  分区停电 → 水厂（备用）→ 储水耗尽 → 断水              Eq. 13    C-W2, C-W3
     K7  医院：分区停电且备用电源失效，或断水超过院内储水时长（2026-11-17 起医疗设施只保留医院）
                                                               Eq. 11    C-H1, C-H18
@@ -18,9 +18,15 @@
 与完整模型（pipeline/twin/cascade.py）相比去掉：同电压站之间的负荷转移与过载跳闸（C-P4，Motter–Lai）、
 河温降额（M-18 供给侧）、路面模块（Eq. 15）、室外复合暴露阈值（C-POP2，由 K9 取代）。
 K8 的可达性按每次运行的实际状态计算，而不是完整模型中的期望通行能力。
+2026-11-20：用电负荷拆成基础负荷与制冷负荷，仍驱动 IEEE 热点模型（power="load"，默认）；power="fragility" 是同日做过对比的
+两参数气温脆弱性曲线（M-48，CORE_MODEL §4.7）。系统缺口（原 K4）暂缓为 D12，只在 pipeline.core --shortfall 时计算；
+供电依赖（沿拓扑向下游传播）暂缓为 D13，supply_dependency=True 时恢复。车辙 → 行程时间（K11）在 pipeline.core 中计算。
 
 Core (skeleton) model: the main chain only. Compared with the full model it drops peer load transfer and
 overload trips (C-P4), river derating, the pavement module and the outdoor compound threshold (replaced by K9).
+Since 2026-11-20: load is split into base and cooling load, still driving the IEEE hot spot (power="load", default);
+power="fragility" is the two-parameter air-temperature fragility compared that day. The system shortfall (D12) and
+supply dependency along the topology (D13) are deferred; rutting → travel time (K11) is computed in pipeline.core.
 """
 from __future__ import annotations
 
@@ -29,15 +35,14 @@ from scipy.special import ndtr
 
 from .cascade import Network, c_to_f
 
-# 【中文】敲除实验（因果贡献）可关掉的关系，编号同关系图集 R01–R19 / relations that can be switched off
+# 【中文】敲除实验（因果贡献）可关掉的关系，编号同关系图集 / relations that can be switched off
 # for the knockout (causal contribution) analysis; ids follow the relation atlas.
 KNOCKOUTS = {
-    "R02": "load does not respond to temperature (m = 1)",
+    "R02": "cooling load does not respond to temperature (load = base load)",
     "R03a": "hot spot sees each station's period-mean ambient instead of the hourly value",
-    "R03b": "hot spot sees each run's period-mean load instead of the hourly load",
+    "R03b": "hot spot sees each run's period-mean cooling load instead of the hourly load",
     "R04": "no thermal failures (p = 0)",
     "R07": "a failed station returns after one hour",
-    "R08": "no upstream propagation: a station is out only if it failed or was shed itself",
     "R09": "water plants never lose power",
     "R10": "no storage buffer: water is lost as soon as every plant stops",
     "R11": "hospitals never lose function from a zone outage",
@@ -48,46 +53,106 @@ KNOCKOUTS = {
     "R21": "heat exposure does not raise heat-illness visits (k = 0)",
     "R24": "ventilator and other device users make no visits during outages",
 }
+# 【中文】只在 power="fragility" 时有意义的敲除 / knockout that only applies with power="fragility"
+FRAGILITY_KNOCKOUTS = {"R03": "heat stress sees each station's period-mean temperature instead of the hourly value"}
 
-# 【中文】骨架模型用到的参数（敏感性分析只看这些）/ parameters used by the core model
-CORE_PARAMS = ["C-P1", "C-P1.T0", "C-P1.Kd", "C-P1.Td", "C-P2.dTOR", "C-P2.dHR", "C-P2.R", "C-P2.n", "C-P2.m",
-               "C-P2.tau", "C-P3", "C-P3.sigma", "C-P6", "C-P9.avail", "C-P9.imp", "C-H1", "C-H18", "C-W2", "C-W3",
-               "C-T2", "C-T5", "C-B1", "C-B2", "C-B3", "C-B4", "C-H10",
-               "C-H11", "C-H11.a", "C-H12", "C-H13", "C-H14", "C-H15", "C-H16"]
+# 【中文】骨架模型用到的参数（敏感性分析只看这些）；车辙 C-T8、C-T11、C-T12 由 pipeline.core 使用
+# parameters used by the core model; rutting C-T8, C-T11, C-T12 are used in pipeline.core
+LOAD_PARAMS = ["C-P1", "C-P1.T0", "C-P1.Kd", "C-P1.Td", "C-P2.dTOR", "C-P2.dHR", "C-P2.R", "C-P2.n", "C-P2.m",
+               "C-P2.tau", "C-P3", "C-P3.sigma"]
+FRAGILITY_PARAMS = ["C-P11", "C-P11.sigma", "C-P11.tau", "C-P11.w"]
+SHORTFALL_PARAMS = ["C-P9.avail", "C-P9.imp"]
+CORE_PARAMS = LOAD_PARAMS + ["C-P6", "C-H1", "C-H18", "C-W2", "C-W3",
+                             "C-T2", "C-T5", "C-T8", "C-T11", "C-T12", "C-B1", "C-B2", "C-B3", "C-B4", "C-H10",
+                             "C-H11", "C-H11.a", "C-H12", "C-H13", "C-H14", "C-H15", "C-H16"]
+IEEE_PARAMS = LOAD_PARAMS + SHORTFALL_PARAMS          # 【中文】兼容旧名 / former name
+
+# 【中文】C-P11 的取值范围由下面的换算得到：把负荷与热点参数的三角分布换算成 T50、σ_T、w（2026-11-19 对比试验，
+# 2,000 次运行中两种做法的就医时间逐次相关 0.99），见 docs/CORE_MODEL.md §4.7。
+# The C-P11 ranges come from this mapping of the load and hot-spot draws (2026-11-19 comparison, CORE_MODEL §4.7).
+FRAGILITY_ANCHOR = 2.33   # 【中文】Φ(−2.33) ≈ 1% / anchor of the tail linearisation
+
+
+def _hot_spot_ss(T_c, th: dict, part: str = "all"):
+    """【中文】稳态热点温度（K2–K3，所有站同一组参数）作为本地气温的函数；part="oil" 只取有滞后的顶油温升部分。
+    Steady-state hot spot vs local air temperature; part="oil" returns only the lagged top-oil rise."""
+    beta, T0, Kd, Td = (th[k][:, None] for k in ("C-P1", "C-P1.T0", "C-P1.Kd", "C-P1.Td"))
+    dTOR, dHR, R, n_, m_ = (th[k][:, None] for k in ("C-P2.dTOR", "C-P2.dHR", "C-P2.R", "C-P2.n", "C-P2.m"))
+    K = Kd * (1 + beta * np.maximum(0, c_to_f(T_c) - T0)) / (1 + beta * np.maximum(0, Td - T0))
+    oil = dTOR * ((K ** 2 * R + 1) / (R + 1)) ** n_
+    return oil if part == "oil" else T_c + oil + dHR * K ** (2 * m_)
+
+
+def fragility_from_ieee(th: dict) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """【中文】把 K2–K3 的参数换算成气温脆弱性曲线 p = Φ((T_eff − T50)/σ_T)：T50 是稳态热点温度达到 θ50 时的本地气温，
+    σ_T = σ / (该处热点温度对气温的斜率)；w 是斜率中有滞后的顶油部分所占比例，
+    T_eff = (1 − w)·当前气温 + w·按顶油时间常数滞后的气温。每次运行一组值，形状 (N, 1)。
+
+    Maps the K2–K3 draws to an air-temperature fragility: T50 is the local air temperature at which the steady-state
+    hot spot reaches theta_50, sigma_T = sigma divided by the hot spot's slope there, and w is the lagged (top-oil)
+    share of that slope, so T_eff = (1 - w) T(t) + w EMA_tau(T)."""
+    th50, sig = th["C-P3"][:, None], th["C-P3.sigma"][:, None]
+    # 【中文】在曲线下尾（热点温度 = θ50 − ANCHOR·σ，每小时失效概率约 1%）做线性化，因为失效几乎都发生在这一段
+    # linearise in the lower tail (hot spot = theta_50 - ANCHOR sigma), where almost all failures occur
+    target = th50 - FRAGILITY_ANCHOR * sig
+    lo, hi = np.full_like(th50, -20.0), np.full_like(th50, 120.0)
+    for _ in range(60):                                   # 【中文】二分法 / bisection (hot spot rises with temperature)
+        mid = (lo + hi) / 2
+        above = _hot_spot_ss(mid, th) >= target
+        hi, lo = np.where(above, mid, hi), np.where(above, lo, mid)
+    Ta_ = (lo + hi) / 2
+    d = lambda part: (_hot_spot_ss(Ta_ + 0.05, th, part) - _hot_spot_ss(Ta_ - 0.05, th, part)) / 0.1  # noqa: E731
+    slope = np.maximum(d("all"), 1e-6)
+    sigT = sig / slope
+    return Ta_ + FRAGILITY_ANCHOR * sigT, sigT, np.clip(d("oil") / slope, 0, 1)
 
 
 def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Generator, day_mask: np.ndarray,
                   Ta_sub: np.ndarray | None = None, Ta_zone: np.ndarray | None = None,
-                  shed: np.ndarray | None = None, off: frozenset = frozenset(), lineb: dict | None = None) -> dict:
+                  shed: np.ndarray | None = None, off: frozenset = frozenset(), lineb: dict | None = None,
+                  power: str = "load", supply_dependency: bool = False) -> dict:
     """【中文】主循环。Ta_c (H,)：BNA 逐小时气温；Ta_sub (H, S) / Ta_zone (H, Z)：本地气温（K1），不给时用 Ta_c；
     day_mask (H,)：当地 08:00–20:00 为 True（K9 白天得热）；shed (N, H)：系统缺口造成的轮流停电比例（K4）。
 
     Main loop. day_mask marks local 08:00–20:00 (daytime gains in K9); shed is the rotating-outage share (K4).
-    off: relation ids from KNOCKOUTS to switch off (R01, R05, R06, R14–R17, R22 are switched in pipeline.core).
+    off: relation ids from KNOCKOUTS to switch off (R01, R14–R17, R22, R27 are switched in pipeline.core).
+    power: "load" (base + cooling load → IEEE hot spot; "ieee" is accepted as the former name) or "fragility" (M-48).
+    supply_dependency: propagate outages down the supply topology (deferred D13 since 2026-11-20).
     lineb: line B inputs {"zone_dep": device users (ventilators and other electricity-dependent equipment) per zone,
     "day": day index per hour}; without it the line B outputs stay zero. With lineb the result also carries "care":
     peak-day extra visits per zone (heat illness and device users separately) and hospital hours closed that day
     (power and water separately), used by pipeline.care."""
-    N, S, H, Z = len(th["C-P1"]), len(net.sid), len(Ta_c), len(net.zone_id)
+    N, S, H, Z = len(th["C-P6"]), len(net.sid), len(Ta_c), len(net.zone_id)
+    power = "load" if power == "ieee" else power
     col = lambda k: th[k][:, None]  # noqa: E731
     Ta_sub = np.repeat(np.asarray(Ta_c, float)[:, None], S, axis=1) if Ta_sub is None else np.asarray(Ta_sub, float)
     Ta_zone = np.repeat(np.asarray(Ta_c, float)[:, None], Z, axis=1) if Ta_zone is None else np.asarray(Ta_zone, float)
-    TF = c_to_f(Ta_sub)
     serving = net.subs["serving"].to_numpy()
 
-    # K2–K3 参数 / load and transformer parameters
-    beta, T0, Kd, Td = col("C-P1"), col("C-P1.T0"), col("C-P1.Kd"), col("C-P1.Td")
-    dTOR, dHR, R, n_, m_, tau = (col(k) for k in ("C-P2.dTOR", "C-P2.dHR", "C-P2.R", "C-P2.n", "C-P2.m", "C-P2.tau"))
-    th50, sig = col("C-P3"), col("C-P3.sigma")
     rep = np.ones((N, 1), int) if "R07" in off else np.round(th["C-P6"]).astype(int)[:, None]
-    mTd = 1 + beta * np.maximum(0, Td - T0)
     repair = np.zeros((N, S), dtype=int)
-    dTO = None
-    # 【中文】R03a / R03b 敲除：用整段时期的平均环境气温或平均负荷倍数 / period means for R03a / R03b
-    Ta_mean = Ta_sub.mean(0)[None, :]
-    m_mean = None
-    if "R03b" in off:
-        m_mean = 1 + beta * np.stack([np.maximum(0, TF[:, s_] - T0).mean(1) for s_ in range(S)], axis=1)
+    Ta_mean = Ta_sub.mean(0)[None, :]          # 【中文】R03 / R03a 敲除：整段时期的平均气温 / period-mean temperature
+    if power == "fragility":
+        # 【中文】K3（2026-11-20）：热应力 T_eff = (1 − w)·当前本地气温 + w·按时间常数 τ 滞后的本地气温，
+        # 每小时失效概率 p = Φ((T_eff − T50)/σ_T)
+        # K3 (2026-11-20): heat stress T_eff mixes the current and lagged local temperature; p = Φ((T_eff − T50)/σ_T)
+        T50, sigT, w_lag, tau = col("C-P11"), col("C-P11.sigma"), col("C-P11.w"), col("C-P11.tau")
+        T_lag = None
+    elif power == "load":
+        # 【中文】K2–K3：负荷 = 基础负荷（1）+ 制冷负荷 β·max(0, T − T0)，以设计温度 Td 时的总负荷归一为 K_design；
+        # 再进 IEEE C57.91 热点模型。基础负荷在设计日所占比例为 1 / m(Td)。
+        # K2–K3: load = base (1) + cooling beta max(0, T - T0), normalised to K_design at Td, then the IEEE hot spot
+        TF = c_to_f(Ta_sub)
+        beta, T0, Kd, Td = col("C-P1"), col("C-P1.T0"), col("C-P1.Kd"), col("C-P1.Td")
+        dTOR, dHR, R, n_, m_, tau = (col(k) for k in ("C-P2.dTOR", "C-P2.dHR", "C-P2.R", "C-P2.n", "C-P2.m", "C-P2.tau"))
+        th50, sig = col("C-P3"), col("C-P3.sigma")
+        mTd = 1 + beta * np.maximum(0, Td - T0)
+        dTO = None
+        m_mean = None
+        if "R03b" in off:
+            m_mean = 1 + beta * np.stack([np.maximum(0, TF[:, s_] - T0).mean(1) for s_ in range(S)], axis=1)
+    else:
+        raise ValueError(f"power must be 'load' or 'fragility', not {power!r}")
 
     # K6–K8 下游资产 / downstream assets
     hs = net.sub_of(net.hosp)
@@ -142,14 +207,21 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
                                     "dep_visits", "heat_visits_excess")}
 
     for h in range(H):
-        # K2：负荷倍数与标幺负荷（无负荷转移）/ load multiplier and per-unit load (no transfer)
-        m = np.ones_like(beta) if "R02" in off else 1 + beta * np.maximum(0, TF[h] - T0)
-        K = Kd * (m_mean if "R03b" in off else m) / mTd
-        # K3：顶油温升一阶滞后 + 热点温度 → 热失效 / top-oil lag, hot spot and thermal failure
-        dTOU = dTOR * ((K ** 2 * R + 1) / (R + 1)) ** n_
-        dTO = dTOU if dTO is None else dTO + (dTOU - dTO) * (1 - np.exp(-1.0 / tau))
-        thetaH = (Ta_mean if "R03a" in off else Ta_sub[h][None, :]) + dTO + dHR * K ** (2 * m_)
-        p = np.zeros_like(thetaH) if "R04" in off else ndtr((thetaH - th50) / sig)
+        if power == "fragility":
+            Ta_h = np.broadcast_to(Ta_mean if ("R03" in off or "R03a" in off) else Ta_sub[h][None, :], (N, S))
+            T_lag = Ta_h.copy() if T_lag is None else T_lag + (Ta_h - T_lag) * (1 - np.exp(-1.0 / tau))
+            T_eff = (1 - w_lag) * Ta_h + w_lag * T_lag
+            thetaH = T_eff
+            p = np.zeros_like(thetaH) if "R04" in off else ndtr((T_eff - T50) / sigT)
+        else:
+            # K2：基础负荷 1 + 制冷负荷，按设计日归一的标幺负荷（无负荷转移）/ base + cooling load, per unit
+            cool = np.zeros_like(beta) if "R02" in off else beta * np.maximum(0, TF[h] - T0)
+            K = Kd * (m_mean if "R03b" in off else 1 + cool) / mTd
+            # K3：顶油温升一阶滞后 + 热点温度 → 热失效 / top-oil lag, hot spot and thermal failure
+            dTOU = dTOR * ((K ** 2 * R + 1) / (R + 1)) ** n_
+            dTO = dTOU if dTO is None else dTO + (dTOU - dTO) * (1 - np.exp(-1.0 / tau))
+            thetaH = (Ta_mean if ("R03" in off or "R03a" in off) else Ta_sub[h][None, :]) + dTO + dHR * K ** (2 * m_)
+            p = np.zeros_like(thetaH) if "R04" in off else ndtr((thetaH - th50) / sig)
         failed = repair > 0
         new_t = ~failed & (rng.random((N, S)) < p)
         repair = np.where(new_t, rep, repair)
@@ -161,9 +233,10 @@ def simulate_core(net: Network, Ta_c: np.ndarray, th: dict, rng: np.random.Gener
         u_shed = rng.random((N, S))
         shed_now = (u_shed < shed[:, h][:, None]) & serving[None, :] if shed is not None else np.zeros((N, S), bool)
 
-        # K5：供电依赖，自上而下传播到不动点 / supply dependency to a fixed point
+        # K5：失效或被切除的站停电；供电依赖（向下游传播）2026-11-20 起暂缓（D13），supply_dependency=True 时恢复
+        # K5: failed or shed stations are out; propagation down the topology is deferred (D13)
         up = ~failed & ~shed_now
-        for _ in range(0 if "R08" in off else S):
+        for _ in range(S if (supply_dependency and "R08" not in off) else 0):
             nxt = up & (~net.has_supply[None, :] | ((up.astype(float) @ net.U) > 0))
             if (nxt == up).all():
                 break

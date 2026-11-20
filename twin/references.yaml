@@ -493,3 +493,13 @@ hhs_empower:
   url: https://empowerprogram.hhs.gov/
   year: 2026
   verified: ZIP layer for Davidson downloaded 2026-11-10 (raw/health/empower_zip_davidson.json); claims month not stated.
+wang2014roughness:
+  apa: 'Wang, T., Harvey, J., Lea, J., & Kim, C. (2014). Impact of pavement roughness on vehicle free-flow speed. Journal of Transportation Engineering, 140(9). https://doi.org/10.1061/(ASCE)TE.1943-5436.0000689'
+  doi: 10.1061/(ASCE)TE.1943-5436.0000689
+  year: 2014
+  verified: Crossref metadata checked 2026-11-20 (volume 140, issue 9; Crossref gives no page or article number). California freeways 2000–2011; an IRI increase of 1 m/km (63 in/mi) lowers free-flow speed by about 0.3–0.4 mph.
+salamanca2014:
+  apa: 'Salamanca, F., Georgescu, M., Mahalov, A., Moustaoui, M., & Wang, M. (2014). Anthropogenic heating of the urban environment due to air conditioning. Journal of Geophysical Research: Atmospheres, 119(10), 5949-5965. https://doi.org/10.1002/2013JD021225'
+  doi: 10.1002/2013JD021225
+  year: 2014
+  verified: Crossref metadata checked 2026-11-20. Phoenix simulations; air-conditioning waste heat raises night-time urban air temperature by up to about 1 °C.

@@ -21,7 +21,7 @@ import numpy as np
 from .adapters.base import write_json
 from .build import ROOT
 
-CAUSES = ("heat", "device", "power", "water", "congestion")
+CAUSES = ("heat", "device", "power", "water", "congestion", "rutting")
 BINS = [("below p50", 0, 50), ("p50–75", 50, 75), ("p75–90", 75, 90), ("p90–95", 90, 95), ("p95–99", 95, 99), ("p99 and above", 99, 100.01)]
 CHAIN = [("thermal failures", "tot:thermal"), ("person-hours without power", "tot:pop_hours"),
          ("hospital hours closed (summer)", "tot:hospital_hours"), ("peak-day heat-illness visits", "tot:peak_day_heat_visits"),
@@ -31,12 +31,12 @@ CHAIN = [("thermal failures", "tot:thermal"), ("person-hours without power", "to
          ("q (visit probability)", "th:C-H13"), ("battery (h)", "th:C-H12"), ("rho0", "th:C-H14"), ("D0", "th:C-H15"), ("W0 (min)", "th:C-H16")]
 
 # 【中文】通径模型：外生参数 → 中介变量 → 结局，按模型的因果顺序 / path model in the model's causal order
-EXO = {"K_design": "th:C-P1.Kd", "theta50": "th:C-P3", "sigma": "th:C-P3.sigma", "repair": "th:C-P6",
+EXO = {"K_design": "th:C-P1.Kd", "cool_slope": "th:C-P1", "theta50": "th:C-P3", "sigma": "th:C-P3.sigma", "repair": "th:C-P6",
        "hosp_backup": "th:C-H1", "q": "th:C-H13", "battery": "th:C-H12", "k_heat": "th:C-H11",
        "rho0": "th:C-H14", "D0": "th:C-H15", "W0": "th:C-H16"}
 MED = {"failures": ("tot:thermal", True), "outage": ("tot:pop_hours", True), "hosp_closed": ("tot:hospital_hours", True),
        "device_peak": ("tot:peak_day_dep_visits", True), "heat_peak": ("tot:peak_day_heat_visits", False)}
-EQ = {"failures": ["K_design", "theta50", "sigma"],
+EQ = {"failures": ["K_design", "cool_slope", "theta50", "sigma"],
       "outage": ["failures", "repair"],
       "hosp_closed": ["outage", "hosp_backup"],
       "device_peak": ["outage", "q", "battery"],

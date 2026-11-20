@@ -28,7 +28,7 @@ from .adapters.base import write_json
 from .build import ROOT, code_version
 from .cascade import air_field_temperatures, load, river_inputs
 from .twin.cascade import Network, c_to_f
-from .twin.core import CORE_PARAMS, simulate_core
+from .twin.core import CORE_PARAMS, FRAGILITY_PARAMS, SHORTFALL_PARAMS, simulate_core
 from .twin.params import Params
 from .twin.river import shed_fraction
 from .twin.validate import spearman_ci
@@ -37,7 +37,7 @@ from .twin.validate import spearman_ci
 COMPARE = ["thermal", "pop_hours", "hospital_hours", "water_out_hours", "shed_station_hours"]
 
 
-DECOMP_KEYS = ("heat", "device", "power", "water", "congestion")
+DECOMP_KEYS = ("heat", "device", "power", "water", "congestion", "rutting")
 
 
 def decomposition_summary(ed: dict) -> dict:
@@ -49,7 +49,7 @@ def decomposition_summary(ed: dict) -> dict:
     for g, m in groups.items():
         out[g] = {k: round(float(dc[k][m].mean()), 3) for k in DECOMP_KEYS} | {
             "total": round(float(t[m].mean()), 3), "runs": int(m.sum()),
-            "travel": round(float(dc["travel"][m].mean() + dc["congestion"][m].mean()), 3),
+            "travel": round(float(dc["travel"][m].mean() + dc["congestion"][m].mean() + dc["rutting"][m].mean()), 3),
             "wait": round(float(dc["wait"][m].mean()), 3),
             "share_visits_at_cap": round(float(ed["share_visits_at_cap"][m].mean()), 3),
             "hospitals_at_cap": round(float(ed["hospitals_at_cap"][m].mean()), 2)}
@@ -146,15 +146,22 @@ def lineb_inputs(assets, net, hours, tz):
             "day": pd.factorize(hours.tz_convert(tz).date)[0]}
 
 
-def time_to_care(cp, sim, th, acc, off=frozenset(), decompose=False):
+def time_to_care(cp, sim, th, acc, off=frozenset(), decompose=False, dT=0.0):
     """【中文】就医时间（每次急诊就诊的路程 + 等待增量）；decompose=True 时附上 Shapley 分解。见 pipeline.care。
-    Time to care per ED visit (travel + waiting), optionally with its Shapley decomposition; see pipeline.care."""
+    K11 车辙（M-49）：情景升温 dT 使车辙加深 → 路面变粗糙 → 车速下降，增量可加，与拥堵一样单独列出（敲除 R27）。
+    Time to care per ED visit (travel + waiting), optionally with its Shapley decomposition; see pipeline.care.
+    K11 rutting (M-49) adds a separate, additive delay from scenario warming (knockout R27)."""
     cong = None if (off & {"R14", "R15", "R16"}) else acc.pop("_congestion_hospital")
     acc.pop("_congestion_hospital", None)
     acc.pop("_care_runs", None)
     ed = care.ed_time(cp, sim["care"], th, congestion=cong, off=off)
+    n = len(ed["time"])
+    rut = np.zeros(n) if "R27" in off else cp.get("rut_unit", 0.0) * dT * th["C-T8"] * th["C-T11"] * th["C-T12"]
+    ed["rutting"] = rut
+    ed["time"] = ed["time"] + rut
     if decompose:
         ed["decomp"] = care.decompose(cp, sim["care"], th, congestion=cong)
+        ed["decomp"]["rutting"] = rut
     return ed
 
 
@@ -168,6 +175,11 @@ def main(argv=None):
     ap.add_argument("--air-field", choices=["on", "off"], default="on")
     ap.add_argument("--outage-source", default="eaglei_davidson")
     ap.add_argument("--tag", default="", help="write to site/data/twin/core/<tag>/ (e.g. a heat-wave run) instead of the main core output")
+    ap.add_argument("--power", choices=["load", "fragility"], default="load",
+                    help="K2–K3 power model: base + cooling load → IEEE hot spot (default) or the two-parameter air-temperature "
+                         "fragility (M-48, CORE_MODEL §4.7)")
+    ap.add_argument("--shortfall", action="store_true", help="add the TVA system shortfall (deferred D12)")
+    ap.add_argument("--supply-dependency", action="store_true", help="propagate outages down the supply topology (deferred D13)")
     args = ap.parse_args(argv)
     scen = [float(x) for x in args.scenarios.split(",")]
     if 0.0 not in scen:
@@ -186,7 +198,8 @@ def main(argv=None):
     assets, deps, couplings = load(std, "assets"), load(std, "dependencies"), load(std, "couplings")
     drivers, events = load(std, "drivers"), load(std, "events")
     build = json.loads((ROOT / proj.get("site_data_dir", "site/data") / "build.json").read_text(encoding="utf-8"))
-    missing = [k for k in CORE_PARAMS if k not in set(couplings["coupling_id"])]
+    PARAMS = CORE_PARAMS + (FRAGILITY_PARAMS if args.power == "fragility" else []) + (SHORTFALL_PARAMS if args.shortfall else [])
+    missing = [k for k in PARAMS if k not in set(couplings["coupling_id"])]
     if missing:
         sys.exit(f"couplings table lacks {missing}; run `python -m pipeline.build` after editing twin/couplings.csv")
 
@@ -209,21 +222,25 @@ def main(argv=None):
     print(f"[core] access network: {actx['net']['stats']['edges']} edges, {len(actx['cells'])} population cells")
     LB = lineb_inputs(assets, net, hours, tz)
     CP = care.prepare(actx, net, assets)
-    print(f"[core] line B: {LB['zone_dep'].sum():,.0f} ventilator and other device users")
+    print(f"[core] line B: {LB['zone_dep'].sum():,.0f} ventilator and other device users; rutting: "
+          f"{actx['net']['stats'].get('rutting_length_share', 0):.1%} of road length has a measured rut depth, "
+          f"{CP['rut_unit']:.4f} min per ED visit per mph-per-inch slowdown")
     sims, th0 = {}, None
     for dT in scen:
         rng = np.random.default_rng(args.seed)          # 【中文】公共随机数 / common random numbers
         th = params.sample(args.runs, rng)
         th0 = th if dT == 0 else th0
         print(f"[core] {dT:+.0f} °C: {args.runs} runs …")
-        shed = adequacy_shed(river, Ta, th, dT)
+        # 【中文】系统缺口（原 K4）2026-11-20 起暂缓（D12），只在 --shortfall 时计算 / K4 shortfall only with --shortfall
+        shed = adequacy_shed(river, Ta, th, dT) if args.shortfall else None
         sims[dT] = simulate_core(net, Ta + dT, th, rng, day_mask,
                                  Ta_sub=None if Ta_sub is None else Ta_sub + dT,
-                                 Ta_zone=None if Ta_zone is None else Ta_zone + dT, shed=shed, lineb=LB)
+                                 Ta_zone=None if Ta_zone is None else Ta_zone + dT, shed=shed, lineb=LB, power=args.power,
+                                 supply_dependency=args.supply_dependency)
         sims[dT]["runs_with_shed"] = None if shed is None else round(float((shed.max(1) > 0).mean()), 4)
         sims[dT]["access"] = access_runs(actx, net, sims[dT], th, hours, tz)
         # 【中文】就医时间：每次急诊就诊的路程（含改道与拥堵）+ 分医院的等待增量 / per ED visit travel + waiting
-        sims[dT]["ed"] = time_to_care(CP, sims[dT], th, sims[dT]["access"], decompose=True)
+        sims[dT]["ed"] = time_to_care(CP, sims[dT], th, sims[dT]["access"], decompose=True, dT=dT)
         sims[dT]["th"] = th
     mc = sims[0.0]
     tot = mc["totals"]
@@ -238,7 +255,7 @@ def main(argv=None):
 
     # ------------------------------------------------------------------ sensitivity
     sens = []
-    for k in CORE_PARAMS:
+    for k in PARAMS:
         v = th0[k]
         if np.ptp(v) == 0:
             continue
@@ -265,7 +282,8 @@ def main(argv=None):
     run = {"run_id": run_id, "model": "core skeleton (docs/CORE_MODEL.md)", "created": stamp.isoformat(timespec="seconds"),
            "code_version": code_version(), "inputs_build_run_id": build.get("run_id"), "couplings_sha256": phash,
            "seed": args.seed, "runs": args.runs, "period": [args.start, args.end], "timezone": tz,
-           "scenarios_delta_c": scen, "air_field": air_info, "outage_source": args.outage_source, "hours": len(hours),
+           "scenarios_delta_c": scen, "power_model": args.power,
+           "shortfall": args.shortfall, "supply_dependency": args.supply_dependency, "rut_unit_min": round(CP["rut_unit"], 5), "air_field": air_info, "outage_source": args.outage_source, "hours": len(hours),
            "links": [k["id"] for k in core_spec["links"]], "deferred": [d["id"] for d in core_spec["deferred"]],
            "network": {"substations": len(net.sid), "zones": len(net.zone_id), "supply_edges": int(net.U.sum()),
                        "hospitals": len(net.hosp),
@@ -281,14 +299,15 @@ def main(argv=None):
             round(float(np.nanmax(r["hourly"]["indoor_ac_max_c"])), 1),
             "max_air_temp_c": round(float(np.max(Ta) + dT), 1), "access": r["access"],
             "time_to_care_min": q(r["ed"]["time"]), "ed_travel_increase_min": q(r["ed"]["travel"]),
-            "ed_congestion_min": q(r["ed"].get("congestion", np.zeros(1))), "wait_increase_min": q(r["ed"]["wait"]),
+            "ed_congestion_min": q(r["ed"].get("congestion", np.zeros(1))), "ed_rutting_min": q(r["ed"]["rutting"]),
+            "wait_increase_min": q(r["ed"]["wait"]),
             "share_visits_at_cap": q(r["ed"]["share_visits_at_cap"]), "decomposition": decomposition_summary(r["ed"])}
     summary = run | {"population_in_zones": int(net.zone_pop.sum()), "elderly_in_zones": int(net.zone_eld.sum()),
                      "poverty_in_zones": int(net.zone_pov.sum()), "scenarios": scen_summary,
                      "validation": val, "sensitivity": sens, "full_model": full}
     res_dir = std / "results" / run_id
     res_dir.mkdir(parents=True, exist_ok=True)
-    write_json(res_dir / "run.json", run | {"parameter_draws": {k: th0[k].tolist() for k in CORE_PARAMS}})
+    write_json(res_dir / "run.json", run | {"parameter_draws": {k: th0[k].tolist() for k in PARAMS}})
     write_json(res_dir / "summary.json", summary)
     write_json(site / "summary.json", summary)
     write_json(site / "timeseries.json", {
@@ -311,7 +330,7 @@ def main(argv=None):
     write_json(site / "stress_hours.json", stress)
     # 【中文】逐次运行的明细，供 pipeline.extremes 做极端情况分析与通径分析 / per-run detail for pipeline.extremes
     for dT, r in sims.items():
-        np.savez_compressed(res_dir / f"runs_{dT:+.0f}.npz", **{f"th:{k}": r["th"][k] for k in CORE_PARAMS},
+        np.savez_compressed(res_dir / f"runs_{dT:+.0f}.npz", **{f"th:{k}": r["th"][k] for k in PARAMS},
                             **{f"tot:{k}": v for k, v in r["totals"].items()},
                             **{f"ed:{k}": v for k, v in r["ed"].items() if k != "decomp"},
                             **{f"dec:{k}": v for k, v in r["ed"]["decomp"].items()},

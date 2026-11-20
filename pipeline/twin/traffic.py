@@ -79,6 +79,7 @@ def build_network(roads: gpd.GeoDataFrame, hpms: gpd.GeoDataFrame | None, snap_m
     mph = fallback.map(lambda d: d[2]).astype(float)
     cls = fallback.map(lambda d: d[3]).astype(object)
     matched = np.zeros(len(edges), bool)
+    rut = np.zeros(len(edges))                  # 【中文】实测车辙深度（英寸），无测量为 0 / measured rut depth (in)
     if hpms is not None and len(hpms):
         h = hpms.to_crs(edges.crs).explode(index_parts=False).reset_index(drop=True)
         ha = pd.json_normalize(h["attributes"].map(json.loads))
@@ -101,15 +102,21 @@ def build_network(roads: gpd.GeoDataFrame, hpms: gpd.GeoDataFrame | None, snap_m
         mph.iloc[ei[ok]] = sp[ok]
         fc = hpms_class(ha["f_system"].to_numpy()[hi])
         cls.iloc[ei] = fc
+        if "rutting" in ha:
+            rv = pd.to_numeric(ha["rutting"], errors="coerce").to_numpy()[hi]
+            ok = np.isfinite(rv) & (rv >= 0)
+            rut[ei[ok]] = rv[ok]
     edges["aadt"], edges["lanes"], edges["speed_mph"], edges["cap_class"] = aadt, lanes, mph, cls
     edges["hpms_matched"] = matched
+    edges["rut_in"] = rut
     edges["t0_min"] = edges["length_m"] / (edges["speed_mph"] * MPH) / 60.0
     ncomp, lab = connected_components(_adj(edges, np.ones(len(edges)), len(uniq)), directed=False)
     big = np.bincount(lab).argmax()
     stats = {"edges": int(len(edges)), "nodes": int(len(uniq)), "components": int(ncomp),
              "largest_component_node_share": round(float((lab == big).mean()), 3),
              "hpms_aadt_matched_share": round(float(matched.mean()), 3),
-             "hpms_aadt_matched_length_share": round(float(edges.loc[matched, "length_m"].sum() / edges["length_m"].sum()), 3)}
+             "hpms_aadt_matched_length_share": round(float(edges.loc[matched, "length_m"].sum() / edges["length_m"].sum()), 3),
+             "rutting_length_share": round(float(edges.loc[rut > 0, "length_m"].sum() / edges["length_m"].sum()), 3)}
     return {"edges": edges, "nodes": uniq.astype(float), "component": lab, "main": big, "stats": stats}
 
 

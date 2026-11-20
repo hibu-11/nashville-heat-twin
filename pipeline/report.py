@@ -165,7 +165,7 @@ def core_section(w, path):
         w("Not run (`python -m pipeline.core`).\n")
         return
     w(f"Run `{x['run_id']}`: {x['runs']:,} Monte Carlo runs per scenario, links {', '.join(x['links'])}; deferred "
-      f"{', '.join(x['deferred'])}. Selection and equations: [CORE_MODEL.md](CORE_MODEL.md). "
+      f"{', '.join(x['deferred'])}; power model `{x.get('power_model', 'load')}` (K2–K3), supply dependency {'on' if x.get('supply_dependency') else 'off (D13)'}. Selection and equations: [CORE_MODEL.md](CORE_MODEL.md). "
       f"Population in zones {n(x['population_in_zones'])} (65+ {n(x['elderly_in_zones'])}, below poverty {n(x['poverty_in_zones'])}).\n")
     full = (x.get("full_model") or {}).get("scenarios", {})
 
@@ -201,7 +201,7 @@ def core_section(w, path):
             ("… from power (backup failed)", lambda v, f: n(v.get("hospital_power_hours", {}).get("mean"), 2)),
             ("… from water (on-site supply exhausted)", lambda v, f: n(v.get("hospital_water_hours", {}).get("mean"), 2)),
             ("Water-out hours (system)", lambda v, f: n(v["water_out_hours"]["mean"], 2)),
-            ("Runs with a TVA shortfall", lambda v, f: "—" if v["runs_with_shed"] is None else f"{v['runs_with_shed']:.1%}"),
+            ("Runs with a TVA shortfall (deferred D12; only with --shortfall)", lambda v, f: "—" if v["runs_with_shed"] is None else f"{v['runs_with_shed']:.1%}"),
             ("K8 runs with degraded segments or hospital closures", lambda v, f: f"{v['access']['runs_with_degraded_segments']:.1%}"),
             ("K8 hospital Δ population mean, min (p99)", lambda v, f: acc(v, "hospital")),
             ("K8 hospital largest cell increase p95, min", lambda v, f: n(v["access"]["hospital"]["largest_cell_increase_min"]["95"], 1)),
@@ -211,6 +211,7 @@ def core_section(w, path):
              f"{n(v.get('peak_day_dep_visits', {}).get('mean'), 1)}"),
             ("Per ED visit: added travel (rerouting + congestion), min", lambda v, f: qs(v, "ed_travel_increase_min", 3)),
             ("Per ED visit: added congestion only, min", lambda v, f: qs(v, "ed_congestion_min", 3)),
+            ("Per ED visit: added delay from rutting (K11), min", lambda v, f: qs(v, "ed_rutting_min", 4)),
             ("Per ED visit: added waiting, min", lambda v, f: qs(v, "wait_increase_min")),
             ("**Time to care per ED visit (travel + waiting), min**", lambda v, f: qs(v, "time_to_care_min", bold=True)),
             ("Share of visits at hospitals at the queue cap (ρ = 0.95)", lambda v, f: qs(v, "share_visits_at_cap", 3))]
@@ -265,7 +266,8 @@ def core_section(w, path):
 
 
 CAUSE_LABEL = {"heat": "heat-illness visits", "device": "device-user visits", "power": "hospital closed (power)",
-               "water": "hospital closed (water)", "congestion": "dark-signal congestion"}
+               "water": "hospital closed (water)", "congestion": "dark-signal congestion",
+               "rutting": "rutting (K11)"}
 
 
 def extremes_section(w, ex):
@@ -273,7 +275,7 @@ def extremes_section(w, ex):
     w("### 11.4 What drives the extreme runs\n")
     w("`python -m pipeline.extremes`. Each run's added time per ED visit is split by Shapley decomposition over four "
       "causes on the peak day (heat-illness visits, device-user visits, hospital capacity lost to power and to water); "
-      "congestion is additive. Runs are grouped by their time to care.\n")
+      "congestion and rutting are additive. Runs are grouped by their time to care.\n")
     for sc, d in ex["scenarios"].items():
         w(f"**{sc} °C — minutes per ED visit by cause**\n")
         w("| Runs (by time to care) | Runs | Total | " + " | ".join(CAUSE_LABEL[c] for c in CAUSE_LABEL) + " | Visits at capped hospitals |")

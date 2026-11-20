@@ -1,5 +1,5 @@
 {
- "created": "2026-11-17T18:46:28+00:00",
+ "created": "2026-11-20T20:08:19+00:00",
  "runs": 500,
  "seed": 20261027,
  "scenarios_delta_c": [
@@ -10,594 +10,475 @@
  "outcomes": {
   "2.0": {
    "base": {
-    "time_to_care_min": 10.688,
-    "wait_increase_min": 10.6516,
-    "time_to_care_median_min": 1.7062,
-    "ed_travel_increase_min": 0.0024,
-    "time_to_care_p95_min": 36.9347,
-    "care_time_loss_min": 0.106,
-    "pop_hours": 644423.7,
-    "indoor_outage_pop_hours": 53599.0,
-    "indoor_pop_hours": 53571542.6
+    "time_to_care_min": 5.8103,
+    "wait_increase_min": 5.7837,
+    "time_to_care_median_min": 1.6081,
+    "ed_travel_increase_min": 0.0011,
+    "time_to_care_p95_min": 13.6906,
+    "care_time_loss_min": 0.07,
+    "pop_hours": 347323.1,
+    "indoor_outage_pop_hours": 25066.6,
+    "indoor_pop_hours": 53543010.2
    },
    "R01": {
-    "time_to_care_min": 12.5077,
-    "wait_increase_min": 12.458,
-    "time_to_care_median_min": 1.7525,
-    "ed_travel_increase_min": 0.0022,
-    "time_to_care_p95_min": 50.6886,
-    "care_time_loss_min": 0.141,
-    "pop_hours": 841925.2,
-    "indoor_outage_pop_hours": 92299.9,
-    "indoor_pop_hours": 67908023.9
-   },
-   "R05": {
-    "time_to_care_min": 10.688,
-    "wait_increase_min": 10.6516,
-    "time_to_care_median_min": 1.7062,
-    "ed_travel_increase_min": 0.0024,
-    "time_to_care_p95_min": 36.9347,
-    "care_time_loss_min": 0.106,
-    "pop_hours": 644423.7,
-    "indoor_outage_pop_hours": 53599.0,
-    "indoor_pop_hours": 53571542.6
-   },
-   "R06": {
-    "time_to_care_min": 10.688,
-    "wait_increase_min": 10.6516,
-    "time_to_care_median_min": 1.7062,
-    "ed_travel_increase_min": 0.0024,
-    "time_to_care_p95_min": 36.9347,
-    "care_time_loss_min": 0.106,
-    "pop_hours": 644423.7,
-    "indoor_outage_pop_hours": 53599.0,
-    "indoor_pop_hours": 53571542.6
+    "time_to_care_min": 7.8466,
+    "wait_increase_min": 7.8068,
+    "time_to_care_median_min": 1.6597,
+    "ed_travel_increase_min": 0.003,
+    "time_to_care_p95_min": 20.321,
+    "care_time_loss_min": 0.103,
+    "pop_hours": 498519.5,
+    "indoor_outage_pop_hours": 45792.3,
+    "indoor_pop_hours": 67861516.3
    },
    "R14": {
-    "time_to_care_min": 10.6539,
-    "wait_increase_min": 10.6516,
-    "time_to_care_median_min": 1.6936,
-    "ed_travel_increase_min": 0.0024,
-    "time_to_care_p95_min": 36.7565,
-    "care_time_loss_min": 0.024,
-    "pop_hours": 644423.7,
-    "indoor_outage_pop_hours": 53599.0,
-    "indoor_pop_hours": 53571542.6
+    "time_to_care_min": 5.7856,
+    "wait_increase_min": 5.7837,
+    "time_to_care_median_min": 1.5978,
+    "ed_travel_increase_min": 0.0011,
+    "time_to_care_p95_min": 13.5267,
+    "care_time_loss_min": 0.01,
+    "pop_hours": 347323.1,
+    "indoor_outage_pop_hours": 25066.6,
+    "indoor_pop_hours": 53543010.2
    },
    "R17": {
-    "time_to_care_min": 10.117,
-    "wait_increase_min": 10.0829,
-    "time_to_care_median_min": 1.7039,
+    "time_to_care_min": 5.4846,
+    "wait_increase_min": 5.459,
+    "time_to_care_median_min": 1.6081,
     "ed_travel_increase_min": 0.0,
-    "time_to_care_p95_min": 36.0467,
-    "care_time_loss_min": 0.081,
-    "pop_hours": 644423.7,
-    "indoor_outage_pop_hours": 53599.0,
-    "indoor_pop_hours": 53571542.6
+    "time_to_care_p95_min": 11.5221,
+    "care_time_loss_min": 0.06,
+    "pop_hours": 347323.1,
+    "indoor_outage_pop_hours": 25066.6,
+    "indoor_pop_hours": 53543010.2
    },
    "R22": {
-    "time_to_care_min": 0.0364,
-    "wait_increase_min": -0.0,
-    "time_to_care_median_min": 0.0,
-    "ed_travel_increase_min": 0.0024,
-    "time_to_care_p95_min": 0.2112,
-    "care_time_loss_min": 0.106,
-    "pop_hours": 644423.7,
-    "indoor_outage_pop_hours": 53599.0,
-    "indoor_pop_hours": 53571542.6
+    "time_to_care_min": 0.0266,
+    "wait_increase_min": 0.0,
+    "time_to_care_median_min": 0.001,
+    "ed_travel_increase_min": 0.0011,
+    "time_to_care_p95_min": 0.1546,
+    "care_time_loss_min": 0.07,
+    "pop_hours": 347323.1,
+    "indoor_outage_pop_hours": 25066.6,
+    "indoor_pop_hours": 53543010.2
+   },
+   "R27": {
+    "time_to_care_min": 5.8094,
+    "wait_increase_min": 5.7837,
+    "time_to_care_median_min": 1.6073,
+    "ed_travel_increase_min": 0.0011,
+    "time_to_care_p95_min": 13.6897,
+    "care_time_loss_min": 0.07,
+    "pop_hours": 347323.1,
+    "indoor_outage_pop_hours": 25066.6,
+    "indoor_pop_hours": 53543010.2
    },
    "R02": {
-    "time_to_care_min": 1.54,
+    "time_to_care_min": 1.5409,
     "wait_increase_min": 1.54,
-    "time_to_care_median_min": 1.3591,
+    "time_to_care_median_min": 1.3599,
     "ed_travel_increase_min": 0.0,
-    "time_to_care_p95_min": 3.3756,
+    "time_to_care_p95_min": 3.3768,
     "care_time_loss_min": 0.0,
     "pop_hours": 0.0,
     "indoor_outage_pop_hours": 0.0,
     "indoor_pop_hours": 53517943.6
    },
    "R03a": {
-    "time_to_care_min": 2.8062,
-    "wait_increase_min": 2.8014,
-    "time_to_care_median_min": 1.4116,
-    "ed_travel_increase_min": 0.0003,
-    "time_to_care_p95_min": 4.2784,
-    "care_time_loss_min": 0.013,
-    "pop_hours": 45519.3,
-    "indoor_outage_pop_hours": 2567.3,
-    "indoor_pop_hours": 53520510.9
+    "time_to_care_min": 1.9989,
+    "wait_increase_min": 1.9937,
+    "time_to_care_median_min": 1.4179,
+    "ed_travel_increase_min": 0.0002,
+    "time_to_care_p95_min": 3.8928,
+    "care_time_loss_min": 0.011,
+    "pop_hours": 25097.3,
+    "indoor_outage_pop_hours": 1405.0,
+    "indoor_pop_hours": 53519348.6
    },
    "R03b": {
-    "time_to_care_min": 1.5409,
-    "wait_increase_min": 1.5406,
-    "time_to_care_median_min": 1.3591,
+    "time_to_care_min": 1.5412,
+    "wait_increase_min": 1.5401,
+    "time_to_care_median_min": 1.3599,
     "ed_travel_increase_min": 0.0,
-    "time_to_care_p95_min": 3.3756,
+    "time_to_care_p95_min": 3.3768,
     "care_time_loss_min": 0.001,
-    "pop_hours": 1780.9,
-    "indoor_outage_pop_hours": 10.8,
-    "indoor_pop_hours": 53517954.3
+    "pop_hours": 214.4,
+    "indoor_outage_pop_hours": 55.7,
+    "indoor_pop_hours": 53517999.2
    },
    "R04": {
-    "time_to_care_min": 1.54,
+    "time_to_care_min": 1.5409,
     "wait_increase_min": 1.54,
-    "time_to_care_median_min": 1.3591,
+    "time_to_care_median_min": 1.3599,
     "ed_travel_increase_min": 0.0,
-    "time_to_care_p95_min": 3.3756,
+    "time_to_care_p95_min": 3.3768,
     "care_time_loss_min": 0.0,
     "pop_hours": 0.0,
     "indoor_outage_pop_hours": 0.0,
     "indoor_pop_hours": 53517943.6
    },
    "R07": {
-    "time_to_care_min": 2.8971,
-    "wait_increase_min": 2.8707,
-    "time_to_care_median_min": 1.4055,
-    "ed_travel_increase_min": 0.0004,
-    "time_to_care_p95_min": 3.8914,
-    "care_time_loss_min": 0.088,
-    "pop_hours": 160244.5,
-    "indoor_outage_pop_hours": 98.5,
-    "indoor_pop_hours": 53518042.1
-   },
-   "R08": {
-    "time_to_care_min": 5.4836,
-    "wait_increase_min": 5.4605,
-    "time_to_care_median_min": 1.62,
-    "ed_travel_increase_min": 0.0007,
-    "time_to_care_p95_min": 13.1513,
-    "care_time_loss_min": 0.067,
-    "pop_hours": 343491.3,
-    "indoor_outage_pop_hours": 22748.4,
-    "indoor_pop_hours": 53540692.0
+    "time_to_care_min": 1.944,
+    "wait_increase_min": 1.9204,
+    "time_to_care_median_min": 1.3897,
+    "ed_travel_increase_min": 0.0003,
+    "time_to_care_p95_min": 3.8111,
+    "care_time_loss_min": 0.069,
+    "pop_hours": 86421.0,
+    "indoor_outage_pop_hours": 31.2,
+    "indoor_pop_hours": 53517974.8
    },
    "R09": {
-    "time_to_care_min": 10.688,
-    "wait_increase_min": 10.6516,
-    "time_to_care_median_min": 1.7062,
-    "ed_travel_increase_min": 0.0024,
-    "time_to_care_p95_min": 36.9347,
-    "care_time_loss_min": 0.106,
-    "pop_hours": 644423.7,
-    "indoor_outage_pop_hours": 53599.0,
-    "indoor_pop_hours": 53571542.6
+    "time_to_care_min": 5.8103,
+    "wait_increase_min": 5.7837,
+    "time_to_care_median_min": 1.6081,
+    "ed_travel_increase_min": 0.0011,
+    "time_to_care_p95_min": 13.6906,
+    "care_time_loss_min": 0.07,
+    "pop_hours": 347323.1,
+    "indoor_outage_pop_hours": 25066.6,
+    "indoor_pop_hours": 53543010.2
    },
    "R10": {
-    "time_to_care_min": 10.688,
-    "wait_increase_min": 10.6516,
-    "time_to_care_median_min": 1.7062,
-    "ed_travel_increase_min": 0.0024,
-    "time_to_care_p95_min": 36.9347,
-    "care_time_loss_min": 0.106,
-    "pop_hours": 644423.7,
-    "indoor_outage_pop_hours": 53599.0,
-    "indoor_pop_hours": 53571542.6
+    "time_to_care_min": 5.8103,
+    "wait_increase_min": 5.7837,
+    "time_to_care_median_min": 1.6081,
+    "ed_travel_increase_min": 0.0011,
+    "time_to_care_p95_min": 13.6906,
+    "care_time_loss_min": 0.07,
+    "pop_hours": 347323.1,
+    "indoor_outage_pop_hours": 25066.6,
+    "indoor_pop_hours": 53543010.2
    },
    "R11": {
-    "time_to_care_min": 10.1236,
-    "wait_increase_min": 10.0829,
-    "time_to_care_median_min": 1.7083,
+    "time_to_care_min": 5.4871,
+    "wait_increase_min": 5.459,
+    "time_to_care_median_min": 1.6081,
     "ed_travel_increase_min": 0.0,
-    "time_to_care_p95_min": 36.2032,
-    "care_time_loss_min": 0.095,
-    "pop_hours": 644423.7,
-    "indoor_outage_pop_hours": 53599.0,
-    "indoor_pop_hours": 53571542.6
+    "time_to_care_p95_min": 11.5221,
+    "care_time_loss_min": 0.066,
+    "pop_hours": 347323.1,
+    "indoor_outage_pop_hours": 25066.6,
+    "indoor_pop_hours": 53543010.2
    },
    "R12": {
-    "time_to_care_min": 10.688,
-    "wait_increase_min": 10.6516,
-    "time_to_care_median_min": 1.7062,
-    "ed_travel_increase_min": 0.0024,
-    "time_to_care_p95_min": 36.9347,
-    "care_time_loss_min": 0.106,
-    "pop_hours": 644423.7,
-    "indoor_outage_pop_hours": 53599.0,
-    "indoor_pop_hours": 53571542.6
+    "time_to_care_min": 5.8103,
+    "wait_increase_min": 5.7837,
+    "time_to_care_median_min": 1.6081,
+    "ed_travel_increase_min": 0.0011,
+    "time_to_care_p95_min": 13.6906,
+    "care_time_loss_min": 0.07,
+    "pop_hours": 347323.1,
+    "indoor_outage_pop_hours": 25066.6,
+    "indoor_pop_hours": 53543010.2
    },
    "R13": {
-    "time_to_care_min": 10.6539,
-    "wait_increase_min": 10.6516,
-    "time_to_care_median_min": 1.6936,
-    "ed_travel_increase_min": 0.0024,
-    "time_to_care_p95_min": 36.7565,
-    "care_time_loss_min": 0.024,
-    "pop_hours": 644423.7,
-    "indoor_outage_pop_hours": 53599.0,
-    "indoor_pop_hours": 53571542.6
+    "time_to_care_min": 5.7856,
+    "wait_increase_min": 5.7837,
+    "time_to_care_median_min": 1.5978,
+    "ed_travel_increase_min": 0.0011,
+    "time_to_care_p95_min": 13.5267,
+    "care_time_loss_min": 0.016,
+    "pop_hours": 347323.1,
+    "indoor_outage_pop_hours": 25066.6,
+    "indoor_pop_hours": 53543010.2
    },
    "R18": {
-    "time_to_care_min": 10.5864,
-    "wait_increase_min": 10.55,
-    "time_to_care_median_min": 1.7039,
-    "ed_travel_increase_min": 0.0023,
-    "time_to_care_p95_min": 36.7499,
-    "care_time_loss_min": 0.106,
-    "pop_hours": 644423.7,
+    "time_to_care_min": 5.7879,
+    "wait_increase_min": 5.7613,
+    "time_to_care_median_min": 1.6081,
+    "ed_travel_increase_min": 0.0011,
+    "time_to_care_p95_min": 13.6751,
+    "care_time_loss_min": 0.07,
+    "pop_hours": 347323.1,
     "indoor_outage_pop_hours": 0.0,
     "indoor_pop_hours": 53517943.6
    },
    "R19": {
-    "time_to_care_min": 8.9082,
-    "wait_increase_min": 8.8718,
-    "time_to_care_median_min": 0.0,
-    "ed_travel_increase_min": 0.0023,
-    "time_to_care_p95_min": 35.159,
-    "care_time_loss_min": 0.106,
-    "pop_hours": 644423.7,
+    "time_to_care_min": 4.1685,
+    "wait_increase_min": 4.1418,
+    "time_to_care_median_min": 0.001,
+    "ed_travel_increase_min": 0.0011,
+    "time_to_care_p95_min": 12.6666,
+    "care_time_loss_min": 0.07,
+    "pop_hours": 347323.1,
     "indoor_outage_pop_hours": 0.0,
     "indoor_pop_hours": 0.0
    },
    "R21": {
-    "time_to_care_min": 8.9082,
-    "wait_increase_min": 8.8718,
-    "time_to_care_median_min": 0.0,
-    "ed_travel_increase_min": 0.0023,
-    "time_to_care_p95_min": 35.159,
-    "care_time_loss_min": 0.106,
-    "pop_hours": 644423.7,
-    "indoor_outage_pop_hours": 53599.0,
-    "indoor_pop_hours": 53571542.6
+    "time_to_care_min": 4.1685,
+    "wait_increase_min": 4.1418,
+    "time_to_care_median_min": 0.001,
+    "ed_travel_increase_min": 0.0011,
+    "time_to_care_p95_min": 12.6666,
+    "care_time_loss_min": 0.07,
+    "pop_hours": 347323.1,
+    "indoor_outage_pop_hours": 25066.6,
+    "indoor_pop_hours": 53543010.2
    },
    "R24": {
-    "time_to_care_min": 1.71,
-    "wait_increase_min": 1.6756,
-    "time_to_care_median_min": 1.3997,
-    "ed_travel_increase_min": 0.0003,
-    "time_to_care_p95_min": 3.5542,
-    "care_time_loss_min": 0.106,
-    "pop_hours": 644423.7,
-    "indoor_outage_pop_hours": 53599.0,
-    "indoor_pop_hours": 53571542.6
+    "time_to_care_min": 1.7079,
+    "wait_increase_min": 1.6818,
+    "time_to_care_median_min": 1.3714,
+    "ed_travel_increase_min": 0.0006,
+    "time_to_care_p95_min": 3.5308,
+    "care_time_loss_min": 0.07,
+    "pop_hours": 347323.1,
+    "indoor_outage_pop_hours": 25066.6,
+    "indoor_pop_hours": 53543010.2
    }
   },
   "4.0": {
    "base": {
-    "time_to_care_min": 36.5129,
-    "wait_increase_min": 36.3893,
-    "time_to_care_median_min": 2.6922,
-    "ed_travel_increase_min": 0.0106,
-    "time_to_care_p95_min": 226.8024,
-    "care_time_loss_min": 0.334,
-    "pop_hours": 3542583.5,
-    "indoor_outage_pop_hours": 516912.8,
-    "indoor_pop_hours": 76397840.7
+    "time_to_care_min": 19.111,
+    "wait_increase_min": 19.0179,
+    "time_to_care_median_min": 2.3229,
+    "ed_travel_increase_min": 0.0056,
+    "time_to_care_p95_min": 72.1672,
+    "care_time_loss_min": 0.263,
+    "pop_hours": 2018057.4,
+    "indoor_outage_pop_hours": 232568.2,
+    "indoor_pop_hours": 76113496.1
    },
    "R01": {
-    "time_to_care_min": 42.7695,
-    "wait_increase_min": 42.611,
-    "time_to_care_median_min": 3.1564,
-    "ed_travel_increase_min": 0.0144,
-    "time_to_care_p95_min": 297.3898,
-    "care_time_loss_min": 0.426,
-    "pop_hours": 4524350.9,
-    "indoor_outage_pop_hours": 769111.8,
-    "indoor_pop_hours": 85167068.3
-   },
-   "R05": {
-    "time_to_care_min": 36.4942,
-    "wait_increase_min": 36.3735,
-    "time_to_care_median_min": 2.6571,
-    "ed_travel_increase_min": 0.0106,
-    "time_to_care_p95_min": 226.8024,
-    "care_time_loss_min": 0.328,
-    "pop_hours": 3538844.2,
-    "indoor_outage_pop_hours": 516405.1,
-    "indoor_pop_hours": 76397333.0
-   },
-   "R06": {
-    "time_to_care_min": 36.4942,
-    "wait_increase_min": 36.3735,
-    "time_to_care_median_min": 2.6571,
-    "ed_travel_increase_min": 0.0106,
-    "time_to_care_p95_min": 226.8024,
-    "care_time_loss_min": 0.328,
-    "pop_hours": 3538844.2,
-    "indoor_outage_pop_hours": 516405.1,
-    "indoor_pop_hours": 76397333.0
+    "time_to_care_min": 25.181,
+    "wait_increase_min": 25.0494,
+    "time_to_care_median_min": 2.6559,
+    "ed_travel_increase_min": 0.0069,
+    "time_to_care_p95_min": 134.5595,
+    "care_time_loss_min": 0.357,
+    "pop_hours": 2836349.2,
+    "indoor_outage_pop_hours": 395472.9,
+    "indoor_pop_hours": 84793429.5
    },
    "R14": {
-    "time_to_care_min": 36.3999,
-    "wait_increase_min": 36.3893,
-    "time_to_care_median_min": 2.6429,
-    "ed_travel_increase_min": 0.0106,
-    "time_to_care_p95_min": 226.5598,
-    "care_time_loss_min": 0.071,
-    "pop_hours": 3542583.5,
-    "indoor_outage_pop_hours": 516912.8,
-    "indoor_pop_hours": 76397840.7
+    "time_to_care_min": 19.0253,
+    "wait_increase_min": 19.0179,
+    "time_to_care_median_min": 2.2869,
+    "ed_travel_increase_min": 0.0056,
+    "time_to_care_p95_min": 71.9473,
+    "care_time_loss_min": 0.063,
+    "pop_hours": 2018057.4,
+    "indoor_outage_pop_hours": 232568.2,
+    "indoor_pop_hours": 76113496.1
    },
    "R17": {
-    "time_to_care_min": 33.8257,
-    "wait_increase_min": 33.7127,
-    "time_to_care_median_min": 2.6292,
+    "time_to_care_min": 17.7485,
+    "wait_increase_min": 17.6611,
+    "time_to_care_median_min": 2.2932,
     "ed_travel_increase_min": 0.0,
-    "time_to_care_p95_min": 222.1157,
-    "care_time_loss_min": 0.259,
-    "pop_hours": 3542583.5,
-    "indoor_outage_pop_hours": 516912.8,
-    "indoor_pop_hours": 76397840.7
+    "time_to_care_p95_min": 70.8531,
+    "care_time_loss_min": 0.198,
+    "pop_hours": 2018057.4,
+    "indoor_outage_pop_hours": 232568.2,
+    "indoor_pop_hours": 76113496.1
    },
    "R22": {
-    "time_to_care_min": 0.1235,
+    "time_to_care_min": 0.093,
     "wait_increase_min": 0.0,
-    "time_to_care_median_min": 0.0182,
-    "ed_travel_increase_min": 0.0106,
-    "time_to_care_p95_min": 0.5851,
-    "care_time_loss_min": 0.334,
-    "pop_hours": 3542583.5,
-    "indoor_outage_pop_hours": 516912.8,
-    "indoor_pop_hours": 76397840.7
+    "time_to_care_median_min": 0.0126,
+    "ed_travel_increase_min": 0.0056,
+    "time_to_care_p95_min": 0.4381,
+    "care_time_loss_min": 0.263,
+    "pop_hours": 2018057.4,
+    "indoor_outage_pop_hours": 232568.2,
+    "indoor_pop_hours": 76113496.1
+   },
+   "R27": {
+    "time_to_care_min": 19.1092,
+    "wait_increase_min": 19.0179,
+    "time_to_care_median_min": 2.3216,
+    "ed_travel_increase_min": 0.0056,
+    "time_to_care_p95_min": 72.1646,
+    "care_time_loss_min": 0.263,
+    "pop_hours": 2018057.4,
+    "indoor_outage_pop_hours": 232568.2,
+    "indoor_pop_hours": 76113496.1
    },
    "R02": {
-    "time_to_care_min": 1.5656,
-    "wait_increase_min": 1.5595,
-    "time_to_care_median_min": 1.3634,
+    "time_to_care_min": 1.5427,
+    "wait_increase_min": 1.5409,
+    "time_to_care_median_min": 1.3606,
     "ed_travel_increase_min": 0.0,
-    "time_to_care_p95_min": 3.4212,
-    "care_time_loss_min": 0.015,
-    "pop_hours": 3839.8,
+    "time_to_care_p95_min": 3.3781,
+    "care_time_loss_min": 0.0,
+    "pop_hours": 0.0,
     "indoor_outage_pop_hours": 0.0,
     "indoor_pop_hours": 75880927.9
    },
    "R03a": {
-    "time_to_care_min": 9.3786,
-    "wait_increase_min": 9.3506,
-    "time_to_care_median_min": 1.6015,
-    "ed_travel_increase_min": 0.0018,
-    "time_to_care_p95_min": 25.8262,
-    "care_time_loss_min": 0.077,
-    "pop_hours": 530659.3,
-    "indoor_outage_pop_hours": 63266.4,
-    "indoor_pop_hours": 75944194.3
+    "time_to_care_min": 4.7041,
+    "wait_increase_min": 4.6874,
+    "time_to_care_median_min": 1.4824,
+    "ed_travel_increase_min": 0.0004,
+    "time_to_care_p95_min": 9.5327,
+    "care_time_loss_min": 0.04,
+    "pop_hours": 281243.0,
+    "indoor_outage_pop_hours": 25927.0,
+    "indoor_pop_hours": 75906855.0
    },
    "R03b": {
-    "time_to_care_min": 1.6317,
-    "wait_increase_min": 1.6248,
-    "time_to_care_median_min": 1.3706,
+    "time_to_care_min": 1.5679,
+    "wait_increase_min": 1.5648,
+    "time_to_care_median_min": 1.3684,
     "ed_travel_increase_min": 0.0,
-    "time_to_care_p95_min": 3.6378,
-    "care_time_loss_min": 0.017,
-    "pop_hours": 12001.6,
-    "indoor_outage_pop_hours": 348.9,
-    "indoor_pop_hours": 75881276.8
+    "time_to_care_p95_min": 3.4569,
+    "care_time_loss_min": 0.003,
+    "pop_hours": 3389.9,
+    "indoor_outage_pop_hours": 488.5,
+    "indoor_pop_hours": 75881416.4
    },
    "R04": {
-    "time_to_care_min": 1.5656,
-    "wait_increase_min": 1.5595,
-    "time_to_care_median_min": 1.3634,
+    "time_to_care_min": 1.5427,
+    "wait_increase_min": 1.5409,
+    "time_to_care_median_min": 1.3606,
     "ed_travel_increase_min": 0.0,
-    "time_to_care_p95_min": 3.4212,
-    "care_time_loss_min": 0.015,
-    "pop_hours": 3815.3,
+    "time_to_care_p95_min": 3.3781,
+    "care_time_loss_min": 0.0,
+    "pop_hours": 0.0,
     "indoor_outage_pop_hours": 0.0,
     "indoor_pop_hours": 75880927.9
    },
    "R07": {
-    "time_to_care_min": 9.7702,
-    "wait_increase_min": 9.6744,
-    "time_to_care_median_min": 1.6084,
+    "time_to_care_min": 4.843,
+    "wait_increase_min": 4.7775,
+    "time_to_care_median_min": 1.4739,
     "ed_travel_increase_min": 0.0016,
-    "time_to_care_p95_min": 28.0317,
-    "care_time_loss_min": 0.289,
-    "pop_hours": 990022.2,
-    "indoor_outage_pop_hours": 16538.2,
-    "indoor_pop_hours": 75897466.1
-   },
-   "R08": {
-    "time_to_care_min": 18.7892,
-    "wait_increase_min": 18.6983,
-    "time_to_care_median_min": 2.2854,
-    "ed_travel_increase_min": 0.004,
-    "time_to_care_p95_min": 76.9302,
-    "care_time_loss_min": 0.27,
-    "pop_hours": 2072804.1,
-    "indoor_outage_pop_hours": 238618.0,
-    "indoor_pop_hours": 76119545.9
+    "time_to_care_p95_min": 5.8796,
+    "care_time_loss_min": 0.211,
+    "pop_hours": 545374.5,
+    "indoor_outage_pop_hours": 2142.5,
+    "indoor_pop_hours": 75883070.4
    },
    "R09": {
-    "time_to_care_min": 36.5129,
-    "wait_increase_min": 36.3893,
-    "time_to_care_median_min": 2.6922,
-    "ed_travel_increase_min": 0.0106,
-    "time_to_care_p95_min": 226.8024,
-    "care_time_loss_min": 0.334,
-    "pop_hours": 3542583.5,
-    "indoor_outage_pop_hours": 516912.8,
-    "indoor_pop_hours": 76397840.7
+    "time_to_care_min": 19.111,
+    "wait_increase_min": 19.0179,
+    "time_to_care_median_min": 2.3229,
+    "ed_travel_increase_min": 0.0056,
+    "time_to_care_p95_min": 72.1672,
+    "care_time_loss_min": 0.263,
+    "pop_hours": 2018057.4,
+    "indoor_outage_pop_hours": 232568.2,
+    "indoor_pop_hours": 76113496.1
    },
    "R10": {
-    "time_to_care_min": 36.5129,
-    "wait_increase_min": 36.3893,
-    "time_to_care_median_min": 2.6922,
-    "ed_travel_increase_min": 0.0106,
-    "time_to_care_p95_min": 226.8024,
-    "care_time_loss_min": 0.334,
-    "pop_hours": 3542583.5,
-    "indoor_outage_pop_hours": 516912.8,
-    "indoor_pop_hours": 76397840.7
+    "time_to_care_min": 19.111,
+    "wait_increase_min": 19.0179,
+    "time_to_care_median_min": 2.3229,
+    "ed_travel_increase_min": 0.0056,
+    "time_to_care_p95_min": 72.1672,
+    "care_time_loss_min": 0.263,
+    "pop_hours": 2018057.4,
+    "indoor_outage_pop_hours": 232568.2,
+    "indoor_pop_hours": 76113496.1
    },
    "R11": {
-    "time_to_care_min": 33.841,
-    "wait_increase_min": 33.7127,
-    "time_to_care_median_min": 2.6292,
+    "time_to_care_min": 17.7571,
+    "wait_increase_min": 17.6611,
+    "time_to_care_median_min": 2.2932,
     "ed_travel_increase_min": 0.0,
-    "time_to_care_p95_min": 222.1272,
-    "care_time_loss_min": 0.292,
-    "pop_hours": 3542583.5,
-    "indoor_outage_pop_hours": 516912.8,
-    "indoor_pop_hours": 76397840.7
+    "time_to_care_p95_min": 70.8531,
+    "care_time_loss_min": 0.22,
+    "pop_hours": 2018057.4,
+    "indoor_outage_pop_hours": 232568.2,
+    "indoor_pop_hours": 76113496.1
    },
    "R12": {
-    "time_to_care_min": 36.5129,
-    "wait_increase_min": 36.3893,
-    "time_to_care_median_min": 2.6922,
-    "ed_travel_increase_min": 0.0106,
-    "time_to_care_p95_min": 226.8024,
-    "care_time_loss_min": 0.334,
-    "pop_hours": 3542583.5,
-    "indoor_outage_pop_hours": 516912.8,
-    "indoor_pop_hours": 76397840.7
+    "time_to_care_min": 19.111,
+    "wait_increase_min": 19.0179,
+    "time_to_care_median_min": 2.3229,
+    "ed_travel_increase_min": 0.0056,
+    "time_to_care_p95_min": 72.1672,
+    "care_time_loss_min": 0.263,
+    "pop_hours": 2018057.4,
+    "indoor_outage_pop_hours": 232568.2,
+    "indoor_pop_hours": 76113496.1
    },
    "R13": {
-    "time_to_care_min": 36.3999,
-    "wait_increase_min": 36.3893,
-    "time_to_care_median_min": 2.6429,
-    "ed_travel_increase_min": 0.0106,
-    "time_to_care_p95_min": 226.5598,
-    "care_time_loss_min": 0.067,
-    "pop_hours": 3542583.5,
-    "indoor_outage_pop_hours": 516912.8,
-    "indoor_pop_hours": 76397840.7
+    "time_to_care_min": 19.0253,
+    "wait_increase_min": 19.0179,
+    "time_to_care_median_min": 2.2869,
+    "ed_travel_increase_min": 0.0056,
+    "time_to_care_p95_min": 71.9473,
+    "care_time_loss_min": 0.051,
+    "pop_hours": 2018057.4,
+    "indoor_outage_pop_hours": 232568.2,
+    "indoor_pop_hours": 76113496.1
    },
    "R18": {
-    "time_to_care_min": 35.9679,
-    "wait_increase_min": 35.8444,
-    "time_to_care_median_min": 2.6474,
-    "ed_travel_increase_min": 0.0106,
-    "time_to_care_p95_min": 225.9434,
-    "care_time_loss_min": 0.334,
-    "pop_hours": 3542583.5,
+    "time_to_care_min": 18.8128,
+    "wait_increase_min": 18.7203,
+    "time_to_care_median_min": 2.2932,
+    "ed_travel_increase_min": 0.0051,
+    "time_to_care_p95_min": 68.679,
+    "care_time_loss_min": 0.263,
+    "pop_hours": 2018057.4,
     "indoor_outage_pop_hours": 0.0,
     "indoor_pop_hours": 75880927.9
    },
    "R19": {
-    "time_to_care_min": 33.833,
-    "wait_increase_min": 33.7095,
-    "time_to_care_median_min": 0.5442,
-    "ed_travel_increase_min": 0.0106,
-    "time_to_care_p95_min": 221.2408,
-    "care_time_loss_min": 0.334,
-    "pop_hours": 3542583.5,
+    "time_to_care_min": 16.9463,
+    "wait_increase_min": 16.8538,
+    "time_to_care_median_min": 0.3171,
+    "ed_travel_increase_min": 0.0051,
+    "time_to_care_p95_min": 66.1824,
+    "care_time_loss_min": 0.263,
+    "pop_hours": 2018057.4,
     "indoor_outage_pop_hours": 0.0,
     "indoor_pop_hours": 0.0
    },
    "R21": {
-    "time_to_care_min": 33.833,
-    "wait_increase_min": 33.7095,
-    "time_to_care_median_min": 0.5442,
-    "ed_travel_increase_min": 0.0106,
-    "time_to_care_p95_min": 221.2408,
-    "care_time_loss_min": 0.334,
-    "pop_hours": 3542583.5,
-    "indoor_outage_pop_hours": 516912.8,
-    "indoor_pop_hours": 76397840.7
+    "time_to_care_min": 16.9463,
+    "wait_increase_min": 16.8538,
+    "time_to_care_median_min": 0.3171,
+    "ed_travel_increase_min": 0.0051,
+    "time_to_care_p95_min": 66.1824,
+    "care_time_loss_min": 0.263,
+    "pop_hours": 2018057.4,
+    "indoor_outage_pop_hours": 232568.2,
+    "indoor_pop_hours": 76113496.1
    },
    "R24": {
-    "time_to_care_min": 3.0537,
-    "wait_increase_min": 2.9365,
-    "time_to_care_median_min": 1.5401,
-    "ed_travel_increase_min": 0.0043,
-    "time_to_care_p95_min": 5.6812,
-    "care_time_loss_min": 0.334,
-    "pop_hours": 3542583.5,
-    "indoor_outage_pop_hours": 516912.8,
-    "indoor_pop_hours": 76397840.7
+    "time_to_care_min": 2.7773,
+    "wait_increase_min": 2.6868,
+    "time_to_care_median_min": 1.4807,
+    "ed_travel_increase_min": 0.0031,
+    "time_to_care_p95_min": 3.9031,
+    "care_time_loss_min": 0.263,
+    "pop_hours": 2018057.4,
+    "indoor_outage_pop_hours": 232568.2,
+    "indoor_pop_hours": 76113496.1
    }
   }
  },
  "relations": {
   "R01": {
    "what_is_switched_off": "local temperature = background (airport) series everywhere (no urban field)",
-   "edges": [
-    [
-     "bg",
-     "urban"
-    ]
-   ],
+   "edges": [],
    "contribution": {
     "+2": {
-     "time_to_care_min": -0.1703,
-     "time_to_care_median_min": -0.0271,
-     "time_to_care_p95_min": -0.3724,
-     "ed_travel_increase_min": 0.0833,
-     "wait_increase_min": -0.1696,
-     "care_time_loss_min": -0.3302,
-     "pop_hours": -0.3065,
-     "indoor_pop_hours": -0.2676,
-     "indoor_outage_pop_hours": -0.722
+     "time_to_care_min": -0.3505,
+     "time_to_care_median_min": -0.0321,
+     "time_to_care_p95_min": -0.4843,
+     "ed_travel_increase_min": -1.7273,
+     "wait_increase_min": -0.3498,
+     "care_time_loss_min": -0.4714,
+     "pop_hours": -0.4353,
+     "indoor_pop_hours": -0.2674,
+     "indoor_outage_pop_hours": -0.8268
     },
     "+4": {
-     "time_to_care_min": -0.1714,
-     "time_to_care_median_min": -0.1724,
-     "time_to_care_p95_min": -0.3112,
-     "ed_travel_increase_min": -0.3585,
-     "wait_increase_min": -0.171,
-     "care_time_loss_min": -0.2754,
-     "pop_hours": -0.2771,
-     "indoor_pop_hours": -0.1148,
-     "indoor_outage_pop_hours": -0.4879
-    }
-   }
-  },
-  "R05": {
-   "what_is_switched_off": "TVA load is not scaled by scenario warming",
-   "edges": [
-    [
-     "load",
-     "margin"
-    ]
-   ],
-   "contribution": {
-    "+2": {
-     "time_to_care_min": 0.0,
-     "time_to_care_median_min": 0.0,
-     "time_to_care_p95_min": 0.0,
-     "ed_travel_increase_min": 0.0,
-     "wait_increase_min": 0.0,
-     "care_time_loss_min": 0.0,
-     "pop_hours": 0.0,
-     "indoor_pop_hours": 0.0,
-     "indoor_outage_pop_hours": 0.0
-    },
-    "+4": {
-     "time_to_care_min": 0.0005,
-     "time_to_care_median_min": 0.013,
-     "time_to_care_p95_min": 0.0,
-     "ed_travel_increase_min": 0.0,
-     "wait_increase_min": 0.0004,
-     "care_time_loss_min": 0.018,
-     "pop_hours": 0.0011,
-     "indoor_pop_hours": 0.0,
-     "indoor_outage_pop_hours": 0.001
-    }
-   }
-  },
-  "R06": {
-   "what_is_switched_off": "no rotating outages from a system shortfall",
-   "edges": [
-    [
-     "margin",
-     "shed"
-    ],
-    [
-     "shed",
-     "topo"
-    ]
-   ],
-   "contribution": {
-    "+2": {
-     "time_to_care_min": 0.0,
-     "time_to_care_median_min": 0.0,
-     "time_to_care_p95_min": 0.0,
-     "ed_travel_increase_min": 0.0,
-     "wait_increase_min": 0.0,
-     "care_time_loss_min": 0.0,
-     "pop_hours": 0.0,
-     "indoor_pop_hours": 0.0,
-     "indoor_outage_pop_hours": 0.0
-    },
-    "+4": {
-     "time_to_care_min": 0.0005,
-     "time_to_care_median_min": 0.013,
-     "time_to_care_p95_min": 0.0,
-     "ed_travel_increase_min": 0.0,
-     "wait_increase_min": 0.0004,
-     "care_time_loss_min": 0.018,
-     "pop_hours": 0.0011,
-     "indoor_pop_hours": 0.0,
-     "indoor_outage_pop_hours": 0.001
+     "time_to_care_min": -0.3176,
+     "time_to_care_median_min": -0.1434,
+     "time_to_care_p95_min": -0.8646,
+     "ed_travel_increase_min": -0.2321,
+     "wait_increase_min": -0.3171,
+     "care_time_loss_min": -0.3574,
+     "pop_hours": -0.4055,
+     "indoor_pop_hours": -0.114,
+     "indoor_outage_pop_hours": -0.7005
     }
    }
   },
@@ -619,23 +500,23 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.0032,
-     "time_to_care_median_min": 0.0074,
-     "time_to_care_p95_min": 0.0048,
+     "time_to_care_min": 0.0043,
+     "time_to_care_median_min": 0.0064,
+     "time_to_care_p95_min": 0.012,
      "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
-     "care_time_loss_min": 0.7736,
+     "care_time_loss_min": 0.8571,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.0031,
-     "time_to_care_median_min": 0.0183,
-     "time_to_care_p95_min": 0.0011,
+     "time_to_care_min": 0.0045,
+     "time_to_care_median_min": 0.0155,
+     "time_to_care_p95_min": 0.003,
      "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
-     "care_time_loss_min": 0.7874,
+     "care_time_loss_min": 0.7605,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
@@ -652,23 +533,23 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.0534,
-     "time_to_care_median_min": 0.0013,
-     "time_to_care_p95_min": 0.024,
+     "time_to_care_min": 0.0561,
+     "time_to_care_median_min": 0.0,
+     "time_to_care_p95_min": 0.1584,
      "ed_travel_increase_min": 1.0,
-     "wait_increase_min": 0.0534,
-     "care_time_loss_min": 0.2358,
+     "wait_increase_min": 0.0561,
+     "care_time_loss_min": 0.1429,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.0736,
-     "time_to_care_median_min": 0.0234,
-     "time_to_care_p95_min": 0.0207,
+     "time_to_care_min": 0.0713,
+     "time_to_care_median_min": 0.0128,
+     "time_to_care_p95_min": 0.0182,
      "ed_travel_increase_min": 1.0,
-     "wait_increase_min": 0.0736,
-     "care_time_loss_min": 0.2246,
+     "wait_increase_min": 0.0713,
+     "care_time_loss_min": 0.2471,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
@@ -685,9 +566,9 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.9966,
-     "time_to_care_median_min": 1.0,
-     "time_to_care_p95_min": 0.9943,
+     "time_to_care_min": 0.9954,
+     "time_to_care_median_min": 0.9994,
+     "time_to_care_p95_min": 0.9887,
      "ed_travel_increase_min": 0.0,
      "wait_increase_min": 1.0,
      "care_time_loss_min": 0.0,
@@ -696,11 +577,44 @@
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.9966,
-     "time_to_care_median_min": 0.9932,
-     "time_to_care_p95_min": 0.9974,
+     "time_to_care_min": 0.9951,
+     "time_to_care_median_min": 0.9946,
+     "time_to_care_p95_min": 0.9939,
      "ed_travel_increase_min": 0.0,
      "wait_increase_min": 1.0,
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    }
+   }
+  },
+  "R27": {
+   "what_is_switched_off": "rutting does not deepen with warming (no rutting delay)",
+   "edges": [
+    [
+     "rut",
+     "travel"
+    ]
+   ],
+   "contribution": {
+    "+2": {
+     "time_to_care_min": 0.0002,
+     "time_to_care_median_min": 0.0005,
+     "time_to_care_p95_min": 0.0001,
+     "ed_travel_increase_min": 0.0,
+     "wait_increase_min": 0.0,
+     "care_time_loss_min": 0.0,
+     "pop_hours": 0.0,
+     "indoor_pop_hours": 0.0,
+     "indoor_outage_pop_hours": 0.0
+    },
+    "+4": {
+     "time_to_care_min": 0.0001,
+     "time_to_care_median_min": 0.0006,
+     "time_to_care_p95_min": 0.0,
+     "ed_travel_increase_min": 0.0,
+     "wait_increase_min": 0.0,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -709,8 +623,12 @@
    }
   },
   "R02": {
-   "what_is_switched_off": "load does not respond to temperature (m = 1)",
+   "what_is_switched_off": "cooling load does not respond to temperature (load = base load)",
    "edges": [
+    [
+     "bg",
+     "load"
+    ],
     [
      "urban",
      "load"
@@ -718,25 +636,25 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.8559,
-     "time_to_care_median_min": 0.2034,
-     "time_to_care_p95_min": 0.9086,
+     "time_to_care_min": 0.7348,
+     "time_to_care_median_min": 0.1543,
+     "time_to_care_p95_min": 0.7533,
      "ed_travel_increase_min": 1.0,
-     "wait_increase_min": 0.8554,
+     "wait_increase_min": 0.7337,
      "care_time_loss_min": 1.0,
      "pop_hours": 1.0,
-     "indoor_pop_hours": 0.001,
+     "indoor_pop_hours": 0.0005,
      "indoor_outage_pop_hours": 1.0
     },
     "+4": {
-     "time_to_care_min": 0.9571,
-     "time_to_care_median_min": 0.4936,
-     "time_to_care_p95_min": 0.9849,
+     "time_to_care_min": 0.9193,
+     "time_to_care_median_min": 0.4143,
+     "time_to_care_p95_min": 0.9532,
      "ed_travel_increase_min": 1.0,
-     "wait_increase_min": 0.9571,
-     "care_time_loss_min": 0.9551,
-     "pop_hours": 0.9989,
-     "indoor_pop_hours": 0.0068,
+     "wait_increase_min": 0.919,
+     "care_time_loss_min": 1.0,
+     "pop_hours": 1.0,
+     "indoor_pop_hours": 0.0031,
      "indoor_outage_pop_hours": 1.0
     }
    }
@@ -745,37 +663,41 @@
    "what_is_switched_off": "hot spot sees each station's period-mean ambient instead of the hourly value",
    "edges": [
     [
+     "bg",
+     "hotspot"
+    ],
+    [
      "urban",
      "hotspot"
     ]
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.7374,
-     "time_to_care_median_min": 0.1727,
-     "time_to_care_p95_min": 0.8842,
-     "ed_travel_increase_min": 0.875,
-     "wait_increase_min": 0.737,
-     "care_time_loss_min": 0.8774,
-     "pop_hours": 0.9294,
-     "indoor_pop_hours": 0.001,
-     "indoor_outage_pop_hours": 0.9521
+     "time_to_care_min": 0.656,
+     "time_to_care_median_min": 0.1183,
+     "time_to_care_p95_min": 0.7157,
+     "ed_travel_increase_min": 0.8182,
+     "wait_increase_min": 0.6553,
+     "care_time_loss_min": 0.8429,
+     "pop_hours": 0.9277,
+     "indoor_pop_hours": 0.0004,
+     "indoor_outage_pop_hours": 0.9439
     },
     "+4": {
-     "time_to_care_min": 0.7431,
-     "time_to_care_median_min": 0.4051,
-     "time_to_care_p95_min": 0.8861,
-     "ed_travel_increase_min": 0.8302,
-     "wait_increase_min": 0.743,
-     "care_time_loss_min": 0.7695,
-     "pop_hours": 0.8502,
-     "indoor_pop_hours": 0.0059,
-     "indoor_outage_pop_hours": 0.8776
+     "time_to_care_min": 0.7539,
+     "time_to_care_median_min": 0.3618,
+     "time_to_care_p95_min": 0.8679,
+     "ed_travel_increase_min": 0.9286,
+     "wait_increase_min": 0.7535,
+     "care_time_loss_min": 0.8479,
+     "pop_hours": 0.8606,
+     "indoor_pop_hours": 0.0027,
+     "indoor_outage_pop_hours": 0.8885
     }
    }
   },
   "R03b": {
-   "what_is_switched_off": "hot spot sees each run's period-mean load instead of the hourly load",
+   "what_is_switched_off": "hot spot sees each run's period-mean cooling load instead of the hourly load",
    "edges": [
     [
      "load",
@@ -784,26 +706,26 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.8558,
-     "time_to_care_median_min": 0.2034,
-     "time_to_care_p95_min": 0.9086,
+     "time_to_care_min": 0.7347,
+     "time_to_care_median_min": 0.1543,
+     "time_to_care_p95_min": 0.7533,
      "ed_travel_increase_min": 1.0,
-     "wait_increase_min": 0.8554,
-     "care_time_loss_min": 0.9906,
-     "pop_hours": 0.9972,
-     "indoor_pop_hours": 0.001,
-     "indoor_outage_pop_hours": 0.9998
+     "wait_increase_min": 0.7337,
+     "care_time_loss_min": 0.9857,
+     "pop_hours": 0.9994,
+     "indoor_pop_hours": 0.0005,
+     "indoor_outage_pop_hours": 0.9978
     },
     "+4": {
-     "time_to_care_min": 0.9553,
-     "time_to_care_median_min": 0.4909,
-     "time_to_care_p95_min": 0.984,
+     "time_to_care_min": 0.918,
+     "time_to_care_median_min": 0.4109,
+     "time_to_care_p95_min": 0.9521,
      "ed_travel_increase_min": 1.0,
-     "wait_increase_min": 0.9553,
-     "care_time_loss_min": 0.9491,
-     "pop_hours": 0.9966,
-     "indoor_pop_hours": 0.0068,
-     "indoor_outage_pop_hours": 0.9993
+     "wait_increase_min": 0.9177,
+     "care_time_loss_min": 0.9886,
+     "pop_hours": 0.9983,
+     "indoor_pop_hours": 0.003,
+     "indoor_outage_pop_hours": 0.9979
     }
    }
   },
@@ -817,25 +739,25 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.8559,
-     "time_to_care_median_min": 0.2034,
-     "time_to_care_p95_min": 0.9086,
+     "time_to_care_min": 0.7348,
+     "time_to_care_median_min": 0.1543,
+     "time_to_care_p95_min": 0.7533,
      "ed_travel_increase_min": 1.0,
-     "wait_increase_min": 0.8554,
+     "wait_increase_min": 0.7337,
      "care_time_loss_min": 1.0,
      "pop_hours": 1.0,
-     "indoor_pop_hours": 0.001,
+     "indoor_pop_hours": 0.0005,
      "indoor_outage_pop_hours": 1.0
     },
     "+4": {
-     "time_to_care_min": 0.9571,
-     "time_to_care_median_min": 0.4936,
-     "time_to_care_p95_min": 0.9849,
+     "time_to_care_min": 0.9193,
+     "time_to_care_median_min": 0.4143,
+     "time_to_care_p95_min": 0.9532,
      "ed_travel_increase_min": 1.0,
-     "wait_increase_min": 0.9571,
-     "care_time_loss_min": 0.9551,
-     "pop_hours": 0.9989,
-     "indoor_pop_hours": 0.0068,
+     "wait_increase_min": 0.919,
+     "care_time_loss_min": 1.0,
+     "pop_hours": 1.0,
+     "indoor_pop_hours": 0.0031,
      "indoor_outage_pop_hours": 1.0
     }
    }
@@ -845,64 +767,31 @@
    "edges": [
     [
      "failure",
-     "topo"
-    ]
-   ],
-   "contribution": {
-    "+2": {
-     "time_to_care_min": 0.7289,
-     "time_to_care_median_min": 0.1762,
-     "time_to_care_p95_min": 0.8946,
-     "ed_travel_increase_min": 0.8333,
-     "wait_increase_min": 0.7305,
-     "care_time_loss_min": 0.1698,
-     "pop_hours": 0.7513,
-     "indoor_pop_hours": 0.001,
-     "indoor_outage_pop_hours": 0.9982
-    },
-    "+4": {
-     "time_to_care_min": 0.7324,
-     "time_to_care_median_min": 0.4026,
-     "time_to_care_p95_min": 0.8764,
-     "ed_travel_increase_min": 0.8491,
-     "wait_increase_min": 0.7341,
-     "care_time_loss_min": 0.1347,
-     "pop_hours": 0.7205,
-     "indoor_pop_hours": 0.0065,
-     "indoor_outage_pop_hours": 0.968
-    }
-   }
-  },
-  "R08": {
-   "what_is_switched_off": "no upstream propagation: a station is out only if it failed or was shed itself",
-   "edges": [
-    [
-     "topo",
      "zone"
     ]
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.4869,
-     "time_to_care_median_min": 0.0505,
-     "time_to_care_p95_min": 0.6439,
-     "ed_travel_increase_min": 0.7083,
-     "wait_increase_min": 0.4874,
-     "care_time_loss_min": 0.3679,
-     "pop_hours": 0.467,
-     "indoor_pop_hours": 0.0006,
-     "indoor_outage_pop_hours": 0.5756
+     "time_to_care_min": 0.6654,
+     "time_to_care_median_min": 0.1358,
+     "time_to_care_p95_min": 0.7216,
+     "ed_travel_increase_min": 0.7273,
+     "wait_increase_min": 0.668,
+     "care_time_loss_min": 0.0143,
+     "pop_hours": 0.7512,
+     "indoor_pop_hours": 0.0005,
+     "indoor_outage_pop_hours": 0.9988
     },
     "+4": {
-     "time_to_care_min": 0.4854,
-     "time_to_care_median_min": 0.1511,
-     "time_to_care_p95_min": 0.6608,
-     "ed_travel_increase_min": 0.6226,
-     "wait_increase_min": 0.4862,
-     "care_time_loss_min": 0.1916,
-     "pop_hours": 0.4149,
-     "indoor_pop_hours": 0.0036,
-     "indoor_outage_pop_hours": 0.5384
+     "time_to_care_min": 0.7466,
+     "time_to_care_median_min": 0.3655,
+     "time_to_care_p95_min": 0.9185,
+     "ed_travel_increase_min": 0.7143,
+     "wait_increase_min": 0.7488,
+     "care_time_loss_min": 0.1977,
+     "pop_hours": 0.7298,
+     "indoor_pop_hours": 0.003,
+     "indoor_outage_pop_hours": 0.9908
     }
    }
   },
@@ -986,23 +875,23 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.0528,
-     "time_to_care_median_min": -0.0012,
-     "time_to_care_p95_min": 0.0198,
+     "time_to_care_min": 0.0556,
+     "time_to_care_median_min": 0.0,
+     "time_to_care_p95_min": 0.1584,
      "ed_travel_increase_min": 1.0,
-     "wait_increase_min": 0.0534,
-     "care_time_loss_min": 0.1038,
+     "wait_increase_min": 0.0561,
+     "care_time_loss_min": 0.0571,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.0732,
-     "time_to_care_median_min": 0.0234,
-     "time_to_care_p95_min": 0.0206,
+     "time_to_care_min": 0.0708,
+     "time_to_care_median_min": 0.0128,
+     "time_to_care_p95_min": 0.0182,
      "ed_travel_increase_min": 1.0,
-     "wait_increase_min": 0.0736,
-     "care_time_loss_min": 0.1257,
+     "wait_increase_min": 0.0713,
+     "care_time_loss_min": 0.1635,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
@@ -1052,23 +941,23 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.0032,
-     "time_to_care_median_min": 0.0074,
-     "time_to_care_p95_min": 0.0048,
+     "time_to_care_min": 0.0043,
+     "time_to_care_median_min": 0.0064,
+     "time_to_care_p95_min": 0.012,
      "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
-     "care_time_loss_min": 0.7736,
+     "care_time_loss_min": 0.7714,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.0031,
-     "time_to_care_median_min": 0.0183,
-     "time_to_care_p95_min": 0.0011,
+     "time_to_care_min": 0.0045,
+     "time_to_care_median_min": 0.0155,
+     "time_to_care_p95_min": 0.003,
      "ed_travel_increase_min": 0.0,
      "wait_increase_min": 0.0,
-     "care_time_loss_min": 0.7994,
+     "care_time_loss_min": 0.8061,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
@@ -1085,25 +974,25 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.0095,
-     "time_to_care_median_min": 0.0013,
-     "time_to_care_p95_min": 0.005,
-     "ed_travel_increase_min": 0.0417,
-     "wait_increase_min": 0.0095,
+     "time_to_care_min": 0.0039,
+     "time_to_care_median_min": 0.0,
+     "time_to_care_p95_min": 0.0011,
+     "ed_travel_increase_min": 0.0,
+     "wait_increase_min": 0.0039,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
-     "indoor_pop_hours": 0.001,
+     "indoor_pop_hours": 0.0005,
      "indoor_outage_pop_hours": 1.0
     },
     "+4": {
-     "time_to_care_min": 0.0149,
-     "time_to_care_median_min": 0.0166,
-     "time_to_care_p95_min": 0.0038,
-     "ed_travel_increase_min": 0.0,
-     "wait_increase_min": 0.015,
+     "time_to_care_min": 0.0156,
+     "time_to_care_median_min": 0.0128,
+     "time_to_care_p95_min": 0.0483,
+     "ed_travel_increase_min": 0.0893,
+     "wait_increase_min": 0.0156,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
-     "indoor_pop_hours": 0.0068,
+     "indoor_pop_hours": 0.0031,
      "indoor_outage_pop_hours": 1.0
     }
    }
@@ -1112,28 +1001,32 @@
    "what_is_switched_off": "indoor equilibrium is not driven by outdoor temperature (held at the AC set point)",
    "edges": [
     [
+     "bg",
+     "indoor"
+    ],
+    [
      "urban",
      "indoor"
     ]
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.1665,
-     "time_to_care_median_min": 1.0,
-     "time_to_care_p95_min": 0.0481,
-     "ed_travel_increase_min": 0.0417,
-     "wait_increase_min": 0.1671,
+     "time_to_care_min": 0.2826,
+     "time_to_care_median_min": 0.9994,
+     "time_to_care_p95_min": 0.0748,
+     "ed_travel_increase_min": 0.0,
+     "wait_increase_min": 0.2839,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 1.0,
      "indoor_outage_pop_hours": 1.0
     },
     "+4": {
-     "time_to_care_min": 0.0734,
-     "time_to_care_median_min": 0.7979,
-     "time_to_care_p95_min": 0.0245,
-     "ed_travel_increase_min": 0.0,
-     "wait_increase_min": 0.0736,
+     "time_to_care_min": 0.1133,
+     "time_to_care_median_min": 0.8635,
+     "time_to_care_p95_min": 0.0829,
+     "ed_travel_increase_min": 0.0893,
+     "wait_increase_min": 0.1138,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 1.0,
@@ -1155,22 +1048,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.1665,
-     "time_to_care_median_min": 1.0,
-     "time_to_care_p95_min": 0.0481,
-     "ed_travel_increase_min": 0.0417,
-     "wait_increase_min": 0.1671,
+     "time_to_care_min": 0.2826,
+     "time_to_care_median_min": 0.9994,
+     "time_to_care_p95_min": 0.0748,
+     "ed_travel_increase_min": 0.0,
+     "wait_increase_min": 0.2839,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.0734,
-     "time_to_care_median_min": 0.7979,
-     "time_to_care_p95_min": 0.0245,
-     "ed_travel_increase_min": 0.0,
-     "wait_increase_min": 0.0736,
+     "time_to_care_min": 0.1133,
+     "time_to_care_median_min": 0.8635,
+     "time_to_care_p95_min": 0.0829,
+     "ed_travel_increase_min": 0.0893,
+     "wait_increase_min": 0.1138,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -1188,22 +1081,22 @@
    ],
    "contribution": {
     "+2": {
-     "time_to_care_min": 0.84,
-     "time_to_care_median_min": 0.1796,
-     "time_to_care_p95_min": 0.9038,
-     "ed_travel_increase_min": 0.875,
-     "wait_increase_min": 0.8427,
+     "time_to_care_min": 0.7061,
+     "time_to_care_median_min": 0.1472,
+     "time_to_care_p95_min": 0.7421,
+     "ed_travel_increase_min": 0.4545,
+     "wait_increase_min": 0.7092,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
      "indoor_outage_pop_hours": 0.0
     },
     "+4": {
-     "time_to_care_min": 0.9164,
-     "time_to_care_median_min": 0.4279,
-     "time_to_care_p95_min": 0.975,
-     "ed_travel_increase_min": 0.5943,
-     "wait_increase_min": 0.9193,
+     "time_to_care_min": 0.8547,
+     "time_to_care_median_min": 0.3626,
+     "time_to_care_p95_min": 0.9459,
+     "ed_travel_increase_min": 0.4464,
+     "wait_increase_min": 0.8587,
      "care_time_loss_min": 0.0,
      "pop_hours": 0.0,
      "indoor_pop_hours": 0.0,
@@ -1228,6 +1121,14 @@
    "inherited": "T2"
   },
   "load": {
+   "tier": "T3",
+   "weakest_inputs": [
+    "PWR-05 Load–temperature slope",
+    "PWR-06 Load–temperature threshold"
+   ],
+   "inherited": "T3"
+  },
+  "base": {
    "tier": "T4",
    "weakest_inputs": [
     "PWR-03 Transformer rated capacity",
@@ -1250,6 +1151,15 @@
    ],
    "inherited": "T4"
   },
+  "rut": {
+   "tier": "T3",
+   "weakest_inputs": [
+    "C-T8 k_rut",
+    "C-T11 b_iri",
+    "C-T12 c_speed"
+   ],
+   "inherited": "T3"
+  },
   "topo": {
    "tier": "T4",
    "weakest_inputs": [
@@ -1270,7 +1180,7 @@
     "PWR-32 Available share of TVA summer capacity",
     "PWR-33 Net import capability at peak"
    ],
-   "inherited": "T4"
+   "inherited": "T2"
   },
   "shed": {
    "tier": "T2",
@@ -1278,7 +1188,7 @@
     "C-P9.avail a",
     "C-P9.imp P_imp"
    ],
-   "inherited": "T4"
+   "inherited": "T2"
   },
   "river": {
    "tier": "T4",
